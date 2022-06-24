@@ -1,0 +1,1766 @@
+22.2855 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([-0.7, -0.7, -0.7]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x000002361D02F668>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x000002361D00E978>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1080]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+22.2859 	EXP 	window1: mouseVisible = True
+22.2859 	EXP 	window1: recordFrameIntervals = False
+22.4518 	EXP 	window1: recordFrameIntervals = True
+22.6352 	EXP 	window1: recordFrameIntervals = False
+22.9010 	EXP 	window1: mouseVisible = False
+22.9079 	EXP 	UDP Sent: marker_ID=13, marker_value=41, marker_string=n_back_start, timestamp=1655322474922427648
+23.0005 	EXP 	Created instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+23.0022 	EXP 	Created exp_zero_back_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='exp_zero_back_text', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+23.0346 	EXP 	Created exp_one_back_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='exp_one_back_text', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+23.0448 	EXP 	Created exp_two_back_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='exp_two_back_text', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+23.0486 	EXP 	Created pause_cross = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=0.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='pause_cross', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+23.0505 	EXP 	Created stim_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.3, italic=False, languageStyle='LTR', name='stim_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+23.0526 	EXP 	Created stim_cross = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='stim_cross', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+23.1330 	EXP 	instructions_text: autoDraw = True
+60.3517 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\NB_TO-1652909861027341.csv as conditions, 9 conditions, 1 params
+60.3528 	EXP 	Created sequence: sequential, trialTypes=9, nReps=1, seed=None
+60.3530 	EXP 	New trial (rep=0, index=0): OrderedDict([('task_order', 'OB-165290985969779.csv')])
+60.3874 	DATA 	Keypress: space
+60.4022 	EXP 	instructions_text: autoDraw = False
+60.4022 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: \nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+60.4022 	EXP 	exp_zero_back_text: autoDraw = True
+60.4022 	EXP 	exp_one_back_text: autoDraw = True
+60.4022 	EXP 	exp_two_back_text: autoDraw = True
+74.9088 	DATA 	Keypress: space
+74.9191 	EXP 	exp_zero_back_text: autoDraw = False
+74.9191 	EXP 	exp_one_back_text: autoDraw = False
+74.9191 	EXP 	exp_two_back_text: autoDraw = False
+74.9191 	EXP 	pause_cross: autoDraw = True
+76.9117 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\OB-165290985969779.csv as conditions, 20 conditions, 3 params
+76.9119 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+76.9121 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+76.9358 	EXP 	pause_cross: autoDraw = False
+76.9358 	EXP 	pause_cross: autoDraw = False
+76.9358 	EXP 	stim_text: text = 1
+76.9358 	EXP 	stim_text: autoDraw = True
+77.4358 	EXP 	stim_text: autoDraw = False
+77.4358 	EXP 	stim_cross: autoDraw = True
+78.2255 	DATA 	Keypress: left
+80.4219 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 3), ('match', 0), ('corr_key', 'left')])
+80.4358 	EXP 	stim_text: autoDraw = False
+80.4358 	EXP 	stim_cross: autoDraw = False
+80.4358 	EXP 	stim_text: text = 3
+80.4358 	EXP 	stim_text: autoDraw = True
+80.9192 	EXP 	stim_cross: autoDraw = True
+80.9358 	EXP 	stim_text: autoDraw = False
+81.1076 	DATA 	Keypress: left
+83.9192 	EXP 	stim_cross: autoDraw = False
+83.9198 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+83.9359 	EXP 	stim_text: autoDraw = False
+83.9359 	EXP 	stim_cross: autoDraw = False
+83.9359 	EXP 	stim_text: text = 5
+83.9359 	EXP 	stim_text: autoDraw = True
+84.4192 	EXP 	stim_cross: autoDraw = True
+84.4359 	EXP 	stim_text: autoDraw = False
+84.4407 	DATA 	Keypress: left
+87.4193 	EXP 	stim_cross: autoDraw = False
+87.4198 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 0), ('match', 0), ('corr_key', 'left')])
+87.4359 	EXP 	stim_text: autoDraw = False
+87.4359 	EXP 	stim_cross: autoDraw = False
+87.4359 	EXP 	stim_text: text = 0
+87.4359 	EXP 	stim_text: autoDraw = True
+87.9193 	EXP 	stim_cross: autoDraw = True
+87.9359 	EXP 	stim_text: autoDraw = False
+87.9575 	DATA 	Keypress: left
+90.9193 	EXP 	stim_cross: autoDraw = False
+90.9199 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 3), ('match', 0), ('corr_key', 'left')])
+90.9360 	EXP 	stim_text: autoDraw = False
+90.9360 	EXP 	stim_cross: autoDraw = False
+90.9360 	EXP 	stim_text: text = 3
+90.9360 	EXP 	stim_text: autoDraw = True
+91.3405 	DATA 	Keypress: left
+91.4193 	EXP 	stim_cross: autoDraw = True
+91.4360 	EXP 	stim_text: autoDraw = False
+94.4194 	EXP 	stim_cross: autoDraw = False
+94.4199 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 3), ('match', 1), ('corr_key', 'right')])
+94.4360 	EXP 	stim_text: autoDraw = False
+94.4360 	EXP 	stim_cross: autoDraw = False
+94.4360 	EXP 	stim_text: text = 3
+94.4360 	EXP 	stim_text: autoDraw = True
+94.8072 	DATA 	Keypress: right
+94.9194 	EXP 	stim_cross: autoDraw = True
+94.9360 	EXP 	stim_text: autoDraw = False
+97.9194 	EXP 	stim_cross: autoDraw = False
+97.9200 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+97.9361 	EXP 	stim_text: autoDraw = False
+97.9361 	EXP 	stim_cross: autoDraw = False
+97.9361 	EXP 	stim_text: text = 9
+97.9361 	EXP 	stim_text: autoDraw = True
+98.3237 	DATA 	Keypress: left
+98.4194 	EXP 	stim_cross: autoDraw = True
+98.4361 	EXP 	stim_text: autoDraw = False
+101.4194 	EXP 	stim_cross: autoDraw = False
+101.4200 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+101.4361 	EXP 	stim_text: autoDraw = False
+101.4361 	EXP 	stim_cross: autoDraw = False
+101.4361 	EXP 	stim_text: text = 9
+101.4361 	EXP 	stim_text: autoDraw = True
+101.9194 	EXP 	stim_cross: autoDraw = True
+101.9361 	EXP 	stim_text: autoDraw = False
+102.2405 	DATA 	Keypress: right
+104.9195 	EXP 	stim_cross: autoDraw = False
+104.9201 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 8), ('match', 0), ('corr_key', 'left')])
+104.9362 	EXP 	stim_text: autoDraw = False
+104.9362 	EXP 	stim_cross: autoDraw = False
+104.9362 	EXP 	stim_text: text = 8
+104.9362 	EXP 	stim_text: autoDraw = True
+105.4195 	EXP 	stim_cross: autoDraw = True
+105.4362 	EXP 	stim_text: autoDraw = False
+105.6406 	DATA 	Keypress: left
+108.4195 	EXP 	stim_cross: autoDraw = False
+108.4201 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+108.4362 	EXP 	stim_text: autoDraw = False
+108.4362 	EXP 	stim_cross: autoDraw = False
+108.4362 	EXP 	stim_text: text = 2
+108.4362 	EXP 	stim_text: autoDraw = True
+108.9196 	EXP 	stim_cross: autoDraw = True
+108.9236 	DATA 	Keypress: left
+108.9362 	EXP 	stim_text: autoDraw = False
+111.9196 	EXP 	stim_cross: autoDraw = False
+111.9202 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+111.9362 	EXP 	stim_text: autoDraw = False
+111.9362 	EXP 	stim_cross: autoDraw = False
+111.9362 	EXP 	stim_text: text = 2
+111.9362 	EXP 	stim_text: autoDraw = True
+112.3578 	DATA 	Keypress: left
+112.4196 	EXP 	stim_cross: autoDraw = True
+112.4362 	EXP 	stim_text: autoDraw = False
+115.4196 	EXP 	stim_cross: autoDraw = False
+115.4202 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+115.4363 	EXP 	stim_text: autoDraw = False
+115.4363 	EXP 	stim_cross: autoDraw = False
+115.4363 	EXP 	stim_text: text = 2
+115.4363 	EXP 	stim_text: autoDraw = True
+115.9196 	EXP 	stim_cross: autoDraw = True
+115.9363 	EXP 	stim_text: autoDraw = False
+116.2243 	DATA 	Keypress: right
+118.9197 	EXP 	stim_cross: autoDraw = False
+118.9202 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+118.9363 	EXP 	stim_text: autoDraw = False
+118.9363 	EXP 	stim_cross: autoDraw = False
+118.9363 	EXP 	stim_text: text = 2
+118.9363 	EXP 	stim_text: autoDraw = True
+119.3915 	DATA 	Keypress: right
+119.4197 	EXP 	stim_cross: autoDraw = True
+119.4364 	EXP 	stim_text: autoDraw = False
+122.4197 	EXP 	stim_cross: autoDraw = False
+122.4203 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+122.4364 	EXP 	stim_text: autoDraw = False
+122.4364 	EXP 	stim_cross: autoDraw = False
+122.4364 	EXP 	stim_text: text = 1
+122.4364 	EXP 	stim_text: autoDraw = True
+122.8571 	DATA 	Keypress: left
+122.9197 	EXP 	stim_cross: autoDraw = True
+122.9364 	EXP 	stim_text: autoDraw = False
+125.9198 	EXP 	stim_cross: autoDraw = False
+125.9204 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+125.9364 	EXP 	stim_text: autoDraw = False
+125.9364 	EXP 	stim_cross: autoDraw = False
+125.9364 	EXP 	stim_text: text = 9
+125.9364 	EXP 	stim_text: autoDraw = True
+126.4198 	EXP 	stim_cross: autoDraw = True
+126.4238 	DATA 	Keypress: left
+126.4364 	EXP 	stim_text: autoDraw = False
+129.4198 	EXP 	stim_cross: autoDraw = False
+129.4204 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+129.4365 	EXP 	stim_text: autoDraw = False
+129.4365 	EXP 	stim_cross: autoDraw = False
+129.4365 	EXP 	stim_text: text = 5
+129.4365 	EXP 	stim_text: autoDraw = True
+129.9198 	EXP 	stim_cross: autoDraw = True
+129.9365 	EXP 	stim_text: autoDraw = False
+129.9913 	DATA 	Keypress: left
+132.9199 	EXP 	stim_cross: autoDraw = False
+132.9205 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 5), ('match', 1), ('corr_key', 'right')])
+132.9365 	EXP 	stim_text: autoDraw = False
+132.9365 	EXP 	stim_cross: autoDraw = False
+132.9365 	EXP 	stim_text: text = 5
+132.9365 	EXP 	stim_text: autoDraw = True
+133.4199 	EXP 	stim_cross: autoDraw = True
+133.4365 	EXP 	stim_text: autoDraw = False
+133.5743 	DATA 	Keypress: right
+136.4199 	EXP 	stim_cross: autoDraw = False
+136.4205 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+136.4366 	EXP 	stim_text: autoDraw = False
+136.4366 	EXP 	stim_cross: autoDraw = False
+136.4366 	EXP 	stim_text: text = 6
+136.4366 	EXP 	stim_text: autoDraw = True
+136.8906 	DATA 	Keypress: left
+136.9199 	EXP 	stim_cross: autoDraw = True
+136.9366 	EXP 	stim_text: autoDraw = False
+139.9199 	EXP 	stim_cross: autoDraw = False
+139.9205 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+139.9366 	EXP 	stim_text: autoDraw = False
+139.9366 	EXP 	stim_cross: autoDraw = False
+139.9366 	EXP 	stim_text: text = 6
+139.9366 	EXP 	stim_text: autoDraw = True
+140.4200 	EXP 	stim_cross: autoDraw = True
+140.4366 	EXP 	stim_text: autoDraw = False
+140.4581 	DATA 	Keypress: right
+143.4200 	EXP 	stim_cross: autoDraw = False
+143.4206 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+143.4366 	EXP 	stim_text: autoDraw = False
+143.4366 	EXP 	stim_cross: autoDraw = False
+143.4366 	EXP 	stim_text: text = 6
+143.4366 	EXP 	stim_text: autoDraw = True
+143.9200 	EXP 	stim_cross: autoDraw = True
+143.9367 	EXP 	stim_text: autoDraw = False
+143.9912 	DATA 	Keypress: right
+146.9200 	EXP 	stim_cross: autoDraw = False
+146.9206 	EXP 	New trial (rep=0, index=1): OrderedDict([('task_order', 'ZB-match_8-16529098592842987.csv')])
+146.9700 	EXP 	stim_text: autoDraw = False
+146.9700 	EXP 	stim_cross: autoDraw = False
+146.9700 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: 8\nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+146.9700 	EXP 	exp_zero_back_text: autoDraw = True
+146.9700 	EXP 	exp_one_back_text: autoDraw = True
+146.9700 	EXP 	exp_two_back_text: autoDraw = True
+153.7434 	DATA 	Keypress: space
+153.7535 	EXP 	exp_zero_back_text: autoDraw = False
+153.7535 	EXP 	exp_one_back_text: autoDraw = False
+153.7535 	EXP 	exp_two_back_text: autoDraw = False
+153.7535 	EXP 	pause_cross: autoDraw = True
+155.7459 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\ZB-match_8-16529098592842987.csv as conditions, 20 conditions, 4 params
+155.7462 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+155.7465 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 2), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+155.7535 	EXP 	pause_cross: autoDraw = False
+155.7535 	EXP 	pause_cross: autoDraw = False
+155.7535 	EXP 	stim_text: text = 2
+155.7535 	EXP 	stim_text: autoDraw = True
+156.2535 	EXP 	stim_text: autoDraw = False
+156.2535 	EXP 	stim_cross: autoDraw = True
+156.3748 	DATA 	Keypress: left
+159.2393 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 6), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+159.2536 	EXP 	stim_cross: autoDraw = False
+159.2536 	EXP 	stim_text: autoDraw = False
+159.2536 	EXP 	stim_cross: autoDraw = False
+159.2536 	EXP 	stim_text: text = 6
+159.2536 	EXP 	stim_text: autoDraw = True
+159.6412 	DATA 	Keypress: left
+159.7369 	EXP 	stim_cross: autoDraw = True
+159.7535 	EXP 	stim_text: autoDraw = False
+162.7369 	EXP 	stim_cross: autoDraw = False
+162.7387 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 9), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+162.7536 	EXP 	stim_text: autoDraw = False
+162.7536 	EXP 	stim_cross: autoDraw = False
+162.7536 	EXP 	stim_text: text = 9
+162.7536 	EXP 	stim_text: autoDraw = True
+163.1250 	DATA 	Keypress: left
+163.2369 	EXP 	stim_cross: autoDraw = True
+163.2536 	EXP 	stim_text: autoDraw = False
+166.2370 	EXP 	stim_cross: autoDraw = False
+166.2396 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+166.2536 	EXP 	stim_text: autoDraw = False
+166.2536 	EXP 	stim_cross: autoDraw = False
+166.2536 	EXP 	stim_text: text = 8
+166.2536 	EXP 	stim_text: autoDraw = True
+166.6249 	DATA 	Keypress: right
+166.7370 	EXP 	stim_cross: autoDraw = True
+166.7536 	EXP 	stim_text: autoDraw = False
+169.7370 	EXP 	stim_cross: autoDraw = False
+169.7393 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 1), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+169.7537 	EXP 	stim_text: autoDraw = False
+169.7537 	EXP 	stim_cross: autoDraw = False
+169.7537 	EXP 	stim_text: text = 1
+169.7537 	EXP 	stim_text: autoDraw = True
+170.2370 	EXP 	stim_cross: autoDraw = True
+170.2537 	EXP 	stim_text: autoDraw = False
+170.3080 	DATA 	Keypress: left
+173.2371 	EXP 	stim_cross: autoDraw = False
+173.2391 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 3), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+173.2537 	EXP 	stim_text: autoDraw = False
+173.2537 	EXP 	stim_cross: autoDraw = False
+173.2537 	EXP 	stim_text: text = 3
+173.2537 	EXP 	stim_text: autoDraw = True
+173.7256 	DATA 	Keypress: left
+173.7371 	EXP 	stim_cross: autoDraw = True
+173.7537 	EXP 	stim_text: autoDraw = False
+176.7371 	EXP 	stim_cross: autoDraw = False
+176.7388 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+176.7538 	EXP 	stim_text: autoDraw = False
+176.7538 	EXP 	stim_cross: autoDraw = False
+176.7538 	EXP 	stim_text: text = 8
+176.7538 	EXP 	stim_text: autoDraw = True
+177.2371 	EXP 	stim_cross: autoDraw = True
+177.2417 	DATA 	Keypress: right
+177.2538 	EXP 	stim_text: autoDraw = False
+180.2371 	EXP 	stim_cross: autoDraw = False
+180.2395 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 7), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+180.2538 	EXP 	stim_text: autoDraw = False
+180.2538 	EXP 	stim_cross: autoDraw = False
+180.2538 	EXP 	stim_text: text = 7
+180.2538 	EXP 	stim_text: autoDraw = True
+180.7371 	EXP 	stim_cross: autoDraw = True
+180.7538 	EXP 	stim_text: autoDraw = False
+180.7584 	DATA 	Keypress: left
+183.7372 	EXP 	stim_cross: autoDraw = False
+183.7394 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 0), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+183.7538 	EXP 	stim_text: autoDraw = False
+183.7538 	EXP 	stim_cross: autoDraw = False
+183.7538 	EXP 	stim_text: text = 0
+183.7538 	EXP 	stim_text: autoDraw = True
+184.2372 	EXP 	stim_cross: autoDraw = True
+184.2413 	DATA 	Keypress: left
+184.2538 	EXP 	stim_text: autoDraw = False
+187.2372 	EXP 	stim_cross: autoDraw = False
+187.2390 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 3), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+187.2539 	EXP 	stim_text: autoDraw = False
+187.2539 	EXP 	stim_cross: autoDraw = False
+187.2539 	EXP 	stim_text: text = 3
+187.2539 	EXP 	stim_text: autoDraw = True
+187.7372 	EXP 	stim_cross: autoDraw = True
+187.7539 	EXP 	stim_text: autoDraw = False
+187.8755 	DATA 	Keypress: left
+190.7373 	EXP 	stim_cross: autoDraw = False
+190.7396 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 0), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+190.7539 	EXP 	stim_text: autoDraw = False
+190.7539 	EXP 	stim_cross: autoDraw = False
+190.7539 	EXP 	stim_text: text = 0
+190.7539 	EXP 	stim_text: autoDraw = True
+191.1748 	DATA 	Keypress: left
+191.2373 	EXP 	stim_cross: autoDraw = True
+191.2539 	EXP 	stim_text: autoDraw = False
+194.2373 	EXP 	stim_cross: autoDraw = False
+194.2393 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+194.2540 	EXP 	stim_text: autoDraw = False
+194.2540 	EXP 	stim_cross: autoDraw = False
+194.2540 	EXP 	stim_text: text = 8
+194.2540 	EXP 	stim_text: autoDraw = True
+194.7373 	EXP 	stim_cross: autoDraw = True
+194.7422 	DATA 	Keypress: right
+194.7540 	EXP 	stim_text: autoDraw = False
+197.7374 	EXP 	stim_cross: autoDraw = False
+197.7400 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+197.7540 	EXP 	stim_text: autoDraw = False
+197.7540 	EXP 	stim_cross: autoDraw = False
+197.7540 	EXP 	stim_text: text = 8
+197.7540 	EXP 	stim_text: autoDraw = True
+198.2374 	EXP 	stim_cross: autoDraw = True
+198.2540 	EXP 	stim_text: autoDraw = False
+198.2749 	DATA 	Keypress: right
+201.2375 	EXP 	stim_cross: autoDraw = False
+201.2402 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+201.2541 	EXP 	stim_text: autoDraw = False
+201.2541 	EXP 	stim_cross: autoDraw = False
+201.2541 	EXP 	stim_text: text = 8
+201.2541 	EXP 	stim_text: autoDraw = True
+201.6582 	DATA 	Keypress: right
+201.7374 	EXP 	stim_cross: autoDraw = True
+201.7541 	EXP 	stim_text: autoDraw = False
+204.7375 	EXP 	stim_cross: autoDraw = False
+204.7401 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+204.7541 	EXP 	stim_text: autoDraw = False
+204.7541 	EXP 	stim_cross: autoDraw = False
+204.7541 	EXP 	stim_text: text = 8
+204.7541 	EXP 	stim_text: autoDraw = True
+205.1422 	DATA 	Keypress: right
+205.2375 	EXP 	stim_cross: autoDraw = True
+205.2541 	EXP 	stim_text: autoDraw = False
+208.2375 	EXP 	stim_cross: autoDraw = False
+208.2397 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+208.2542 	EXP 	stim_text: autoDraw = False
+208.2542 	EXP 	stim_cross: autoDraw = False
+208.2542 	EXP 	stim_text: text = 8
+208.2542 	EXP 	stim_text: autoDraw = True
+208.5920 	DATA 	Keypress: right
+208.7375 	EXP 	stim_cross: autoDraw = True
+208.7542 	EXP 	stim_text: autoDraw = False
+211.7376 	EXP 	stim_cross: autoDraw = False
+211.7393 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 7), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+211.7542 	EXP 	stim_text: autoDraw = False
+211.7542 	EXP 	stim_cross: autoDraw = False
+211.7542 	EXP 	stim_text: text = 7
+211.7542 	EXP 	stim_text: autoDraw = True
+212.2083 	DATA 	Keypress: left
+212.2376 	EXP 	stim_cross: autoDraw = True
+212.2543 	EXP 	stim_text: autoDraw = False
+215.2376 	EXP 	stim_cross: autoDraw = False
+215.2400 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 2), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+215.2543 	EXP 	stim_text: autoDraw = False
+215.2543 	EXP 	stim_cross: autoDraw = False
+215.2543 	EXP 	stim_text: text = 2
+215.2543 	EXP 	stim_text: autoDraw = True
+215.6752 	DATA 	Keypress: left
+215.7376 	EXP 	stim_cross: autoDraw = True
+215.7543 	EXP 	stim_text: autoDraw = False
+218.7376 	EXP 	stim_cross: autoDraw = False
+218.7399 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 2), ('match_num', 8), ('match', 0), ('corr_key', 'left')])
+218.7543 	EXP 	stim_text: autoDraw = False
+218.7543 	EXP 	stim_cross: autoDraw = False
+218.7543 	EXP 	stim_text: text = 2
+218.7543 	EXP 	stim_text: autoDraw = True
+219.1920 	DATA 	Keypress: left
+219.2377 	EXP 	stim_cross: autoDraw = True
+219.2543 	EXP 	stim_text: autoDraw = False
+222.2377 	EXP 	stim_cross: autoDraw = False
+222.2396 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 8), ('match_num', 8), ('match', 1), ('corr_key', 'right')])
+222.2544 	EXP 	stim_text: autoDraw = False
+222.2544 	EXP 	stim_cross: autoDraw = False
+222.2544 	EXP 	stim_text: text = 8
+222.2544 	EXP 	stim_text: autoDraw = True
+222.6757 	DATA 	Keypress: right
+222.7377 	EXP 	stim_cross: autoDraw = True
+222.7544 	EXP 	stim_text: autoDraw = False
+225.7377 	EXP 	stim_cross: autoDraw = False
+225.7399 	EXP 	New trial (rep=0, index=2): OrderedDict([('task_order', 'ZB-match_9-16529098592180767.csv')])
+225.7877 	EXP 	stim_text: autoDraw = False
+225.7877 	EXP 	stim_cross: autoDraw = False
+225.7877 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: 9\nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+225.7877 	EXP 	exp_zero_back_text: autoDraw = True
+225.7877 	EXP 	exp_one_back_text: autoDraw = True
+225.7877 	EXP 	exp_two_back_text: autoDraw = True
+229.6780 	DATA 	Keypress: space
+229.6878 	EXP 	exp_zero_back_text: autoDraw = False
+229.6878 	EXP 	exp_one_back_text: autoDraw = False
+229.6878 	EXP 	exp_two_back_text: autoDraw = False
+229.6878 	EXP 	pause_cross: autoDraw = True
+231.6806 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\ZB-match_9-16529098592180767.csv as conditions, 20 conditions, 4 params
+231.6809 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+231.6811 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 0), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+231.6879 	EXP 	pause_cross: autoDraw = False
+231.6879 	EXP 	pause_cross: autoDraw = False
+231.6879 	EXP 	stim_text: text = 0
+231.6879 	EXP 	stim_text: autoDraw = True
+232.1878 	EXP 	stim_text: autoDraw = False
+232.1878 	EXP 	stim_cross: autoDraw = True
+232.2584 	DATA 	Keypress: left
+235.1737 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 4), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+235.1878 	EXP 	stim_cross: autoDraw = False
+235.1878 	EXP 	stim_text: autoDraw = False
+235.1878 	EXP 	stim_cross: autoDraw = False
+235.1878 	EXP 	stim_text: text = 4
+235.1878 	EXP 	stim_text: autoDraw = True
+235.6712 	EXP 	stim_cross: autoDraw = True
+235.6879 	EXP 	stim_text: autoDraw = False
+235.6920 	DATA 	Keypress: left
+238.6712 	EXP 	stim_cross: autoDraw = False
+238.6738 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+238.6879 	EXP 	stim_text: autoDraw = False
+238.6879 	EXP 	stim_cross: autoDraw = False
+238.6879 	EXP 	stim_text: text = 9
+238.6879 	EXP 	stim_text: autoDraw = True
+239.1712 	EXP 	stim_cross: autoDraw = True
+239.1757 	DATA 	Keypress: right
+239.1879 	EXP 	stim_text: autoDraw = False
+242.1713 	EXP 	stim_cross: autoDraw = False
+242.1734 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 5), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+242.1879 	EXP 	stim_text: autoDraw = False
+242.1879 	EXP 	stim_cross: autoDraw = False
+242.1879 	EXP 	stim_text: text = 5
+242.1879 	EXP 	stim_text: autoDraw = True
+242.6713 	EXP 	stim_cross: autoDraw = True
+242.6880 	EXP 	stim_text: autoDraw = False
+242.7252 	DATA 	Keypress: left
+245.6713 	EXP 	stim_cross: autoDraw = False
+245.6731 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+245.6880 	EXP 	stim_text: autoDraw = False
+245.6880 	EXP 	stim_cross: autoDraw = False
+245.6880 	EXP 	stim_text: text = 9
+245.6880 	EXP 	stim_text: autoDraw = True
+246.1092 	DATA 	Keypress: right
+246.1713 	EXP 	stim_cross: autoDraw = True
+246.1880 	EXP 	stim_text: autoDraw = False
+249.1714 	EXP 	stim_cross: autoDraw = False
+249.1737 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 3), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+249.1880 	EXP 	stim_text: autoDraw = False
+249.1880 	EXP 	stim_cross: autoDraw = False
+249.1880 	EXP 	stim_text: text = 3
+249.1880 	EXP 	stim_text: autoDraw = True
+249.6714 	EXP 	stim_cross: autoDraw = True
+249.6756 	DATA 	Keypress: left
+249.6880 	EXP 	stim_text: autoDraw = False
+252.6714 	EXP 	stim_cross: autoDraw = False
+252.6733 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 7), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+252.6881 	EXP 	stim_text: autoDraw = False
+252.6881 	EXP 	stim_cross: autoDraw = False
+252.6881 	EXP 	stim_text: text = 7
+252.6881 	EXP 	stim_text: autoDraw = True
+253.1714 	EXP 	stim_cross: autoDraw = True
+253.1881 	EXP 	stim_text: autoDraw = False
+253.2760 	DATA 	Keypress: left
+256.1715 	EXP 	stim_cross: autoDraw = False
+256.1733 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+256.1881 	EXP 	stim_text: autoDraw = False
+256.1881 	EXP 	stim_cross: autoDraw = False
+256.1881 	EXP 	stim_text: text = 9
+256.1881 	EXP 	stim_text: autoDraw = True
+256.6715 	EXP 	stim_cross: autoDraw = True
+256.6881 	EXP 	stim_text: autoDraw = False
+256.9097 	DATA 	Keypress: right
+259.6715 	EXP 	stim_cross: autoDraw = False
+259.6741 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+259.6882 	EXP 	stim_text: autoDraw = False
+259.6882 	EXP 	stim_cross: autoDraw = False
+259.6882 	EXP 	stim_text: text = 9
+259.6882 	EXP 	stim_text: autoDraw = True
+260.1715 	EXP 	stim_cross: autoDraw = True
+260.1882 	EXP 	stim_text: autoDraw = False
+260.2089 	DATA 	Keypress: right
+263.1716 	EXP 	stim_cross: autoDraw = False
+263.1737 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 5), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+263.1882 	EXP 	stim_text: autoDraw = False
+263.1882 	EXP 	stim_cross: autoDraw = False
+263.1882 	EXP 	stim_text: text = 5
+263.1882 	EXP 	stim_text: autoDraw = True
+263.6098 	DATA 	Keypress: left
+263.6716 	EXP 	stim_cross: autoDraw = True
+263.6882 	EXP 	stim_text: autoDraw = False
+266.6716 	EXP 	stim_cross: autoDraw = False
+266.6735 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+266.6883 	EXP 	stim_text: autoDraw = False
+266.6883 	EXP 	stim_cross: autoDraw = False
+266.6883 	EXP 	stim_text: text = 9
+266.6883 	EXP 	stim_text: autoDraw = True
+267.1096 	DATA 	Keypress: right
+267.1716 	EXP 	stim_cross: autoDraw = True
+267.1883 	EXP 	stim_text: autoDraw = False
+270.1716 	EXP 	stim_cross: autoDraw = False
+270.1741 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 4), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+270.1883 	EXP 	stim_text: autoDraw = False
+270.1883 	EXP 	stim_cross: autoDraw = False
+270.1883 	EXP 	stim_text: text = 4
+270.1883 	EXP 	stim_text: autoDraw = True
+270.5431 	DATA 	Keypress: left
+270.6717 	EXP 	stim_cross: autoDraw = True
+270.6883 	EXP 	stim_text: autoDraw = False
+273.6717 	EXP 	stim_cross: autoDraw = False
+273.6736 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 5), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+273.6884 	EXP 	stim_text: autoDraw = False
+273.6884 	EXP 	stim_cross: autoDraw = False
+273.6884 	EXP 	stim_text: text = 5
+273.6884 	EXP 	stim_text: autoDraw = True
+274.1097 	DATA 	Keypress: left
+274.1717 	EXP 	stim_cross: autoDraw = True
+274.1884 	EXP 	stim_text: autoDraw = False
+277.1717 	EXP 	stim_cross: autoDraw = False
+277.1742 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+277.1884 	EXP 	stim_text: autoDraw = False
+277.1884 	EXP 	stim_cross: autoDraw = False
+277.1884 	EXP 	stim_text: text = 9
+277.1884 	EXP 	stim_text: autoDraw = True
+277.6432 	DATA 	Keypress: right
+277.6717 	EXP 	stim_cross: autoDraw = True
+277.6884 	EXP 	stim_text: autoDraw = False
+280.6718 	EXP 	stim_cross: autoDraw = False
+280.6739 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+280.6884 	EXP 	stim_text: autoDraw = False
+280.6884 	EXP 	stim_cross: autoDraw = False
+280.6884 	EXP 	stim_text: text = 9
+280.6884 	EXP 	stim_text: autoDraw = True
+281.0591 	DATA 	Keypress: right
+281.1718 	EXP 	stim_cross: autoDraw = True
+281.1884 	EXP 	stim_text: autoDraw = False
+284.1718 	EXP 	stim_cross: autoDraw = False
+284.1745 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 1), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+284.1885 	EXP 	stim_text: autoDraw = False
+284.1885 	EXP 	stim_cross: autoDraw = False
+284.1885 	EXP 	stim_text: text = 1
+284.1885 	EXP 	stim_text: autoDraw = True
+284.6266 	DATA 	Keypress: left
+284.6718 	EXP 	stim_cross: autoDraw = True
+284.6885 	EXP 	stim_text: autoDraw = False
+287.6719 	EXP 	stim_cross: autoDraw = False
+287.6741 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 9), ('match_num', 9), ('match', 1), ('corr_key', 'right')])
+287.6885 	EXP 	stim_text: autoDraw = False
+287.6885 	EXP 	stim_cross: autoDraw = False
+287.6885 	EXP 	stim_text: text = 9
+287.6885 	EXP 	stim_text: autoDraw = True
+288.1719 	EXP 	stim_cross: autoDraw = True
+288.1760 	DATA 	Keypress: right
+288.1886 	EXP 	stim_text: autoDraw = False
+291.1719 	EXP 	stim_cross: autoDraw = False
+291.1737 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 6), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+291.1886 	EXP 	stim_text: autoDraw = False
+291.1886 	EXP 	stim_cross: autoDraw = False
+291.1886 	EXP 	stim_text: text = 6
+291.1886 	EXP 	stim_text: autoDraw = True
+291.6602 	DATA 	Keypress: right
+291.6719 	EXP 	stim_cross: autoDraw = True
+291.6886 	EXP 	stim_text: autoDraw = False
+294.6720 	EXP 	stim_cross: autoDraw = False
+294.6738 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 3), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+294.6886 	EXP 	stim_text: autoDraw = False
+294.6886 	EXP 	stim_cross: autoDraw = False
+294.6886 	EXP 	stim_text: text = 3
+294.6886 	EXP 	stim_text: autoDraw = True
+295.1720 	EXP 	stim_cross: autoDraw = True
+295.1886 	EXP 	stim_text: autoDraw = False
+295.1927 	DATA 	Keypress: right
+298.1720 	EXP 	stim_cross: autoDraw = False
+298.1745 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 5), ('match_num', 9), ('match', 0), ('corr_key', 'left')])
+298.1887 	EXP 	stim_text: autoDraw = False
+298.1887 	EXP 	stim_cross: autoDraw = False
+298.1887 	EXP 	stim_text: text = 5
+298.1887 	EXP 	stim_text: autoDraw = True
+298.6265 	DATA 	Keypress: left
+298.6720 	EXP 	stim_cross: autoDraw = True
+298.6887 	EXP 	stim_text: autoDraw = False
+301.6721 	EXP 	stim_cross: autoDraw = False
+301.6741 	EXP 	New trial (rep=0, index=3): OrderedDict([('task_order', 'OB-16529098598729453.csv')])
+301.7221 	EXP 	stim_text: autoDraw = False
+301.7221 	EXP 	stim_cross: autoDraw = False
+301.7221 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: \nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+301.7221 	EXP 	exp_zero_back_text: autoDraw = True
+301.7221 	EXP 	exp_one_back_text: autoDraw = True
+301.7221 	EXP 	exp_two_back_text: autoDraw = True
+305.3278 	DATA 	Keypress: space
+305.3554 	EXP 	exp_zero_back_text: autoDraw = False
+305.3554 	EXP 	exp_one_back_text: autoDraw = False
+305.3554 	EXP 	exp_two_back_text: autoDraw = False
+305.3554 	EXP 	pause_cross: autoDraw = True
+307.3466 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\OB-16529098598729453.csv as conditions, 20 conditions, 3 params
+307.3469 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+307.3471 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+307.3555 	EXP 	pause_cross: autoDraw = False
+307.3555 	EXP 	pause_cross: autoDraw = False
+307.3555 	EXP 	stim_text: text = 1
+307.3555 	EXP 	stim_text: autoDraw = True
+307.8555 	EXP 	stim_text: autoDraw = False
+307.8555 	EXP 	stim_cross: autoDraw = True
+310.8414 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+310.8555 	EXP 	stim_cross: autoDraw = False
+310.8555 	EXP 	stim_text: autoDraw = False
+310.8555 	EXP 	stim_cross: autoDraw = False
+310.8555 	EXP 	stim_text: text = 7
+310.8555 	EXP 	stim_text: autoDraw = True
+311.3270 	DATA 	Keypress: left
+311.3389 	EXP 	stim_cross: autoDraw = True
+311.3555 	EXP 	stim_text: autoDraw = False
+314.3389 	EXP 	stim_cross: autoDraw = False
+314.3409 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 4), ('match', 0), ('corr_key', 'left')])
+314.3556 	EXP 	stim_text: autoDraw = False
+314.3556 	EXP 	stim_cross: autoDraw = False
+314.3556 	EXP 	stim_text: text = 4
+314.3556 	EXP 	stim_text: autoDraw = True
+314.7770 	DATA 	Keypress: left
+314.8389 	EXP 	stim_cross: autoDraw = True
+314.8556 	EXP 	stim_text: autoDraw = False
+317.8389 	EXP 	stim_cross: autoDraw = False
+317.8413 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 4), ('match', 1), ('corr_key', 'right')])
+317.8556 	EXP 	stim_text: autoDraw = False
+317.8556 	EXP 	stim_cross: autoDraw = False
+317.8556 	EXP 	stim_text: text = 4
+317.8556 	EXP 	stim_text: autoDraw = True
+318.3389 	EXP 	stim_cross: autoDraw = True
+318.3556 	EXP 	stim_text: autoDraw = False
+318.6604 	DATA 	Keypress: right
+321.3390 	EXP 	stim_cross: autoDraw = False
+321.3409 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 4), ('match', 1), ('corr_key', 'right')])
+321.3556 	EXP 	stim_text: autoDraw = False
+321.3556 	EXP 	stim_cross: autoDraw = False
+321.3556 	EXP 	stim_text: text = 4
+321.3556 	EXP 	stim_text: autoDraw = True
+321.7930 	DATA 	Keypress: right
+321.8390 	EXP 	stim_cross: autoDraw = True
+321.8557 	EXP 	stim_text: autoDraw = False
+324.8390 	EXP 	stim_cross: autoDraw = False
+324.8416 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 3), ('match', 0), ('corr_key', 'left')])
+324.8557 	EXP 	stim_text: autoDraw = False
+324.8557 	EXP 	stim_cross: autoDraw = False
+324.8557 	EXP 	stim_text: text = 3
+324.8557 	EXP 	stim_text: autoDraw = True
+325.3390 	EXP 	stim_cross: autoDraw = True
+325.3557 	EXP 	stim_text: autoDraw = False
+325.7435 	DATA 	Keypress: left
+328.3391 	EXP 	stim_cross: autoDraw = False
+328.3416 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+328.3557 	EXP 	stim_text: autoDraw = False
+328.3557 	EXP 	stim_cross: autoDraw = False
+328.3557 	EXP 	stim_text: text = 5
+328.3557 	EXP 	stim_text: autoDraw = True
+328.8391 	EXP 	stim_cross: autoDraw = True
+328.8558 	EXP 	stim_text: autoDraw = False
+328.8764 	DATA 	Keypress: left
+331.8391 	EXP 	stim_cross: autoDraw = False
+331.8412 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+331.8558 	EXP 	stim_text: autoDraw = False
+331.8558 	EXP 	stim_cross: autoDraw = False
+331.8558 	EXP 	stim_text: text = 1
+331.8558 	EXP 	stim_text: autoDraw = True
+332.3391 	EXP 	stim_cross: autoDraw = True
+332.3558 	EXP 	stim_text: autoDraw = False
+332.4269 	DATA 	Keypress: left
+335.3392 	EXP 	stim_cross: autoDraw = False
+335.3417 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 1), ('match', 1), ('corr_key', 'right')])
+335.3558 	EXP 	stim_text: autoDraw = False
+335.3558 	EXP 	stim_cross: autoDraw = False
+335.3558 	EXP 	stim_text: text = 1
+335.3558 	EXP 	stim_text: autoDraw = True
+335.8392 	EXP 	stim_cross: autoDraw = True
+335.8436 	DATA 	Keypress: left
+335.8558 	EXP 	stim_text: autoDraw = False
+338.8392 	EXP 	stim_cross: autoDraw = False
+338.8413 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 1), ('match', 1), ('corr_key', 'right')])
+338.8559 	EXP 	stim_text: autoDraw = False
+338.8559 	EXP 	stim_cross: autoDraw = False
+338.8559 	EXP 	stim_text: text = 1
+338.8559 	EXP 	stim_text: autoDraw = True
+339.3392 	EXP 	stim_cross: autoDraw = True
+339.3559 	EXP 	stim_text: autoDraw = False
+339.4939 	DATA 	Keypress: right
+342.3393 	EXP 	stim_cross: autoDraw = False
+342.3409 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 1), ('match', 1), ('corr_key', 'right')])
+342.3559 	EXP 	stim_text: autoDraw = False
+342.3559 	EXP 	stim_cross: autoDraw = False
+342.3559 	EXP 	stim_text: text = 1
+342.3559 	EXP 	stim_text: autoDraw = True
+342.8393 	EXP 	stim_cross: autoDraw = True
+342.8559 	EXP 	stim_text: autoDraw = False
+342.8608 	DATA 	Keypress: right
+345.8393 	EXP 	stim_cross: autoDraw = False
+345.8416 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+345.8560 	EXP 	stim_text: autoDraw = False
+345.8560 	EXP 	stim_cross: autoDraw = False
+345.8560 	EXP 	stim_text: text = 9
+345.8560 	EXP 	stim_text: autoDraw = True
+346.3273 	DATA 	Keypress: left
+346.3393 	EXP 	stim_cross: autoDraw = True
+346.3559 	EXP 	stim_text: autoDraw = False
+349.3394 	EXP 	stim_cross: autoDraw = False
+349.3415 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+349.3560 	EXP 	stim_text: autoDraw = False
+349.3560 	EXP 	stim_cross: autoDraw = False
+349.3560 	EXP 	stim_text: text = 7
+349.3560 	EXP 	stim_text: autoDraw = True
+349.8106 	DATA 	Keypress: left
+349.8394 	EXP 	stim_cross: autoDraw = True
+349.8560 	EXP 	stim_text: autoDraw = False
+352.8394 	EXP 	stim_cross: autoDraw = False
+352.8420 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 8), ('match', 0), ('corr_key', 'left')])
+352.8561 	EXP 	stim_text: autoDraw = False
+352.8561 	EXP 	stim_cross: autoDraw = False
+352.8561 	EXP 	stim_text: text = 8
+352.8561 	EXP 	stim_text: autoDraw = True
+353.3100 	DATA 	Keypress: left
+353.3394 	EXP 	stim_cross: autoDraw = True
+353.3561 	EXP 	stim_text: autoDraw = False
+356.3395 	EXP 	stim_cross: autoDraw = False
+356.3417 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 8), ('match', 1), ('corr_key', 'right')])
+356.3561 	EXP 	stim_text: autoDraw = False
+356.3561 	EXP 	stim_cross: autoDraw = False
+356.3561 	EXP 	stim_text: text = 8
+356.3561 	EXP 	stim_text: autoDraw = True
+356.7937 	DATA 	Keypress: right
+356.8395 	EXP 	stim_cross: autoDraw = True
+356.8561 	EXP 	stim_text: autoDraw = False
+359.8395 	EXP 	stim_cross: autoDraw = False
+359.8413 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 0), ('match', 0), ('corr_key', 'left')])
+359.8562 	EXP 	stim_text: autoDraw = False
+359.8562 	EXP 	stim_cross: autoDraw = False
+359.8562 	EXP 	stim_text: text = 0
+359.8562 	EXP 	stim_text: autoDraw = True
+360.3395 	EXP 	stim_cross: autoDraw = True
+360.3442 	DATA 	Keypress: left
+360.3562 	EXP 	stim_text: autoDraw = False
+363.3395 	EXP 	stim_cross: autoDraw = False
+363.3419 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+363.3562 	EXP 	stim_text: autoDraw = False
+363.3562 	EXP 	stim_cross: autoDraw = False
+363.3562 	EXP 	stim_text: text = 2
+363.3562 	EXP 	stim_text: autoDraw = True
+363.7771 	DATA 	Keypress: left
+363.8395 	EXP 	stim_cross: autoDraw = True
+363.8562 	EXP 	stim_text: autoDraw = False
+366.8396 	EXP 	stim_cross: autoDraw = False
+366.8416 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+366.8563 	EXP 	stim_text: autoDraw = False
+366.8563 	EXP 	stim_cross: autoDraw = False
+366.8563 	EXP 	stim_text: text = 2
+366.8563 	EXP 	stim_text: autoDraw = True
+367.3396 	EXP 	stim_cross: autoDraw = True
+367.3563 	EXP 	stim_text: autoDraw = False
+367.4272 	DATA 	Keypress: right
+370.3396 	EXP 	stim_cross: autoDraw = False
+370.3422 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+370.3563 	EXP 	stim_text: autoDraw = False
+370.3563 	EXP 	stim_cross: autoDraw = False
+370.3563 	EXP 	stim_text: text = 2
+370.3563 	EXP 	stim_text: autoDraw = True
+370.8396 	EXP 	stim_cross: autoDraw = True
+370.8563 	EXP 	stim_text: autoDraw = False
+371.7777 	DATA 	Keypress: right
+373.8397 	EXP 	stim_cross: autoDraw = False
+373.8421 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+373.8564 	EXP 	stim_text: autoDraw = False
+373.8564 	EXP 	stim_cross: autoDraw = False
+373.8564 	EXP 	stim_text: text = 6
+373.8564 	EXP 	stim_text: autoDraw = True
+374.2941 	DATA 	Keypress: left
+374.3397 	EXP 	stim_cross: autoDraw = True
+374.3564 	EXP 	stim_text: autoDraw = False
+377.3397 	EXP 	stim_cross: autoDraw = False
+377.3417 	EXP 	New trial (rep=0, index=4): OrderedDict([('task_order', 'ZB-match_1-16529098593413885.csv')])
+377.3897 	EXP 	stim_text: autoDraw = False
+377.3897 	EXP 	stim_cross: autoDraw = False
+377.3897 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: 1\nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+377.3897 	EXP 	exp_zero_back_text: autoDraw = True
+377.3897 	EXP 	exp_one_back_text: autoDraw = True
+377.3897 	EXP 	exp_two_back_text: autoDraw = True
+381.7284 	DATA 	Keypress: space
+381.7565 	EXP 	exp_zero_back_text: autoDraw = False
+381.7565 	EXP 	exp_one_back_text: autoDraw = False
+381.7565 	EXP 	exp_two_back_text: autoDraw = False
+381.7565 	EXP 	pause_cross: autoDraw = True
+383.7483 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\ZB-match_1-16529098593413885.csv as conditions, 20 conditions, 4 params
+383.7486 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+383.7488 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 9), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+383.7565 	EXP 	pause_cross: autoDraw = False
+383.7565 	EXP 	pause_cross: autoDraw = False
+383.7565 	EXP 	stim_text: text = 9
+383.7565 	EXP 	stim_text: autoDraw = True
+384.2565 	EXP 	stim_text: autoDraw = False
+384.2565 	EXP 	stim_cross: autoDraw = True
+384.5776 	DATA 	Keypress: left
+387.2425 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 3), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+387.2565 	EXP 	stim_cross: autoDraw = False
+387.2565 	EXP 	stim_text: autoDraw = False
+387.2565 	EXP 	stim_cross: autoDraw = False
+387.2565 	EXP 	stim_text: text = 3
+387.2565 	EXP 	stim_text: autoDraw = True
+387.7399 	EXP 	stim_cross: autoDraw = True
+387.7565 	EXP 	stim_text: autoDraw = False
+387.7781 	DATA 	Keypress: left
+390.7399 	EXP 	stim_cross: autoDraw = False
+390.7419 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 5), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+390.7566 	EXP 	stim_text: autoDraw = False
+390.7566 	EXP 	stim_cross: autoDraw = False
+390.7566 	EXP 	stim_text: text = 5
+390.7566 	EXP 	stim_text: autoDraw = True
+391.1940 	DATA 	Keypress: left
+391.2399 	EXP 	stim_cross: autoDraw = True
+391.2566 	EXP 	stim_text: autoDraw = False
+394.2399 	EXP 	stim_cross: autoDraw = False
+394.2426 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 7), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+394.2566 	EXP 	stim_text: autoDraw = False
+394.2566 	EXP 	stim_cross: autoDraw = False
+394.2566 	EXP 	stim_text: text = 7
+394.2566 	EXP 	stim_text: autoDraw = True
+394.7399 	EXP 	stim_cross: autoDraw = True
+394.7566 	EXP 	stim_text: autoDraw = False
+394.7614 	DATA 	Keypress: left
+397.7400 	EXP 	stim_cross: autoDraw = False
+397.7417 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+397.7566 	EXP 	stim_text: autoDraw = False
+397.7566 	EXP 	stim_cross: autoDraw = False
+397.7566 	EXP 	stim_text: text = 1
+397.7566 	EXP 	stim_text: autoDraw = True
+398.2400 	EXP 	stim_cross: autoDraw = True
+398.2567 	EXP 	stim_text: autoDraw = False
+398.3109 	DATA 	Keypress: right
+401.2400 	EXP 	stim_cross: autoDraw = False
+401.2418 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+401.2567 	EXP 	stim_text: autoDraw = False
+401.2567 	EXP 	stim_cross: autoDraw = False
+401.2567 	EXP 	stim_text: text = 1
+401.2567 	EXP 	stim_text: autoDraw = True
+401.7400 	EXP 	stim_cross: autoDraw = True
+401.7567 	EXP 	stim_text: autoDraw = False
+401.7776 	DATA 	Keypress: left
+404.7401 	EXP 	stim_cross: autoDraw = False
+404.7425 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 6), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+404.7568 	EXP 	stim_text: autoDraw = False
+404.7568 	EXP 	stim_cross: autoDraw = False
+404.7568 	EXP 	stim_text: text = 6
+404.7568 	EXP 	stim_text: autoDraw = True
+405.2401 	EXP 	stim_cross: autoDraw = True
+405.2567 	EXP 	stim_text: autoDraw = False
+405.2789 	DATA 	Keypress: left
+408.2401 	EXP 	stim_cross: autoDraw = False
+408.2422 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 2), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+408.2568 	EXP 	stim_text: autoDraw = False
+408.2568 	EXP 	stim_cross: autoDraw = False
+408.2568 	EXP 	stim_text: text = 2
+408.2568 	EXP 	stim_text: autoDraw = True
+408.7112 	DATA 	Keypress: left
+408.7401 	EXP 	stim_cross: autoDraw = True
+408.7568 	EXP 	stim_text: autoDraw = False
+411.7402 	EXP 	stim_cross: autoDraw = False
+411.7421 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+411.7568 	EXP 	stim_text: autoDraw = False
+411.7568 	EXP 	stim_cross: autoDraw = False
+411.7568 	EXP 	stim_text: text = 1
+411.7568 	EXP 	stim_text: autoDraw = True
+412.2110 	DATA 	Keypress: right
+412.2402 	EXP 	stim_cross: autoDraw = True
+412.2569 	EXP 	stim_text: autoDraw = False
+415.2402 	EXP 	stim_cross: autoDraw = False
+415.2427 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 3), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+415.2569 	EXP 	stim_text: autoDraw = False
+415.2569 	EXP 	stim_cross: autoDraw = False
+415.2569 	EXP 	stim_text: text = 3
+415.2569 	EXP 	stim_text: autoDraw = True
+415.7403 	EXP 	stim_cross: autoDraw = True
+415.7446 	DATA 	Keypress: left
+415.7569 	EXP 	stim_text: autoDraw = False
+418.7402 	EXP 	stim_cross: autoDraw = False
+418.7428 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+418.7569 	EXP 	stim_text: autoDraw = False
+418.7569 	EXP 	stim_cross: autoDraw = False
+418.7569 	EXP 	stim_text: text = 1
+418.7569 	EXP 	stim_text: autoDraw = True
+419.2403 	EXP 	stim_cross: autoDraw = True
+419.2569 	EXP 	stim_text: autoDraw = False
+419.3783 	DATA 	Keypress: right
+422.2403 	EXP 	stim_cross: autoDraw = False
+422.2424 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 3), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+422.2570 	EXP 	stim_text: autoDraw = False
+422.2570 	EXP 	stim_cross: autoDraw = False
+422.2570 	EXP 	stim_text: text = 3
+422.2570 	EXP 	stim_text: autoDraw = True
+422.7403 	EXP 	stim_cross: autoDraw = True
+422.7570 	EXP 	stim_text: autoDraw = False
+422.7952 	DATA 	Keypress: left
+425.7403 	EXP 	stim_cross: autoDraw = False
+425.7425 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+425.7570 	EXP 	stim_text: autoDraw = False
+425.7570 	EXP 	stim_cross: autoDraw = False
+425.7570 	EXP 	stim_text: text = 1
+425.7570 	EXP 	stim_text: autoDraw = True
+426.2403 	EXP 	stim_cross: autoDraw = True
+426.2570 	EXP 	stim_text: autoDraw = False
+426.3282 	DATA 	Keypress: right
+429.2404 	EXP 	stim_cross: autoDraw = False
+429.2421 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 2), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+429.2571 	EXP 	stim_text: autoDraw = False
+429.2571 	EXP 	stim_cross: autoDraw = False
+429.2571 	EXP 	stim_text: text = 2
+429.2571 	EXP 	stim_text: autoDraw = True
+429.6284 	DATA 	Keypress: left
+429.7404 	EXP 	stim_cross: autoDraw = True
+429.7571 	EXP 	stim_text: autoDraw = False
+432.7405 	EXP 	stim_cross: autoDraw = False
+432.7428 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 4), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+432.7571 	EXP 	stim_text: autoDraw = False
+432.7571 	EXP 	stim_cross: autoDraw = False
+432.7571 	EXP 	stim_text: text = 4
+432.7571 	EXP 	stim_text: autoDraw = True
+433.2294 	DATA 	Keypress: left
+433.2405 	EXP 	stim_cross: autoDraw = True
+433.2571 	EXP 	stim_text: autoDraw = False
+436.2405 	EXP 	stim_cross: autoDraw = False
+436.2424 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 0), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+436.2571 	EXP 	stim_text: autoDraw = False
+436.2571 	EXP 	stim_cross: autoDraw = False
+436.2571 	EXP 	stim_text: text = 0
+436.2571 	EXP 	stim_text: autoDraw = True
+436.7405 	EXP 	stim_cross: autoDraw = True
+436.7453 	DATA 	Keypress: left
+436.7572 	EXP 	stim_text: autoDraw = False
+439.7405 	EXP 	stim_cross: autoDraw = False
+439.7430 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+439.7572 	EXP 	stim_text: autoDraw = False
+439.7572 	EXP 	stim_cross: autoDraw = False
+439.7572 	EXP 	stim_text: text = 1
+439.7572 	EXP 	stim_text: autoDraw = True
+440.2405 	EXP 	stim_cross: autoDraw = True
+440.2572 	EXP 	stim_text: autoDraw = False
+440.3786 	DATA 	Keypress: right
+443.2406 	EXP 	stim_cross: autoDraw = False
+443.2425 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+443.2573 	EXP 	stim_text: autoDraw = False
+443.2573 	EXP 	stim_cross: autoDraw = False
+443.2573 	EXP 	stim_text: text = 1
+443.2573 	EXP 	stim_text: autoDraw = True
+443.7290 	DATA 	Keypress: right
+443.7406 	EXP 	stim_cross: autoDraw = True
+443.7573 	EXP 	stim_text: autoDraw = False
+446.7406 	EXP 	stim_cross: autoDraw = False
+446.7431 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 0), ('match_num', 1), ('match', 0), ('corr_key', 'left')])
+446.7573 	EXP 	stim_text: autoDraw = False
+446.7573 	EXP 	stim_cross: autoDraw = False
+446.7573 	EXP 	stim_text: text = 0
+446.7573 	EXP 	stim_text: autoDraw = True
+447.1782 	DATA 	Keypress: left
+447.2406 	EXP 	stim_cross: autoDraw = True
+447.2573 	EXP 	stim_text: autoDraw = False
+450.2407 	EXP 	stim_cross: autoDraw = False
+450.2431 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 1), ('match_num', 1), ('match', 1), ('corr_key', 'right')])
+450.2573 	EXP 	stim_text: autoDraw = False
+450.2573 	EXP 	stim_cross: autoDraw = False
+450.2573 	EXP 	stim_text: text = 1
+450.2573 	EXP 	stim_text: autoDraw = True
+450.7121 	DATA 	Keypress: right
+450.7407 	EXP 	stim_cross: autoDraw = True
+450.7574 	EXP 	stim_text: autoDraw = False
+453.7407 	EXP 	stim_cross: autoDraw = False
+453.7428 	EXP 	New trial (rep=0, index=5): OrderedDict([('task_order', 'TB-16529098605915005.csv')])
+453.7907 	EXP 	stim_text: autoDraw = False
+453.7907 	EXP 	stim_cross: autoDraw = False
+453.7907 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: \nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+453.7907 	EXP 	exp_zero_back_text: autoDraw = True
+453.7907 	EXP 	exp_one_back_text: autoDraw = True
+453.7907 	EXP 	exp_two_back_text: autoDraw = True
+459.5475 	DATA 	Keypress: space
+459.5575 	EXP 	exp_zero_back_text: autoDraw = False
+459.5575 	EXP 	exp_one_back_text: autoDraw = False
+459.5575 	EXP 	exp_two_back_text: autoDraw = False
+459.5575 	EXP 	pause_cross: autoDraw = True
+461.5494 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\TB-16529098605915005.csv as conditions, 20 conditions, 3 params
+461.5496 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+461.5499 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+461.5575 	EXP 	pause_cross: autoDraw = False
+461.5575 	EXP 	pause_cross: autoDraw = False
+461.5575 	EXP 	stim_text: text = 6
+461.5575 	EXP 	stim_text: autoDraw = True
+462.0575 	EXP 	stim_text: autoDraw = False
+462.0575 	EXP 	stim_cross: autoDraw = True
+463.0287 	DATA 	Keypress: left
+465.0432 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 0), ('match', 0), ('corr_key', 'left')])
+465.0575 	EXP 	stim_cross: autoDraw = False
+465.0575 	EXP 	stim_text: autoDraw = False
+465.0575 	EXP 	stim_cross: autoDraw = False
+465.0575 	EXP 	stim_text: text = 0
+465.0575 	EXP 	stim_text: autoDraw = True
+465.4953 	DATA 	Keypress: left
+465.5408 	EXP 	stim_cross: autoDraw = True
+465.5576 	EXP 	stim_text: autoDraw = False
+468.5409 	EXP 	stim_cross: autoDraw = False
+468.5428 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+468.5576 	EXP 	stim_text: autoDraw = False
+468.5576 	EXP 	stim_cross: autoDraw = False
+468.5576 	EXP 	stim_text: text = 7
+468.5576 	EXP 	stim_text: autoDraw = True
+469.0409 	EXP 	stim_cross: autoDraw = True
+469.0576 	EXP 	stim_text: autoDraw = False
+469.2122 	DATA 	Keypress: left
+472.0410 	EXP 	stim_cross: autoDraw = False
+472.0434 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+472.0576 	EXP 	stim_text: autoDraw = False
+472.0576 	EXP 	stim_cross: autoDraw = False
+472.0576 	EXP 	stim_text: text = 9
+472.0576 	EXP 	stim_text: autoDraw = True
+472.5410 	EXP 	stim_cross: autoDraw = True
+472.5577 	EXP 	stim_text: autoDraw = False
+472.5794 	DATA 	Keypress: left
+475.5410 	EXP 	stim_cross: autoDraw = False
+475.5430 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 7), ('match', 1), ('corr_key', 'right')])
+475.5577 	EXP 	stim_text: autoDraw = False
+475.5577 	EXP 	stim_cross: autoDraw = False
+475.5577 	EXP 	stim_text: text = 7
+475.5577 	EXP 	stim_text: autoDraw = True
+476.0410 	EXP 	stim_cross: autoDraw = True
+476.0577 	EXP 	stim_text: autoDraw = False
+476.4126 	DATA 	Keypress: right
+479.0411 	EXP 	stim_cross: autoDraw = False
+479.0435 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+479.0577 	EXP 	stim_text: autoDraw = False
+479.0577 	EXP 	stim_cross: autoDraw = False
+479.0577 	EXP 	stim_text: text = 9
+479.0577 	EXP 	stim_text: autoDraw = True
+479.5410 	EXP 	stim_cross: autoDraw = True
+479.5577 	EXP 	stim_text: autoDraw = False
+479.9623 	DATA 	Keypress: right
+482.5411 	EXP 	stim_cross: autoDraw = False
+482.5431 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+482.5578 	EXP 	stim_text: autoDraw = False
+482.5578 	EXP 	stim_cross: autoDraw = False
+482.5578 	EXP 	stim_text: text = 1
+482.5578 	EXP 	stim_text: autoDraw = True
+483.0411 	EXP 	stim_cross: autoDraw = True
+483.0578 	EXP 	stim_text: autoDraw = False
+483.3294 	DATA 	Keypress: left
+486.0411 	EXP 	stim_cross: autoDraw = False
+486.0430 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+486.0578 	EXP 	stim_text: autoDraw = False
+486.0578 	EXP 	stim_cross: autoDraw = False
+486.0578 	EXP 	stim_text: text = 9
+486.0578 	EXP 	stim_text: autoDraw = True
+486.5411 	EXP 	stim_cross: autoDraw = True
+486.5578 	EXP 	stim_text: autoDraw = False
+486.8960 	DATA 	Keypress: right
+489.5412 	EXP 	stim_cross: autoDraw = False
+489.5436 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 1), ('match', 1), ('corr_key', 'right')])
+489.5578 	EXP 	stim_text: autoDraw = False
+489.5578 	EXP 	stim_cross: autoDraw = False
+489.5578 	EXP 	stim_text: text = 1
+489.5578 	EXP 	stim_text: autoDraw = True
+490.0412 	EXP 	stim_cross: autoDraw = True
+490.0579 	EXP 	stim_text: autoDraw = False
+490.7956 	DATA 	Keypress: right
+493.0412 	EXP 	stim_cross: autoDraw = False
+493.0434 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 8), ('match', 0), ('corr_key', 'left')])
+493.0579 	EXP 	stim_text: autoDraw = False
+493.0579 	EXP 	stim_cross: autoDraw = False
+493.0579 	EXP 	stim_text: text = 8
+493.0579 	EXP 	stim_text: autoDraw = True
+493.5412 	EXP 	stim_cross: autoDraw = True
+493.5579 	EXP 	stim_text: autoDraw = False
+494.0460 	DATA 	Keypress: left
+496.5413 	EXP 	stim_cross: autoDraw = False
+496.5430 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+496.5579 	EXP 	stim_text: autoDraw = False
+496.5579 	EXP 	stim_cross: autoDraw = False
+496.5579 	EXP 	stim_text: text = 5
+496.5579 	EXP 	stim_text: autoDraw = True
+497.0413 	EXP 	stim_cross: autoDraw = True
+497.0579 	EXP 	stim_text: autoDraw = False
+497.4958 	DATA 	Keypress: left
+500.0413 	EXP 	stim_cross: autoDraw = False
+500.0437 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+500.0580 	EXP 	stim_text: autoDraw = False
+500.0580 	EXP 	stim_cross: autoDraw = False
+500.0580 	EXP 	stim_text: text = 6
+500.0580 	EXP 	stim_text: autoDraw = True
+500.5413 	EXP 	stim_cross: autoDraw = True
+500.5580 	EXP 	stim_text: autoDraw = False
+500.9626 	DATA 	Keypress: left
+503.5414 	EXP 	stim_cross: autoDraw = False
+503.5435 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 5), ('match', 1), ('corr_key', 'right')])
+503.5580 	EXP 	stim_text: autoDraw = False
+503.5580 	EXP 	stim_cross: autoDraw = False
+503.5580 	EXP 	stim_text: text = 5
+503.5580 	EXP 	stim_text: autoDraw = True
+504.0414 	EXP 	stim_cross: autoDraw = True
+504.0580 	EXP 	stim_text: autoDraw = False
+504.8963 	DATA 	Keypress: right
+507.0414 	EXP 	stim_cross: autoDraw = False
+507.0432 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+507.0581 	EXP 	stim_text: autoDraw = False
+507.0581 	EXP 	stim_cross: autoDraw = False
+507.0581 	EXP 	stim_text: text = 6
+507.0581 	EXP 	stim_text: autoDraw = True
+507.5414 	EXP 	stim_cross: autoDraw = True
+507.5581 	EXP 	stim_text: autoDraw = False
+508.1954 	DATA 	Keypress: right
+510.5415 	EXP 	stim_cross: autoDraw = False
+510.5439 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+510.5581 	EXP 	stim_text: autoDraw = False
+510.5581 	EXP 	stim_cross: autoDraw = False
+510.5581 	EXP 	stim_text: text = 6
+510.5581 	EXP 	stim_text: autoDraw = True
+511.0415 	EXP 	stim_cross: autoDraw = True
+511.0581 	EXP 	stim_text: autoDraw = False
+511.8955 	DATA 	Keypress: right
+514.0415 	EXP 	stim_cross: autoDraw = False
+514.0435 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 3), ('match', 0), ('corr_key', 'left')])
+514.0582 	EXP 	stim_text: autoDraw = False
+514.0582 	EXP 	stim_cross: autoDraw = False
+514.0582 	EXP 	stim_text: text = 3
+514.0582 	EXP 	stim_text: autoDraw = True
+514.5415 	EXP 	stim_cross: autoDraw = True
+514.5582 	EXP 	stim_text: autoDraw = False
+516.4624 	DATA 	Keypress: left
+517.5415 	EXP 	stim_cross: autoDraw = False
+517.5433 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+517.5582 	EXP 	stim_text: autoDraw = False
+517.5582 	EXP 	stim_cross: autoDraw = False
+517.5582 	EXP 	stim_text: text = 6
+517.5582 	EXP 	stim_text: autoDraw = True
+518.0416 	EXP 	stim_cross: autoDraw = True
+518.0582 	EXP 	stim_text: autoDraw = False
+518.6965 	DATA 	Keypress: right
+521.0416 	EXP 	stim_cross: autoDraw = False
+521.0442 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 3), ('match', 1), ('corr_key', 'right')])
+521.0583 	EXP 	stim_text: autoDraw = False
+521.0583 	EXP 	stim_cross: autoDraw = False
+521.0583 	EXP 	stim_text: text = 3
+521.0583 	EXP 	stim_text: autoDraw = True
+521.5416 	EXP 	stim_cross: autoDraw = True
+521.5583 	EXP 	stim_text: autoDraw = False
+522.1624 	DATA 	Keypress: left
+524.5416 	EXP 	stim_cross: autoDraw = False
+524.5442 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+524.5583 	EXP 	stim_text: autoDraw = False
+524.5583 	EXP 	stim_cross: autoDraw = False
+524.5583 	EXP 	stim_text: text = 7
+524.5583 	EXP 	stim_text: autoDraw = True
+525.0417 	EXP 	stim_cross: autoDraw = True
+525.0583 	EXP 	stim_text: autoDraw = False
+526.2798 	DATA 	Keypress: left
+528.0417 	EXP 	stim_cross: autoDraw = False
+528.0438 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+528.0584 	EXP 	stim_text: autoDraw = False
+528.0584 	EXP 	stim_cross: autoDraw = False
+528.0584 	EXP 	stim_text: text = 7
+528.0584 	EXP 	stim_text: autoDraw = True
+528.5417 	EXP 	stim_cross: autoDraw = True
+528.5584 	EXP 	stim_text: autoDraw = False
+529.6956 	DATA 	Keypress: right
+531.5417 	EXP 	stim_cross: autoDraw = False
+531.5435 	EXP 	New trial (rep=0, index=6): OrderedDict([('task_order', 'OB-16529098597545102.csv')])
+531.5751 	EXP 	stim_text: autoDraw = False
+531.5751 	EXP 	stim_cross: autoDraw = False
+531.5751 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: \nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+531.5751 	EXP 	exp_zero_back_text: autoDraw = True
+531.5751 	EXP 	exp_one_back_text: autoDraw = True
+531.5751 	EXP 	exp_two_back_text: autoDraw = True
+534.2484 	DATA 	Keypress: space
+534.2584 	EXP 	exp_zero_back_text: autoDraw = False
+534.2584 	EXP 	exp_one_back_text: autoDraw = False
+534.2584 	EXP 	exp_two_back_text: autoDraw = False
+534.2584 	EXP 	pause_cross: autoDraw = True
+536.2505 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\OB-16529098597545102.csv as conditions, 20 conditions, 3 params
+536.2508 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+536.2510 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+536.2585 	EXP 	pause_cross: autoDraw = False
+536.2585 	EXP 	pause_cross: autoDraw = False
+536.2585 	EXP 	stim_text: text = 5
+536.2585 	EXP 	stim_text: autoDraw = True
+536.5964 	DATA 	Keypress: left
+536.7585 	EXP 	stim_text: autoDraw = False
+536.7585 	EXP 	stim_cross: autoDraw = True
+539.7438 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 5), ('match', 1), ('corr_key', 'right')])
+539.7585 	EXP 	stim_cross: autoDraw = False
+539.7585 	EXP 	stim_text: autoDraw = False
+539.7585 	EXP 	stim_cross: autoDraw = False
+539.7585 	EXP 	stim_text: text = 5
+539.7585 	EXP 	stim_text: autoDraw = True
+540.2419 	EXP 	stim_cross: autoDraw = True
+540.2585 	EXP 	stim_text: autoDraw = False
+540.5468 	DATA 	Keypress: right
+543.2419 	EXP 	stim_cross: autoDraw = False
+543.2445 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 5), ('match', 1), ('corr_key', 'right')])
+543.2585 	EXP 	stim_text: autoDraw = False
+543.2585 	EXP 	stim_cross: autoDraw = False
+543.2585 	EXP 	stim_text: text = 5
+543.2585 	EXP 	stim_text: autoDraw = True
+543.6297 	DATA 	Keypress: right
+543.7419 	EXP 	stim_cross: autoDraw = True
+543.7585 	EXP 	stim_text: autoDraw = False
+546.7419 	EXP 	stim_cross: autoDraw = False
+546.7441 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+546.7586 	EXP 	stim_text: autoDraw = False
+546.7586 	EXP 	stim_cross: autoDraw = False
+546.7586 	EXP 	stim_text: text = 2
+546.7586 	EXP 	stim_text: autoDraw = True
+547.2419 	EXP 	stim_cross: autoDraw = True
+547.2586 	EXP 	stim_text: autoDraw = False
+547.5292 	DATA 	Keypress: left
+550.2420 	EXP 	stim_cross: autoDraw = False
+550.2437 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+550.2587 	EXP 	stim_text: autoDraw = False
+550.2587 	EXP 	stim_cross: autoDraw = False
+550.2587 	EXP 	stim_text: text = 2
+550.2587 	EXP 	stim_text: autoDraw = True
+550.7420 	EXP 	stim_cross: autoDraw = True
+550.7587 	EXP 	stim_text: autoDraw = False
+550.8633 	DATA 	Keypress: right
+553.7420 	EXP 	stim_cross: autoDraw = False
+553.7446 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+553.7587 	EXP 	stim_text: autoDraw = False
+553.7587 	EXP 	stim_cross: autoDraw = False
+553.7587 	EXP 	stim_text: text = 2
+553.7587 	EXP 	stim_text: autoDraw = True
+554.2420 	EXP 	stim_cross: autoDraw = True
+554.2465 	DATA 	Keypress: right
+554.2587 	EXP 	stim_text: autoDraw = False
+557.2421 	EXP 	stim_cross: autoDraw = False
+557.2446 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 2), ('match', 1), ('corr_key', 'right')])
+557.2587 	EXP 	stim_text: autoDraw = False
+557.2587 	EXP 	stim_cross: autoDraw = False
+557.2587 	EXP 	stim_text: text = 2
+557.2587 	EXP 	stim_text: autoDraw = True
+557.6629 	DATA 	Keypress: right
+557.7420 	EXP 	stim_cross: autoDraw = True
+557.7587 	EXP 	stim_text: autoDraw = False
+560.7421 	EXP 	stim_cross: autoDraw = False
+560.7447 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+560.7588 	EXP 	stim_text: autoDraw = False
+560.7588 	EXP 	stim_cross: autoDraw = False
+560.7588 	EXP 	stim_text: text = 6
+560.7588 	EXP 	stim_text: autoDraw = True
+561.2421 	EXP 	stim_cross: autoDraw = True
+561.2588 	EXP 	stim_text: autoDraw = False
+561.2796 	DATA 	Keypress: left
+564.2422 	EXP 	stim_cross: autoDraw = False
+564.2444 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 3), ('match', 0), ('corr_key', 'left')])
+564.2588 	EXP 	stim_text: autoDraw = False
+564.2588 	EXP 	stim_cross: autoDraw = False
+564.2588 	EXP 	stim_text: text = 3
+564.2588 	EXP 	stim_text: autoDraw = True
+564.7421 	EXP 	stim_cross: autoDraw = True
+564.7588 	EXP 	stim_text: autoDraw = False
+564.9966 	DATA 	Keypress: left
+567.7422 	EXP 	stim_cross: autoDraw = False
+567.7446 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+567.7589 	EXP 	stim_text: autoDraw = False
+567.7589 	EXP 	stim_cross: autoDraw = False
+567.7589 	EXP 	stim_text: text = 6
+567.7589 	EXP 	stim_text: autoDraw = True
+568.2422 	EXP 	stim_cross: autoDraw = True
+568.2589 	EXP 	stim_text: autoDraw = False
+568.6634 	DATA 	Keypress: left
+571.2423 	EXP 	stim_cross: autoDraw = False
+571.2442 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+571.2589 	EXP 	stim_text: autoDraw = False
+571.2589 	EXP 	stim_cross: autoDraw = False
+571.2589 	EXP 	stim_text: text = 9
+571.2589 	EXP 	stim_text: autoDraw = True
+571.7423 	EXP 	stim_cross: autoDraw = True
+571.7589 	EXP 	stim_text: autoDraw = False
+572.0304 	DATA 	Keypress: left
+574.7423 	EXP 	stim_cross: autoDraw = False
+574.7449 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+574.7590 	EXP 	stim_text: autoDraw = False
+574.7590 	EXP 	stim_cross: autoDraw = False
+574.7590 	EXP 	stim_text: text = 2
+574.7590 	EXP 	stim_text: autoDraw = True
+575.2423 	EXP 	stim_cross: autoDraw = True
+575.2590 	EXP 	stim_text: autoDraw = False
+575.2637 	DATA 	Keypress: left
+578.2423 	EXP 	stim_cross: autoDraw = False
+578.2445 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 4), ('match', 0), ('corr_key', 'left')])
+578.2590 	EXP 	stim_text: autoDraw = False
+578.2590 	EXP 	stim_cross: autoDraw = False
+578.2590 	EXP 	stim_text: text = 4
+578.2590 	EXP 	stim_text: autoDraw = True
+578.7424 	EXP 	stim_cross: autoDraw = True
+578.7590 	EXP 	stim_text: autoDraw = False
+578.7633 	DATA 	Keypress: left
+581.7424 	EXP 	stim_cross: autoDraw = False
+581.7441 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+581.7590 	EXP 	stim_text: autoDraw = False
+581.7590 	EXP 	stim_cross: autoDraw = False
+581.7590 	EXP 	stim_text: text = 6
+581.7590 	EXP 	stim_text: autoDraw = True
+582.2424 	EXP 	stim_cross: autoDraw = True
+582.2590 	EXP 	stim_text: autoDraw = False
+582.4634 	DATA 	Keypress: left
+585.2424 	EXP 	stim_cross: autoDraw = False
+585.2448 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+585.2591 	EXP 	stim_text: autoDraw = False
+585.2591 	EXP 	stim_cross: autoDraw = False
+585.2591 	EXP 	stim_text: text = 6
+585.2591 	EXP 	stim_text: autoDraw = True
+585.7424 	EXP 	stim_cross: autoDraw = True
+585.7591 	EXP 	stim_text: autoDraw = False
+585.9132 	DATA 	Keypress: right
+588.7425 	EXP 	stim_cross: autoDraw = False
+588.7447 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+588.7591 	EXP 	stim_text: autoDraw = False
+588.7591 	EXP 	stim_cross: autoDraw = False
+588.7591 	EXP 	stim_text: text = 6
+588.7591 	EXP 	stim_text: autoDraw = True
+589.1639 	DATA 	Keypress: right
+589.2425 	EXP 	stim_cross: autoDraw = True
+589.2591 	EXP 	stim_text: autoDraw = False
+592.2425 	EXP 	stim_cross: autoDraw = False
+592.2444 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+592.2592 	EXP 	stim_text: autoDraw = False
+592.2592 	EXP 	stim_cross: autoDraw = False
+592.2592 	EXP 	stim_text: text = 6
+592.2592 	EXP 	stim_text: autoDraw = True
+592.6636 	DATA 	Keypress: right
+592.7425 	EXP 	stim_cross: autoDraw = True
+592.7592 	EXP 	stim_text: autoDraw = False
+595.7426 	EXP 	stim_cross: autoDraw = False
+595.7450 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 6), ('match', 1), ('corr_key', 'right')])
+595.7592 	EXP 	stim_text: autoDraw = False
+595.7592 	EXP 	stim_cross: autoDraw = False
+595.7592 	EXP 	stim_text: text = 6
+595.7592 	EXP 	stim_text: autoDraw = True
+596.1475 	DATA 	Keypress: right
+596.2426 	EXP 	stim_cross: autoDraw = True
+596.2592 	EXP 	stim_text: autoDraw = False
+599.2426 	EXP 	stim_cross: autoDraw = False
+599.2450 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+599.2593 	EXP 	stim_text: autoDraw = False
+599.2593 	EXP 	stim_cross: autoDraw = False
+599.2593 	EXP 	stim_text: text = 1
+599.2593 	EXP 	stim_text: autoDraw = True
+599.7426 	EXP 	stim_cross: autoDraw = True
+599.7593 	EXP 	stim_text: autoDraw = False
+599.8307 	DATA 	Keypress: left
+602.7427 	EXP 	stim_cross: autoDraw = False
+602.7448 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+602.7593 	EXP 	stim_text: autoDraw = False
+602.7593 	EXP 	stim_cross: autoDraw = False
+602.7593 	EXP 	stim_text: text = 7
+602.7593 	EXP 	stim_text: autoDraw = True
+603.2427 	EXP 	stim_cross: autoDraw = True
+603.2593 	EXP 	stim_text: autoDraw = False
+603.2636 	DATA 	Keypress: left
+606.2427 	EXP 	stim_cross: autoDraw = False
+606.2444 	EXP 	New trial (rep=0, index=7): OrderedDict([('task_order', 'TB-16529098610107052.csv')])
+606.2761 	EXP 	stim_text: autoDraw = False
+606.2761 	EXP 	stim_cross: autoDraw = False
+606.2761 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: \nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+606.2761 	EXP 	exp_zero_back_text: autoDraw = True
+606.2761 	EXP 	exp_one_back_text: autoDraw = True
+606.2761 	EXP 	exp_two_back_text: autoDraw = True
+611.7990 	DATA 	Keypress: space
+611.8094 	EXP 	exp_zero_back_text: autoDraw = False
+611.8094 	EXP 	exp_one_back_text: autoDraw = False
+611.8094 	EXP 	exp_two_back_text: autoDraw = False
+611.8094 	EXP 	pause_cross: autoDraw = True
+613.8016 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\TB-16529098610107052.csv as conditions, 20 conditions, 3 params
+613.8019 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+613.8021 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+613.8095 	EXP 	pause_cross: autoDraw = False
+613.8095 	EXP 	pause_cross: autoDraw = False
+613.8095 	EXP 	stim_text: text = 7
+613.8095 	EXP 	stim_text: autoDraw = True
+614.3095 	EXP 	stim_text: autoDraw = False
+614.3095 	EXP 	stim_cross: autoDraw = True
+614.3972 	DATA 	Keypress: left
+617.2951 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+617.3095 	EXP 	stim_cross: autoDraw = False
+617.3095 	EXP 	stim_text: autoDraw = False
+617.3095 	EXP 	stim_cross: autoDraw = False
+617.3095 	EXP 	stim_text: text = 9
+617.3095 	EXP 	stim_text: autoDraw = True
+617.7638 	DATA 	Keypress: left
+617.7929 	EXP 	stim_cross: autoDraw = True
+617.8095 	EXP 	stim_text: autoDraw = False
+620.7929 	EXP 	stim_cross: autoDraw = False
+620.7955 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+620.8096 	EXP 	stim_text: autoDraw = False
+620.8096 	EXP 	stim_cross: autoDraw = False
+620.8096 	EXP 	stim_text: text = 9
+620.8096 	EXP 	stim_text: autoDraw = True
+621.2929 	EXP 	stim_cross: autoDraw = True
+621.3096 	EXP 	stim_text: autoDraw = False
+622.6976 	DATA 	Keypress: left
+624.2929 	EXP 	stim_cross: autoDraw = False
+624.2951 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+624.3096 	EXP 	stim_text: autoDraw = False
+624.3096 	EXP 	stim_cross: autoDraw = False
+624.3096 	EXP 	stim_text: text = 5
+624.3096 	EXP 	stim_text: autoDraw = True
+624.7929 	EXP 	stim_cross: autoDraw = True
+624.8096 	EXP 	stim_text: autoDraw = False
+625.6478 	DATA 	Keypress: left
+627.7930 	EXP 	stim_cross: autoDraw = False
+627.7947 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+627.8097 	EXP 	stim_text: autoDraw = False
+627.8097 	EXP 	stim_cross: autoDraw = False
+627.8097 	EXP 	stim_text: text = 9
+627.8097 	EXP 	stim_text: autoDraw = True
+628.2930 	EXP 	stim_cross: autoDraw = True
+628.3097 	EXP 	stim_text: autoDraw = False
+628.9809 	DATA 	Keypress: right
+631.2930 	EXP 	stim_cross: autoDraw = False
+631.2954 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 5), ('match', 1), ('corr_key', 'right')])
+631.3097 	EXP 	stim_text: autoDraw = False
+631.3097 	EXP 	stim_cross: autoDraw = False
+631.3097 	EXP 	stim_text: text = 5
+631.3097 	EXP 	stim_text: autoDraw = True
+631.7930 	EXP 	stim_cross: autoDraw = True
+631.8097 	EXP 	stim_text: autoDraw = False
+632.9973 	DATA 	Keypress: right
+634.7931 	EXP 	stim_cross: autoDraw = False
+634.7950 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+634.8097 	EXP 	stim_text: autoDraw = False
+634.8097 	EXP 	stim_cross: autoDraw = False
+634.8097 	EXP 	stim_text: text = 1
+634.8097 	EXP 	stim_text: autoDraw = True
+635.2931 	EXP 	stim_cross: autoDraw = True
+635.3098 	EXP 	stim_text: autoDraw = False
+635.9641 	DATA 	Keypress: left
+638.2931 	EXP 	stim_cross: autoDraw = False
+638.2957 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 5), ('match', 1), ('corr_key', 'right')])
+638.3098 	EXP 	stim_text: autoDraw = False
+638.3098 	EXP 	stim_cross: autoDraw = False
+638.3098 	EXP 	stim_text: text = 5
+638.3098 	EXP 	stim_text: autoDraw = True
+638.7931 	EXP 	stim_cross: autoDraw = True
+638.8098 	EXP 	stim_text: autoDraw = False
+639.2304 	DATA 	Keypress: right
+641.7932 	EXP 	stim_cross: autoDraw = False
+641.7953 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+641.8099 	EXP 	stim_text: autoDraw = False
+641.8099 	EXP 	stim_cross: autoDraw = False
+641.8099 	EXP 	stim_text: text = 9
+641.8099 	EXP 	stim_text: autoDraw = True
+642.2932 	EXP 	stim_cross: autoDraw = True
+642.3098 	EXP 	stim_text: autoDraw = False
+642.8806 	DATA 	Keypress: left
+645.2932 	EXP 	stim_cross: autoDraw = False
+645.2959 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 4), ('match', 0), ('corr_key', 'left')])
+645.3099 	EXP 	stim_text: autoDraw = False
+645.3099 	EXP 	stim_cross: autoDraw = False
+645.3099 	EXP 	stim_text: text = 4
+645.3099 	EXP 	stim_text: autoDraw = True
+645.7932 	EXP 	stim_cross: autoDraw = True
+645.8099 	EXP 	stim_text: autoDraw = False
+646.3473 	DATA 	Keypress: left
+648.7933 	EXP 	stim_cross: autoDraw = False
+648.7950 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+648.8099 	EXP 	stim_text: autoDraw = False
+648.8099 	EXP 	stim_cross: autoDraw = False
+648.8099 	EXP 	stim_text: text = 9
+648.8099 	EXP 	stim_text: autoDraw = True
+649.2310 	DATA 	Keypress: right
+649.2933 	EXP 	stim_cross: autoDraw = True
+649.3099 	EXP 	stim_text: autoDraw = False
+652.2933 	EXP 	stim_cross: autoDraw = False
+652.2958 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 4), ('match', 1), ('corr_key', 'right')])
+652.3100 	EXP 	stim_text: autoDraw = False
+652.3100 	EXP 	stim_cross: autoDraw = False
+652.3100 	EXP 	stim_text: text = 4
+652.3100 	EXP 	stim_text: autoDraw = True
+652.7933 	EXP 	stim_cross: autoDraw = True
+652.8100 	EXP 	stim_text: autoDraw = False
+653.4310 	DATA 	Keypress: right
+655.7933 	EXP 	stim_cross: autoDraw = False
+655.7955 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+655.8100 	EXP 	stim_text: autoDraw = False
+655.8100 	EXP 	stim_cross: autoDraw = False
+655.8100 	EXP 	stim_text: text = 7
+655.8100 	EXP 	stim_text: autoDraw = True
+656.2934 	EXP 	stim_cross: autoDraw = True
+656.3100 	EXP 	stim_text: autoDraw = False
+657.0473 	DATA 	Keypress: left
+659.2934 	EXP 	stim_cross: autoDraw = False
+659.2962 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 8), ('match', 0), ('corr_key', 'left')])
+659.3101 	EXP 	stim_text: autoDraw = False
+659.3101 	EXP 	stim_cross: autoDraw = False
+659.3101 	EXP 	stim_text: text = 8
+659.3101 	EXP 	stim_text: autoDraw = True
+659.7934 	EXP 	stim_cross: autoDraw = True
+659.8101 	EXP 	stim_text: autoDraw = False
+660.1649 	DATA 	Keypress: left
+662.7934 	EXP 	stim_cross: autoDraw = False
+662.7957 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 8), ('match', 0), ('corr_key', 'left')])
+662.8101 	EXP 	stim_text: autoDraw = False
+662.8101 	EXP 	stim_cross: autoDraw = False
+662.8101 	EXP 	stim_text: text = 8
+662.8101 	EXP 	stim_text: autoDraw = True
+663.2935 	EXP 	stim_cross: autoDraw = True
+663.3101 	EXP 	stim_text: autoDraw = False
+664.1982 	DATA 	Keypress: left
+666.2936 	EXP 	stim_cross: autoDraw = False
+666.2963 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 8), ('match', 1), ('corr_key', 'right')])
+666.3102 	EXP 	stim_text: autoDraw = False
+666.3102 	EXP 	stim_cross: autoDraw = False
+666.3102 	EXP 	stim_text: text = 8
+666.3102 	EXP 	stim_text: autoDraw = True
+666.7935 	EXP 	stim_cross: autoDraw = True
+666.8102 	EXP 	stim_text: autoDraw = False
+666.9308 	DATA 	Keypress: right
+669.7935 	EXP 	stim_cross: autoDraw = False
+669.7959 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+669.8102 	EXP 	stim_text: autoDraw = False
+669.8102 	EXP 	stim_cross: autoDraw = False
+669.8102 	EXP 	stim_text: text = 2
+669.8102 	EXP 	stim_text: autoDraw = True
+670.2935 	EXP 	stim_cross: autoDraw = True
+670.3102 	EXP 	stim_text: autoDraw = False
+670.3311 	DATA 	Keypress: left
+673.2936 	EXP 	stim_cross: autoDraw = False
+673.2957 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 8), ('match', 1), ('corr_key', 'right')])
+673.3102 	EXP 	stim_text: autoDraw = False
+673.3102 	EXP 	stim_cross: autoDraw = False
+673.3102 	EXP 	stim_text: text = 8
+673.3102 	EXP 	stim_text: autoDraw = True
+673.7936 	EXP 	stim_cross: autoDraw = True
+673.8103 	EXP 	stim_text: autoDraw = False
+674.0481 	DATA 	Keypress: right
+676.7936 	EXP 	stim_cross: autoDraw = False
+676.7955 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+676.8103 	EXP 	stim_text: autoDraw = False
+676.8103 	EXP 	stim_cross: autoDraw = False
+676.8103 	EXP 	stim_text: text = 6
+676.8103 	EXP 	stim_text: autoDraw = True
+677.2936 	EXP 	stim_cross: autoDraw = True
+677.3103 	EXP 	stim_text: autoDraw = False
+677.8982 	DATA 	Keypress: left
+680.2937 	EXP 	stim_cross: autoDraw = False
+680.2956 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 8), ('match', 1), ('corr_key', 'right')])
+680.3103 	EXP 	stim_text: autoDraw = False
+680.3103 	EXP 	stim_cross: autoDraw = False
+680.3103 	EXP 	stim_text: text = 8
+680.3103 	EXP 	stim_text: autoDraw = True
+680.7937 	EXP 	stim_cross: autoDraw = True
+680.8103 	EXP 	stim_text: autoDraw = False
+681.5644 	DATA 	Keypress: right
+683.7937 	EXP 	stim_cross: autoDraw = False
+683.7962 	EXP 	New trial (rep=0, index=8): OrderedDict([('task_order', 'TB-1652909860659721.csv')])
+683.8271 	EXP 	stim_text: autoDraw = False
+683.8271 	EXP 	stim_cross: autoDraw = False
+683.8271 	EXP 	exp_zero_back_text: text = 'This is a 0-back trial. \n\nPress RIGHT if the number is: \nOtherwise, press LEFT. \n\nPress SPACE when you are ready to begin.'
+683.8271 	EXP 	exp_zero_back_text: autoDraw = True
+683.8271 	EXP 	exp_one_back_text: autoDraw = True
+683.8271 	EXP 	exp_two_back_text: autoDraw = True
+686.9331 	DATA 	Keypress: space
+686.9438 	EXP 	exp_zero_back_text: autoDraw = False
+686.9438 	EXP 	exp_one_back_text: autoDraw = False
+686.9438 	EXP 	exp_two_back_text: autoDraw = False
+686.9438 	EXP 	pause_cross: autoDraw = True
+688.9359 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_01\n_back\n_back_conditions\TB-1652909860659721.csv as conditions, 20 conditions, 3 params
+688.9362 	EXP 	Created sequence: sequential, trialTypes=20, nReps=1, seed=None
+688.9364 	EXP 	New trial (rep=0, index=0): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+688.9438 	EXP 	pause_cross: autoDraw = False
+688.9438 	EXP 	pause_cross: autoDraw = False
+688.9438 	EXP 	stim_text: text = 2
+688.9438 	EXP 	stim_text: autoDraw = True
+689.4438 	EXP 	stim_text: autoDraw = False
+689.4438 	EXP 	stim_cross: autoDraw = True
+689.9481 	DATA 	Keypress: left
+692.4294 	EXP 	New trial (rep=0, index=1): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+692.4438 	EXP 	stim_cross: autoDraw = False
+692.4438 	EXP 	stim_text: autoDraw = False
+692.4438 	EXP 	stim_cross: autoDraw = False
+692.4438 	EXP 	stim_text: text = 7
+692.4438 	EXP 	stim_text: autoDraw = True
+692.9157 	DATA 	Keypress: left
+692.9272 	EXP 	stim_cross: autoDraw = True
+692.9438 	EXP 	stim_text: autoDraw = False
+695.9272 	EXP 	stim_cross: autoDraw = False
+695.9298 	EXP 	New trial (rep=0, index=2): OrderedDict([('num_stim', 7), ('match', 0), ('corr_key', 'left')])
+695.9439 	EXP 	stim_text: autoDraw = False
+695.9439 	EXP 	stim_cross: autoDraw = False
+695.9439 	EXP 	stim_text: text = 7
+695.9439 	EXP 	stim_text: autoDraw = True
+696.4272 	EXP 	stim_cross: autoDraw = True
+696.4439 	EXP 	stim_text: autoDraw = False
+697.6484 	DATA 	Keypress: left
+699.4273 	EXP 	stim_cross: autoDraw = False
+699.4295 	EXP 	New trial (rep=0, index=3): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+699.4439 	EXP 	stim_text: autoDraw = False
+699.4439 	EXP 	stim_cross: autoDraw = False
+699.4439 	EXP 	stim_text: text = 1
+699.4439 	EXP 	stim_text: autoDraw = True
+699.9273 	EXP 	stim_cross: autoDraw = True
+699.9439 	EXP 	stim_text: autoDraw = False
+700.3651 	DATA 	Keypress: left
+702.9273 	EXP 	stim_cross: autoDraw = False
+702.9291 	EXP 	New trial (rep=0, index=4): OrderedDict([('num_stim', 1), ('match', 0), ('corr_key', 'left')])
+702.9440 	EXP 	stim_text: autoDraw = False
+702.9440 	EXP 	stim_cross: autoDraw = False
+702.9440 	EXP 	stim_text: text = 1
+702.9440 	EXP 	stim_text: autoDraw = True
+703.4273 	EXP 	stim_cross: autoDraw = True
+703.4440 	EXP 	stim_text: autoDraw = False
+704.6487 	DATA 	Keypress: left
+706.4273 	EXP 	stim_cross: autoDraw = False
+706.4294 	EXP 	New trial (rep=0, index=5): OrderedDict([('num_stim', 1), ('match', 1), ('corr_key', 'right')])
+706.4440 	EXP 	stim_text: autoDraw = False
+706.4440 	EXP 	stim_cross: autoDraw = False
+706.4440 	EXP 	stim_text: text = 1
+706.4440 	EXP 	stim_text: autoDraw = True
+706.9274 	EXP 	stim_cross: autoDraw = True
+706.9440 	EXP 	stim_text: autoDraw = False
+707.1827 	DATA 	Keypress: right
+709.9274 	EXP 	stim_cross: autoDraw = False
+709.9299 	EXP 	New trial (rep=0, index=6): OrderedDict([('num_stim', 9), ('match', 0), ('corr_key', 'left')])
+709.9441 	EXP 	stim_text: autoDraw = False
+709.9441 	EXP 	stim_cross: autoDraw = False
+709.9441 	EXP 	stim_text: text = 9
+709.9441 	EXP 	stim_text: autoDraw = True
+710.4274 	EXP 	stim_cross: autoDraw = True
+710.4441 	EXP 	stim_text: autoDraw = False
+710.4647 	DATA 	Keypress: left
+713.4274 	EXP 	stim_cross: autoDraw = False
+713.4296 	EXP 	New trial (rep=0, index=7): OrderedDict([('num_stim', 1), ('match', 1), ('corr_key', 'right')])
+713.4441 	EXP 	stim_text: autoDraw = False
+713.4441 	EXP 	stim_cross: autoDraw = False
+713.4441 	EXP 	stim_text: text = 1
+713.4441 	EXP 	stim_text: autoDraw = True
+713.9274 	EXP 	stim_cross: autoDraw = True
+713.9441 	EXP 	stim_text: autoDraw = False
+714.4824 	DATA 	Keypress: right
+716.9275 	EXP 	stim_cross: autoDraw = False
+716.9297 	EXP 	New trial (rep=0, index=8): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+716.9442 	EXP 	stim_text: autoDraw = False
+716.9442 	EXP 	stim_cross: autoDraw = False
+716.9442 	EXP 	stim_text: text = 9
+716.9442 	EXP 	stim_text: autoDraw = True
+717.4275 	EXP 	stim_cross: autoDraw = True
+717.4442 	EXP 	stim_text: autoDraw = False
+718.0988 	DATA 	Keypress: right
+720.4275 	EXP 	stim_cross: autoDraw = False
+720.4293 	EXP 	New trial (rep=0, index=9): OrderedDict([('num_stim', 5), ('match', 0), ('corr_key', 'left')])
+720.4442 	EXP 	stim_text: autoDraw = False
+720.4442 	EXP 	stim_cross: autoDraw = False
+720.4442 	EXP 	stim_text: text = 5
+720.4442 	EXP 	stim_text: autoDraw = True
+720.9275 	EXP 	stim_cross: autoDraw = True
+720.9442 	EXP 	stim_text: autoDraw = False
+721.4149 	DATA 	Keypress: left
+723.9276 	EXP 	stim_cross: autoDraw = False
+723.9299 	EXP 	New trial (rep=0, index=10): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+723.9443 	EXP 	stim_text: autoDraw = False
+723.9443 	EXP 	stim_cross: autoDraw = False
+723.9443 	EXP 	stim_text: text = 9
+723.9443 	EXP 	stim_text: autoDraw = True
+724.4276 	EXP 	stim_cross: autoDraw = True
+724.4443 	EXP 	stim_text: autoDraw = False
+725.3982 	DATA 	Keypress: right
+727.4276 	EXP 	stim_cross: autoDraw = False
+727.4295 	EXP 	New trial (rep=0, index=11): OrderedDict([('num_stim', 6), ('match', 0), ('corr_key', 'left')])
+727.4443 	EXP 	stim_text: autoDraw = False
+727.4443 	EXP 	stim_cross: autoDraw = False
+727.4443 	EXP 	stim_text: text = 6
+727.4443 	EXP 	stim_text: autoDraw = True
+727.9276 	EXP 	stim_cross: autoDraw = True
+727.9443 	EXP 	stim_text: autoDraw = False
+728.2656 	DATA 	Keypress: left
+730.9277 	EXP 	stim_cross: autoDraw = False
+730.9295 	EXP 	New trial (rep=0, index=12): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+730.9443 	EXP 	stim_text: autoDraw = False
+730.9443 	EXP 	stim_cross: autoDraw = False
+730.9443 	EXP 	stim_text: text = 9
+730.9443 	EXP 	stim_text: autoDraw = True
+731.4277 	EXP 	stim_cross: autoDraw = True
+731.4443 	EXP 	stim_text: autoDraw = False
+731.5650 	DATA 	Keypress: right
+734.4277 	EXP 	stim_cross: autoDraw = False
+734.4303 	EXP 	New trial (rep=0, index=13): OrderedDict([('num_stim', 0), ('match', 0), ('corr_key', 'left')])
+734.4444 	EXP 	stim_text: autoDraw = False
+734.4444 	EXP 	stim_cross: autoDraw = False
+734.4444 	EXP 	stim_text: text = 0
+734.4444 	EXP 	stim_text: autoDraw = True
+734.9277 	EXP 	stim_cross: autoDraw = True
+734.9444 	EXP 	stim_text: autoDraw = False
+735.2483 	DATA 	Keypress: left
+737.9277 	EXP 	stim_cross: autoDraw = False
+737.9299 	EXP 	New trial (rep=0, index=14): OrderedDict([('num_stim', 9), ('match', 1), ('corr_key', 'right')])
+737.9444 	EXP 	stim_text: autoDraw = False
+737.9444 	EXP 	stim_cross: autoDraw = False
+737.9444 	EXP 	stim_text: text = 9
+737.9444 	EXP 	stim_text: autoDraw = True
+738.4278 	EXP 	stim_cross: autoDraw = True
+738.4444 	EXP 	stim_text: autoDraw = False
+739.5498 	DATA 	Keypress: left
+740.3326 	DATA 	Keypress: right
+741.4278 	EXP 	stim_cross: autoDraw = False
+741.4304 	EXP 	New trial (rep=0, index=15): OrderedDict([('num_stim', 4), ('match', 0), ('corr_key', 'left')])
+741.4445 	EXP 	stim_text: autoDraw = False
+741.4445 	EXP 	stim_cross: autoDraw = False
+741.4445 	EXP 	stim_text: text = 4
+741.4445 	EXP 	stim_text: autoDraw = True
+741.9278 	EXP 	stim_cross: autoDraw = True
+741.9445 	EXP 	stim_text: autoDraw = False
+742.4988 	DATA 	Keypress: left
+744.9278 	EXP 	stim_cross: autoDraw = False
+744.9300 	EXP 	New trial (rep=0, index=16): OrderedDict([('num_stim', 2), ('match', 0), ('corr_key', 'left')])
+744.9445 	EXP 	stim_text: autoDraw = False
+744.9445 	EXP 	stim_cross: autoDraw = False
+744.9445 	EXP 	stim_text: text = 2
+744.9445 	EXP 	stim_text: autoDraw = True
+745.4279 	EXP 	stim_cross: autoDraw = True
+745.4445 	EXP 	stim_text: autoDraw = False
+745.9996 	DATA 	Keypress: left
+748.4279 	EXP 	stim_cross: autoDraw = False
+748.4297 	EXP 	New trial (rep=0, index=17): OrderedDict([('num_stim', 4), ('match', 1), ('corr_key', 'right')])
+748.4446 	EXP 	stim_text: autoDraw = False
+748.4446 	EXP 	stim_cross: autoDraw = False
+748.4446 	EXP 	stim_text: text = 4
+748.4446 	EXP 	stim_text: autoDraw = True
+748.7820 	DATA 	Keypress: right
+748.9279 	EXP 	stim_cross: autoDraw = True
+748.9445 	EXP 	stim_text: autoDraw = False
+751.9279 	EXP 	stim_cross: autoDraw = False
+751.9304 	EXP 	New trial (rep=0, index=18): OrderedDict([('num_stim', 4), ('match', 0), ('corr_key', 'left')])
+751.9446 	EXP 	stim_text: autoDraw = False
+751.9446 	EXP 	stim_cross: autoDraw = False
+751.9446 	EXP 	stim_text: text = 4
+751.9446 	EXP 	stim_text: autoDraw = True
+752.4279 	EXP 	stim_cross: autoDraw = True
+752.4446 	EXP 	stim_text: autoDraw = False
+753.8156 	DATA 	Keypress: left
+755.4280 	EXP 	stim_cross: autoDraw = False
+755.4304 	EXP 	New trial (rep=0, index=19): OrderedDict([('num_stim', 4), ('match', 1), ('corr_key', 'right')])
+755.4446 	EXP 	stim_text: autoDraw = False
+755.4446 	EXP 	stim_cross: autoDraw = False
+755.4446 	EXP 	stim_text: text = 4
+755.4446 	EXP 	stim_text: autoDraw = True
+755.9280 	EXP 	stim_cross: autoDraw = True
+755.9447 	EXP 	stim_text: autoDraw = False
+756.1826 	DATA 	Keypress: right
+758.9280 	EXP 	stim_cross: autoDraw = False
+758.9306 	EXP 	UDP Sent: marker_ID=14, marker_value=42, marker_string=n_back_end, timestamp=1655323229971006464
+758.9447 	EXP 	stim_text: autoDraw = False
+758.9447 	EXP 	stim_cross: autoDraw = False
+759.3517 	EXP 	window1: mouseVisible = True

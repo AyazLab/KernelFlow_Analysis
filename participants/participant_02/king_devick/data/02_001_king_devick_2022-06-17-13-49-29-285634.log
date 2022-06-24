@@ -1,0 +1,45 @@
+13.9436 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([-0.7, -0.7, -0.7]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x00000162A974F860>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x00000162A96EFCC0>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1080]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+13.9439 	EXP 	window1: mouseVisible = True
+13.9440 	EXP 	window1: recordFrameIntervals = False
+14.1098 	EXP 	window1: recordFrameIntervals = True
+14.2933 	EXP 	window1: recordFrameIntervals = False
+14.5555 	EXP 	window1: mouseVisible = False
+14.5605 	EXP 	UDP Sent: marker_ID=3, marker_value=31, marker_string=king_devick_start, timestamp=1655488169285633792
+14.6503 	EXP 	Created instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+14.6848 	EXP 	Created demo_instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.06, italic=False, languageStyle='LTR', name='demo_instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+14.8088 	EXP 	Created demo_image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, image='king_devick_stimuli/demo_card.jpg', interpolate=True, mask=None, maskParams=None, name='demo_image', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.85, 0.85]), texRes=128.0, units='height', win=Window(...))
+14.8286 	EXP 	Created test1_instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.06, italic=False, languageStyle='LTR', name='test1_instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+14.9646 	EXP 	Created test1_image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, image='king_devick_stimuli/test1_card.jpg', interpolate=True, mask=None, maskParams=None, name='test1_image', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.85, 0.85]), texRes=128.0, units='height', win=Window(...))
+14.9841 	EXP 	Created test2_instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.06, italic=False, languageStyle='LTR', name='test2_instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+15.1127 	EXP 	Created test2_image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, image='king_devick_stimuli/test2_card.jpg', interpolate=True, mask=None, maskParams=None, name='test2_image', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.85, 0.85]), texRes=128.0, units='height', win=Window(...))
+15.1308 	EXP 	Created test3_instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.06, italic=False, languageStyle='LTR', name='test3_instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+15.2476 	EXP 	Created test3_image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, image='king_devick_stimuli/test3_card.jpg', interpolate=True, mask=None, maskParams=None, name='test3_image', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.85, 0.85]), texRes=128.0, units='height', win=Window(...))
+15.3322 	EXP 	instructions_text: autoDraw = True
+20.9193 	DATA 	Keypress: space
+20.9266 	EXP 	instructions_text: autoDraw = False
+20.9266 	EXP 	demo_instructions_text: autoDraw = True
+37.3873 	DATA 	Keypress: space
+37.3936 	EXP 	demo_instructions_text: autoDraw = False
+37.3936 	EXP 	demo_image: autoDraw = True
+54.2175 	DATA 	Keypress: space
+54.2271 	EXP 	demo_image: autoDraw = False
+54.2271 	EXP 	test1_instructions_text: autoDraw = True
+69.0157 	DATA 	Keypress: space
+69.0440 	EXP 	test1_instructions_text: autoDraw = False
+69.0440 	EXP 	test1_image: autoDraw = True
+87.5675 	DATA 	Keypress: space
+87.5776 	EXP 	test1_image: autoDraw = False
+87.5776 	EXP 	test2_instructions_text: autoDraw = True
+92.9834 	DATA 	Keypress: space
+92.9944 	EXP 	test2_instructions_text: autoDraw = False
+92.9944 	EXP 	test2_image: autoDraw = True
+110.7844 	DATA 	Keypress: space
+110.7947 	EXP 	test2_image: autoDraw = False
+110.7947 	EXP 	test3_instructions_text: autoDraw = True
+116.0846 	DATA 	Keypress: space
+116.0948 	EXP 	test3_instructions_text: autoDraw = False
+116.0948 	EXP 	test3_image: autoDraw = True
+133.6318 	EXP 	UDP Sent: marker_ID=4, marker_value=32, marker_string=king_devick_end, timestamp=1655488299115586048
+133.6321 	DATA 	Keypress: space
+133.6451 	EXP 	test3_image: autoDraw = False
+134.0144 	EXP 	window1: mouseVisible = True

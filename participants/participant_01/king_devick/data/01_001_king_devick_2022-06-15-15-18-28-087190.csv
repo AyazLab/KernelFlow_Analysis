@@ -1,0 +1,4 @@
+﻿test1_image.started,test1_image.stopped,test1_resp.keys,test1_resp.rt,test1_resp.started,test1_resp.stopped,test2_image.started,test2_image.stopped,test2_resp.keys,test2_resp.rt,test2_resp.started,test2_resp.stopped,test3_image.started,test3_image.stopped,test3_resp.keys,test3_resp.rt,test3_resp.started,test3_resp.stopped,participant,session,date,expName,psychopyVersion,frameRate,
+53.51491799999985,None,space,15.563976699999785,53.51491799999985,None,,,,,,,,,,,,,01,001,2022_Jun_15_1518,king_devick,2021.2.3,60.0313964203646,
+,,,,,,72.76516549999997,None,space,15.689665599999898,72.76516549999997,None,,,,,,,01,001,2022_Jun_15_1518,king_devick,2021.2.3,60.0313964203646,
+,,,,,,,,,,,,91.96540920000007,None,space,16.50537200000008,91.96540920000007,None,01,001,2022_Jun_15_1518,king_devick,2021.2.3,60.0313964203646,
