@@ -1,0 +1,4 @@
+﻿task_order,king_devick_loop.thisRepN,king_devick_loop.thisTrialN,king_devick_loop.thisN,king_devick_loop.thisIndex,card_image.started,card_image.stopped,card_resp.keys,card_resp.rt,card_resp.started,card_resp.stopped,participant,session,date,expName,psychopyVersion,frameRate,
+card_1.jpg,0,0,0,0,43.535771799999566,None,space,14.10724890000074,43.535771799999566,None,03,001,2022_Jul_06_1628,king_devick,2021.2.3,59.995740302524304,
+card_2.jpg,0,1,1,1,66.55311710000024,None,space,12.51393630000075,66.55311710000024,None,03,001,2022_Jul_06_1628,king_devick,2021.2.3,59.995740302524304,
+card_3.jpg,0,2,2,2,82.18638779999947,None,space,12.432821899999908,82.18638779999947,None,03,001,2022_Jul_06_1628,king_devick,2021.2.3,59.995740302524304,

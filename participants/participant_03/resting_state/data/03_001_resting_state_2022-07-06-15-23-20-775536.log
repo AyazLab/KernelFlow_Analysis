@@ -1,0 +1,25 @@
+107.0971 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([-0.7, -0.7, -0.7]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x000002B947E82208>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x000002B947F03668>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1080]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+107.0975 	EXP 	window1: mouseVisible = True
+107.0975 	EXP 	window1: recordFrameIntervals = False
+107.2633 	EXP 	window1: recordFrameIntervals = True
+107.4466 	EXP 	window1: recordFrameIntervals = False
+107.7164 	EXP 	window1: mouseVisible = False
+107.7219 	EXP 	UDP Sent: marker_ID=3, marker_value=51, marker_string=resting_state_start, timestamp=1657135400775536384
+107.8208 	EXP 	Created welcome_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='welcome_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+107.8974 	EXP 	Sound halfway_tone set volume 1.000
+107.9005 	EXP 	Created trial_cross = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='trial_cross', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+107.9013 	EXP 	Sound done_sound set volume 1.000
+107.9176 	EXP 	Created done_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='done_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='The Resting State task is now complete.', units='height', win=Window(...), wrapWidth=1)
+108.0044 	EXP 	welcome_text: autoDraw = True
+117.1532 	DATA 	Keypress: space
+117.1633 	EXP 	welcome_text: autoDraw = False
+117.1633 	EXP 	trial_cross: autoDraw = True
+327.1498 	EXP 	Sound halfway_tone started
+327.6511 	EXP 	Sound halfway_tone reached end of file
+537.1696 	EXP 	Sound done_sound started
+537.1696 	EXP 	trial_cross: autoDraw = False
+537.1696 	EXP 	done_text: autoDraw = True
+537.6711 	EXP 	Sound done_sound reached end of file
+540.1531 	EXP 	UDP Sent: marker_ID=4, marker_value=52, marker_string=resting_state_end, timestamp=1657135936914191104
+540.1696 	EXP 	done_text: autoDraw = False
+540.5438 	EXP 	window1: mouseVisible = True

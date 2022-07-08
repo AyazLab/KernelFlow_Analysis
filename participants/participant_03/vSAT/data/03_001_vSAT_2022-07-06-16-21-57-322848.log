@@ -1,0 +1,2933 @@
+9.5187 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([-0.7, -0.7, -0.7]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000022E98AD1080>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x0000022E98A63390>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1080]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+9.5189 	EXP 	window1: mouseVisible = True
+9.5189 	EXP 	window1: recordFrameIntervals = False
+9.6850 	EXP 	window1: recordFrameIntervals = True
+9.8684 	EXP 	window1: recordFrameIntervals = False
+10.1300 	EXP 	window1: mouseVisible = False
+10.1355 	EXP 	UDP Sent: marker_ID=13, marker_value=91, marker_string=vSAT_start, timestamp=1657138917322847488
+10.2381 	EXP 	Created instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+10.2465 	EXP 	Created experiment_SAT_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='experiment_SAT_text', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+10.2545 	EXP 	Created experiment_vSAT_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-1.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.05, italic=False, languageStyle='LTR', name='experiment_vSAT_text', opacity=1.0, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+10.2561 	EXP 	Created inter_stim_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='inter_stim_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='', units='height', win=Window(...), wrapWidth=1)
+10.2591 	EXP 	Created cross1 = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='cross1', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+10.2606 	EXP 	Created vSAT_square = Rect(__class__=<class 'psychopy.visual.rect.Rect'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=0.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='vSAT_square', opacity=1.0, ori=0.0, pos=array([0., 0.]), size=array([0.25, 0.25]), units='height', vertices=ndarray(...), win=Window(...))
+10.2628 	EXP 	Created cross2 = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='cross2', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+10.3163 	EXP 	Sound response_sound set volume 1.000
+10.3186 	EXP 	Created cross3 = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-2.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='cross3', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+10.3193 	EXP 	Sound feedback_sound set volume 1.000
+10.3214 	EXP 	Created cross4 = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=-1.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='cross4', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+10.3360 	EXP 	Created done_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='done_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='The vSAT task is now complete.', units='height', win=Window(...), wrapWidth=1)
+10.4170 	EXP 	instructions_text: autoDraw = True
+15.7734 	DATA 	Keypress: space
+15.7918 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\vSAT\vSAT_TO-16571317878520164.csv as conditions, 4 conditions, 1 params
+15.7921 	EXP 	Created sequence: sequential, trialTypes=4, nReps=1, seed=None
+15.7924 	EXP 	New trial (rep=0, index=0): OrderedDict([('task_order', 'SAT_stims-16571317877910345.csv')])
+15.8185 	EXP 	instructions_text: autoDraw = False
+15.8185 	EXP 	experiment_SAT_text: autoDraw = True
+15.8185 	EXP 	experiment_vSAT_text: autoDraw = True
+17.7449 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\vSAT\vSAT_conditions\SAT_stims-16571317877910345.csv as conditions, 30 conditions, 6 params
+17.7453 	EXP 	Created sequence: sequential, trialTypes=30, nReps=1, seed=None
+17.7455 	EXP 	New trial (rep=0, index=0): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+17.7489 	DATA 	Keypress: space
+17.7519 	EXP 	experiment_SAT_text: autoDraw = False
+17.7519 	EXP 	experiment_vSAT_text: autoDraw = False
+17.7519 	EXP 	inter_stim_text: autoDraw = True
+17.7519 	EXP 	cross1: autoDraw = True
+20.7518 	EXP 	inter_stim_text: autoDraw = False
+20.7518 	EXP 	cross1: autoDraw = False
+20.7518 	EXP 	inter_stim_text: autoDraw = False
+20.7518 	EXP 	cross1: autoDraw = False
+20.7518 	EXP 	vSAT_square: pos = array([0., 0.])
+20.7518 	EXP 	vSAT_square: autoDraw = True
+20.7518 	EXP 	cross2: autoDraw = True
+20.7852 	EXP 	vSAT_square: autoDraw = False
+20.7852 	EXP 	cross2: autoDraw = False
+20.7852 	EXP 	vSAT_square: autoDraw = False
+20.7852 	EXP 	cross2: autoDraw = False
+20.7852 	EXP 	cross3: autoDraw = True
+20.8685 	EXP 	Sound response_sound started
+21.2200 	EXP 	Sound response_sound stopped
+21.2352 	EXP 	Sound feedback_sound started
+21.2248 	DATA 	Keypress: right
+21.2352 	EXP 	cross3: autoDraw = False
+21.2352 	EXP 	cross4: autoDraw = True
+21.7300 	EXP 	Sound feedback_sound stopped
+21.7317 	EXP 	New trial (rep=0, index=1): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+21.7519 	EXP 	cross4: autoDraw = False
+21.7519 	EXP 	cross4: autoDraw = False
+21.7519 	EXP 	inter_stim_text: autoDraw = True
+21.7519 	EXP 	cross1: autoDraw = True
+24.7519 	EXP 	inter_stim_text: autoDraw = False
+24.7519 	EXP 	cross1: autoDraw = False
+24.7519 	EXP 	inter_stim_text: autoDraw = False
+24.7519 	EXP 	cross1: autoDraw = False
+24.7519 	EXP 	vSAT_square: pos = array([0., 0.])
+24.7519 	EXP 	vSAT_square: autoDraw = True
+24.7519 	EXP 	cross2: autoDraw = True
+24.8019 	EXP 	vSAT_square: autoDraw = False
+24.8019 	EXP 	cross2: autoDraw = False
+24.8019 	EXP 	vSAT_square: autoDraw = False
+24.8019 	EXP 	cross2: autoDraw = False
+24.8019 	EXP 	cross3: autoDraw = True
+24.8853 	EXP 	Sound response_sound started
+25.1000 	EXP 	Sound response_sound stopped
+25.1186 	EXP 	Sound feedback_sound started
+25.1050 	DATA 	Keypress: right
+25.1186 	EXP 	cross3: autoDraw = False
+25.1186 	EXP 	cross4: autoDraw = True
+25.6200 	EXP 	Sound feedback_sound reached end of file
+25.6216 	EXP 	New trial (rep=0, index=2): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+25.6353 	EXP 	cross4: autoDraw = False
+25.6353 	EXP 	cross4: autoDraw = False
+25.6353 	EXP 	inter_stim_text: autoDraw = True
+25.6353 	EXP 	cross1: autoDraw = True
+26.6353 	EXP 	inter_stim_text: autoDraw = False
+26.6353 	EXP 	cross1: autoDraw = False
+26.6353 	EXP 	inter_stim_text: autoDraw = False
+26.6353 	EXP 	cross1: autoDraw = False
+26.6353 	EXP 	vSAT_square: pos = array([0., 0.])
+26.6353 	EXP 	vSAT_square: autoDraw = True
+26.6353 	EXP 	cross2: autoDraw = True
+26.6686 	EXP 	vSAT_square: autoDraw = False
+26.6686 	EXP 	cross2: autoDraw = False
+26.6686 	EXP 	vSAT_square: autoDraw = False
+26.6686 	EXP 	cross2: autoDraw = False
+26.6686 	EXP 	cross3: autoDraw = True
+26.7519 	EXP 	Sound response_sound started
+27.1820 	EXP 	Sound response_sound reached end of file
+27.5186 	EXP 	Sound feedback_sound started
+27.5102 	DATA 	Keypress: left
+27.5186 	EXP 	cross3: autoDraw = False
+27.5186 	EXP 	cross4: autoDraw = True
+28.0200 	EXP 	Sound feedback_sound reached end of file
+28.0215 	EXP 	New trial (rep=0, index=3): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+28.0353 	EXP 	cross4: autoDraw = False
+28.0353 	EXP 	cross4: autoDraw = False
+28.0353 	EXP 	inter_stim_text: autoDraw = True
+28.0353 	EXP 	cross1: autoDraw = True
+29.0353 	EXP 	inter_stim_text: autoDraw = False
+29.0353 	EXP 	cross1: autoDraw = False
+29.0353 	EXP 	inter_stim_text: autoDraw = False
+29.0353 	EXP 	cross1: autoDraw = False
+29.0353 	EXP 	vSAT_square: pos = array([0., 0.])
+29.0353 	EXP 	vSAT_square: autoDraw = True
+29.0353 	EXP 	cross2: autoDraw = True
+29.0686 	EXP 	vSAT_square: autoDraw = False
+29.0686 	EXP 	cross2: autoDraw = False
+29.0686 	EXP 	vSAT_square: autoDraw = False
+29.0686 	EXP 	cross2: autoDraw = False
+29.0686 	EXP 	cross3: autoDraw = True
+29.1520 	EXP 	Sound response_sound started
+29.5821 	EXP 	Sound response_sound reached end of file
+29.6353 	EXP 	Sound feedback_sound started
+29.6270 	DATA 	Keypress: left
+29.6353 	EXP 	cross3: autoDraw = False
+29.6353 	EXP 	cross4: autoDraw = True
+30.1300 	EXP 	Sound feedback_sound stopped
+30.1316 	EXP 	New trial (rep=0, index=4): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+30.1520 	EXP 	cross4: autoDraw = False
+30.1520 	EXP 	cross4: autoDraw = False
+30.1520 	EXP 	inter_stim_text: autoDraw = True
+30.1520 	EXP 	cross1: autoDraw = True
+33.1521 	EXP 	inter_stim_text: autoDraw = False
+33.1521 	EXP 	cross1: autoDraw = False
+33.1521 	EXP 	inter_stim_text: autoDraw = False
+33.1521 	EXP 	cross1: autoDraw = False
+33.1521 	EXP 	vSAT_square: pos = array([0., 0.])
+33.1521 	EXP 	vSAT_square: autoDraw = True
+33.1521 	EXP 	cross2: autoDraw = True
+33.2020 	EXP 	vSAT_square: autoDraw = False
+33.2020 	EXP 	cross2: autoDraw = False
+33.2020 	EXP 	vSAT_square: autoDraw = False
+33.2020 	EXP 	cross2: autoDraw = False
+33.2020 	EXP 	cross3: autoDraw = True
+33.2854 	EXP 	Sound response_sound started
+33.5000 	EXP 	Sound response_sound stopped
+33.5187 	EXP 	Sound feedback_sound started
+33.5050 	DATA 	Keypress: right
+33.5187 	EXP 	cross3: autoDraw = False
+33.5187 	EXP 	cross4: autoDraw = True
+34.0200 	EXP 	Sound feedback_sound reached end of file
+34.0216 	EXP 	New trial (rep=0, index=5): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+34.0354 	EXP 	cross4: autoDraw = False
+34.0354 	EXP 	cross4: autoDraw = False
+34.0354 	EXP 	inter_stim_text: autoDraw = True
+34.0354 	EXP 	cross1: autoDraw = True
+35.0354 	EXP 	inter_stim_text: autoDraw = False
+35.0354 	EXP 	cross1: autoDraw = False
+35.0354 	EXP 	inter_stim_text: autoDraw = False
+35.0354 	EXP 	cross1: autoDraw = False
+35.0354 	EXP 	vSAT_square: pos = array([0., 0.])
+35.0354 	EXP 	vSAT_square: autoDraw = True
+35.0354 	EXP 	cross2: autoDraw = True
+35.0854 	EXP 	vSAT_square: autoDraw = False
+35.0854 	EXP 	cross2: autoDraw = False
+35.0854 	EXP 	vSAT_square: autoDraw = False
+35.0854 	EXP 	cross2: autoDraw = False
+35.0854 	EXP 	cross3: autoDraw = True
+35.1688 	EXP 	Sound response_sound started
+35.5500 	EXP 	Sound response_sound stopped
+35.5688 	EXP 	Sound feedback_sound started
+35.5549 	DATA 	Keypress: right
+35.5687 	EXP 	cross3: autoDraw = False
+35.5687 	EXP 	cross4: autoDraw = True
+36.0700 	EXP 	Sound feedback_sound reached end of file
+36.0703 	EXP 	New trial (rep=0, index=6): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+36.0854 	EXP 	cross4: autoDraw = False
+36.0854 	EXP 	inter_stim_text: autoDraw = True
+36.0854 	EXP 	cross1: autoDraw = True
+38.0854 	EXP 	inter_stim_text: autoDraw = False
+38.0854 	EXP 	cross1: autoDraw = False
+38.0854 	EXP 	inter_stim_text: autoDraw = False
+38.0854 	EXP 	cross1: autoDraw = False
+38.0854 	EXP 	vSAT_square: pos = array([0., 0.])
+38.0854 	EXP 	vSAT_square: autoDraw = True
+38.0854 	EXP 	cross2: autoDraw = True
+38.1188 	EXP 	vSAT_square: autoDraw = False
+38.1188 	EXP 	cross2: autoDraw = False
+38.1188 	EXP 	vSAT_square: autoDraw = False
+38.1188 	EXP 	cross2: autoDraw = False
+38.1188 	EXP 	cross3: autoDraw = True
+38.2021 	EXP 	Sound response_sound started
+38.5000 	EXP 	Sound response_sound stopped
+38.5188 	EXP 	Sound feedback_sound started
+38.5050 	DATA 	Keypress: right
+38.5188 	EXP 	cross3: autoDraw = False
+38.5188 	EXP 	cross4: autoDraw = True
+39.0200 	EXP 	Sound feedback_sound reached end of file
+39.0204 	EXP 	New trial (rep=0, index=7): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+39.0355 	EXP 	cross4: autoDraw = False
+39.0355 	EXP 	inter_stim_text: autoDraw = True
+39.0355 	EXP 	cross1: autoDraw = True
+41.0355 	EXP 	inter_stim_text: autoDraw = False
+41.0355 	EXP 	cross1: autoDraw = False
+41.0355 	EXP 	inter_stim_text: autoDraw = False
+41.0355 	EXP 	cross1: autoDraw = False
+41.0355 	EXP 	vSAT_square: pos = array([0., 0.])
+41.0355 	EXP 	vSAT_square: autoDraw = True
+41.0355 	EXP 	cross2: autoDraw = True
+41.0689 	EXP 	vSAT_square: autoDraw = False
+41.0689 	EXP 	cross2: autoDraw = False
+41.0689 	EXP 	vSAT_square: autoDraw = False
+41.0689 	EXP 	cross2: autoDraw = False
+41.0689 	EXP 	cross3: autoDraw = True
+41.1522 	EXP 	Sound response_sound started
+41.5000 	EXP 	Sound response_sound stopped
+41.5189 	EXP 	Sound feedback_sound started
+41.5051 	DATA 	Keypress: left
+41.5188 	EXP 	cross3: autoDraw = False
+41.5188 	EXP 	cross4: autoDraw = True
+42.0200 	EXP 	Sound feedback_sound reached end of file
+42.0203 	EXP 	New trial (rep=0, index=8): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+42.0355 	EXP 	cross4: autoDraw = False
+42.0355 	EXP 	inter_stim_text: autoDraw = True
+42.0355 	EXP 	cross1: autoDraw = True
+45.0356 	EXP 	inter_stim_text: autoDraw = False
+45.0356 	EXP 	cross1: autoDraw = False
+45.0356 	EXP 	inter_stim_text: autoDraw = False
+45.0356 	EXP 	cross1: autoDraw = False
+45.0356 	EXP 	vSAT_square: pos = array([0., 0.])
+45.0356 	EXP 	vSAT_square: autoDraw = True
+45.0356 	EXP 	cross2: autoDraw = True
+45.0689 	EXP 	vSAT_square: autoDraw = False
+45.0689 	EXP 	cross2: autoDraw = False
+45.0689 	EXP 	vSAT_square: autoDraw = False
+45.0689 	EXP 	cross2: autoDraw = False
+45.0689 	EXP 	cross3: autoDraw = True
+45.1522 	EXP 	Sound response_sound started
+45.5829 	EXP 	Sound response_sound reached end of file
+45.5847 	DATA 	Keypress: left
+45.6189 	EXP 	Sound feedback_sound started
+45.6189 	EXP 	cross3: autoDraw = False
+45.6189 	EXP 	cross4: autoDraw = True
+46.1200 	EXP 	Sound feedback_sound reached end of file
+46.1219 	EXP 	New trial (rep=0, index=9): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+46.1356 	EXP 	cross4: autoDraw = False
+46.1356 	EXP 	cross4: autoDraw = False
+46.1356 	EXP 	inter_stim_text: autoDraw = True
+46.1356 	EXP 	cross1: autoDraw = True
+48.1356 	EXP 	inter_stim_text: autoDraw = False
+48.1356 	EXP 	cross1: autoDraw = False
+48.1356 	EXP 	inter_stim_text: autoDraw = False
+48.1356 	EXP 	cross1: autoDraw = False
+48.1356 	EXP 	vSAT_square: pos = array([0., 0.])
+48.1356 	EXP 	vSAT_square: autoDraw = True
+48.1356 	EXP 	cross2: autoDraw = True
+48.1689 	EXP 	vSAT_square: autoDraw = False
+48.1689 	EXP 	cross2: autoDraw = False
+48.1689 	EXP 	vSAT_square: autoDraw = False
+48.1689 	EXP 	cross2: autoDraw = False
+48.1689 	EXP 	cross3: autoDraw = True
+48.2523 	EXP 	Sound response_sound started
+48.6396 	DATA 	Keypress: left
+48.6823 	EXP 	Sound response_sound reached end of file
+49.1856 	EXP 	Sound feedback_sound started
+49.1774 	DATA 	Keypress: left
+49.1856 	EXP 	cross3: autoDraw = False
+49.1856 	EXP 	cross4: autoDraw = True
+49.6800 	EXP 	Sound feedback_sound stopped
+49.6816 	EXP 	New trial (rep=0, index=10): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+49.6857 	EXP 	cross4: autoDraw = False
+49.6857 	EXP 	cross4: autoDraw = False
+49.6857 	EXP 	inter_stim_text: autoDraw = True
+49.6857 	EXP 	cross1: autoDraw = True
+51.6857 	EXP 	inter_stim_text: autoDraw = False
+51.6857 	EXP 	cross1: autoDraw = False
+51.6857 	EXP 	inter_stim_text: autoDraw = False
+51.6857 	EXP 	cross1: autoDraw = False
+51.6857 	EXP 	vSAT_square: pos = array([0., 0.])
+51.6857 	EXP 	vSAT_square: autoDraw = True
+51.6857 	EXP 	cross2: autoDraw = True
+51.7357 	EXP 	vSAT_square: autoDraw = False
+51.7357 	EXP 	cross2: autoDraw = False
+51.7357 	EXP 	vSAT_square: autoDraw = False
+51.7357 	EXP 	cross2: autoDraw = False
+51.7357 	EXP 	cross3: autoDraw = True
+51.8190 	EXP 	Sound response_sound started
+52.2500 	EXP 	Sound response_sound reached end of file
+52.2690 	EXP 	Sound feedback_sound started
+52.2565 	DATA 	Keypress: left
+52.2690 	EXP 	cross3: autoDraw = False
+52.2690 	EXP 	cross4: autoDraw = True
+52.7700 	EXP 	Sound feedback_sound reached end of file
+52.7720 	EXP 	New trial (rep=0, index=11): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+52.7857 	EXP 	cross4: autoDraw = False
+52.7857 	EXP 	cross4: autoDraw = False
+52.7857 	EXP 	inter_stim_text: autoDraw = True
+52.7857 	EXP 	cross1: autoDraw = True
+55.7857 	EXP 	inter_stim_text: autoDraw = False
+55.7857 	EXP 	cross1: autoDraw = False
+55.7857 	EXP 	inter_stim_text: autoDraw = False
+55.7857 	EXP 	cross1: autoDraw = False
+55.7857 	EXP 	vSAT_square: pos = array([0., 0.])
+55.7857 	EXP 	vSAT_square: autoDraw = True
+55.7857 	EXP 	cross2: autoDraw = True
+55.8191 	EXP 	vSAT_square: autoDraw = False
+55.8191 	EXP 	cross2: autoDraw = False
+55.8191 	EXP 	vSAT_square: autoDraw = False
+55.8191 	EXP 	cross2: autoDraw = False
+55.8191 	EXP 	cross3: autoDraw = True
+55.9024 	EXP 	Sound response_sound started
+56.3325 	EXP 	Sound response_sound reached end of file
+56.4024 	EXP 	Sound feedback_sound started
+56.3942 	DATA 	Keypress: left
+56.4024 	EXP 	cross3: autoDraw = False
+56.4024 	EXP 	cross4: autoDraw = True
+56.9000 	EXP 	Sound feedback_sound stopped
+56.9016 	EXP 	New trial (rep=0, index=12): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+56.9191 	EXP 	cross4: autoDraw = False
+56.9191 	EXP 	cross4: autoDraw = False
+56.9191 	EXP 	inter_stim_text: autoDraw = True
+56.9191 	EXP 	cross1: autoDraw = True
+58.9191 	EXP 	inter_stim_text: autoDraw = False
+58.9191 	EXP 	cross1: autoDraw = False
+58.9191 	EXP 	inter_stim_text: autoDraw = False
+58.9191 	EXP 	cross1: autoDraw = False
+58.9191 	EXP 	vSAT_square: pos = array([0., 0.])
+58.9191 	EXP 	vSAT_square: autoDraw = True
+58.9191 	EXP 	cross2: autoDraw = True
+58.9525 	EXP 	vSAT_square: autoDraw = False
+58.9525 	EXP 	cross2: autoDraw = False
+58.9525 	EXP 	vSAT_square: autoDraw = False
+58.9525 	EXP 	cross2: autoDraw = False
+58.9525 	EXP 	cross3: autoDraw = True
+59.0358 	EXP 	Sound response_sound started
+59.2500 	EXP 	Sound response_sound stopped
+59.2525 	EXP 	Sound feedback_sound started
+59.2542 	DATA 	Keypress: right
+59.2691 	EXP 	cross3: autoDraw = False
+59.2691 	EXP 	cross4: autoDraw = True
+59.7500 	EXP 	Sound feedback_sound stopped
+59.7695 	EXP 	New trial (rep=0, index=13): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+59.7858 	EXP 	cross4: autoDraw = False
+59.7858 	EXP 	inter_stim_text: autoDraw = True
+59.7858 	EXP 	cross1: autoDraw = True
+62.7858 	EXP 	inter_stim_text: autoDraw = False
+62.7858 	EXP 	cross1: autoDraw = False
+62.7858 	EXP 	inter_stim_text: autoDraw = False
+62.7858 	EXP 	cross1: autoDraw = False
+62.7858 	EXP 	vSAT_square: pos = array([0., 0.])
+62.7858 	EXP 	vSAT_square: autoDraw = True
+62.7858 	EXP 	cross2: autoDraw = True
+62.8192 	EXP 	vSAT_square: autoDraw = False
+62.8192 	EXP 	cross2: autoDraw = False
+62.8192 	EXP 	vSAT_square: autoDraw = False
+62.8192 	EXP 	cross2: autoDraw = False
+62.8192 	EXP 	cross3: autoDraw = True
+62.9025 	EXP 	Sound response_sound started
+63.1000 	EXP 	Sound response_sound stopped
+63.1192 	EXP 	Sound feedback_sound started
+63.1050 	DATA 	Keypress: left
+63.1192 	EXP 	cross3: autoDraw = False
+63.1192 	EXP 	cross4: autoDraw = True
+63.6200 	EXP 	Sound feedback_sound reached end of file
+63.6203 	EXP 	New trial (rep=0, index=14): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+63.6359 	EXP 	cross4: autoDraw = False
+63.6359 	EXP 	inter_stim_text: autoDraw = True
+63.6359 	EXP 	cross1: autoDraw = True
+65.6359 	EXP 	inter_stim_text: autoDraw = False
+65.6359 	EXP 	cross1: autoDraw = False
+65.6359 	EXP 	inter_stim_text: autoDraw = False
+65.6359 	EXP 	cross1: autoDraw = False
+65.6359 	EXP 	vSAT_square: pos = array([0., 0.])
+65.6359 	EXP 	vSAT_square: autoDraw = True
+65.6359 	EXP 	cross2: autoDraw = True
+65.6692 	EXP 	vSAT_square: autoDraw = False
+65.6692 	EXP 	cross2: autoDraw = False
+65.6692 	EXP 	vSAT_square: autoDraw = False
+65.6692 	EXP 	cross2: autoDraw = False
+65.6692 	EXP 	cross3: autoDraw = True
+65.7525 	EXP 	Sound response_sound started
+66.1826 	EXP 	Sound response_sound reached end of file
+66.3359 	EXP 	Sound feedback_sound started
+66.3280 	DATA 	Keypress: left
+66.3359 	EXP 	cross3: autoDraw = False
+66.3359 	EXP 	cross4: autoDraw = True
+66.8300 	EXP 	Sound feedback_sound stopped
+66.8315 	EXP 	New trial (rep=0, index=15): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+66.8359 	EXP 	cross4: autoDraw = False
+66.8359 	EXP 	cross4: autoDraw = False
+66.8359 	EXP 	inter_stim_text: autoDraw = True
+66.8359 	EXP 	cross1: autoDraw = True
+67.8359 	EXP 	inter_stim_text: autoDraw = False
+67.8359 	EXP 	cross1: autoDraw = False
+67.8359 	EXP 	inter_stim_text: autoDraw = False
+67.8359 	EXP 	cross1: autoDraw = False
+67.8359 	EXP 	vSAT_square: pos = array([0., 0.])
+67.8359 	EXP 	vSAT_square: autoDraw = True
+67.8359 	EXP 	cross2: autoDraw = True
+67.8693 	EXP 	vSAT_square: autoDraw = False
+67.8693 	EXP 	cross2: autoDraw = False
+67.8693 	EXP 	vSAT_square: autoDraw = False
+67.8693 	EXP 	cross2: autoDraw = False
+67.8693 	EXP 	cross3: autoDraw = True
+67.9526 	EXP 	Sound response_sound started
+68.1904 	DATA 	Keypress: right
+68.2200 	EXP 	Sound response_sound stopped
+68.2359 	EXP 	Sound feedback_sound started
+68.2359 	EXP 	cross3: autoDraw = False
+68.2359 	EXP 	cross4: autoDraw = True
+68.7299 	EXP 	Sound feedback_sound stopped
+68.7315 	EXP 	New trial (rep=0, index=16): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+68.7359 	EXP 	cross4: autoDraw = False
+68.7359 	EXP 	cross4: autoDraw = False
+68.7359 	EXP 	inter_stim_text: autoDraw = True
+68.7359 	EXP 	cross1: autoDraw = True
+69.7360 	EXP 	inter_stim_text: autoDraw = False
+69.7360 	EXP 	cross1: autoDraw = False
+69.7360 	EXP 	inter_stim_text: autoDraw = False
+69.7360 	EXP 	cross1: autoDraw = False
+69.7360 	EXP 	vSAT_square: pos = array([0., 0.])
+69.7360 	EXP 	vSAT_square: autoDraw = True
+69.7360 	EXP 	cross2: autoDraw = True
+69.7693 	EXP 	vSAT_square: autoDraw = False
+69.7693 	EXP 	cross2: autoDraw = False
+69.7693 	EXP 	vSAT_square: autoDraw = False
+69.7693 	EXP 	cross2: autoDraw = False
+69.7693 	EXP 	cross3: autoDraw = True
+69.8526 	EXP 	Sound response_sound started
+70.0901 	EXP 	Sound response_sound stopped
+70.1026 	EXP 	Sound feedback_sound started
+70.0951 	DATA 	Keypress: right
+70.1027 	EXP 	cross3: autoDraw = False
+70.1027 	EXP 	cross4: autoDraw = True
+70.6000 	EXP 	Sound feedback_sound stopped
+70.6016 	EXP 	New trial (rep=0, index=17): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+70.6193 	EXP 	cross4: autoDraw = False
+70.6193 	EXP 	cross4: autoDraw = False
+70.6193 	EXP 	inter_stim_text: autoDraw = True
+70.6193 	EXP 	cross1: autoDraw = True
+72.6193 	EXP 	inter_stim_text: autoDraw = False
+72.6193 	EXP 	cross1: autoDraw = False
+72.6193 	EXP 	inter_stim_text: autoDraw = False
+72.6193 	EXP 	cross1: autoDraw = False
+72.6193 	EXP 	vSAT_square: pos = array([0., 0.])
+72.6193 	EXP 	vSAT_square: autoDraw = True
+72.6193 	EXP 	cross2: autoDraw = True
+72.6527 	EXP 	vSAT_square: autoDraw = False
+72.6527 	EXP 	cross2: autoDraw = False
+72.6527 	EXP 	vSAT_square: autoDraw = False
+72.6527 	EXP 	cross2: autoDraw = False
+72.6527 	EXP 	cross3: autoDraw = True
+72.7360 	EXP 	Sound response_sound started
+72.9571 	DATA 	Keypress: right
+72.9900 	EXP 	Sound response_sound stopped
+73.0026 	EXP 	Sound feedback_sound started
+73.0027 	EXP 	cross3: autoDraw = False
+73.0027 	EXP 	cross4: autoDraw = True
+73.5000 	EXP 	Sound feedback_sound stopped
+73.5016 	EXP 	New trial (rep=0, index=18): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+73.5193 	EXP 	cross4: autoDraw = False
+73.5193 	EXP 	cross4: autoDraw = False
+73.5193 	EXP 	inter_stim_text: autoDraw = True
+73.5193 	EXP 	cross1: autoDraw = True
+76.5194 	EXP 	inter_stim_text: autoDraw = False
+76.5194 	EXP 	cross1: autoDraw = False
+76.5194 	EXP 	inter_stim_text: autoDraw = False
+76.5194 	EXP 	cross1: autoDraw = False
+76.5194 	EXP 	vSAT_square: pos = array([0., 0.])
+76.5194 	EXP 	vSAT_square: autoDraw = True
+76.5194 	EXP 	cross2: autoDraw = True
+76.5527 	EXP 	vSAT_square: autoDraw = False
+76.5527 	EXP 	cross2: autoDraw = False
+76.5527 	EXP 	vSAT_square: autoDraw = False
+76.5527 	EXP 	cross2: autoDraw = False
+76.5527 	EXP 	cross3: autoDraw = True
+76.6361 	EXP 	Sound response_sound started
+77.0700 	EXP 	Sound response_sound reached end of file
+77.3361 	EXP 	Sound feedback_sound started
+77.3281 	DATA 	Keypress: left
+77.3361 	EXP 	cross3: autoDraw = False
+77.3361 	EXP 	cross4: autoDraw = True
+77.8300 	EXP 	Sound feedback_sound stopped
+77.8315 	EXP 	New trial (rep=0, index=19): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+77.8361 	EXP 	cross4: autoDraw = False
+77.8361 	EXP 	cross4: autoDraw = False
+77.8361 	EXP 	inter_stim_text: autoDraw = True
+77.8361 	EXP 	cross1: autoDraw = True
+79.8361 	EXP 	inter_stim_text: autoDraw = False
+79.8361 	EXP 	cross1: autoDraw = False
+79.8361 	EXP 	inter_stim_text: autoDraw = False
+79.8361 	EXP 	cross1: autoDraw = False
+79.8361 	EXP 	vSAT_square: pos = array([0., 0.])
+79.8361 	EXP 	vSAT_square: autoDraw = True
+79.8361 	EXP 	cross2: autoDraw = True
+79.8694 	EXP 	vSAT_square: autoDraw = False
+79.8694 	EXP 	cross2: autoDraw = False
+79.8694 	EXP 	vSAT_square: autoDraw = False
+79.8694 	EXP 	cross2: autoDraw = False
+79.8694 	EXP 	cross3: autoDraw = True
+79.9528 	EXP 	Sound response_sound started
+80.1401 	EXP 	Sound response_sound stopped
+80.1528 	EXP 	Sound feedback_sound started
+80.1451 	DATA 	Keypress: right
+80.1528 	EXP 	cross3: autoDraw = False
+80.1528 	EXP 	cross4: autoDraw = True
+80.6500 	EXP 	Sound feedback_sound stopped
+80.6516 	EXP 	New trial (rep=0, index=20): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+80.6694 	EXP 	cross4: autoDraw = False
+80.6694 	EXP 	cross4: autoDraw = False
+80.6694 	EXP 	inter_stim_text: autoDraw = True
+80.6694 	EXP 	cross1: autoDraw = True
+82.6695 	EXP 	inter_stim_text: autoDraw = False
+82.6695 	EXP 	cross1: autoDraw = False
+82.6695 	EXP 	inter_stim_text: autoDraw = False
+82.6695 	EXP 	cross1: autoDraw = False
+82.6695 	EXP 	vSAT_square: pos = array([0., 0.])
+82.6695 	EXP 	vSAT_square: autoDraw = True
+82.6695 	EXP 	cross2: autoDraw = True
+82.7195 	EXP 	vSAT_square: autoDraw = False
+82.7195 	EXP 	cross2: autoDraw = False
+82.7195 	EXP 	vSAT_square: autoDraw = False
+82.7195 	EXP 	cross2: autoDraw = False
+82.7195 	EXP 	cross3: autoDraw = True
+82.8028 	EXP 	Sound response_sound started
+83.2329 	EXP 	Sound response_sound reached end of file
+83.3195 	EXP 	Sound feedback_sound started
+83.3116 	DATA 	Keypress: left
+83.3195 	EXP 	cross3: autoDraw = False
+83.3195 	EXP 	cross4: autoDraw = True
+83.8200 	EXP 	Sound feedback_sound reached end of file
+83.8224 	EXP 	New trial (rep=0, index=21): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+83.8362 	EXP 	cross4: autoDraw = False
+83.8362 	EXP 	cross4: autoDraw = False
+83.8362 	EXP 	inter_stim_text: autoDraw = True
+83.8362 	EXP 	cross1: autoDraw = True
+86.8362 	EXP 	inter_stim_text: autoDraw = False
+86.8362 	EXP 	cross1: autoDraw = False
+86.8362 	EXP 	inter_stim_text: autoDraw = False
+86.8362 	EXP 	cross1: autoDraw = False
+86.8362 	EXP 	vSAT_square: pos = array([0., 0.])
+86.8362 	EXP 	vSAT_square: autoDraw = True
+86.8362 	EXP 	cross2: autoDraw = True
+86.8862 	EXP 	vSAT_square: autoDraw = False
+86.8862 	EXP 	cross2: autoDraw = False
+86.8862 	EXP 	vSAT_square: autoDraw = False
+86.8862 	EXP 	cross2: autoDraw = False
+86.8862 	EXP 	cross3: autoDraw = True
+86.9696 	EXP 	Sound response_sound started
+87.2601 	EXP 	Sound response_sound stopped
+87.2696 	EXP 	Sound feedback_sound started
+87.2651 	DATA 	Keypress: right
+87.2696 	EXP 	cross3: autoDraw = False
+87.2696 	EXP 	cross4: autoDraw = True
+87.7700 	EXP 	Sound feedback_sound stopped
+87.7715 	EXP 	New trial (rep=0, index=22): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+87.7862 	EXP 	cross4: autoDraw = False
+87.7862 	EXP 	cross4: autoDraw = False
+87.7862 	EXP 	inter_stim_text: autoDraw = True
+87.7862 	EXP 	cross1: autoDraw = True
+88.7862 	EXP 	inter_stim_text: autoDraw = False
+88.7862 	EXP 	cross1: autoDraw = False
+88.7862 	EXP 	inter_stim_text: autoDraw = False
+88.7862 	EXP 	cross1: autoDraw = False
+88.7862 	EXP 	vSAT_square: pos = array([0., 0.])
+88.7862 	EXP 	vSAT_square: autoDraw = True
+88.7862 	EXP 	cross2: autoDraw = True
+88.8363 	EXP 	vSAT_square: autoDraw = False
+88.8363 	EXP 	cross2: autoDraw = False
+88.8363 	EXP 	vSAT_square: autoDraw = False
+88.8363 	EXP 	cross2: autoDraw = False
+88.8363 	EXP 	cross3: autoDraw = True
+88.9196 	EXP 	Sound response_sound started
+89.3500 	EXP 	Sound response_sound reached end of file
+89.3696 	EXP 	Sound feedback_sound started
+89.3562 	DATA 	Keypress: right
+89.3696 	EXP 	cross3: autoDraw = False
+89.3696 	EXP 	cross4: autoDraw = True
+89.8700 	EXP 	Sound feedback_sound reached end of file
+89.8716 	EXP 	New trial (rep=0, index=23): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+89.8863 	EXP 	cross4: autoDraw = False
+89.8863 	EXP 	cross4: autoDraw = False
+89.8863 	EXP 	inter_stim_text: autoDraw = True
+89.8863 	EXP 	cross1: autoDraw = True
+90.8863 	EXP 	inter_stim_text: autoDraw = False
+90.8863 	EXP 	cross1: autoDraw = False
+90.8863 	EXP 	inter_stim_text: autoDraw = False
+90.8863 	EXP 	cross1: autoDraw = False
+90.8863 	EXP 	vSAT_square: pos = array([0., 0.])
+90.8863 	EXP 	vSAT_square: autoDraw = True
+90.8863 	EXP 	cross2: autoDraw = True
+90.9196 	EXP 	vSAT_square: autoDraw = False
+90.9196 	EXP 	cross2: autoDraw = False
+90.9196 	EXP 	vSAT_square: autoDraw = False
+90.9196 	EXP 	cross2: autoDraw = False
+90.9196 	EXP 	cross3: autoDraw = True
+91.0029 	EXP 	Sound response_sound started
+91.2100 	EXP 	Sound response_sound stopped
+91.2196 	EXP 	Sound feedback_sound started
+91.2151 	DATA 	Keypress: right
+91.2197 	EXP 	cross3: autoDraw = False
+91.2197 	EXP 	cross4: autoDraw = True
+91.7200 	EXP 	Sound feedback_sound stopped
+91.7216 	EXP 	New trial (rep=0, index=24): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+91.7363 	EXP 	cross4: autoDraw = False
+91.7363 	EXP 	cross4: autoDraw = False
+91.7363 	EXP 	inter_stim_text: autoDraw = True
+91.7363 	EXP 	cross1: autoDraw = True
+93.7363 	EXP 	inter_stim_text: autoDraw = False
+93.7363 	EXP 	cross1: autoDraw = False
+93.7363 	EXP 	inter_stim_text: autoDraw = False
+93.7363 	EXP 	cross1: autoDraw = False
+93.7363 	EXP 	vSAT_square: pos = array([0., 0.])
+93.7363 	EXP 	vSAT_square: autoDraw = True
+93.7363 	EXP 	cross2: autoDraw = True
+93.7697 	EXP 	vSAT_square: autoDraw = False
+93.7697 	EXP 	cross2: autoDraw = False
+93.7697 	EXP 	vSAT_square: autoDraw = False
+93.7697 	EXP 	cross2: autoDraw = False
+93.7697 	EXP 	cross3: autoDraw = True
+93.8530 	EXP 	Sound response_sound started
+94.1744 	DATA 	Keypress: left
+94.2000 	EXP 	Sound response_sound stopped
+94.2030 	EXP 	Sound feedback_sound started
+94.2196 	EXP 	cross3: autoDraw = False
+94.2196 	EXP 	cross4: autoDraw = True
+94.7000 	EXP 	Sound feedback_sound stopped
+94.7201 	EXP 	New trial (rep=0, index=25): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+94.7364 	EXP 	cross4: autoDraw = False
+94.7364 	EXP 	inter_stim_text: autoDraw = True
+94.7364 	EXP 	cross1: autoDraw = True
+96.7364 	EXP 	inter_stim_text: autoDraw = False
+96.7364 	EXP 	cross1: autoDraw = False
+96.7364 	EXP 	inter_stim_text: autoDraw = False
+96.7364 	EXP 	cross1: autoDraw = False
+96.7364 	EXP 	vSAT_square: pos = array([0., 0.])
+96.7364 	EXP 	vSAT_square: autoDraw = True
+96.7364 	EXP 	cross2: autoDraw = True
+96.7697 	EXP 	vSAT_square: autoDraw = False
+96.7697 	EXP 	cross2: autoDraw = False
+96.7697 	EXP 	vSAT_square: autoDraw = False
+96.7697 	EXP 	cross2: autoDraw = False
+96.7697 	EXP 	cross3: autoDraw = True
+96.8531 	EXP 	Sound response_sound started
+97.2837 	EXP 	Sound response_sound reached end of file
+97.3197 	EXP 	Sound feedback_sound started
+97.3119 	DATA 	Keypress: left
+97.3197 	EXP 	cross3: autoDraw = False
+97.3197 	EXP 	cross4: autoDraw = True
+97.8200 	EXP 	Sound feedback_sound reached end of file
+97.8216 	EXP 	New trial (rep=0, index=26): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+97.8364 	EXP 	cross4: autoDraw = False
+97.8364 	EXP 	cross4: autoDraw = False
+97.8364 	EXP 	inter_stim_text: autoDraw = True
+97.8364 	EXP 	cross1: autoDraw = True
+98.8364 	EXP 	inter_stim_text: autoDraw = False
+98.8364 	EXP 	cross1: autoDraw = False
+98.8364 	EXP 	inter_stim_text: autoDraw = False
+98.8364 	EXP 	cross1: autoDraw = False
+98.8364 	EXP 	vSAT_square: pos = array([0., 0.])
+98.8364 	EXP 	vSAT_square: autoDraw = True
+98.8364 	EXP 	cross2: autoDraw = True
+98.8697 	EXP 	vSAT_square: autoDraw = False
+98.8697 	EXP 	cross2: autoDraw = False
+98.8697 	EXP 	vSAT_square: autoDraw = False
+98.8697 	EXP 	cross2: autoDraw = False
+98.8697 	EXP 	cross3: autoDraw = True
+98.9531 	EXP 	Sound response_sound started
+99.3830 	EXP 	Sound response_sound reached end of file
+99.4198 	EXP 	Sound feedback_sound started
+99.4121 	DATA 	Keypress: left
+99.4197 	EXP 	cross3: autoDraw = False
+99.4197 	EXP 	cross4: autoDraw = True
+99.9200 	EXP 	Sound feedback_sound reached end of file
+99.9220 	EXP 	New trial (rep=0, index=27): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+99.9364 	EXP 	cross4: autoDraw = False
+99.9364 	EXP 	cross4: autoDraw = False
+99.9364 	EXP 	inter_stim_text: autoDraw = True
+99.9364 	EXP 	cross1: autoDraw = True
+101.9365 	EXP 	inter_stim_text: autoDraw = False
+101.9365 	EXP 	cross1: autoDraw = False
+101.9365 	EXP 	inter_stim_text: autoDraw = False
+101.9365 	EXP 	cross1: autoDraw = False
+101.9365 	EXP 	vSAT_square: pos = array([0., 0.])
+101.9365 	EXP 	vSAT_square: autoDraw = True
+101.9365 	EXP 	cross2: autoDraw = True
+101.9698 	EXP 	vSAT_square: autoDraw = False
+101.9698 	EXP 	cross2: autoDraw = False
+101.9698 	EXP 	vSAT_square: autoDraw = False
+101.9698 	EXP 	cross2: autoDraw = False
+101.9698 	EXP 	cross3: autoDraw = True
+102.0531 	EXP 	Sound response_sound started
+102.4200 	EXP 	Sound response_sound stopped
+102.4365 	EXP 	Sound feedback_sound started
+102.4250 	DATA 	Keypress: left
+102.4364 	EXP 	cross3: autoDraw = False
+102.4364 	EXP 	cross4: autoDraw = True
+102.9300 	EXP 	Sound feedback_sound stopped
+102.9315 	EXP 	New trial (rep=0, index=28): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+102.9365 	EXP 	cross4: autoDraw = False
+102.9365 	EXP 	cross4: autoDraw = False
+102.9365 	EXP 	inter_stim_text: autoDraw = True
+102.9365 	EXP 	cross1: autoDraw = True
+104.9365 	EXP 	inter_stim_text: autoDraw = False
+104.9365 	EXP 	cross1: autoDraw = False
+104.9365 	EXP 	inter_stim_text: autoDraw = False
+104.9365 	EXP 	cross1: autoDraw = False
+104.9365 	EXP 	vSAT_square: pos = array([0., 0.])
+104.9365 	EXP 	vSAT_square: autoDraw = True
+104.9365 	EXP 	cross2: autoDraw = True
+104.9865 	EXP 	vSAT_square: autoDraw = False
+104.9865 	EXP 	cross2: autoDraw = False
+104.9865 	EXP 	vSAT_square: autoDraw = False
+104.9865 	EXP 	cross2: autoDraw = False
+104.9865 	EXP 	cross3: autoDraw = True
+105.0698 	EXP 	Sound response_sound started
+105.4400 	EXP 	Sound response_sound stopped
+105.4532 	EXP 	Sound feedback_sound started
+105.4451 	DATA 	Keypress: left
+105.4532 	EXP 	cross3: autoDraw = False
+105.4532 	EXP 	cross4: autoDraw = True
+105.9500 	EXP 	Sound feedback_sound stopped
+105.9516 	EXP 	New trial (rep=0, index=29): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+105.9699 	EXP 	cross4: autoDraw = False
+105.9699 	EXP 	cross4: autoDraw = False
+105.9699 	EXP 	inter_stim_text: autoDraw = True
+105.9699 	EXP 	cross1: autoDraw = True
+108.9699 	EXP 	inter_stim_text: autoDraw = False
+108.9699 	EXP 	cross1: autoDraw = False
+108.9699 	EXP 	inter_stim_text: autoDraw = False
+108.9699 	EXP 	cross1: autoDraw = False
+108.9699 	EXP 	vSAT_square: pos = array([0., 0.])
+108.9699 	EXP 	vSAT_square: autoDraw = True
+108.9699 	EXP 	cross2: autoDraw = True
+109.0032 	EXP 	vSAT_square: autoDraw = False
+109.0032 	EXP 	cross2: autoDraw = False
+109.0032 	EXP 	vSAT_square: autoDraw = False
+109.0032 	EXP 	cross2: autoDraw = False
+109.0032 	EXP 	cross3: autoDraw = True
+109.0866 	EXP 	Sound response_sound started
+109.3410 	DATA 	Keypress: right
+109.3700 	EXP 	Sound response_sound stopped
+109.3866 	EXP 	Sound feedback_sound started
+109.3866 	EXP 	cross3: autoDraw = False
+109.3866 	EXP 	cross4: autoDraw = True
+109.8899 	EXP 	Sound feedback_sound reached end of file
+109.8915 	EXP 	New trial (rep=0, index=1): OrderedDict([('task_order', 'SAT_stims-16571317878055692.csv')])
+109.9199 	EXP 	cross4: autoDraw = False
+109.9199 	EXP 	cross4: autoDraw = False
+109.9199 	EXP 	experiment_SAT_text: autoDraw = True
+109.9199 	EXP 	experiment_vSAT_text: autoDraw = True
+113.6962 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\vSAT\vSAT_conditions\SAT_stims-16571317878055692.csv as conditions, 30 conditions, 6 params
+113.6965 	EXP 	Created sequence: sequential, trialTypes=30, nReps=1, seed=None
+113.6967 	EXP 	New trial (rep=0, index=0): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+113.6997 	DATA 	Keypress: space
+113.7034 	EXP 	experiment_SAT_text: autoDraw = False
+113.7034 	EXP 	experiment_vSAT_text: autoDraw = False
+113.7034 	EXP 	inter_stim_text: autoDraw = True
+113.7034 	EXP 	cross1: autoDraw = True
+114.7033 	EXP 	inter_stim_text: autoDraw = False
+114.7033 	EXP 	cross1: autoDraw = False
+114.7033 	EXP 	inter_stim_text: autoDraw = False
+114.7033 	EXP 	cross1: autoDraw = False
+114.7033 	EXP 	vSAT_square: pos = array([0., 0.])
+114.7033 	EXP 	vSAT_square: autoDraw = True
+114.7033 	EXP 	cross2: autoDraw = True
+114.7533 	EXP 	vSAT_square: autoDraw = False
+114.7533 	EXP 	cross2: autoDraw = False
+114.7533 	EXP 	vSAT_square: autoDraw = False
+114.7533 	EXP 	cross2: autoDraw = False
+114.7533 	EXP 	cross3: autoDraw = True
+114.8367 	EXP 	Sound response_sound started
+115.2700 	EXP 	Sound response_sound reached end of file
+115.4366 	EXP 	Sound feedback_sound started
+115.4288 	DATA 	Keypress: left
+115.4366 	EXP 	cross3: autoDraw = False
+115.4366 	EXP 	cross4: autoDraw = True
+115.9400 	EXP 	Sound feedback_sound reached end of file
+115.9422 	EXP 	New trial (rep=0, index=1): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+115.9533 	EXP 	cross4: autoDraw = False
+115.9533 	EXP 	cross4: autoDraw = False
+115.9533 	EXP 	inter_stim_text: autoDraw = True
+115.9533 	EXP 	cross1: autoDraw = True
+118.9534 	EXP 	inter_stim_text: autoDraw = False
+118.9534 	EXP 	cross1: autoDraw = False
+118.9534 	EXP 	inter_stim_text: autoDraw = False
+118.9534 	EXP 	cross1: autoDraw = False
+118.9534 	EXP 	vSAT_square: pos = array([0., 0.])
+118.9534 	EXP 	vSAT_square: autoDraw = True
+118.9534 	EXP 	cross2: autoDraw = True
+118.9867 	EXP 	vSAT_square: autoDraw = False
+118.9867 	EXP 	cross2: autoDraw = False
+118.9867 	EXP 	vSAT_square: autoDraw = False
+118.9867 	EXP 	cross2: autoDraw = False
+118.9867 	EXP 	cross3: autoDraw = True
+119.0700 	EXP 	Sound response_sound started
+119.2700 	EXP 	Sound response_sound stopped
+119.2867 	EXP 	Sound feedback_sound started
+119.2741 	DATA 	Keypress: right
+119.2867 	EXP 	cross3: autoDraw = False
+119.2867 	EXP 	cross4: autoDraw = True
+119.7900 	EXP 	Sound feedback_sound reached end of file
+119.7916 	EXP 	New trial (rep=0, index=2): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+119.8034 	EXP 	cross4: autoDraw = False
+119.8034 	EXP 	cross4: autoDraw = False
+119.8034 	EXP 	inter_stim_text: autoDraw = True
+119.8034 	EXP 	cross1: autoDraw = True
+122.8034 	EXP 	inter_stim_text: autoDraw = False
+122.8034 	EXP 	cross1: autoDraw = False
+122.8034 	EXP 	inter_stim_text: autoDraw = False
+122.8034 	EXP 	cross1: autoDraw = False
+122.8034 	EXP 	vSAT_square: pos = array([0., 0.])
+122.8034 	EXP 	vSAT_square: autoDraw = True
+122.8034 	EXP 	cross2: autoDraw = True
+122.8368 	EXP 	vSAT_square: autoDraw = False
+122.8368 	EXP 	cross2: autoDraw = False
+122.8368 	EXP 	vSAT_square: autoDraw = False
+122.8368 	EXP 	cross2: autoDraw = False
+122.8368 	EXP 	cross3: autoDraw = True
+122.9201 	EXP 	Sound response_sound started
+123.1100 	EXP 	Sound response_sound stopped
+123.1201 	EXP 	Sound feedback_sound started
+123.1152 	DATA 	Keypress: right
+123.1202 	EXP 	cross3: autoDraw = False
+123.1202 	EXP 	cross4: autoDraw = True
+123.6200 	EXP 	Sound feedback_sound stopped
+123.6215 	EXP 	New trial (rep=0, index=3): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+123.6368 	EXP 	cross4: autoDraw = False
+123.6368 	EXP 	cross4: autoDraw = False
+123.6368 	EXP 	inter_stim_text: autoDraw = True
+123.6368 	EXP 	cross1: autoDraw = True
+126.6368 	EXP 	inter_stim_text: autoDraw = False
+126.6368 	EXP 	cross1: autoDraw = False
+126.6368 	EXP 	inter_stim_text: autoDraw = False
+126.6368 	EXP 	cross1: autoDraw = False
+126.6368 	EXP 	vSAT_square: pos = array([0., 0.])
+126.6368 	EXP 	vSAT_square: autoDraw = True
+126.6368 	EXP 	cross2: autoDraw = True
+126.6868 	EXP 	vSAT_square: autoDraw = False
+126.6868 	EXP 	cross2: autoDraw = False
+126.6868 	EXP 	vSAT_square: autoDraw = False
+126.6868 	EXP 	cross2: autoDraw = False
+126.6868 	EXP 	cross3: autoDraw = True
+126.7702 	EXP 	Sound response_sound started
+126.9580 	DATA 	Keypress: right
+126.9906 	EXP 	Sound response_sound stopped
+127.0035 	EXP 	Sound feedback_sound started
+127.0035 	EXP 	cross3: autoDraw = False
+127.0035 	EXP 	cross4: autoDraw = True
+127.5000 	EXP 	Sound feedback_sound stopped
+127.5015 	EXP 	New trial (rep=0, index=4): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+127.5202 	EXP 	cross4: autoDraw = False
+127.5202 	EXP 	cross4: autoDraw = False
+127.5202 	EXP 	inter_stim_text: autoDraw = True
+127.5202 	EXP 	cross1: autoDraw = True
+128.5202 	EXP 	inter_stim_text: autoDraw = False
+128.5202 	EXP 	cross1: autoDraw = False
+128.5202 	EXP 	inter_stim_text: autoDraw = False
+128.5202 	EXP 	cross1: autoDraw = False
+128.5202 	EXP 	vSAT_square: pos = array([0., 0.])
+128.5202 	EXP 	vSAT_square: autoDraw = True
+128.5202 	EXP 	cross2: autoDraw = True
+128.5702 	EXP 	vSAT_square: autoDraw = False
+128.5702 	EXP 	cross2: autoDraw = False
+128.5702 	EXP 	vSAT_square: autoDraw = False
+128.5702 	EXP 	cross2: autoDraw = False
+128.5702 	EXP 	cross3: autoDraw = True
+128.6535 	EXP 	Sound response_sound started
+128.9101 	EXP 	Sound response_sound stopped
+128.9202 	EXP 	Sound feedback_sound started
+128.9151 	DATA 	Keypress: right
+128.9202 	EXP 	cross3: autoDraw = False
+128.9202 	EXP 	cross4: autoDraw = True
+129.4200 	EXP 	Sound feedback_sound stopped
+129.4215 	EXP 	New trial (rep=0, index=5): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+129.4369 	EXP 	cross4: autoDraw = False
+129.4369 	EXP 	cross4: autoDraw = False
+129.4369 	EXP 	inter_stim_text: autoDraw = True
+129.4369 	EXP 	cross1: autoDraw = True
+132.4369 	EXP 	inter_stim_text: autoDraw = False
+132.4369 	EXP 	cross1: autoDraw = False
+132.4369 	EXP 	inter_stim_text: autoDraw = False
+132.4369 	EXP 	cross1: autoDraw = False
+132.4369 	EXP 	vSAT_square: pos = array([0., 0.])
+132.4369 	EXP 	vSAT_square: autoDraw = True
+132.4369 	EXP 	cross2: autoDraw = True
+132.4703 	EXP 	vSAT_square: autoDraw = False
+132.4703 	EXP 	cross2: autoDraw = False
+132.4703 	EXP 	vSAT_square: autoDraw = False
+132.4703 	EXP 	cross2: autoDraw = False
+132.4703 	EXP 	cross3: autoDraw = True
+132.5536 	EXP 	Sound response_sound started
+132.9836 	EXP 	Sound response_sound reached end of file
+133.1203 	EXP 	Sound feedback_sound started
+133.1124 	DATA 	Keypress: left
+133.1203 	EXP 	cross3: autoDraw = False
+133.1203 	EXP 	cross4: autoDraw = True
+133.6200 	EXP 	Sound feedback_sound stopped
+133.6219 	EXP 	New trial (rep=0, index=6): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+133.6369 	EXP 	cross4: autoDraw = False
+133.6369 	EXP 	cross4: autoDraw = False
+133.6369 	EXP 	inter_stim_text: autoDraw = True
+133.6369 	EXP 	cross1: autoDraw = True
+136.6370 	EXP 	inter_stim_text: autoDraw = False
+136.6370 	EXP 	cross1: autoDraw = False
+136.6370 	EXP 	inter_stim_text: autoDraw = False
+136.6370 	EXP 	cross1: autoDraw = False
+136.6370 	EXP 	vSAT_square: pos = array([0., 0.])
+136.6370 	EXP 	vSAT_square: autoDraw = True
+136.6370 	EXP 	cross2: autoDraw = True
+136.6704 	EXP 	vSAT_square: autoDraw = False
+136.6704 	EXP 	cross2: autoDraw = False
+136.6704 	EXP 	vSAT_square: autoDraw = False
+136.6704 	EXP 	cross2: autoDraw = False
+136.6704 	EXP 	cross3: autoDraw = True
+136.7537 	EXP 	Sound response_sound started
+137.1400 	EXP 	Sound response_sound stopped
+137.1537 	EXP 	Sound feedback_sound started
+137.1451 	DATA 	Keypress: left
+137.1537 	EXP 	cross3: autoDraw = False
+137.1537 	EXP 	cross4: autoDraw = True
+137.6500 	EXP 	Sound feedback_sound stopped
+137.6518 	EXP 	New trial (rep=0, index=7): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+137.6704 	EXP 	cross4: autoDraw = False
+137.6704 	EXP 	cross4: autoDraw = False
+137.6704 	EXP 	inter_stim_text: autoDraw = True
+137.6704 	EXP 	cross1: autoDraw = True
+139.6704 	EXP 	inter_stim_text: autoDraw = False
+139.6704 	EXP 	cross1: autoDraw = False
+139.6704 	EXP 	inter_stim_text: autoDraw = False
+139.6704 	EXP 	cross1: autoDraw = False
+139.6704 	EXP 	vSAT_square: pos = array([0., 0.])
+139.6704 	EXP 	vSAT_square: autoDraw = True
+139.6704 	EXP 	cross2: autoDraw = True
+139.7037 	EXP 	vSAT_square: autoDraw = False
+139.7037 	EXP 	cross2: autoDraw = False
+139.7037 	EXP 	vSAT_square: autoDraw = False
+139.7037 	EXP 	cross2: autoDraw = False
+139.7037 	EXP 	cross3: autoDraw = True
+139.7870 	EXP 	Sound response_sound started
+140.1416 	DATA 	Keypress: left
+140.1700 	EXP 	Sound response_sound stopped
+140.1870 	EXP 	Sound feedback_sound started
+140.1871 	EXP 	cross3: autoDraw = False
+140.1871 	EXP 	cross4: autoDraw = True
+140.6900 	EXP 	Sound feedback_sound reached end of file
+140.6919 	EXP 	New trial (rep=0, index=8): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+140.7037 	EXP 	cross4: autoDraw = False
+140.7037 	EXP 	cross4: autoDraw = False
+140.7037 	EXP 	inter_stim_text: autoDraw = True
+140.7037 	EXP 	cross1: autoDraw = True
+142.7038 	EXP 	inter_stim_text: autoDraw = False
+142.7038 	EXP 	cross1: autoDraw = False
+142.7038 	EXP 	inter_stim_text: autoDraw = False
+142.7038 	EXP 	cross1: autoDraw = False
+142.7038 	EXP 	vSAT_square: pos = array([0., 0.])
+142.7038 	EXP 	vSAT_square: autoDraw = True
+142.7038 	EXP 	cross2: autoDraw = True
+142.7371 	EXP 	vSAT_square: autoDraw = False
+142.7371 	EXP 	cross2: autoDraw = False
+142.7371 	EXP 	vSAT_square: autoDraw = False
+142.7371 	EXP 	cross2: autoDraw = False
+142.7371 	EXP 	cross3: autoDraw = True
+142.8204 	EXP 	Sound response_sound started
+143.1700 	EXP 	Sound response_sound stopped
+143.1871 	EXP 	Sound feedback_sound started
+143.1741 	DATA 	Keypress: left
+143.1871 	EXP 	cross3: autoDraw = False
+143.1871 	EXP 	cross4: autoDraw = True
+143.6900 	EXP 	Sound feedback_sound reached end of file
+143.6915 	EXP 	New trial (rep=0, index=9): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+143.7038 	EXP 	cross4: autoDraw = False
+143.7038 	EXP 	cross4: autoDraw = False
+143.7038 	EXP 	inter_stim_text: autoDraw = True
+143.7038 	EXP 	cross1: autoDraw = True
+146.7038 	EXP 	inter_stim_text: autoDraw = False
+146.7038 	EXP 	cross1: autoDraw = False
+146.7038 	EXP 	inter_stim_text: autoDraw = False
+146.7038 	EXP 	cross1: autoDraw = False
+146.7038 	EXP 	vSAT_square: pos = array([0., 0.])
+146.7038 	EXP 	vSAT_square: autoDraw = True
+146.7038 	EXP 	cross2: autoDraw = True
+146.7372 	EXP 	vSAT_square: autoDraw = False
+146.7372 	EXP 	cross2: autoDraw = False
+146.7372 	EXP 	vSAT_square: autoDraw = False
+146.7372 	EXP 	cross2: autoDraw = False
+146.7372 	EXP 	cross3: autoDraw = True
+146.8205 	EXP 	Sound response_sound started
+146.9752 	DATA 	Keypress: right
+147.0106 	EXP 	Sound response_sound stopped
+147.0205 	EXP 	Sound feedback_sound started
+147.0205 	EXP 	cross3: autoDraw = False
+147.0205 	EXP 	cross4: autoDraw = True
+147.5200 	EXP 	Sound feedback_sound stopped
+147.5216 	EXP 	New trial (rep=0, index=10): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+147.5372 	EXP 	cross4: autoDraw = False
+147.5372 	EXP 	cross4: autoDraw = False
+147.5372 	EXP 	inter_stim_text: autoDraw = True
+147.5372 	EXP 	cross1: autoDraw = True
+148.5372 	EXP 	inter_stim_text: autoDraw = False
+148.5372 	EXP 	cross1: autoDraw = False
+148.5372 	EXP 	inter_stim_text: autoDraw = False
+148.5372 	EXP 	cross1: autoDraw = False
+148.5372 	EXP 	vSAT_square: pos = array([0., 0.])
+148.5372 	EXP 	vSAT_square: autoDraw = True
+148.5372 	EXP 	cross2: autoDraw = True
+148.5705 	EXP 	vSAT_square: autoDraw = False
+148.5705 	EXP 	cross2: autoDraw = False
+148.5705 	EXP 	vSAT_square: autoDraw = False
+148.5705 	EXP 	cross2: autoDraw = False
+148.5705 	EXP 	cross3: autoDraw = True
+148.6539 	EXP 	Sound response_sound started
+149.0832 	EXP 	Sound response_sound reached end of file
+149.2039 	EXP 	Sound feedback_sound started
+149.1958 	DATA 	Keypress: left
+149.2039 	EXP 	cross3: autoDraw = False
+149.2039 	EXP 	cross4: autoDraw = True
+149.7000 	EXP 	Sound feedback_sound stopped
+149.7015 	EXP 	New trial (rep=0, index=11): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+149.7206 	EXP 	cross4: autoDraw = False
+149.7206 	EXP 	cross4: autoDraw = False
+149.7206 	EXP 	inter_stim_text: autoDraw = True
+149.7206 	EXP 	cross1: autoDraw = True
+150.7206 	EXP 	inter_stim_text: autoDraw = False
+150.7206 	EXP 	cross1: autoDraw = False
+150.7206 	EXP 	inter_stim_text: autoDraw = False
+150.7206 	EXP 	cross1: autoDraw = False
+150.7206 	EXP 	vSAT_square: pos = array([0., 0.])
+150.7206 	EXP 	vSAT_square: autoDraw = True
+150.7206 	EXP 	cross2: autoDraw = True
+150.7705 	EXP 	vSAT_square: autoDraw = False
+150.7705 	EXP 	cross2: autoDraw = False
+150.7705 	EXP 	vSAT_square: autoDraw = False
+150.7705 	EXP 	cross2: autoDraw = False
+150.7705 	EXP 	cross3: autoDraw = True
+150.8539 	EXP 	Sound response_sound started
+151.1906 	EXP 	Sound response_sound stopped
+151.2039 	EXP 	Sound feedback_sound started
+151.1950 	DATA 	Keypress: right
+151.2039 	EXP 	cross3: autoDraw = False
+151.2039 	EXP 	cross4: autoDraw = True
+151.7000 	EXP 	Sound feedback_sound stopped
+151.7015 	EXP 	New trial (rep=0, index=12): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+151.7206 	EXP 	cross4: autoDraw = False
+151.7206 	EXP 	cross4: autoDraw = False
+151.7206 	EXP 	inter_stim_text: autoDraw = True
+151.7206 	EXP 	cross1: autoDraw = True
+152.7206 	EXP 	inter_stim_text: autoDraw = False
+152.7206 	EXP 	cross1: autoDraw = False
+152.7206 	EXP 	inter_stim_text: autoDraw = False
+152.7206 	EXP 	cross1: autoDraw = False
+152.7206 	EXP 	vSAT_square: pos = array([0., 0.])
+152.7206 	EXP 	vSAT_square: autoDraw = True
+152.7206 	EXP 	cross2: autoDraw = True
+152.7706 	EXP 	vSAT_square: autoDraw = False
+152.7706 	EXP 	cross2: autoDraw = False
+152.7706 	EXP 	vSAT_square: autoDraw = False
+152.7706 	EXP 	cross2: autoDraw = False
+152.7706 	EXP 	cross3: autoDraw = True
+152.8540 	EXP 	Sound response_sound started
+153.0606 	EXP 	Sound response_sound stopped
+153.0706 	EXP 	Sound feedback_sound started
+153.0651 	DATA 	Keypress: right
+153.0706 	EXP 	cross3: autoDraw = False
+153.0706 	EXP 	cross4: autoDraw = True
+153.5700 	EXP 	Sound feedback_sound stopped
+153.5716 	EXP 	New trial (rep=0, index=13): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+153.5873 	EXP 	cross4: autoDraw = False
+153.5873 	EXP 	cross4: autoDraw = False
+153.5873 	EXP 	inter_stim_text: autoDraw = True
+153.5873 	EXP 	cross1: autoDraw = True
+156.5873 	EXP 	inter_stim_text: autoDraw = False
+156.5873 	EXP 	cross1: autoDraw = False
+156.5873 	EXP 	inter_stim_text: autoDraw = False
+156.5873 	EXP 	cross1: autoDraw = False
+156.5873 	EXP 	vSAT_square: pos = array([0., 0.])
+156.5873 	EXP 	vSAT_square: autoDraw = True
+156.5873 	EXP 	cross2: autoDraw = True
+156.6206 	EXP 	vSAT_square: autoDraw = False
+156.6206 	EXP 	cross2: autoDraw = False
+156.6206 	EXP 	vSAT_square: autoDraw = False
+156.6206 	EXP 	cross2: autoDraw = False
+156.6206 	EXP 	cross3: autoDraw = True
+156.7040 	EXP 	Sound response_sound started
+157.1340 	EXP 	Sound response_sound reached end of file
+157.2207 	EXP 	Sound feedback_sound started
+157.2129 	DATA 	Keypress: left
+157.2207 	EXP 	cross3: autoDraw = False
+157.2207 	EXP 	cross4: autoDraw = True
+157.7200 	EXP 	Sound feedback_sound stopped
+157.7216 	EXP 	New trial (rep=0, index=14): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+157.7373 	EXP 	cross4: autoDraw = False
+157.7373 	EXP 	cross4: autoDraw = False
+157.7373 	EXP 	inter_stim_text: autoDraw = True
+157.7373 	EXP 	cross1: autoDraw = True
+159.7374 	EXP 	inter_stim_text: autoDraw = False
+159.7374 	EXP 	cross1: autoDraw = False
+159.7374 	EXP 	inter_stim_text: autoDraw = False
+159.7374 	EXP 	cross1: autoDraw = False
+159.7374 	EXP 	vSAT_square: pos = array([0., 0.])
+159.7374 	EXP 	vSAT_square: autoDraw = True
+159.7374 	EXP 	cross2: autoDraw = True
+159.7707 	EXP 	vSAT_square: autoDraw = False
+159.7707 	EXP 	cross2: autoDraw = False
+159.7707 	EXP 	vSAT_square: autoDraw = False
+159.7707 	EXP 	cross2: autoDraw = False
+159.7707 	EXP 	cross3: autoDraw = True
+159.8540 	EXP 	Sound response_sound started
+160.1587 	DATA 	Keypress: right
+160.1900 	EXP 	Sound response_sound stopped
+160.2040 	EXP 	Sound feedback_sound started
+160.2040 	EXP 	cross3: autoDraw = False
+160.2040 	EXP 	cross4: autoDraw = True
+160.7000 	EXP 	Sound feedback_sound stopped
+160.7016 	EXP 	New trial (rep=0, index=15): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+160.7207 	EXP 	cross4: autoDraw = False
+160.7207 	EXP 	cross4: autoDraw = False
+160.7207 	EXP 	inter_stim_text: autoDraw = True
+160.7207 	EXP 	cross1: autoDraw = True
+161.7207 	EXP 	inter_stim_text: autoDraw = False
+161.7207 	EXP 	cross1: autoDraw = False
+161.7207 	EXP 	inter_stim_text: autoDraw = False
+161.7207 	EXP 	cross1: autoDraw = False
+161.7207 	EXP 	vSAT_square: pos = array([0., 0.])
+161.7207 	EXP 	vSAT_square: autoDraw = True
+161.7207 	EXP 	cross2: autoDraw = True
+161.7540 	EXP 	vSAT_square: autoDraw = False
+161.7540 	EXP 	cross2: autoDraw = False
+161.7540 	EXP 	vSAT_square: autoDraw = False
+161.7540 	EXP 	cross2: autoDraw = False
+161.7540 	EXP 	cross3: autoDraw = True
+161.8374 	EXP 	Sound response_sound started
+162.0400 	EXP 	Sound response_sound stopped
+162.0541 	EXP 	Sound feedback_sound started
+162.0441 	DATA 	Keypress: right
+162.0541 	EXP 	cross3: autoDraw = False
+162.0541 	EXP 	cross4: autoDraw = True
+162.5500 	EXP 	Sound feedback_sound stopped
+162.5515 	EXP 	New trial (rep=0, index=16): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+162.5708 	EXP 	cross4: autoDraw = False
+162.5708 	EXP 	cross4: autoDraw = False
+162.5708 	EXP 	inter_stim_text: autoDraw = True
+162.5708 	EXP 	cross1: autoDraw = True
+163.5708 	EXP 	inter_stim_text: autoDraw = False
+163.5708 	EXP 	cross1: autoDraw = False
+163.5708 	EXP 	inter_stim_text: autoDraw = False
+163.5708 	EXP 	cross1: autoDraw = False
+163.5708 	EXP 	vSAT_square: pos = array([0., 0.])
+163.5708 	EXP 	vSAT_square: autoDraw = True
+163.5708 	EXP 	cross2: autoDraw = True
+163.6041 	EXP 	vSAT_square: autoDraw = False
+163.6041 	EXP 	cross2: autoDraw = False
+163.6041 	EXP 	vSAT_square: autoDraw = False
+163.6041 	EXP 	cross2: autoDraw = False
+163.6041 	EXP 	cross3: autoDraw = True
+163.6874 	EXP 	Sound response_sound started
+163.8406 	EXP 	Sound response_sound stopped
+163.8541 	EXP 	Sound feedback_sound started
+163.8451 	DATA 	Keypress: right
+163.8541 	EXP 	cross3: autoDraw = False
+163.8541 	EXP 	cross4: autoDraw = True
+164.3499 	EXP 	Sound feedback_sound stopped
+164.3516 	EXP 	New trial (rep=0, index=17): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+164.3708 	EXP 	cross4: autoDraw = False
+164.3708 	EXP 	cross4: autoDraw = False
+164.3708 	EXP 	inter_stim_text: autoDraw = True
+164.3708 	EXP 	cross1: autoDraw = True
+165.3708 	EXP 	inter_stim_text: autoDraw = False
+165.3708 	EXP 	cross1: autoDraw = False
+165.3708 	EXP 	inter_stim_text: autoDraw = False
+165.3708 	EXP 	cross1: autoDraw = False
+165.3708 	EXP 	vSAT_square: pos = array([0., 0.])
+165.3708 	EXP 	vSAT_square: autoDraw = True
+165.3708 	EXP 	cross2: autoDraw = True
+165.4208 	EXP 	vSAT_square: autoDraw = False
+165.4208 	EXP 	cross2: autoDraw = False
+165.4208 	EXP 	vSAT_square: autoDraw = False
+165.4208 	EXP 	cross2: autoDraw = False
+165.4208 	EXP 	cross3: autoDraw = True
+165.5041 	EXP 	Sound response_sound started
+165.7106 	EXP 	Sound response_sound stopped
+165.7208 	EXP 	Sound feedback_sound started
+165.7151 	DATA 	Keypress: right
+165.7208 	EXP 	cross3: autoDraw = False
+165.7208 	EXP 	cross4: autoDraw = True
+166.2200 	EXP 	Sound feedback_sound stopped
+166.2216 	EXP 	New trial (rep=0, index=18): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+166.2375 	EXP 	cross4: autoDraw = False
+166.2375 	EXP 	cross4: autoDraw = False
+166.2375 	EXP 	inter_stim_text: autoDraw = True
+166.2375 	EXP 	cross1: autoDraw = True
+168.2375 	EXP 	inter_stim_text: autoDraw = False
+168.2375 	EXP 	cross1: autoDraw = False
+168.2375 	EXP 	inter_stim_text: autoDraw = False
+168.2375 	EXP 	cross1: autoDraw = False
+168.2375 	EXP 	vSAT_square: pos = array([0., 0.])
+168.2375 	EXP 	vSAT_square: autoDraw = True
+168.2375 	EXP 	cross2: autoDraw = True
+168.2708 	EXP 	vSAT_square: autoDraw = False
+168.2708 	EXP 	cross2: autoDraw = False
+168.2708 	EXP 	vSAT_square: autoDraw = False
+168.2708 	EXP 	cross2: autoDraw = False
+168.2708 	EXP 	cross3: autoDraw = True
+168.3542 	EXP 	Sound response_sound started
+168.6600 	EXP 	Sound response_sound stopped
+168.6708 	EXP 	Sound feedback_sound started
+168.6651 	DATA 	Keypress: right
+168.6709 	EXP 	cross3: autoDraw = False
+168.6709 	EXP 	cross4: autoDraw = True
+169.1700 	EXP 	Sound feedback_sound stopped
+169.1717 	EXP 	New trial (rep=0, index=19): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+169.1875 	EXP 	cross4: autoDraw = False
+169.1875 	EXP 	cross4: autoDraw = False
+169.1875 	EXP 	inter_stim_text: autoDraw = True
+169.1875 	EXP 	cross1: autoDraw = True
+170.1876 	EXP 	inter_stim_text: autoDraw = False
+170.1876 	EXP 	cross1: autoDraw = False
+170.1876 	EXP 	inter_stim_text: autoDraw = False
+170.1876 	EXP 	cross1: autoDraw = False
+170.1876 	EXP 	vSAT_square: pos = array([0., 0.])
+170.1876 	EXP 	vSAT_square: autoDraw = True
+170.1876 	EXP 	cross2: autoDraw = True
+170.2375 	EXP 	vSAT_square: autoDraw = False
+170.2375 	EXP 	cross2: autoDraw = False
+170.2375 	EXP 	vSAT_square: autoDraw = False
+170.2375 	EXP 	cross2: autoDraw = False
+170.2375 	EXP 	cross3: autoDraw = True
+170.3209 	EXP 	Sound response_sound started
+170.7500 	EXP 	Sound response_sound stopped
+170.7542 	EXP 	Sound feedback_sound started
+170.7561 	DATA 	Keypress: left
+170.7708 	EXP 	cross3: autoDraw = False
+170.7708 	EXP 	cross4: autoDraw = True
+171.2500 	EXP 	Sound feedback_sound stopped
+171.2546 	EXP 	New trial (rep=0, index=20): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+171.2709 	EXP 	cross4: autoDraw = False
+171.2709 	EXP 	inter_stim_text: autoDraw = True
+171.2709 	EXP 	cross1: autoDraw = True
+174.2709 	EXP 	inter_stim_text: autoDraw = False
+174.2709 	EXP 	cross1: autoDraw = False
+174.2709 	EXP 	inter_stim_text: autoDraw = False
+174.2709 	EXP 	cross1: autoDraw = False
+174.2709 	EXP 	vSAT_square: pos = array([0., 0.])
+174.2709 	EXP 	vSAT_square: autoDraw = True
+174.2709 	EXP 	cross2: autoDraw = True
+174.3043 	EXP 	vSAT_square: autoDraw = False
+174.3043 	EXP 	cross2: autoDraw = False
+174.3043 	EXP 	vSAT_square: autoDraw = False
+174.3043 	EXP 	cross2: autoDraw = False
+174.3043 	EXP 	cross3: autoDraw = True
+174.3876 	EXP 	Sound response_sound started
+174.8100 	EXP 	Sound response_sound stopped
+174.8209 	EXP 	Sound feedback_sound started
+174.8150 	DATA 	Keypress: left
+174.8210 	EXP 	cross3: autoDraw = False
+174.8210 	EXP 	cross4: autoDraw = True
+175.3200 	EXP 	Sound feedback_sound stopped
+175.3221 	EXP 	New trial (rep=0, index=21): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+175.3376 	EXP 	cross4: autoDraw = False
+175.3376 	EXP 	cross4: autoDraw = False
+175.3376 	EXP 	inter_stim_text: autoDraw = True
+175.3376 	EXP 	cross1: autoDraw = True
+177.3376 	EXP 	inter_stim_text: autoDraw = False
+177.3376 	EXP 	cross1: autoDraw = False
+177.3376 	EXP 	inter_stim_text: autoDraw = False
+177.3376 	EXP 	cross1: autoDraw = False
+177.3376 	EXP 	vSAT_square: pos = array([0., 0.])
+177.3376 	EXP 	vSAT_square: autoDraw = True
+177.3376 	EXP 	cross2: autoDraw = True
+177.3710 	EXP 	vSAT_square: autoDraw = False
+177.3710 	EXP 	cross2: autoDraw = False
+177.3710 	EXP 	vSAT_square: autoDraw = False
+177.3710 	EXP 	cross2: autoDraw = False
+177.3710 	EXP 	cross3: autoDraw = True
+177.4543 	EXP 	Sound response_sound started
+177.6200 	EXP 	Sound response_sound stopped
+177.6377 	EXP 	Sound feedback_sound started
+177.6251 	DATA 	Keypress: right
+177.6376 	EXP 	cross3: autoDraw = False
+177.6376 	EXP 	cross4: autoDraw = True
+178.1406 	EXP 	Sound feedback_sound reached end of file
+178.1425 	EXP 	New trial (rep=0, index=22): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+178.1543 	EXP 	cross4: autoDraw = False
+178.1543 	EXP 	cross4: autoDraw = False
+178.1543 	EXP 	inter_stim_text: autoDraw = True
+178.1543 	EXP 	cross1: autoDraw = True
+179.1543 	EXP 	inter_stim_text: autoDraw = False
+179.1543 	EXP 	cross1: autoDraw = False
+179.1543 	EXP 	inter_stim_text: autoDraw = False
+179.1543 	EXP 	cross1: autoDraw = False
+179.1543 	EXP 	vSAT_square: pos = array([0., 0.])
+179.1543 	EXP 	vSAT_square: autoDraw = True
+179.1543 	EXP 	cross2: autoDraw = True
+179.2043 	EXP 	vSAT_square: autoDraw = False
+179.2043 	EXP 	cross2: autoDraw = False
+179.2043 	EXP 	vSAT_square: autoDraw = False
+179.2043 	EXP 	cross2: autoDraw = False
+179.2043 	EXP 	cross3: autoDraw = True
+179.2876 	EXP 	Sound response_sound started
+179.4606 	EXP 	Sound response_sound stopped
+179.4710 	EXP 	Sound feedback_sound started
+179.4650 	DATA 	Keypress: right
+179.4711 	EXP 	cross3: autoDraw = False
+179.4711 	EXP 	cross4: autoDraw = True
+179.9700 	EXP 	Sound feedback_sound stopped
+179.9716 	EXP 	New trial (rep=0, index=23): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+179.9877 	EXP 	cross4: autoDraw = False
+179.9877 	EXP 	cross4: autoDraw = False
+179.9877 	EXP 	inter_stim_text: autoDraw = True
+179.9877 	EXP 	cross1: autoDraw = True
+180.9877 	EXP 	inter_stim_text: autoDraw = False
+180.9877 	EXP 	cross1: autoDraw = False
+180.9877 	EXP 	inter_stim_text: autoDraw = False
+180.9877 	EXP 	cross1: autoDraw = False
+180.9877 	EXP 	vSAT_square: pos = array([0., 0.])
+180.9877 	EXP 	vSAT_square: autoDraw = True
+180.9877 	EXP 	cross2: autoDraw = True
+181.0210 	EXP 	vSAT_square: autoDraw = False
+181.0210 	EXP 	cross2: autoDraw = False
+181.0210 	EXP 	vSAT_square: autoDraw = False
+181.0210 	EXP 	cross2: autoDraw = False
+181.0210 	EXP 	cross3: autoDraw = True
+181.1043 	EXP 	Sound response_sound started
+181.2399 	EXP 	Sound response_sound stopped
+181.2543 	EXP 	Sound feedback_sound started
+181.2441 	DATA 	Keypress: right
+181.2544 	EXP 	cross3: autoDraw = False
+181.2544 	EXP 	cross4: autoDraw = True
+181.7500 	EXP 	Sound feedback_sound stopped
+181.7515 	EXP 	New trial (rep=0, index=24): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+181.7710 	EXP 	cross4: autoDraw = False
+181.7710 	EXP 	cross4: autoDraw = False
+181.7710 	EXP 	inter_stim_text: autoDraw = True
+181.7710 	EXP 	cross1: autoDraw = True
+182.7711 	EXP 	inter_stim_text: autoDraw = False
+182.7711 	EXP 	cross1: autoDraw = False
+182.7711 	EXP 	inter_stim_text: autoDraw = False
+182.7711 	EXP 	cross1: autoDraw = False
+182.7711 	EXP 	vSAT_square: pos = array([0., 0.])
+182.7711 	EXP 	vSAT_square: autoDraw = True
+182.7711 	EXP 	cross2: autoDraw = True
+182.8044 	EXP 	vSAT_square: autoDraw = False
+182.8044 	EXP 	cross2: autoDraw = False
+182.8044 	EXP 	vSAT_square: autoDraw = False
+182.8044 	EXP 	cross2: autoDraw = False
+182.8044 	EXP 	cross3: autoDraw = True
+182.8877 	EXP 	Sound response_sound started
+183.0399 	EXP 	Sound response_sound stopped
+183.0544 	EXP 	Sound feedback_sound started
+183.0441 	DATA 	Keypress: right
+183.0544 	EXP 	cross3: autoDraw = False
+183.0544 	EXP 	cross4: autoDraw = True
+183.5500 	EXP 	Sound feedback_sound stopped
+183.5516 	EXP 	New trial (rep=0, index=25): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+183.5711 	EXP 	cross4: autoDraw = False
+183.5711 	EXP 	cross4: autoDraw = False
+183.5711 	EXP 	inter_stim_text: autoDraw = True
+183.5711 	EXP 	cross1: autoDraw = True
+186.5711 	EXP 	inter_stim_text: autoDraw = False
+186.5711 	EXP 	cross1: autoDraw = False
+186.5711 	EXP 	inter_stim_text: autoDraw = False
+186.5711 	EXP 	cross1: autoDraw = False
+186.5711 	EXP 	vSAT_square: pos = array([0., 0.])
+186.5711 	EXP 	vSAT_square: autoDraw = True
+186.5711 	EXP 	cross2: autoDraw = True
+186.6044 	EXP 	vSAT_square: autoDraw = False
+186.6044 	EXP 	cross2: autoDraw = False
+186.6044 	EXP 	vSAT_square: autoDraw = False
+186.6044 	EXP 	cross2: autoDraw = False
+186.6044 	EXP 	cross3: autoDraw = True
+186.6878 	EXP 	Sound response_sound started
+187.1200 	EXP 	Sound response_sound reached end of file
+187.1222 	DATA 	Keypress: left
+187.1545 	EXP 	Sound feedback_sound started
+187.1545 	EXP 	cross3: autoDraw = False
+187.1545 	EXP 	cross4: autoDraw = True
+187.6500 	EXP 	Sound feedback_sound stopped
+187.6515 	EXP 	New trial (rep=0, index=26): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+187.6711 	EXP 	cross4: autoDraw = False
+187.6711 	EXP 	cross4: autoDraw = False
+187.6711 	EXP 	inter_stim_text: autoDraw = True
+187.6711 	EXP 	cross1: autoDraw = True
+188.6711 	EXP 	inter_stim_text: autoDraw = False
+188.6711 	EXP 	cross1: autoDraw = False
+188.6711 	EXP 	inter_stim_text: autoDraw = False
+188.6711 	EXP 	cross1: autoDraw = False
+188.6711 	EXP 	vSAT_square: pos = array([0., 0.])
+188.6711 	EXP 	vSAT_square: autoDraw = True
+188.6711 	EXP 	cross2: autoDraw = True
+188.7212 	EXP 	vSAT_square: autoDraw = False
+188.7212 	EXP 	cross2: autoDraw = False
+188.7212 	EXP 	vSAT_square: autoDraw = False
+188.7212 	EXP 	cross2: autoDraw = False
+188.7212 	EXP 	cross3: autoDraw = True
+188.8045 	EXP 	Sound response_sound started
+189.1200 	EXP 	Sound response_sound stopped
+189.1378 	EXP 	Sound feedback_sound started
+189.1252 	DATA 	Keypress: left
+189.1378 	EXP 	cross3: autoDraw = False
+189.1378 	EXP 	cross4: autoDraw = True
+189.6400 	EXP 	Sound feedback_sound reached end of file
+189.6417 	EXP 	New trial (rep=0, index=27): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+189.6545 	EXP 	cross4: autoDraw = False
+189.6545 	EXP 	cross4: autoDraw = False
+189.6545 	EXP 	inter_stim_text: autoDraw = True
+189.6545 	EXP 	cross1: autoDraw = True
+191.6545 	EXP 	inter_stim_text: autoDraw = False
+191.6545 	EXP 	cross1: autoDraw = False
+191.6545 	EXP 	inter_stim_text: autoDraw = False
+191.6545 	EXP 	cross1: autoDraw = False
+191.6545 	EXP 	vSAT_square: pos = array([0., 0.])
+191.6545 	EXP 	vSAT_square: autoDraw = True
+191.6545 	EXP 	cross2: autoDraw = True
+191.7045 	EXP 	vSAT_square: autoDraw = False
+191.7045 	EXP 	cross2: autoDraw = False
+191.7045 	EXP 	vSAT_square: autoDraw = False
+191.7045 	EXP 	cross2: autoDraw = False
+191.7045 	EXP 	cross3: autoDraw = True
+191.7879 	EXP 	Sound response_sound started
+191.9400 	EXP 	Sound response_sound stopped
+191.9545 	EXP 	Sound feedback_sound started
+191.9450 	DATA 	Keypress: right
+191.9545 	EXP 	cross3: autoDraw = False
+191.9545 	EXP 	cross4: autoDraw = True
+192.4500 	EXP 	Sound feedback_sound stopped
+192.4514 	EXP 	New trial (rep=0, index=28): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0), ('y_pos', 0), ('match', 1), ('corr_key', 'right')])
+192.4712 	EXP 	cross4: autoDraw = False
+192.4712 	EXP 	cross4: autoDraw = False
+192.4712 	EXP 	inter_stim_text: autoDraw = True
+192.4712 	EXP 	cross1: autoDraw = True
+195.4712 	EXP 	inter_stim_text: autoDraw = False
+195.4712 	EXP 	cross1: autoDraw = False
+195.4712 	EXP 	inter_stim_text: autoDraw = False
+195.4712 	EXP 	cross1: autoDraw = False
+195.4712 	EXP 	vSAT_square: pos = array([0., 0.])
+195.4712 	EXP 	vSAT_square: autoDraw = True
+195.4712 	EXP 	cross2: autoDraw = True
+195.5046 	EXP 	vSAT_square: autoDraw = False
+195.5046 	EXP 	cross2: autoDraw = False
+195.5046 	EXP 	vSAT_square: autoDraw = False
+195.5046 	EXP 	cross2: autoDraw = False
+195.5046 	EXP 	cross3: autoDraw = True
+195.5879 	EXP 	Sound response_sound started
+195.9200 	EXP 	Sound response_sound stopped
+195.9379 	EXP 	Sound feedback_sound started
+195.9250 	DATA 	Keypress: right
+195.9379 	EXP 	cross3: autoDraw = False
+195.9379 	EXP 	cross4: autoDraw = True
+196.4400 	EXP 	Sound feedback_sound reached end of file
+196.4419 	EXP 	New trial (rep=0, index=29): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0), ('y_pos', 0), ('match', 0), ('corr_key', 'left')])
+196.4546 	EXP 	cross4: autoDraw = False
+196.4546 	EXP 	cross4: autoDraw = False
+196.4546 	EXP 	inter_stim_text: autoDraw = True
+196.4546 	EXP 	cross1: autoDraw = True
+197.4546 	EXP 	inter_stim_text: autoDraw = False
+197.4546 	EXP 	cross1: autoDraw = False
+197.4546 	EXP 	inter_stim_text: autoDraw = False
+197.4546 	EXP 	cross1: autoDraw = False
+197.4546 	EXP 	vSAT_square: pos = array([0., 0.])
+197.4546 	EXP 	vSAT_square: autoDraw = True
+197.4546 	EXP 	cross2: autoDraw = True
+197.4880 	EXP 	vSAT_square: autoDraw = False
+197.4880 	EXP 	cross2: autoDraw = False
+197.4880 	EXP 	vSAT_square: autoDraw = False
+197.4880 	EXP 	cross2: autoDraw = False
+197.4880 	EXP 	cross3: autoDraw = True
+197.5713 	EXP 	Sound response_sound started
+198.0000 	EXP 	Sound response_sound stopped
+198.0713 	EXP 	Sound feedback_sound started
+198.0629 	DATA 	Keypress: left
+198.0713 	EXP 	cross3: autoDraw = False
+198.0713 	EXP 	cross4: autoDraw = True
+198.5700 	EXP 	Sound feedback_sound stopped
+198.5715 	EXP 	New trial (rep=0, index=2): OrderedDict([('task_order', 'vSAT_stims-16571317878217099.csv')])
+198.6046 	EXP 	cross4: autoDraw = False
+198.6046 	EXP 	cross4: autoDraw = False
+198.6046 	EXP 	experiment_SAT_text: autoDraw = True
+198.6046 	EXP 	experiment_vSAT_text: autoDraw = True
+202.0973 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\vSAT\vSAT_conditions\vSAT_stims-16571317878217099.csv as conditions, 30 conditions, 6 params
+202.0976 	EXP 	Created sequence: sequential, trialTypes=30, nReps=1, seed=None
+202.0979 	EXP 	New trial (rep=0, index=0): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+202.1008 	DATA 	Keypress: space
+202.1047 	EXP 	experiment_SAT_text: autoDraw = False
+202.1047 	EXP 	experiment_vSAT_text: autoDraw = False
+202.1047 	EXP 	inter_stim_text: autoDraw = True
+202.1047 	EXP 	cross1: autoDraw = True
+203.1047 	EXP 	inter_stim_text: autoDraw = False
+203.1047 	EXP 	cross1: autoDraw = False
+203.1047 	EXP 	inter_stim_text: autoDraw = False
+203.1047 	EXP 	cross1: autoDraw = False
+203.1047 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+203.1047 	EXP 	vSAT_square: autoDraw = True
+203.1047 	EXP 	cross2: autoDraw = True
+203.1380 	EXP 	vSAT_square: autoDraw = False
+203.1380 	EXP 	cross2: autoDraw = False
+203.1380 	EXP 	vSAT_square: autoDraw = False
+203.1380 	EXP 	cross2: autoDraw = False
+203.1380 	EXP 	cross3: autoDraw = True
+203.2214 	EXP 	Sound response_sound started
+203.5699 	EXP 	Sound response_sound stopped
+203.5880 	EXP 	Sound feedback_sound started
+203.5750 	DATA 	Keypress: right
+203.5881 	EXP 	cross3: autoDraw = False
+203.5881 	EXP 	cross4: autoDraw = True
+204.0900 	EXP 	Sound feedback_sound reached end of file
+204.0916 	EXP 	New trial (rep=0, index=1): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+204.1047 	EXP 	cross4: autoDraw = False
+204.1047 	EXP 	cross4: autoDraw = False
+204.1047 	EXP 	inter_stim_text: autoDraw = True
+204.1047 	EXP 	cross1: autoDraw = True
+205.1047 	EXP 	inter_stim_text: autoDraw = False
+205.1047 	EXP 	cross1: autoDraw = False
+205.1047 	EXP 	inter_stim_text: autoDraw = False
+205.1047 	EXP 	cross1: autoDraw = False
+205.1047 	EXP 	vSAT_square: pos = array([0., 0.])
+205.1047 	EXP 	vSAT_square: autoDraw = True
+205.1047 	EXP 	cross2: autoDraw = True
+205.1380 	EXP 	vSAT_square: autoDraw = False
+205.1380 	EXP 	cross2: autoDraw = False
+205.1380 	EXP 	vSAT_square: autoDraw = False
+205.1380 	EXP 	cross2: autoDraw = False
+205.1380 	EXP 	cross3: autoDraw = True
+205.2214 	EXP 	Sound response_sound started
+205.6515 	EXP 	Sound response_sound reached end of file
+205.6932 	DATA 	Keypress: left
+205.7214 	EXP 	Sound feedback_sound started
+205.7214 	EXP 	cross3: autoDraw = False
+205.7214 	EXP 	cross4: autoDraw = True
+206.2200 	EXP 	Sound feedback_sound stopped
+206.2216 	EXP 	New trial (rep=0, index=2): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+206.2381 	EXP 	cross4: autoDraw = False
+206.2381 	EXP 	cross4: autoDraw = False
+206.2381 	EXP 	inter_stim_text: autoDraw = True
+206.2381 	EXP 	cross1: autoDraw = True
+209.2381 	EXP 	inter_stim_text: autoDraw = False
+209.2381 	EXP 	cross1: autoDraw = False
+209.2381 	EXP 	inter_stim_text: autoDraw = False
+209.2381 	EXP 	cross1: autoDraw = False
+209.2381 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+209.2381 	EXP 	vSAT_square: autoDraw = True
+209.2381 	EXP 	cross2: autoDraw = True
+209.2714 	EXP 	vSAT_square: autoDraw = False
+209.2714 	EXP 	cross2: autoDraw = False
+209.2714 	EXP 	vSAT_square: autoDraw = False
+209.2714 	EXP 	cross2: autoDraw = False
+209.2714 	EXP 	cross3: autoDraw = True
+209.3548 	EXP 	Sound response_sound started
+209.5200 	EXP 	Sound response_sound stopped
+209.5381 	EXP 	Sound feedback_sound started
+209.5245 	DATA 	Keypress: right
+209.5381 	EXP 	cross3: autoDraw = False
+209.5381 	EXP 	cross4: autoDraw = True
+210.0406 	EXP 	Sound feedback_sound reached end of file
+210.0410 	EXP 	New trial (rep=0, index=3): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+210.0548 	EXP 	cross4: autoDraw = False
+210.0548 	EXP 	inter_stim_text: autoDraw = True
+210.0548 	EXP 	cross1: autoDraw = True
+213.0549 	EXP 	inter_stim_text: autoDraw = False
+213.0549 	EXP 	cross1: autoDraw = False
+213.0549 	EXP 	inter_stim_text: autoDraw = False
+213.0549 	EXP 	cross1: autoDraw = False
+213.0549 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+213.0549 	EXP 	vSAT_square: autoDraw = True
+213.0549 	EXP 	cross2: autoDraw = True
+213.1049 	EXP 	vSAT_square: autoDraw = False
+213.1049 	EXP 	cross2: autoDraw = False
+213.1049 	EXP 	vSAT_square: autoDraw = False
+213.1049 	EXP 	cross2: autoDraw = False
+213.1049 	EXP 	cross3: autoDraw = True
+213.1882 	EXP 	Sound response_sound started
+213.4700 	EXP 	Sound response_sound stopped
+213.4882 	EXP 	Sound feedback_sound started
+213.4747 	DATA 	Keypress: left
+213.4882 	EXP 	cross3: autoDraw = False
+213.4882 	EXP 	cross4: autoDraw = True
+213.9899 	EXP 	Sound feedback_sound reached end of file
+213.9921 	EXP 	New trial (rep=0, index=4): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+214.0049 	EXP 	cross4: autoDraw = False
+214.0049 	EXP 	cross4: autoDraw = False
+214.0049 	EXP 	inter_stim_text: autoDraw = True
+214.0049 	EXP 	cross1: autoDraw = True
+217.0049 	EXP 	inter_stim_text: autoDraw = False
+217.0049 	EXP 	cross1: autoDraw = False
+217.0049 	EXP 	inter_stim_text: autoDraw = False
+217.0049 	EXP 	cross1: autoDraw = False
+217.0049 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+217.0049 	EXP 	vSAT_square: autoDraw = True
+217.0049 	EXP 	cross2: autoDraw = True
+217.0383 	EXP 	vSAT_square: autoDraw = False
+217.0383 	EXP 	cross2: autoDraw = False
+217.0383 	EXP 	vSAT_square: autoDraw = False
+217.0383 	EXP 	cross2: autoDraw = False
+217.0383 	EXP 	cross3: autoDraw = True
+217.1216 	EXP 	Sound response_sound started
+217.4601 	EXP 	Sound response_sound stopped
+217.4716 	EXP 	Sound feedback_sound started
+217.4651 	DATA 	Keypress: right
+217.4716 	EXP 	cross3: autoDraw = False
+217.4716 	EXP 	cross4: autoDraw = True
+217.9700 	EXP 	Sound feedback_sound stopped
+217.9723 	EXP 	New trial (rep=0, index=5): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+217.9882 	EXP 	cross4: autoDraw = False
+217.9882 	EXP 	cross4: autoDraw = False
+217.9882 	EXP 	inter_stim_text: autoDraw = True
+217.9882 	EXP 	cross1: autoDraw = True
+218.9883 	EXP 	inter_stim_text: autoDraw = False
+218.9883 	EXP 	cross1: autoDraw = False
+218.9883 	EXP 	inter_stim_text: autoDraw = False
+218.9883 	EXP 	cross1: autoDraw = False
+218.9883 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+218.9883 	EXP 	vSAT_square: autoDraw = True
+218.9883 	EXP 	cross2: autoDraw = True
+219.0216 	EXP 	vSAT_square: autoDraw = False
+219.0216 	EXP 	cross2: autoDraw = False
+219.0216 	EXP 	vSAT_square: autoDraw = False
+219.0216 	EXP 	cross2: autoDraw = False
+219.0216 	EXP 	cross3: autoDraw = True
+219.1050 	EXP 	Sound response_sound started
+219.5349 	EXP 	Sound response_sound reached end of file
+219.5716 	EXP 	Sound feedback_sound started
+219.5638 	DATA 	Keypress: left
+219.5716 	EXP 	cross3: autoDraw = False
+219.5716 	EXP 	cross4: autoDraw = True
+220.0700 	EXP 	Sound feedback_sound stopped
+220.0716 	EXP 	New trial (rep=0, index=6): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+220.0883 	EXP 	cross4: autoDraw = False
+220.0883 	EXP 	cross4: autoDraw = False
+220.0883 	EXP 	inter_stim_text: autoDraw = True
+220.0883 	EXP 	cross1: autoDraw = True
+222.0883 	EXP 	inter_stim_text: autoDraw = False
+222.0883 	EXP 	cross1: autoDraw = False
+222.0883 	EXP 	inter_stim_text: autoDraw = False
+222.0883 	EXP 	cross1: autoDraw = False
+222.0883 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+222.0883 	EXP 	vSAT_square: autoDraw = True
+222.0883 	EXP 	cross2: autoDraw = True
+222.1217 	EXP 	vSAT_square: autoDraw = False
+222.1217 	EXP 	cross2: autoDraw = False
+222.1217 	EXP 	vSAT_square: autoDraw = False
+222.1217 	EXP 	cross2: autoDraw = False
+222.1217 	EXP 	cross3: autoDraw = True
+222.2050 	EXP 	Sound response_sound started
+222.6350 	EXP 	Sound response_sound reached end of file
+222.6375 	DATA 	Keypress: left
+222.6717 	EXP 	Sound feedback_sound started
+222.6717 	EXP 	cross3: autoDraw = False
+222.6717 	EXP 	cross4: autoDraw = True
+223.1700 	EXP 	Sound feedback_sound stopped
+223.1717 	EXP 	New trial (rep=0, index=7): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+223.1883 	EXP 	cross4: autoDraw = False
+223.1883 	EXP 	cross4: autoDraw = False
+223.1883 	EXP 	inter_stim_text: autoDraw = True
+223.1883 	EXP 	cross1: autoDraw = True
+225.1884 	EXP 	inter_stim_text: autoDraw = False
+225.1884 	EXP 	cross1: autoDraw = False
+225.1884 	EXP 	inter_stim_text: autoDraw = False
+225.1884 	EXP 	cross1: autoDraw = False
+225.1884 	EXP 	vSAT_square: pos = array([0., 0.])
+225.1884 	EXP 	vSAT_square: autoDraw = True
+225.1884 	EXP 	cross2: autoDraw = True
+225.2384 	EXP 	vSAT_square: autoDraw = False
+225.2384 	EXP 	cross2: autoDraw = False
+225.2384 	EXP 	vSAT_square: autoDraw = False
+225.2384 	EXP 	cross2: autoDraw = False
+225.2384 	EXP 	cross3: autoDraw = True
+225.3217 	EXP 	Sound response_sound started
+225.7511 	EXP 	Sound response_sound reached end of file
+225.7884 	EXP 	Sound feedback_sound started
+225.7804 	DATA 	Keypress: left
+225.7884 	EXP 	cross3: autoDraw = False
+225.7884 	EXP 	cross4: autoDraw = True
+226.2899 	EXP 	Sound feedback_sound reached end of file
+226.2920 	EXP 	New trial (rep=0, index=8): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+226.3051 	EXP 	cross4: autoDraw = False
+226.3051 	EXP 	cross4: autoDraw = False
+226.3051 	EXP 	inter_stim_text: autoDraw = True
+226.3051 	EXP 	cross1: autoDraw = True
+227.3051 	EXP 	inter_stim_text: autoDraw = False
+227.3051 	EXP 	cross1: autoDraw = False
+227.3051 	EXP 	inter_stim_text: autoDraw = False
+227.3051 	EXP 	cross1: autoDraw = False
+227.3051 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+227.3051 	EXP 	vSAT_square: autoDraw = True
+227.3051 	EXP 	cross2: autoDraw = True
+227.3551 	EXP 	vSAT_square: autoDraw = False
+227.3551 	EXP 	cross2: autoDraw = False
+227.3551 	EXP 	vSAT_square: autoDraw = False
+227.3551 	EXP 	cross2: autoDraw = False
+227.3551 	EXP 	cross3: autoDraw = True
+227.4384 	EXP 	Sound response_sound started
+227.6900 	EXP 	Sound response_sound stopped
+227.7051 	EXP 	Sound feedback_sound started
+227.6951 	DATA 	Keypress: right
+227.7051 	EXP 	cross3: autoDraw = False
+227.7051 	EXP 	cross4: autoDraw = True
+228.2000 	EXP 	Sound feedback_sound stopped
+228.2015 	EXP 	New trial (rep=0, index=9): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+228.2218 	EXP 	cross4: autoDraw = False
+228.2218 	EXP 	cross4: autoDraw = False
+228.2218 	EXP 	inter_stim_text: autoDraw = True
+228.2218 	EXP 	cross1: autoDraw = True
+231.2218 	EXP 	inter_stim_text: autoDraw = False
+231.2218 	EXP 	cross1: autoDraw = False
+231.2218 	EXP 	inter_stim_text: autoDraw = False
+231.2218 	EXP 	cross1: autoDraw = False
+231.2218 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+231.2218 	EXP 	vSAT_square: autoDraw = True
+231.2218 	EXP 	cross2: autoDraw = True
+231.2718 	EXP 	vSAT_square: autoDraw = False
+231.2718 	EXP 	cross2: autoDraw = False
+231.2718 	EXP 	vSAT_square: autoDraw = False
+231.2718 	EXP 	cross2: autoDraw = False
+231.2718 	EXP 	cross3: autoDraw = True
+231.3551 	EXP 	Sound response_sound started
+231.7096 	DATA 	Keypress: right
+231.7400 	EXP 	Sound response_sound stopped
+231.7552 	EXP 	Sound feedback_sound started
+231.7552 	EXP 	cross3: autoDraw = False
+231.7552 	EXP 	cross4: autoDraw = True
+232.2500 	EXP 	Sound feedback_sound stopped
+232.2521 	EXP 	New trial (rep=0, index=10): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+232.2718 	EXP 	cross4: autoDraw = False
+232.2718 	EXP 	cross4: autoDraw = False
+232.2718 	EXP 	inter_stim_text: autoDraw = True
+232.2718 	EXP 	cross1: autoDraw = True
+234.2719 	EXP 	inter_stim_text: autoDraw = False
+234.2719 	EXP 	cross1: autoDraw = False
+234.2719 	EXP 	inter_stim_text: autoDraw = False
+234.2719 	EXP 	cross1: autoDraw = False
+234.2719 	EXP 	vSAT_square: pos = array([0., 0.])
+234.2719 	EXP 	vSAT_square: autoDraw = True
+234.2719 	EXP 	cross2: autoDraw = True
+234.3052 	EXP 	vSAT_square: autoDraw = False
+234.3052 	EXP 	cross2: autoDraw = False
+234.3052 	EXP 	vSAT_square: autoDraw = False
+234.3052 	EXP 	cross2: autoDraw = False
+234.3052 	EXP 	cross3: autoDraw = True
+234.3885 	EXP 	Sound response_sound started
+234.6400 	EXP 	Sound response_sound stopped
+234.6552 	EXP 	Sound feedback_sound started
+234.6450 	DATA 	Keypress: right
+234.6552 	EXP 	cross3: autoDraw = False
+234.6552 	EXP 	cross4: autoDraw = True
+235.1500 	EXP 	Sound feedback_sound stopped
+235.1515 	EXP 	New trial (rep=0, index=11): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+235.1719 	EXP 	cross4: autoDraw = False
+235.1719 	EXP 	cross4: autoDraw = False
+235.1719 	EXP 	inter_stim_text: autoDraw = True
+235.1719 	EXP 	cross1: autoDraw = True
+238.1719 	EXP 	inter_stim_text: autoDraw = False
+238.1719 	EXP 	cross1: autoDraw = False
+238.1719 	EXP 	inter_stim_text: autoDraw = False
+238.1719 	EXP 	cross1: autoDraw = False
+238.1719 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+238.1719 	EXP 	vSAT_square: autoDraw = True
+238.1719 	EXP 	cross2: autoDraw = True
+238.2053 	EXP 	vSAT_square: autoDraw = False
+238.2053 	EXP 	cross2: autoDraw = False
+238.2053 	EXP 	vSAT_square: autoDraw = False
+238.2053 	EXP 	cross2: autoDraw = False
+238.2053 	EXP 	cross3: autoDraw = True
+238.2886 	EXP 	Sound response_sound started
+238.5100 	EXP 	Sound response_sound stopped
+238.5219 	EXP 	Sound feedback_sound started
+238.5150 	DATA 	Keypress: right
+238.5219 	EXP 	cross3: autoDraw = False
+238.5219 	EXP 	cross4: autoDraw = True
+239.0199 	EXP 	Sound feedback_sound stopped
+239.0216 	EXP 	New trial (rep=0, index=12): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+239.0386 	EXP 	cross4: autoDraw = False
+239.0386 	EXP 	cross4: autoDraw = False
+239.0386 	EXP 	inter_stim_text: autoDraw = True
+239.0386 	EXP 	cross1: autoDraw = True
+241.0386 	EXP 	inter_stim_text: autoDraw = False
+241.0386 	EXP 	cross1: autoDraw = False
+241.0386 	EXP 	inter_stim_text: autoDraw = False
+241.0386 	EXP 	cross1: autoDraw = False
+241.0386 	EXP 	vSAT_square: pos = array([0., 0.])
+241.0386 	EXP 	vSAT_square: autoDraw = True
+241.0386 	EXP 	cross2: autoDraw = True
+241.0720 	EXP 	vSAT_square: autoDraw = False
+241.0720 	EXP 	cross2: autoDraw = False
+241.0720 	EXP 	vSAT_square: autoDraw = False
+241.0720 	EXP 	cross2: autoDraw = False
+241.0720 	EXP 	cross3: autoDraw = True
+241.1553 	EXP 	Sound response_sound started
+241.5600 	EXP 	Sound response_sound stopped
+241.5719 	EXP 	Sound feedback_sound started
+241.5650 	DATA 	Keypress: right
+241.5720 	EXP 	cross3: autoDraw = False
+241.5720 	EXP 	cross4: autoDraw = True
+241.9082 	DATA 	Keypress: left
+242.0700 	EXP 	Sound feedback_sound stopped
+242.0715 	EXP 	New trial (rep=0, index=13): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+242.0887 	EXP 	cross4: autoDraw = False
+242.0887 	EXP 	cross4: autoDraw = False
+242.0887 	EXP 	inter_stim_text: autoDraw = True
+242.0887 	EXP 	cross1: autoDraw = True
+245.0887 	EXP 	inter_stim_text: autoDraw = False
+245.0887 	EXP 	cross1: autoDraw = False
+245.0887 	EXP 	inter_stim_text: autoDraw = False
+245.0887 	EXP 	cross1: autoDraw = False
+245.0887 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+245.0887 	EXP 	vSAT_square: autoDraw = True
+245.0887 	EXP 	cross2: autoDraw = True
+245.1387 	EXP 	vSAT_square: autoDraw = False
+245.1387 	EXP 	cross2: autoDraw = False
+245.1387 	EXP 	vSAT_square: autoDraw = False
+245.1387 	EXP 	cross2: autoDraw = False
+245.1387 	EXP 	cross3: autoDraw = True
+245.2220 	EXP 	Sound response_sound started
+245.4606 	EXP 	Sound response_sound stopped
+245.4720 	EXP 	Sound feedback_sound started
+245.4649 	DATA 	Keypress: right
+245.4720 	EXP 	cross3: autoDraw = False
+245.4720 	EXP 	cross4: autoDraw = True
+245.9700 	EXP 	Sound feedback_sound stopped
+245.9715 	EXP 	New trial (rep=0, index=14): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+245.9887 	EXP 	cross4: autoDraw = False
+245.9887 	EXP 	cross4: autoDraw = False
+245.9887 	EXP 	inter_stim_text: autoDraw = True
+245.9887 	EXP 	cross1: autoDraw = True
+247.9887 	EXP 	inter_stim_text: autoDraw = False
+247.9887 	EXP 	cross1: autoDraw = False
+247.9887 	EXP 	inter_stim_text: autoDraw = False
+247.9887 	EXP 	cross1: autoDraw = False
+247.9887 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+247.9887 	EXP 	vSAT_square: autoDraw = True
+247.9887 	EXP 	cross2: autoDraw = True
+248.0387 	EXP 	vSAT_square: autoDraw = False
+248.0387 	EXP 	cross2: autoDraw = False
+248.0387 	EXP 	vSAT_square: autoDraw = False
+248.0387 	EXP 	cross2: autoDraw = False
+248.0387 	EXP 	cross3: autoDraw = True
+248.1221 	EXP 	Sound response_sound started
+248.4400 	EXP 	Sound response_sound stopped
+248.4554 	EXP 	Sound feedback_sound started
+248.4450 	DATA 	Keypress: right
+248.4554 	EXP 	cross3: autoDraw = False
+248.4554 	EXP 	cross4: autoDraw = True
+248.9500 	EXP 	Sound feedback_sound stopped
+248.9515 	EXP 	New trial (rep=0, index=15): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+248.9721 	EXP 	cross4: autoDraw = False
+248.9721 	EXP 	cross4: autoDraw = False
+248.9721 	EXP 	inter_stim_text: autoDraw = True
+248.9721 	EXP 	cross1: autoDraw = True
+250.9721 	EXP 	inter_stim_text: autoDraw = False
+250.9721 	EXP 	cross1: autoDraw = False
+250.9721 	EXP 	inter_stim_text: autoDraw = False
+250.9721 	EXP 	cross1: autoDraw = False
+250.9721 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+250.9721 	EXP 	vSAT_square: autoDraw = True
+250.9721 	EXP 	cross2: autoDraw = True
+251.0221 	EXP 	vSAT_square: autoDraw = False
+251.0221 	EXP 	cross2: autoDraw = False
+251.0221 	EXP 	vSAT_square: autoDraw = False
+251.0221 	EXP 	cross2: autoDraw = False
+251.0221 	EXP 	cross3: autoDraw = True
+251.1055 	EXP 	Sound response_sound started
+251.5106 	EXP 	Sound response_sound stopped
+251.5221 	EXP 	Sound feedback_sound started
+251.5151 	DATA 	Keypress: left
+251.5222 	EXP 	cross3: autoDraw = False
+251.5222 	EXP 	cross4: autoDraw = True
+252.0200 	EXP 	Sound feedback_sound stopped
+252.0215 	EXP 	New trial (rep=0, index=16): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+252.0388 	EXP 	cross4: autoDraw = False
+252.0388 	EXP 	cross4: autoDraw = False
+252.0388 	EXP 	inter_stim_text: autoDraw = True
+252.0388 	EXP 	cross1: autoDraw = True
+253.0388 	EXP 	inter_stim_text: autoDraw = False
+253.0388 	EXP 	cross1: autoDraw = False
+253.0388 	EXP 	inter_stim_text: autoDraw = False
+253.0388 	EXP 	cross1: autoDraw = False
+253.0388 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+253.0388 	EXP 	vSAT_square: autoDraw = True
+253.0388 	EXP 	cross2: autoDraw = True
+253.0722 	EXP 	vSAT_square: autoDraw = False
+253.0722 	EXP 	cross2: autoDraw = False
+253.0722 	EXP 	vSAT_square: autoDraw = False
+253.0722 	EXP 	cross2: autoDraw = False
+253.0722 	EXP 	cross3: autoDraw = True
+253.1555 	EXP 	Sound response_sound started
+253.5848 	EXP 	Sound response_sound reached end of file
+253.5869 	DATA 	Keypress: left
+253.6055 	EXP 	Sound feedback_sound started
+253.6055 	EXP 	cross3: autoDraw = False
+253.6055 	EXP 	cross4: autoDraw = True
+254.1000 	EXP 	Sound feedback_sound stopped
+254.1014 	EXP 	New trial (rep=0, index=17): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+254.1221 	EXP 	cross4: autoDraw = False
+254.1221 	EXP 	cross4: autoDraw = False
+254.1221 	EXP 	inter_stim_text: autoDraw = True
+254.1221 	EXP 	cross1: autoDraw = True
+255.1222 	EXP 	inter_stim_text: autoDraw = False
+255.1222 	EXP 	cross1: autoDraw = False
+255.1222 	EXP 	inter_stim_text: autoDraw = False
+255.1222 	EXP 	cross1: autoDraw = False
+255.1222 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+255.1222 	EXP 	vSAT_square: autoDraw = True
+255.1222 	EXP 	cross2: autoDraw = True
+255.1555 	EXP 	vSAT_square: autoDraw = False
+255.1555 	EXP 	cross2: autoDraw = False
+255.1555 	EXP 	vSAT_square: autoDraw = False
+255.1555 	EXP 	cross2: autoDraw = False
+255.1555 	EXP 	cross3: autoDraw = True
+255.2388 	EXP 	Sound response_sound started
+255.6101 	EXP 	Sound response_sound stopped
+255.6222 	EXP 	Sound feedback_sound started
+255.6151 	DATA 	Keypress: right
+255.6222 	EXP 	cross3: autoDraw = False
+255.6222 	EXP 	cross4: autoDraw = True
+256.1200 	EXP 	Sound feedback_sound stopped
+256.1220 	EXP 	New trial (rep=0, index=18): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+256.1389 	EXP 	cross4: autoDraw = False
+256.1389 	EXP 	cross4: autoDraw = False
+256.1389 	EXP 	inter_stim_text: autoDraw = True
+256.1389 	EXP 	cross1: autoDraw = True
+258.1389 	EXP 	inter_stim_text: autoDraw = False
+258.1389 	EXP 	cross1: autoDraw = False
+258.1389 	EXP 	inter_stim_text: autoDraw = False
+258.1389 	EXP 	cross1: autoDraw = False
+258.1389 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+258.1389 	EXP 	vSAT_square: autoDraw = True
+258.1389 	EXP 	cross2: autoDraw = True
+258.1722 	EXP 	vSAT_square: autoDraw = False
+258.1722 	EXP 	cross2: autoDraw = False
+258.1722 	EXP 	vSAT_square: autoDraw = False
+258.1722 	EXP 	cross2: autoDraw = False
+258.1722 	EXP 	cross3: autoDraw = True
+258.2556 	EXP 	Sound response_sound started
+258.6855 	EXP 	Sound response_sound reached end of file
+258.7389 	EXP 	Sound feedback_sound started
+258.7308 	DATA 	Keypress: left
+258.7389 	EXP 	cross3: autoDraw = False
+258.7389 	EXP 	cross4: autoDraw = True
+259.2399 	EXP 	Sound feedback_sound reached end of file
+259.2418 	EXP 	New trial (rep=0, index=19): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+259.2556 	EXP 	cross4: autoDraw = False
+259.2556 	EXP 	cross4: autoDraw = False
+259.2556 	EXP 	inter_stim_text: autoDraw = True
+259.2556 	EXP 	cross1: autoDraw = True
+260.2556 	EXP 	inter_stim_text: autoDraw = False
+260.2556 	EXP 	cross1: autoDraw = False
+260.2556 	EXP 	inter_stim_text: autoDraw = False
+260.2556 	EXP 	cross1: autoDraw = False
+260.2556 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+260.2556 	EXP 	vSAT_square: autoDraw = True
+260.2556 	EXP 	cross2: autoDraw = True
+260.2889 	EXP 	vSAT_square: autoDraw = False
+260.2889 	EXP 	cross2: autoDraw = False
+260.2889 	EXP 	vSAT_square: autoDraw = False
+260.2889 	EXP 	cross2: autoDraw = False
+260.2889 	EXP 	cross3: autoDraw = True
+260.3723 	EXP 	Sound response_sound started
+260.8023 	EXP 	Sound response_sound reached end of file
+260.8222 	EXP 	Sound feedback_sound started
+260.8083 	DATA 	Keypress: left
+260.8223 	EXP 	cross3: autoDraw = False
+260.8223 	EXP 	cross4: autoDraw = True
+261.3200 	EXP 	Sound feedback_sound stopped
+261.3203 	EXP 	New trial (rep=0, index=20): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+261.3389 	EXP 	cross4: autoDraw = False
+261.3389 	EXP 	inter_stim_text: autoDraw = True
+261.3389 	EXP 	cross1: autoDraw = True
+264.3390 	EXP 	inter_stim_text: autoDraw = False
+264.3390 	EXP 	cross1: autoDraw = False
+264.3390 	EXP 	inter_stim_text: autoDraw = False
+264.3390 	EXP 	cross1: autoDraw = False
+264.3390 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+264.3390 	EXP 	vSAT_square: autoDraw = True
+264.3390 	EXP 	cross2: autoDraw = True
+264.3723 	EXP 	vSAT_square: autoDraw = False
+264.3723 	EXP 	cross2: autoDraw = False
+264.3723 	EXP 	vSAT_square: autoDraw = False
+264.3723 	EXP 	cross2: autoDraw = False
+264.3723 	EXP 	cross3: autoDraw = True
+264.4557 	EXP 	Sound response_sound started
+264.6600 	EXP 	Sound response_sound stopped
+264.6724 	EXP 	Sound feedback_sound started
+264.6651 	DATA 	Keypress: right
+264.6724 	EXP 	cross3: autoDraw = False
+264.6724 	EXP 	cross4: autoDraw = True
+265.1700 	EXP 	Sound feedback_sound stopped
+265.1715 	EXP 	New trial (rep=0, index=21): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+265.1890 	EXP 	cross4: autoDraw = False
+265.1890 	EXP 	cross4: autoDraw = False
+265.1890 	EXP 	inter_stim_text: autoDraw = True
+265.1890 	EXP 	cross1: autoDraw = True
+266.1890 	EXP 	inter_stim_text: autoDraw = False
+266.1890 	EXP 	cross1: autoDraw = False
+266.1890 	EXP 	inter_stim_text: autoDraw = False
+266.1890 	EXP 	cross1: autoDraw = False
+266.1890 	EXP 	vSAT_square: pos = array([0., 0.])
+266.1890 	EXP 	vSAT_square: autoDraw = True
+266.1890 	EXP 	cross2: autoDraw = True
+266.2224 	EXP 	vSAT_square: autoDraw = False
+266.2224 	EXP 	cross2: autoDraw = False
+266.2224 	EXP 	vSAT_square: autoDraw = False
+266.2224 	EXP 	cross2: autoDraw = False
+266.2224 	EXP 	cross3: autoDraw = True
+266.3057 	EXP 	Sound response_sound started
+266.4935 	DATA 	Keypress: right
+266.5300 	EXP 	Sound response_sound stopped
+266.5390 	EXP 	Sound feedback_sound started
+266.5391 	EXP 	cross3: autoDraw = False
+266.5391 	EXP 	cross4: autoDraw = True
+267.0400 	EXP 	Sound feedback_sound stopped
+267.0415 	EXP 	New trial (rep=0, index=22): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+267.0557 	EXP 	cross4: autoDraw = False
+267.0557 	EXP 	cross4: autoDraw = False
+267.0557 	EXP 	inter_stim_text: autoDraw = True
+267.0557 	EXP 	cross1: autoDraw = True
+269.0558 	EXP 	inter_stim_text: autoDraw = False
+269.0558 	EXP 	cross1: autoDraw = False
+269.0558 	EXP 	inter_stim_text: autoDraw = False
+269.0558 	EXP 	cross1: autoDraw = False
+269.0558 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+269.0558 	EXP 	vSAT_square: autoDraw = True
+269.0558 	EXP 	cross2: autoDraw = True
+269.0891 	EXP 	vSAT_square: autoDraw = False
+269.0891 	EXP 	cross2: autoDraw = False
+269.0891 	EXP 	vSAT_square: autoDraw = False
+269.0891 	EXP 	cross2: autoDraw = False
+269.0891 	EXP 	cross3: autoDraw = True
+269.1724 	EXP 	Sound response_sound started
+269.4600 	EXP 	Sound response_sound stopped
+269.4724 	EXP 	Sound feedback_sound started
+269.4651 	DATA 	Keypress: right
+269.4725 	EXP 	cross3: autoDraw = False
+269.4725 	EXP 	cross4: autoDraw = True
+269.9700 	EXP 	Sound feedback_sound stopped
+269.9716 	EXP 	New trial (rep=0, index=23): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+269.9891 	EXP 	cross4: autoDraw = False
+269.9891 	EXP 	cross4: autoDraw = False
+269.9891 	EXP 	inter_stim_text: autoDraw = True
+269.9891 	EXP 	cross1: autoDraw = True
+270.9891 	EXP 	inter_stim_text: autoDraw = False
+270.9891 	EXP 	cross1: autoDraw = False
+270.9891 	EXP 	inter_stim_text: autoDraw = False
+270.9891 	EXP 	cross1: autoDraw = False
+270.9891 	EXP 	vSAT_square: pos = array([0., 0.])
+270.9891 	EXP 	vSAT_square: autoDraw = True
+270.9891 	EXP 	cross2: autoDraw = True
+271.0391 	EXP 	vSAT_square: autoDraw = False
+271.0391 	EXP 	cross2: autoDraw = False
+271.0391 	EXP 	vSAT_square: autoDraw = False
+271.0391 	EXP 	cross2: autoDraw = False
+271.0391 	EXP 	cross3: autoDraw = True
+271.1224 	EXP 	Sound response_sound started
+271.5524 	EXP 	Sound response_sound reached end of file
+271.6224 	EXP 	Sound feedback_sound started
+271.6141 	DATA 	Keypress: left
+271.6224 	EXP 	cross3: autoDraw = False
+271.6224 	EXP 	cross4: autoDraw = True
+272.1199 	EXP 	Sound feedback_sound stopped
+272.1215 	EXP 	New trial (rep=0, index=24): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+272.1391 	EXP 	cross4: autoDraw = False
+272.1391 	EXP 	cross4: autoDraw = False
+272.1391 	EXP 	inter_stim_text: autoDraw = True
+272.1391 	EXP 	cross1: autoDraw = True
+273.1391 	EXP 	inter_stim_text: autoDraw = False
+273.1391 	EXP 	cross1: autoDraw = False
+273.1391 	EXP 	inter_stim_text: autoDraw = False
+273.1391 	EXP 	cross1: autoDraw = False
+273.1391 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+273.1391 	EXP 	vSAT_square: autoDraw = True
+273.1391 	EXP 	cross2: autoDraw = True
+273.1725 	EXP 	vSAT_square: autoDraw = False
+273.1725 	EXP 	cross2: autoDraw = False
+273.1725 	EXP 	vSAT_square: autoDraw = False
+273.1725 	EXP 	cross2: autoDraw = False
+273.1725 	EXP 	cross3: autoDraw = True
+273.2558 	EXP 	Sound response_sound started
+273.6900 	EXP 	Sound response_sound reached end of file
+273.6921 	DATA 	Keypress: left
+273.7225 	EXP 	Sound feedback_sound started
+273.7225 	EXP 	cross3: autoDraw = False
+273.7225 	EXP 	cross4: autoDraw = True
+274.2199 	EXP 	Sound feedback_sound stopped
+274.2215 	EXP 	New trial (rep=0, index=25): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+274.2392 	EXP 	cross4: autoDraw = False
+274.2392 	EXP 	cross4: autoDraw = False
+274.2392 	EXP 	inter_stim_text: autoDraw = True
+274.2392 	EXP 	cross1: autoDraw = True
+275.2392 	EXP 	inter_stim_text: autoDraw = False
+275.2392 	EXP 	cross1: autoDraw = False
+275.2392 	EXP 	inter_stim_text: autoDraw = False
+275.2392 	EXP 	cross1: autoDraw = False
+275.2392 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+275.2392 	EXP 	vSAT_square: autoDraw = True
+275.2392 	EXP 	cross2: autoDraw = True
+275.2725 	EXP 	vSAT_square: autoDraw = False
+275.2725 	EXP 	cross2: autoDraw = False
+275.2725 	EXP 	vSAT_square: autoDraw = False
+275.2725 	EXP 	cross2: autoDraw = False
+275.2725 	EXP 	cross3: autoDraw = True
+275.3558 	EXP 	Sound response_sound started
+275.7700 	EXP 	Sound response_sound stopped
+275.7892 	EXP 	Sound feedback_sound started
+275.7751 	DATA 	Keypress: left
+275.7892 	EXP 	cross3: autoDraw = False
+275.7892 	EXP 	cross4: autoDraw = True
+276.2900 	EXP 	Sound feedback_sound reached end of file
+276.2903 	EXP 	New trial (rep=0, index=26): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+276.3059 	EXP 	cross4: autoDraw = False
+276.3059 	EXP 	inter_stim_text: autoDraw = True
+276.3059 	EXP 	cross1: autoDraw = True
+277.3059 	EXP 	inter_stim_text: autoDraw = False
+277.3059 	EXP 	cross1: autoDraw = False
+277.3059 	EXP 	inter_stim_text: autoDraw = False
+277.3059 	EXP 	cross1: autoDraw = False
+277.3059 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+277.3059 	EXP 	vSAT_square: autoDraw = True
+277.3059 	EXP 	cross2: autoDraw = True
+277.3392 	EXP 	vSAT_square: autoDraw = False
+277.3392 	EXP 	cross2: autoDraw = False
+277.3392 	EXP 	vSAT_square: autoDraw = False
+277.3392 	EXP 	cross2: autoDraw = False
+277.3392 	EXP 	cross3: autoDraw = True
+277.4225 	EXP 	Sound response_sound started
+277.7899 	EXP 	Sound response_sound stopped
+277.8059 	EXP 	Sound feedback_sound started
+277.7946 	DATA 	Keypress: left
+277.8059 	EXP 	cross3: autoDraw = False
+277.8059 	EXP 	cross4: autoDraw = True
+278.2999 	EXP 	Sound feedback_sound stopped
+278.3015 	EXP 	New trial (rep=0, index=27): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+278.3059 	EXP 	cross4: autoDraw = False
+278.3059 	EXP 	cross4: autoDraw = False
+278.3059 	EXP 	inter_stim_text: autoDraw = True
+278.3059 	EXP 	cross1: autoDraw = True
+279.3059 	EXP 	inter_stim_text: autoDraw = False
+279.3059 	EXP 	cross1: autoDraw = False
+279.3059 	EXP 	inter_stim_text: autoDraw = False
+279.3059 	EXP 	cross1: autoDraw = False
+279.3059 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+279.3059 	EXP 	vSAT_square: autoDraw = True
+279.3059 	EXP 	cross2: autoDraw = True
+279.3392 	EXP 	vSAT_square: autoDraw = False
+279.3392 	EXP 	cross2: autoDraw = False
+279.3392 	EXP 	vSAT_square: autoDraw = False
+279.3392 	EXP 	cross2: autoDraw = False
+279.3392 	EXP 	cross3: autoDraw = True
+279.4226 	EXP 	Sound response_sound started
+279.6773 	DATA 	Keypress: right
+279.7100 	EXP 	Sound response_sound stopped
+279.7225 	EXP 	Sound feedback_sound started
+279.7226 	EXP 	cross3: autoDraw = False
+279.7226 	EXP 	cross4: autoDraw = True
+280.2206 	EXP 	Sound feedback_sound stopped
+280.2226 	EXP 	New trial (rep=0, index=28): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+280.2393 	EXP 	cross4: autoDraw = False
+280.2393 	EXP 	cross4: autoDraw = False
+280.2393 	EXP 	inter_stim_text: autoDraw = True
+280.2393 	EXP 	cross1: autoDraw = True
+282.2393 	EXP 	inter_stim_text: autoDraw = False
+282.2393 	EXP 	cross1: autoDraw = False
+282.2393 	EXP 	inter_stim_text: autoDraw = False
+282.2393 	EXP 	cross1: autoDraw = False
+282.2393 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+282.2393 	EXP 	vSAT_square: autoDraw = True
+282.2393 	EXP 	cross2: autoDraw = True
+282.2892 	EXP 	vSAT_square: autoDraw = False
+282.2892 	EXP 	cross2: autoDraw = False
+282.2892 	EXP 	vSAT_square: autoDraw = False
+282.2892 	EXP 	cross2: autoDraw = False
+282.2892 	EXP 	cross3: autoDraw = True
+282.3726 	EXP 	Sound response_sound started
+282.5800 	EXP 	Sound response_sound stopped
+282.5893 	EXP 	Sound feedback_sound started
+282.5851 	DATA 	Keypress: right
+282.5893 	EXP 	cross3: autoDraw = False
+282.5893 	EXP 	cross4: autoDraw = True
+283.0900 	EXP 	Sound feedback_sound stopped
+283.0915 	EXP 	New trial (rep=0, index=29): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+283.1060 	EXP 	cross4: autoDraw = False
+283.1060 	EXP 	cross4: autoDraw = False
+283.1060 	EXP 	inter_stim_text: autoDraw = True
+283.1060 	EXP 	cross1: autoDraw = True
+284.1060 	EXP 	inter_stim_text: autoDraw = False
+284.1060 	EXP 	cross1: autoDraw = False
+284.1060 	EXP 	inter_stim_text: autoDraw = False
+284.1060 	EXP 	cross1: autoDraw = False
+284.1060 	EXP 	vSAT_square: pos = array([0., 0.])
+284.1060 	EXP 	vSAT_square: autoDraw = True
+284.1060 	EXP 	cross2: autoDraw = True
+284.1393 	EXP 	vSAT_square: autoDraw = False
+284.1393 	EXP 	cross2: autoDraw = False
+284.1393 	EXP 	vSAT_square: autoDraw = False
+284.1393 	EXP 	cross2: autoDraw = False
+284.1393 	EXP 	cross3: autoDraw = True
+284.2226 	EXP 	Sound response_sound started
+284.6528 	EXP 	Sound response_sound reached end of file
+284.7227 	EXP 	Sound feedback_sound started
+284.7143 	DATA 	Keypress: left
+284.7227 	EXP 	cross3: autoDraw = False
+284.7227 	EXP 	cross4: autoDraw = True
+285.2199 	EXP 	Sound feedback_sound stopped
+285.2216 	EXP 	New trial (rep=0, index=3): OrderedDict([('task_order', 'vSAT_stims-16571317878376577.csv')])
+285.2560 	EXP 	cross4: autoDraw = False
+285.2560 	EXP 	cross4: autoDraw = False
+285.2560 	EXP 	experiment_SAT_text: autoDraw = True
+285.2560 	EXP 	experiment_vSAT_text: autoDraw = True
+286.5273 	DATA 	Keypress: space
+286.5489 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\vSAT\vSAT_conditions\vSAT_stims-16571317878376577.csv as conditions, 30 conditions, 6 params
+286.5492 	EXP 	Created sequence: sequential, trialTypes=30, nReps=1, seed=None
+286.5494 	EXP 	New trial (rep=0, index=0): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+286.5560 	EXP 	experiment_SAT_text: autoDraw = False
+286.5560 	EXP 	experiment_vSAT_text: autoDraw = False
+286.5560 	EXP 	inter_stim_text: autoDraw = True
+286.5560 	EXP 	cross1: autoDraw = True
+288.5560 	EXP 	inter_stim_text: autoDraw = False
+288.5560 	EXP 	cross1: autoDraw = False
+288.5560 	EXP 	inter_stim_text: autoDraw = False
+288.5560 	EXP 	cross1: autoDraw = False
+288.5560 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+288.5560 	EXP 	vSAT_square: autoDraw = True
+288.5560 	EXP 	cross2: autoDraw = True
+288.5893 	EXP 	vSAT_square: autoDraw = False
+288.5893 	EXP 	cross2: autoDraw = False
+288.5893 	EXP 	vSAT_square: autoDraw = False
+288.5893 	EXP 	cross2: autoDraw = False
+288.5893 	EXP 	cross3: autoDraw = True
+288.6727 	EXP 	Sound response_sound started
+289.0900 	EXP 	Sound response_sound stopped
+289.1060 	EXP 	Sound feedback_sound started
+289.0950 	DATA 	Keypress: right
+289.1060 	EXP 	cross3: autoDraw = False
+289.1060 	EXP 	cross4: autoDraw = True
+289.5999 	EXP 	Sound feedback_sound stopped
+289.6016 	EXP 	New trial (rep=0, index=1): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+289.6061 	EXP 	cross4: autoDraw = False
+289.6061 	EXP 	cross4: autoDraw = False
+289.6061 	EXP 	inter_stim_text: autoDraw = True
+289.6061 	EXP 	cross1: autoDraw = True
+291.6061 	EXP 	inter_stim_text: autoDraw = False
+291.6061 	EXP 	cross1: autoDraw = False
+291.6061 	EXP 	inter_stim_text: autoDraw = False
+291.6061 	EXP 	cross1: autoDraw = False
+291.6061 	EXP 	vSAT_square: pos = array([0., 0.])
+291.6061 	EXP 	vSAT_square: autoDraw = True
+291.6061 	EXP 	cross2: autoDraw = True
+291.6394 	EXP 	vSAT_square: autoDraw = False
+291.6394 	EXP 	cross2: autoDraw = False
+291.6394 	EXP 	vSAT_square: autoDraw = False
+291.6394 	EXP 	cross2: autoDraw = False
+291.6394 	EXP 	cross3: autoDraw = True
+291.7227 	EXP 	Sound response_sound started
+292.1528 	EXP 	Sound response_sound reached end of file
+292.3228 	EXP 	Sound feedback_sound started
+292.3150 	DATA 	Keypress: left
+292.3227 	EXP 	cross3: autoDraw = False
+292.3227 	EXP 	cross4: autoDraw = True
+292.8200 	EXP 	Sound feedback_sound stopped
+292.8215 	EXP 	New trial (rep=0, index=2): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+292.8394 	EXP 	cross4: autoDraw = False
+292.8394 	EXP 	cross4: autoDraw = False
+292.8394 	EXP 	inter_stim_text: autoDraw = True
+292.8394 	EXP 	cross1: autoDraw = True
+293.8395 	EXP 	inter_stim_text: autoDraw = False
+293.8395 	EXP 	cross1: autoDraw = False
+293.8395 	EXP 	inter_stim_text: autoDraw = False
+293.8395 	EXP 	cross1: autoDraw = False
+293.8395 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+293.8395 	EXP 	vSAT_square: autoDraw = True
+293.8395 	EXP 	cross2: autoDraw = True
+293.8895 	EXP 	vSAT_square: autoDraw = False
+293.8895 	EXP 	cross2: autoDraw = False
+293.8895 	EXP 	vSAT_square: autoDraw = False
+293.8895 	EXP 	cross2: autoDraw = False
+293.8895 	EXP 	cross3: autoDraw = True
+293.9728 	EXP 	Sound response_sound started
+294.4034 	EXP 	Sound response_sound reached end of file
+294.4058 	DATA 	Keypress: left
+294.4395 	EXP 	Sound feedback_sound started
+294.4395 	EXP 	cross3: autoDraw = False
+294.4395 	EXP 	cross4: autoDraw = True
+294.9400 	EXP 	Sound feedback_sound reached end of file
+294.9424 	EXP 	New trial (rep=0, index=3): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+294.9561 	EXP 	cross4: autoDraw = False
+294.9561 	EXP 	cross4: autoDraw = False
+294.9561 	EXP 	inter_stim_text: autoDraw = True
+294.9561 	EXP 	cross1: autoDraw = True
+297.9562 	EXP 	inter_stim_text: autoDraw = False
+297.9562 	EXP 	cross1: autoDraw = False
+297.9562 	EXP 	inter_stim_text: autoDraw = False
+297.9562 	EXP 	cross1: autoDraw = False
+297.9562 	EXP 	vSAT_square: pos = array([0., 0.])
+297.9562 	EXP 	vSAT_square: autoDraw = True
+297.9562 	EXP 	cross2: autoDraw = True
+297.9895 	EXP 	vSAT_square: autoDraw = False
+297.9895 	EXP 	cross2: autoDraw = False
+297.9895 	EXP 	vSAT_square: autoDraw = False
+297.9895 	EXP 	cross2: autoDraw = False
+297.9895 	EXP 	cross3: autoDraw = True
+298.0729 	EXP 	Sound response_sound started
+298.2800 	EXP 	Sound response_sound stopped
+298.2895 	EXP 	Sound feedback_sound started
+298.2843 	DATA 	Keypress: right
+298.2896 	EXP 	cross3: autoDraw = False
+298.2896 	EXP 	cross4: autoDraw = True
+298.7899 	EXP 	Sound feedback_sound stopped
+298.7915 	EXP 	New trial (rep=0, index=4): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+298.8062 	EXP 	cross4: autoDraw = False
+298.8062 	EXP 	cross4: autoDraw = False
+298.8062 	EXP 	inter_stim_text: autoDraw = True
+298.8062 	EXP 	cross1: autoDraw = True
+301.8062 	EXP 	inter_stim_text: autoDraw = False
+301.8062 	EXP 	cross1: autoDraw = False
+301.8062 	EXP 	inter_stim_text: autoDraw = False
+301.8062 	EXP 	cross1: autoDraw = False
+301.8062 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+301.8062 	EXP 	vSAT_square: autoDraw = True
+301.8062 	EXP 	cross2: autoDraw = True
+301.8396 	EXP 	vSAT_square: autoDraw = False
+301.8396 	EXP 	cross2: autoDraw = False
+301.8396 	EXP 	vSAT_square: autoDraw = False
+301.8396 	EXP 	cross2: autoDraw = False
+301.8396 	EXP 	cross3: autoDraw = True
+301.9229 	EXP 	Sound response_sound started
+302.3529 	EXP 	Sound response_sound reached end of file
+302.3556 	DATA 	Keypress: left
+302.3896 	EXP 	Sound feedback_sound started
+302.3896 	EXP 	cross3: autoDraw = False
+302.3896 	EXP 	cross4: autoDraw = True
+302.8899 	EXP 	Sound feedback_sound reached end of file
+302.8916 	EXP 	New trial (rep=0, index=5): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+302.9063 	EXP 	cross4: autoDraw = False
+302.9063 	EXP 	cross4: autoDraw = False
+302.9063 	EXP 	inter_stim_text: autoDraw = True
+302.9063 	EXP 	cross1: autoDraw = True
+305.9063 	EXP 	inter_stim_text: autoDraw = False
+305.9063 	EXP 	cross1: autoDraw = False
+305.9063 	EXP 	inter_stim_text: autoDraw = False
+305.9063 	EXP 	cross1: autoDraw = False
+305.9063 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+305.9063 	EXP 	vSAT_square: autoDraw = True
+305.9063 	EXP 	cross2: autoDraw = True
+305.9396 	EXP 	vSAT_square: autoDraw = False
+305.9396 	EXP 	cross2: autoDraw = False
+305.9396 	EXP 	vSAT_square: autoDraw = False
+305.9396 	EXP 	cross2: autoDraw = False
+305.9396 	EXP 	cross3: autoDraw = True
+306.0230 	EXP 	Sound response_sound started
+306.2400 	EXP 	Sound response_sound stopped
+306.2563 	EXP 	Sound feedback_sound started
+306.2450 	DATA 	Keypress: right
+306.2563 	EXP 	cross3: autoDraw = False
+306.2563 	EXP 	cross4: autoDraw = True
+306.7499 	EXP 	Sound feedback_sound stopped
+306.7515 	EXP 	New trial (rep=0, index=6): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+306.7564 	EXP 	cross4: autoDraw = False
+306.7564 	EXP 	cross4: autoDraw = False
+306.7564 	EXP 	inter_stim_text: autoDraw = True
+306.7564 	EXP 	cross1: autoDraw = True
+309.7564 	EXP 	inter_stim_text: autoDraw = False
+309.7564 	EXP 	cross1: autoDraw = False
+309.7564 	EXP 	inter_stim_text: autoDraw = False
+309.7564 	EXP 	cross1: autoDraw = False
+309.7564 	EXP 	vSAT_square: pos = array([0., 0.])
+309.7564 	EXP 	vSAT_square: autoDraw = True
+309.7564 	EXP 	cross2: autoDraw = True
+309.7897 	EXP 	vSAT_square: autoDraw = False
+309.7897 	EXP 	cross2: autoDraw = False
+309.7897 	EXP 	vSAT_square: autoDraw = False
+309.7897 	EXP 	cross2: autoDraw = False
+309.7897 	EXP 	cross3: autoDraw = True
+309.8730 	EXP 	Sound response_sound started
+310.3031 	EXP 	Sound response_sound reached end of file
+310.3230 	EXP 	Sound feedback_sound started
+310.3098 	DATA 	Keypress: left
+310.3230 	EXP 	cross3: autoDraw = False
+310.3230 	EXP 	cross4: autoDraw = True
+310.8199 	EXP 	Sound feedback_sound stopped
+310.8215 	EXP 	New trial (rep=0, index=7): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+310.8397 	EXP 	cross4: autoDraw = False
+310.8397 	EXP 	cross4: autoDraw = False
+310.8397 	EXP 	inter_stim_text: autoDraw = True
+310.8397 	EXP 	cross1: autoDraw = True
+312.8398 	EXP 	inter_stim_text: autoDraw = False
+312.8398 	EXP 	cross1: autoDraw = False
+312.8398 	EXP 	inter_stim_text: autoDraw = False
+312.8398 	EXP 	cross1: autoDraw = False
+312.8398 	EXP 	vSAT_square: pos = array([0., 0.])
+312.8398 	EXP 	vSAT_square: autoDraw = True
+312.8398 	EXP 	cross2: autoDraw = True
+312.8731 	EXP 	vSAT_square: autoDraw = False
+312.8731 	EXP 	cross2: autoDraw = False
+312.8731 	EXP 	vSAT_square: autoDraw = False
+312.8731 	EXP 	cross2: autoDraw = False
+312.8731 	EXP 	cross3: autoDraw = True
+312.9564 	EXP 	Sound response_sound started
+313.2300 	EXP 	Sound response_sound stopped
+313.2398 	EXP 	Sound feedback_sound started
+313.2351 	DATA 	Keypress: left
+313.2353 	DATA 	Keypress: right
+313.2398 	EXP 	cross3: autoDraw = False
+313.2398 	EXP 	cross4: autoDraw = True
+313.7400 	EXP 	Sound feedback_sound stopped
+313.7416 	EXP 	New trial (rep=0, index=8): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+313.7564 	EXP 	cross4: autoDraw = False
+313.7564 	EXP 	cross4: autoDraw = False
+313.7564 	EXP 	inter_stim_text: autoDraw = True
+313.7564 	EXP 	cross1: autoDraw = True
+316.7565 	EXP 	inter_stim_text: autoDraw = False
+316.7565 	EXP 	cross1: autoDraw = False
+316.7565 	EXP 	inter_stim_text: autoDraw = False
+316.7565 	EXP 	cross1: autoDraw = False
+316.7565 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+316.7565 	EXP 	vSAT_square: autoDraw = True
+316.7565 	EXP 	cross2: autoDraw = True
+316.7898 	EXP 	vSAT_square: autoDraw = False
+316.7898 	EXP 	cross2: autoDraw = False
+316.7898 	EXP 	vSAT_square: autoDraw = False
+316.7898 	EXP 	cross2: autoDraw = False
+316.7898 	EXP 	cross3: autoDraw = True
+316.8732 	EXP 	Sound response_sound started
+317.1899 	EXP 	Sound response_sound stopped
+317.2065 	EXP 	Sound feedback_sound started
+317.1951 	DATA 	Keypress: right
+317.2065 	EXP 	cross3: autoDraw = False
+317.2065 	EXP 	cross4: autoDraw = True
+317.7000 	EXP 	Sound feedback_sound stopped
+317.7014 	EXP 	New trial (rep=0, index=9): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+317.7065 	EXP 	cross4: autoDraw = False
+317.7065 	EXP 	cross4: autoDraw = False
+317.7065 	EXP 	inter_stim_text: autoDraw = True
+317.7065 	EXP 	cross1: autoDraw = True
+319.7065 	EXP 	inter_stim_text: autoDraw = False
+319.7065 	EXP 	cross1: autoDraw = False
+319.7065 	EXP 	inter_stim_text: autoDraw = False
+319.7065 	EXP 	cross1: autoDraw = False
+319.7065 	EXP 	vSAT_square: pos = array([0., 0.])
+319.7065 	EXP 	vSAT_square: autoDraw = True
+319.7065 	EXP 	cross2: autoDraw = True
+319.7399 	EXP 	vSAT_square: autoDraw = False
+319.7399 	EXP 	cross2: autoDraw = False
+319.7399 	EXP 	vSAT_square: autoDraw = False
+319.7399 	EXP 	cross2: autoDraw = False
+319.7399 	EXP 	cross3: autoDraw = True
+319.8232 	EXP 	Sound response_sound started
+320.0100 	EXP 	Sound response_sound stopped
+320.0232 	EXP 	Sound feedback_sound started
+320.0150 	DATA 	Keypress: right
+320.0232 	EXP 	cross3: autoDraw = False
+320.0232 	EXP 	cross4: autoDraw = True
+320.5199 	EXP 	Sound feedback_sound stopped
+320.5215 	EXP 	New trial (rep=0, index=10): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+320.5399 	EXP 	cross4: autoDraw = False
+320.5399 	EXP 	cross4: autoDraw = False
+320.5399 	EXP 	inter_stim_text: autoDraw = True
+320.5399 	EXP 	cross1: autoDraw = True
+322.5399 	EXP 	inter_stim_text: autoDraw = False
+322.5399 	EXP 	cross1: autoDraw = False
+322.5399 	EXP 	inter_stim_text: autoDraw = False
+322.5399 	EXP 	cross1: autoDraw = False
+322.5399 	EXP 	vSAT_square: pos = array([0., 0.])
+322.5399 	EXP 	vSAT_square: autoDraw = True
+322.5399 	EXP 	cross2: autoDraw = True
+322.5899 	EXP 	vSAT_square: autoDraw = False
+322.5899 	EXP 	cross2: autoDraw = False
+322.5899 	EXP 	vSAT_square: autoDraw = False
+322.5899 	EXP 	cross2: autoDraw = False
+322.5899 	EXP 	cross3: autoDraw = True
+322.6732 	EXP 	Sound response_sound started
+322.8453 	DATA 	Keypress: right
+322.8800 	EXP 	Sound response_sound stopped
+322.8899 	EXP 	Sound feedback_sound started
+322.8900 	EXP 	cross3: autoDraw = False
+322.8900 	EXP 	cross4: autoDraw = True
+323.3900 	EXP 	Sound feedback_sound stopped
+323.3915 	EXP 	New trial (rep=0, index=11): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+323.4066 	EXP 	cross4: autoDraw = False
+323.4066 	EXP 	cross4: autoDraw = False
+323.4066 	EXP 	inter_stim_text: autoDraw = True
+323.4066 	EXP 	cross1: autoDraw = True
+324.4066 	EXP 	inter_stim_text: autoDraw = False
+324.4066 	EXP 	cross1: autoDraw = False
+324.4066 	EXP 	inter_stim_text: autoDraw = False
+324.4066 	EXP 	cross1: autoDraw = False
+324.4066 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+324.4066 	EXP 	vSAT_square: autoDraw = True
+324.4066 	EXP 	cross2: autoDraw = True
+324.4400 	EXP 	vSAT_square: autoDraw = False
+324.4400 	EXP 	cross2: autoDraw = False
+324.4400 	EXP 	vSAT_square: autoDraw = False
+324.4400 	EXP 	cross2: autoDraw = False
+324.4400 	EXP 	cross3: autoDraw = True
+324.5233 	EXP 	Sound response_sound started
+324.9532 	EXP 	Sound response_sound reached end of file
+325.0233 	EXP 	Sound feedback_sound started
+325.0150 	DATA 	Keypress: left
+325.0233 	EXP 	cross3: autoDraw = False
+325.0233 	EXP 	cross4: autoDraw = True
+325.5200 	EXP 	Sound feedback_sound stopped
+325.5215 	EXP 	New trial (rep=0, index=12): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+325.5400 	EXP 	cross4: autoDraw = False
+325.5400 	EXP 	cross4: autoDraw = False
+325.5400 	EXP 	inter_stim_text: autoDraw = True
+325.5400 	EXP 	cross1: autoDraw = True
+327.5400 	EXP 	inter_stim_text: autoDraw = False
+327.5400 	EXP 	cross1: autoDraw = False
+327.5400 	EXP 	inter_stim_text: autoDraw = False
+327.5400 	EXP 	cross1: autoDraw = False
+327.5400 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+327.5400 	EXP 	vSAT_square: autoDraw = True
+327.5400 	EXP 	cross2: autoDraw = True
+327.5733 	EXP 	vSAT_square: autoDraw = False
+327.5733 	EXP 	cross2: autoDraw = False
+327.5733 	EXP 	vSAT_square: autoDraw = False
+327.5733 	EXP 	cross2: autoDraw = False
+327.5733 	EXP 	cross3: autoDraw = True
+327.6566 	EXP 	Sound response_sound started
+328.0900 	EXP 	Sound response_sound reached end of file
+328.1733 	EXP 	Sound feedback_sound started
+328.1657 	DATA 	Keypress: left
+328.1733 	EXP 	cross3: autoDraw = False
+328.1733 	EXP 	cross4: autoDraw = True
+328.6700 	EXP 	Sound feedback_sound stopped
+328.6715 	EXP 	New trial (rep=0, index=13): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+328.6900 	EXP 	cross4: autoDraw = False
+328.6900 	EXP 	cross4: autoDraw = False
+328.6900 	EXP 	inter_stim_text: autoDraw = True
+328.6900 	EXP 	cross1: autoDraw = True
+329.6900 	EXP 	inter_stim_text: autoDraw = False
+329.6900 	EXP 	cross1: autoDraw = False
+329.6900 	EXP 	inter_stim_text: autoDraw = False
+329.6900 	EXP 	cross1: autoDraw = False
+329.6900 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+329.6900 	EXP 	vSAT_square: autoDraw = True
+329.6900 	EXP 	cross2: autoDraw = True
+329.7233 	EXP 	vSAT_square: autoDraw = False
+329.7233 	EXP 	cross2: autoDraw = False
+329.7233 	EXP 	vSAT_square: autoDraw = False
+329.7233 	EXP 	cross2: autoDraw = False
+329.7233 	EXP 	cross3: autoDraw = True
+329.8067 	EXP 	Sound response_sound started
+330.0613 	DATA 	Keypress: right
+330.0899 	EXP 	Sound response_sound stopped
+330.1067 	EXP 	Sound feedback_sound started
+330.1067 	EXP 	cross3: autoDraw = False
+330.1067 	EXP 	cross4: autoDraw = True
+330.6099 	EXP 	Sound feedback_sound reached end of file
+330.6116 	EXP 	New trial (rep=0, index=14): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+330.6234 	EXP 	cross4: autoDraw = False
+330.6234 	EXP 	cross4: autoDraw = False
+330.6234 	EXP 	inter_stim_text: autoDraw = True
+330.6234 	EXP 	cross1: autoDraw = True
+333.6234 	EXP 	inter_stim_text: autoDraw = False
+333.6234 	EXP 	cross1: autoDraw = False
+333.6234 	EXP 	inter_stim_text: autoDraw = False
+333.6234 	EXP 	cross1: autoDraw = False
+333.6234 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+333.6234 	EXP 	vSAT_square: autoDraw = True
+333.6234 	EXP 	cross2: autoDraw = True
+333.6567 	EXP 	vSAT_square: autoDraw = False
+333.6567 	EXP 	cross2: autoDraw = False
+333.6567 	EXP 	vSAT_square: autoDraw = False
+333.6567 	EXP 	cross2: autoDraw = False
+333.6567 	EXP 	cross3: autoDraw = True
+333.7401 	EXP 	Sound response_sound started
+334.1276 	DATA 	Keypress: right
+334.1599 	EXP 	Sound response_sound stopped
+334.1734 	EXP 	Sound feedback_sound started
+334.1734 	EXP 	cross3: autoDraw = False
+334.1734 	EXP 	cross4: autoDraw = True
+334.6706 	EXP 	Sound feedback_sound stopped
+334.6725 	EXP 	New trial (rep=0, index=15): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+334.6901 	EXP 	cross4: autoDraw = False
+334.6901 	EXP 	cross4: autoDraw = False
+334.6901 	EXP 	inter_stim_text: autoDraw = True
+334.6901 	EXP 	cross1: autoDraw = True
+336.6901 	EXP 	inter_stim_text: autoDraw = False
+336.6901 	EXP 	cross1: autoDraw = False
+336.6901 	EXP 	inter_stim_text: autoDraw = False
+336.6901 	EXP 	cross1: autoDraw = False
+336.6901 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+336.6901 	EXP 	vSAT_square: autoDraw = True
+336.6901 	EXP 	cross2: autoDraw = True
+336.7401 	EXP 	vSAT_square: autoDraw = False
+336.7401 	EXP 	cross2: autoDraw = False
+336.7401 	EXP 	vSAT_square: autoDraw = False
+336.7401 	EXP 	cross2: autoDraw = False
+336.7401 	EXP 	cross3: autoDraw = True
+336.8234 	EXP 	Sound response_sound started
+337.2534 	EXP 	Sound response_sound reached end of file
+337.4735 	EXP 	Sound feedback_sound started
+337.4657 	DATA 	Keypress: left
+337.4735 	EXP 	cross3: autoDraw = False
+337.4735 	EXP 	cross4: autoDraw = True
+337.9706 	EXP 	Sound feedback_sound stopped
+337.9725 	EXP 	New trial (rep=0, index=16): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 1), ('corr_key', 'right')])
+337.9901 	EXP 	cross4: autoDraw = False
+337.9901 	EXP 	cross4: autoDraw = False
+337.9901 	EXP 	inter_stim_text: autoDraw = True
+337.9901 	EXP 	cross1: autoDraw = True
+340.9902 	EXP 	inter_stim_text: autoDraw = False
+340.9902 	EXP 	cross1: autoDraw = False
+340.9902 	EXP 	inter_stim_text: autoDraw = False
+340.9902 	EXP 	cross1: autoDraw = False
+340.9902 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+340.9902 	EXP 	vSAT_square: autoDraw = True
+340.9902 	EXP 	cross2: autoDraw = True
+341.0235 	EXP 	vSAT_square: autoDraw = False
+341.0235 	EXP 	cross2: autoDraw = False
+341.0235 	EXP 	vSAT_square: autoDraw = False
+341.0235 	EXP 	cross2: autoDraw = False
+341.0235 	EXP 	cross3: autoDraw = True
+341.1068 	EXP 	Sound response_sound started
+341.3899 	EXP 	Sound response_sound stopped
+341.4069 	EXP 	Sound feedback_sound started
+341.3951 	DATA 	Keypress: right
+341.4069 	EXP 	cross3: autoDraw = False
+341.4069 	EXP 	cross4: autoDraw = True
+341.9099 	EXP 	Sound feedback_sound reached end of file
+341.9118 	EXP 	New trial (rep=0, index=17): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+341.9235 	EXP 	cross4: autoDraw = False
+341.9235 	EXP 	cross4: autoDraw = False
+341.9235 	EXP 	inter_stim_text: autoDraw = True
+341.9235 	EXP 	cross1: autoDraw = True
+343.9236 	EXP 	inter_stim_text: autoDraw = False
+343.9236 	EXP 	cross1: autoDraw = False
+343.9236 	EXP 	inter_stim_text: autoDraw = False
+343.9236 	EXP 	cross1: autoDraw = False
+343.9236 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+343.9236 	EXP 	vSAT_square: autoDraw = True
+343.9236 	EXP 	cross2: autoDraw = True
+343.9569 	EXP 	vSAT_square: autoDraw = False
+343.9569 	EXP 	cross2: autoDraw = False
+343.9569 	EXP 	vSAT_square: autoDraw = False
+343.9569 	EXP 	cross2: autoDraw = False
+343.9569 	EXP 	cross3: autoDraw = True
+344.0402 	EXP 	Sound response_sound started
+344.4099 	EXP 	Sound response_sound stopped
+344.4236 	EXP 	Sound feedback_sound started
+344.4150 	DATA 	Keypress: left
+344.4236 	EXP 	cross3: autoDraw = False
+344.4236 	EXP 	cross4: autoDraw = True
+344.9199 	EXP 	Sound feedback_sound stopped
+344.9215 	EXP 	New trial (rep=0, index=18): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 3), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+344.9403 	EXP 	cross4: autoDraw = False
+344.9403 	EXP 	cross4: autoDraw = False
+344.9403 	EXP 	inter_stim_text: autoDraw = True
+344.9403 	EXP 	cross1: autoDraw = True
+347.9403 	EXP 	inter_stim_text: autoDraw = False
+347.9403 	EXP 	cross1: autoDraw = False
+347.9403 	EXP 	inter_stim_text: autoDraw = False
+347.9403 	EXP 	cross1: autoDraw = False
+347.9403 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+347.9403 	EXP 	vSAT_square: autoDraw = True
+347.9403 	EXP 	cross2: autoDraw = True
+347.9736 	EXP 	vSAT_square: autoDraw = False
+347.9736 	EXP 	cross2: autoDraw = False
+347.9736 	EXP 	vSAT_square: autoDraw = False
+347.9736 	EXP 	cross2: autoDraw = False
+347.9736 	EXP 	cross3: autoDraw = True
+348.0570 	EXP 	Sound response_sound started
+348.4899 	EXP 	Sound response_sound reached end of file
+348.5236 	EXP 	Sound feedback_sound started
+348.5159 	DATA 	Keypress: left
+348.5237 	EXP 	cross3: autoDraw = False
+348.5237 	EXP 	cross4: autoDraw = True
+349.0199 	EXP 	Sound feedback_sound stopped
+349.0215 	EXP 	New trial (rep=0, index=19): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+349.0403 	EXP 	cross4: autoDraw = False
+349.0403 	EXP 	cross4: autoDraw = False
+349.0403 	EXP 	inter_stim_text: autoDraw = True
+349.0403 	EXP 	cross1: autoDraw = True
+351.0404 	EXP 	inter_stim_text: autoDraw = False
+351.0404 	EXP 	cross1: autoDraw = False
+351.0404 	EXP 	inter_stim_text: autoDraw = False
+351.0404 	EXP 	cross1: autoDraw = False
+351.0404 	EXP 	vSAT_square: pos = array([0., 0.])
+351.0404 	EXP 	vSAT_square: autoDraw = True
+351.0404 	EXP 	cross2: autoDraw = True
+351.0737 	EXP 	vSAT_square: autoDraw = False
+351.0737 	EXP 	cross2: autoDraw = False
+351.0737 	EXP 	vSAT_square: autoDraw = False
+351.0737 	EXP 	cross2: autoDraw = False
+351.0737 	EXP 	cross3: autoDraw = True
+351.1570 	EXP 	Sound response_sound started
+351.5900 	EXP 	Sound response_sound reached end of file
+351.7404 	EXP 	Sound feedback_sound started
+351.7320 	DATA 	Keypress: left
+351.7403 	EXP 	cross3: autoDraw = False
+351.7403 	EXP 	cross4: autoDraw = True
+352.2400 	EXP 	Sound feedback_sound stopped
+352.2415 	EXP 	New trial (rep=0, index=20): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+352.2570 	EXP 	cross4: autoDraw = False
+352.2570 	EXP 	cross4: autoDraw = False
+352.2570 	EXP 	inter_stim_text: autoDraw = True
+352.2570 	EXP 	cross1: autoDraw = True
+353.2570 	EXP 	inter_stim_text: autoDraw = False
+353.2570 	EXP 	cross1: autoDraw = False
+353.2570 	EXP 	inter_stim_text: autoDraw = False
+353.2570 	EXP 	cross1: autoDraw = False
+353.2570 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+353.2570 	EXP 	vSAT_square: autoDraw = True
+353.2570 	EXP 	cross2: autoDraw = True
+353.2904 	EXP 	vSAT_square: autoDraw = False
+353.2904 	EXP 	cross2: autoDraw = False
+353.2904 	EXP 	vSAT_square: autoDraw = False
+353.2904 	EXP 	cross2: autoDraw = False
+353.2904 	EXP 	cross3: autoDraw = True
+353.3737 	EXP 	Sound response_sound started
+353.7899 	EXP 	Sound response_sound stopped
+353.8070 	EXP 	Sound feedback_sound started
+353.7943 	DATA 	Keypress: left
+353.8070 	EXP 	cross3: autoDraw = False
+353.8070 	EXP 	cross4: autoDraw = True
+354.3099 	EXP 	Sound feedback_sound reached end of file
+354.3119 	EXP 	New trial (rep=0, index=21): OrderedDict([('stim_time', 0.017), ('inter_stim_time', 1), ('x_pos', -0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+354.3237 	EXP 	cross4: autoDraw = False
+354.3237 	EXP 	cross4: autoDraw = False
+354.3237 	EXP 	inter_stim_text: autoDraw = True
+354.3237 	EXP 	cross1: autoDraw = True
+355.3238 	EXP 	inter_stim_text: autoDraw = False
+355.3238 	EXP 	cross1: autoDraw = False
+355.3238 	EXP 	inter_stim_text: autoDraw = False
+355.3238 	EXP 	cross1: autoDraw = False
+355.3238 	EXP 	vSAT_square: pos = array([-0.25, -0.25])
+355.3238 	EXP 	vSAT_square: autoDraw = True
+355.3238 	EXP 	cross2: autoDraw = True
+355.3571 	EXP 	vSAT_square: autoDraw = False
+355.3571 	EXP 	cross2: autoDraw = False
+355.3571 	EXP 	vSAT_square: autoDraw = False
+355.3571 	EXP 	cross2: autoDraw = False
+355.3571 	EXP 	cross3: autoDraw = True
+355.4404 	EXP 	Sound response_sound started
+355.8700 	EXP 	Sound response_sound stopped
+356.2071 	EXP 	Sound feedback_sound started
+356.1992 	DATA 	Keypress: left
+356.2071 	EXP 	cross3: autoDraw = False
+356.2071 	EXP 	cross4: autoDraw = True
+356.7099 	EXP 	Sound feedback_sound reached end of file
+356.7120 	EXP 	New trial (rep=0, index=22): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+356.7238 	EXP 	cross4: autoDraw = False
+356.7238 	EXP 	cross4: autoDraw = False
+356.7238 	EXP 	inter_stim_text: autoDraw = True
+356.7238 	EXP 	cross1: autoDraw = True
+358.7238 	EXP 	inter_stim_text: autoDraw = False
+358.7238 	EXP 	cross1: autoDraw = False
+358.7238 	EXP 	inter_stim_text: autoDraw = False
+358.7238 	EXP 	cross1: autoDraw = False
+358.7238 	EXP 	vSAT_square: pos = array([0., 0.])
+358.7238 	EXP 	vSAT_square: autoDraw = True
+358.7238 	EXP 	cross2: autoDraw = True
+358.7738 	EXP 	vSAT_square: autoDraw = False
+358.7738 	EXP 	cross2: autoDraw = False
+358.7738 	EXP 	vSAT_square: autoDraw = False
+358.7738 	EXP 	cross2: autoDraw = False
+358.7738 	EXP 	cross3: autoDraw = True
+358.8571 	EXP 	Sound response_sound started
+359.2290 	DATA 	Keypress: left
+359.2599 	EXP 	Sound response_sound stopped
+359.2739 	EXP 	Sound feedback_sound started
+359.2738 	EXP 	cross3: autoDraw = False
+359.2738 	EXP 	cross4: autoDraw = True
+359.7700 	EXP 	Sound feedback_sound stopped
+359.7715 	EXP 	New trial (rep=0, index=23): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+359.7905 	EXP 	cross4: autoDraw = False
+359.7905 	EXP 	cross4: autoDraw = False
+359.7905 	EXP 	inter_stim_text: autoDraw = True
+359.7905 	EXP 	cross1: autoDraw = True
+362.7905 	EXP 	inter_stim_text: autoDraw = False
+362.7905 	EXP 	cross1: autoDraw = False
+362.7905 	EXP 	inter_stim_text: autoDraw = False
+362.7905 	EXP 	cross1: autoDraw = False
+362.7905 	EXP 	vSAT_square: pos = array([0., 0.])
+362.7905 	EXP 	vSAT_square: autoDraw = True
+362.7905 	EXP 	cross2: autoDraw = True
+362.8405 	EXP 	vSAT_square: autoDraw = False
+362.8405 	EXP 	cross2: autoDraw = False
+362.8405 	EXP 	vSAT_square: autoDraw = False
+362.8405 	EXP 	cross2: autoDraw = False
+362.8405 	EXP 	cross3: autoDraw = True
+362.9239 	EXP 	Sound response_sound started
+363.2600 	EXP 	Sound response_sound stopped
+363.2739 	EXP 	Sound feedback_sound started
+363.2647 	DATA 	Keypress: right
+363.2739 	EXP 	cross3: autoDraw = False
+363.2739 	EXP 	cross4: autoDraw = True
+363.7699 	EXP 	Sound feedback_sound stopped
+363.7715 	EXP 	New trial (rep=0, index=24): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 1), ('x_pos', 0.25), ('y_pos', 0.25), ('match', 1), ('corr_key', 'right')])
+363.7906 	EXP 	cross4: autoDraw = False
+363.7906 	EXP 	cross4: autoDraw = False
+363.7906 	EXP 	inter_stim_text: autoDraw = True
+363.7906 	EXP 	cross1: autoDraw = True
+364.7906 	EXP 	inter_stim_text: autoDraw = False
+364.7906 	EXP 	cross1: autoDraw = False
+364.7906 	EXP 	inter_stim_text: autoDraw = False
+364.7906 	EXP 	cross1: autoDraw = False
+364.7906 	EXP 	vSAT_square: pos = array([0.25, 0.25])
+364.7906 	EXP 	vSAT_square: autoDraw = True
+364.7906 	EXP 	cross2: autoDraw = True
+364.8405 	EXP 	vSAT_square: autoDraw = False
+364.8405 	EXP 	cross2: autoDraw = False
+364.8405 	EXP 	vSAT_square: autoDraw = False
+364.8405 	EXP 	cross2: autoDraw = False
+364.8405 	EXP 	cross3: autoDraw = True
+364.9239 	EXP 	Sound response_sound started
+365.1599 	EXP 	Sound response_sound stopped
+365.1739 	EXP 	Sound feedback_sound started
+365.1650 	DATA 	Keypress: right
+365.1739 	EXP 	cross3: autoDraw = False
+365.1739 	EXP 	cross4: autoDraw = True
+365.2427 	DATA 	Keypress: right
+365.6700 	EXP 	Sound feedback_sound stopped
+365.6715 	EXP 	New trial (rep=0, index=25): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+365.6906 	EXP 	cross4: autoDraw = False
+365.6906 	EXP 	cross4: autoDraw = False
+365.6906 	EXP 	inter_stim_text: autoDraw = True
+365.6906 	EXP 	cross1: autoDraw = True
+366.6906 	EXP 	inter_stim_text: autoDraw = False
+366.6906 	EXP 	cross1: autoDraw = False
+366.6906 	EXP 	inter_stim_text: autoDraw = False
+366.6906 	EXP 	cross1: autoDraw = False
+366.6906 	EXP 	vSAT_square: pos = array([0., 0.])
+366.6906 	EXP 	vSAT_square: autoDraw = True
+366.6906 	EXP 	cross2: autoDraw = True
+366.7239 	EXP 	vSAT_square: autoDraw = False
+366.7239 	EXP 	cross2: autoDraw = False
+366.7239 	EXP 	vSAT_square: autoDraw = False
+366.7239 	EXP 	cross2: autoDraw = False
+366.7239 	EXP 	cross3: autoDraw = True
+366.8073 	EXP 	Sound response_sound started
+367.2399 	EXP 	Sound response_sound reached end of file
+367.3906 	EXP 	Sound feedback_sound started
+367.3827 	DATA 	Keypress: left
+367.3906 	EXP 	cross3: autoDraw = False
+367.3906 	EXP 	cross4: autoDraw = True
+367.8906 	EXP 	Sound feedback_sound stopped
+367.8925 	EXP 	New trial (rep=0, index=26): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 1), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 0), ('corr_key', 'left')])
+367.9073 	EXP 	cross4: autoDraw = False
+367.9073 	EXP 	cross4: autoDraw = False
+367.9073 	EXP 	inter_stim_text: autoDraw = True
+367.9073 	EXP 	cross1: autoDraw = True
+368.9073 	EXP 	inter_stim_text: autoDraw = False
+368.9073 	EXP 	cross1: autoDraw = False
+368.9073 	EXP 	inter_stim_text: autoDraw = False
+368.9073 	EXP 	cross1: autoDraw = False
+368.9073 	EXP 	vSAT_square: pos = array([0., 0.])
+368.9073 	EXP 	vSAT_square: autoDraw = True
+368.9073 	EXP 	cross2: autoDraw = True
+368.9406 	EXP 	vSAT_square: autoDraw = False
+368.9406 	EXP 	cross2: autoDraw = False
+368.9406 	EXP 	vSAT_square: autoDraw = False
+368.9406 	EXP 	cross2: autoDraw = False
+368.9406 	EXP 	cross3: autoDraw = True
+369.0240 	EXP 	Sound response_sound started
+369.4538 	EXP 	Sound response_sound reached end of file
+369.4740 	EXP 	Sound feedback_sound started
+369.4600 	DATA 	Keypress: left
+369.4740 	EXP 	cross3: autoDraw = False
+369.4740 	EXP 	cross4: autoDraw = True
+369.9699 	EXP 	Sound feedback_sound stopped
+369.9702 	EXP 	New trial (rep=0, index=27): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 2), ('x_pos', 0.25), ('y_pos', -0.25), ('match', 0), ('corr_key', 'left')])
+369.9906 	EXP 	cross4: autoDraw = False
+369.9906 	EXP 	inter_stim_text: autoDraw = True
+369.9906 	EXP 	cross1: autoDraw = True
+371.9907 	EXP 	inter_stim_text: autoDraw = False
+371.9907 	EXP 	cross1: autoDraw = False
+371.9907 	EXP 	inter_stim_text: autoDraw = False
+371.9907 	EXP 	cross1: autoDraw = False
+371.9907 	EXP 	vSAT_square: pos = array([ 0.25, -0.25])
+371.9907 	EXP 	vSAT_square: autoDraw = True
+371.9907 	EXP 	cross2: autoDraw = True
+372.0407 	EXP 	vSAT_square: autoDraw = False
+372.0407 	EXP 	cross2: autoDraw = False
+372.0407 	EXP 	vSAT_square: autoDraw = False
+372.0407 	EXP 	cross2: autoDraw = False
+372.0407 	EXP 	cross3: autoDraw = True
+372.1240 	EXP 	Sound response_sound started
+372.5540 	EXP 	Sound response_sound reached end of file
+372.5740 	EXP 	Sound feedback_sound started
+372.5609 	DATA 	Keypress: left
+372.5740 	EXP 	cross3: autoDraw = False
+372.5740 	EXP 	cross4: autoDraw = True
+373.0699 	EXP 	Sound feedback_sound stopped
+373.0715 	EXP 	New trial (rep=0, index=28): OrderedDict([('stim_time', 0.05), ('inter_stim_time', 3), ('x_pos', 0.0), ('y_pos', 0.0), ('match', 1), ('corr_key', 'right')])
+373.0907 	EXP 	cross4: autoDraw = False
+373.0907 	EXP 	cross4: autoDraw = False
+373.0907 	EXP 	inter_stim_text: autoDraw = True
+373.0907 	EXP 	cross1: autoDraw = True
+376.0907 	EXP 	inter_stim_text: autoDraw = False
+376.0907 	EXP 	cross1: autoDraw = False
+376.0907 	EXP 	inter_stim_text: autoDraw = False
+376.0907 	EXP 	cross1: autoDraw = False
+376.0907 	EXP 	vSAT_square: pos = array([0., 0.])
+376.0907 	EXP 	vSAT_square: autoDraw = True
+376.0907 	EXP 	cross2: autoDraw = True
+376.1407 	EXP 	vSAT_square: autoDraw = False
+376.1407 	EXP 	cross2: autoDraw = False
+376.1407 	EXP 	vSAT_square: autoDraw = False
+376.1407 	EXP 	cross2: autoDraw = False
+376.1407 	EXP 	cross3: autoDraw = True
+376.2241 	EXP 	Sound response_sound started
+376.4400 	EXP 	Sound response_sound stopped
+376.4574 	EXP 	Sound feedback_sound started
+376.4450 	DATA 	Keypress: right
+376.4574 	EXP 	cross3: autoDraw = False
+376.4574 	EXP 	cross4: autoDraw = True
+376.9600 	EXP 	Sound feedback_sound reached end of file
+376.9623 	EXP 	New trial (rep=0, index=29): OrderedDict([('stim_time', 0.028999999999999998), ('inter_stim_time', 2), ('x_pos', -0.25), ('y_pos', 0.25), ('match', 0), ('corr_key', 'left')])
+376.9741 	EXP 	cross4: autoDraw = False
+376.9741 	EXP 	cross4: autoDraw = False
+376.9741 	EXP 	inter_stim_text: autoDraw = True
+376.9741 	EXP 	cross1: autoDraw = True
+378.9741 	EXP 	inter_stim_text: autoDraw = False
+378.9741 	EXP 	cross1: autoDraw = False
+378.9741 	EXP 	inter_stim_text: autoDraw = False
+378.9741 	EXP 	cross1: autoDraw = False
+378.9741 	EXP 	vSAT_square: pos = array([-0.25,  0.25])
+378.9741 	EXP 	vSAT_square: autoDraw = True
+378.9741 	EXP 	cross2: autoDraw = True
+379.0074 	EXP 	vSAT_square: autoDraw = False
+379.0074 	EXP 	cross2: autoDraw = False
+379.0074 	EXP 	vSAT_square: autoDraw = False
+379.0074 	EXP 	cross2: autoDraw = False
+379.0074 	EXP 	cross3: autoDraw = True
+379.0908 	EXP 	Sound response_sound started
+379.5199 	EXP 	Sound response_sound stopped
+379.5220 	DATA 	Keypress: left
+379.5408 	EXP 	Sound feedback_sound started
+379.5408 	EXP 	cross3: autoDraw = False
+379.5408 	EXP 	cross4: autoDraw = True
+380.0399 	EXP 	Sound feedback_sound stopped
+380.0575 	EXP 	cross4: autoDraw = False
+380.0575 	EXP 	cross4: autoDraw = False
+380.0575 	EXP 	done_text: autoDraw = True
+383.0410 	EXP 	UDP Sent: marker_ID=14, marker_value=92, marker_string=vSAT_end, timestamp=1657139296544441344
+383.0576 	EXP 	done_text: autoDraw = False
+383.4960 	EXP 	window1: mouseVisible = True

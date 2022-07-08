@@ -1,0 +1,360 @@
+10.2048 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, autoLog=True, backendConf=UNKNOWN, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([-0.7, -0.7, -0.7]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x000001A5AC98F780>, gamma=None, gammaErrorPolicy='raise', lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x000001A5AC935BA8>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1080]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+10.2052 	EXP 	window1: mouseVisible = True
+10.2052 	EXP 	window1: recordFrameIntervals = False
+10.3711 	EXP 	window1: recordFrameIntervals = True
+10.5545 	EXP 	window1: recordFrameIntervals = False
+10.8218 	EXP 	window1: mouseVisible = False
+10.8269 	EXP 	UDP Sent: marker_ID=7, marker_value=61, marker_string=tower_of_london_start, timestamp=1657136970723606784
+10.9268 	EXP 	Created instructions_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='instructions_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+10.9565 	EXP 	Created multi_move_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.07, italic=False, languageStyle='LTR', name='multi_move_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+10.9867 	EXP 	Created stim_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='stim_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text=str(...), units='height', win=Window(...), wrapWidth=1)
+10.9915 	EXP 	Created stim_image = ImageStim(__class__=<class 'psychopy.visual.image.ImageStim'>, autoLog=True, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=-2.0, flipHoriz=False, flipVert=False, image='sin', interpolate=True, mask=None, maskParams=None, name='stim_image', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.5 , 0.75]), texRes=128.0, units='height', win=Window(...))
+10.9943 	EXP 	Created pause_cross = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace='rgb', contrast=None, depth=0.0, fillColor=array([1, 1, 1]), fillColorSpace='rgb', fillRGB=array([1, 1, 1]), interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineRGB=array([1, 1, 1]), lineWidth=1.0, name='pause_cross', opacity=1, ori=0.0, pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+11.0052 	EXP 	Created done_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color=array([1., 1., 1.]), colorSpace='rgb', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Open Sans', fontFiles=[], height=0.1, italic=False, languageStyle='LTR', name='done_text', opacity=1, ori=0.0, pos=array([0., 0.]), rgb=UNKNOWN, text='The Tower of London task is now complete.', units='height', win=Window(...), wrapWidth=1)
+11.0862 	EXP 	instructions_text: autoDraw = True
+13.2451 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\TOL_TO-1657131785845741.csv as conditions, 6 conditions, 1 params
+13.2454 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+13.2456 	EXP 	New trial (rep=0, index=0): OrderedDict([('task_order', 'MM_stims-16571317858137326.csv')])
+13.2500 	DATA 	Keypress: space
+13.2545 	EXP 	instructions_text: autoDraw = False
+13.2545 	EXP 	multi_move_text: autoDraw = True
+13.8740 	DATA 	Keypress: space
+15.2606 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\tower_of_london_conditions\MM_stims-16571317858137326.csv as conditions, 6 conditions, 3 params
+15.2609 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+15.2611 	EXP 	New trial (rep=0, index=0): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_2.jpg'), ('match', 1), ('corr_key', 'right')])
+15.3545 	EXP 	multi_move_text: autoDraw = False
+15.3545 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_2.jpg'
+15.3545 	EXP 	stim_image: autoDraw = True
+22.3379 	EXP 	stim_text: autoDraw = True
+22.3546 	EXP 	stim_image: autoDraw = False
+24.4928 	DATA 	Keypress: right
+25.2723 	EXP 	New trial (rep=0, index=1): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_6.jpg'), ('match', 1), ('corr_key', 'right')])
+25.3047 	EXP 	stim_text: autoDraw = False
+25.3047 	EXP 	stim_image: autoDraw = False
+25.3047 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_6.jpg'
+25.3047 	EXP 	stim_image: autoDraw = True
+32.2881 	EXP 	stim_text: autoDraw = True
+32.3047 	EXP 	stim_image: autoDraw = False
+32.6765 	DATA 	Keypress: right
+35.2721 	EXP 	New trial (rep=0, index=2): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_4.jpg'), ('match', 1), ('corr_key', 'right')])
+35.3048 	EXP 	stim_text: autoDraw = False
+35.3048 	EXP 	stim_image: autoDraw = False
+35.3048 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_4.jpg'
+35.3048 	EXP 	stim_image: autoDraw = True
+42.2882 	EXP 	stim_text: autoDraw = True
+42.3049 	EXP 	stim_image: autoDraw = False
+42.6427 	DATA 	Keypress: right
+45.2723 	EXP 	New trial (rep=0, index=3): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_1.jpg'), ('match', 0), ('corr_key', 'left')])
+45.3049 	EXP 	stim_text: autoDraw = False
+45.3049 	EXP 	stim_image: autoDraw = False
+45.3049 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_1.jpg'
+45.3049 	EXP 	stim_image: autoDraw = True
+52.2884 	EXP 	stim_text: autoDraw = True
+52.3050 	EXP 	stim_image: autoDraw = False
+52.7942 	DATA 	Keypress: left
+55.2725 	EXP 	New trial (rep=0, index=4): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_3.jpg'), ('match', 0), ('corr_key', 'left')])
+55.3051 	EXP 	stim_text: autoDraw = False
+55.3051 	EXP 	stim_image: autoDraw = False
+55.3051 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_3.jpg'
+55.3051 	EXP 	stim_image: autoDraw = True
+62.2885 	EXP 	stim_text: autoDraw = True
+62.3052 	EXP 	stim_image: autoDraw = False
+62.9604 	DATA 	Keypress: left
+65.2726 	EXP 	New trial (rep=0, index=5): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_6.jpg'), ('match', 0), ('corr_key', 'left')])
+65.3053 	EXP 	stim_text: autoDraw = False
+65.3053 	EXP 	stim_image: autoDraw = False
+65.3053 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_6.jpg'
+65.3053 	EXP 	stim_image: autoDraw = True
+72.2887 	EXP 	stim_text: autoDraw = True
+72.3053 	EXP 	stim_image: autoDraw = False
+72.5597 	DATA 	Keypress: left
+75.2888 	EXP 	stim_text: autoDraw = False
+75.2888 	EXP 	stim_image: autoDraw = False
+75.2888 	EXP 	pause_cross: autoDraw = True
+77.2724 	EXP 	New trial (rep=0, index=1): OrderedDict([('task_order', 'ZM_stims-16571317858019333.csv')])
+77.2888 	EXP 	pause_cross: autoDraw = False
+77.2888 	EXP 	multi_move_text: autoDraw = True
+78.2249 	DATA 	Keypress: space
+79.2793 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\tower_of_london_conditions\ZM_stims-16571317858019333.csv as conditions, 6 conditions, 3 params
+79.2796 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+79.2798 	EXP 	New trial (rep=0, index=0): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_6.jpg'), ('match', 0), ('corr_key', 'left')])
+79.3222 	EXP 	multi_move_text: autoDraw = False
+79.3222 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_6.jpg'
+79.3222 	EXP 	stim_image: autoDraw = True
+86.3056 	EXP 	stim_text: autoDraw = True
+86.3222 	EXP 	stim_image: autoDraw = False
+86.6605 	DATA 	Keypress: left
+89.2901 	EXP 	New trial (rep=0, index=1): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_3.jpg'), ('match', 0), ('corr_key', 'left')])
+89.3223 	EXP 	stim_text: autoDraw = False
+89.3223 	EXP 	stim_image: autoDraw = False
+89.3223 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_3.jpg'
+89.3223 	EXP 	stim_image: autoDraw = True
+90.2581 	DATA 	Keypress: left
+96.3057 	EXP 	stim_text: autoDraw = True
+96.3224 	EXP 	stim_image: autoDraw = False
+97.2102 	DATA 	Keypress: left
+99.2898 	EXP 	New trial (rep=0, index=2): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_2.jpg'), ('match', 0), ('corr_key', 'left')])
+99.3225 	EXP 	stim_text: autoDraw = False
+99.3225 	EXP 	stim_image: autoDraw = False
+99.3225 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_2.jpg'
+99.3225 	EXP 	stim_image: autoDraw = True
+106.3059 	EXP 	stim_text: autoDraw = True
+106.3226 	EXP 	stim_image: autoDraw = False
+107.3435 	DATA 	Keypress: down
+107.8940 	DATA 	Keypress: left
+109.2899 	EXP 	New trial (rep=0, index=3): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_4.jpg'), ('match', 0), ('corr_key', 'left')])
+109.3226 	EXP 	stim_text: autoDraw = False
+109.3226 	EXP 	stim_image: autoDraw = False
+109.3226 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_4.jpg'
+109.3226 	EXP 	stim_image: autoDraw = True
+116.3060 	EXP 	stim_text: autoDraw = True
+116.3227 	EXP 	stim_image: autoDraw = False
+117.1438 	DATA 	Keypress: left
+119.2901 	EXP 	New trial (rep=0, index=4): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_1.jpg'), ('match', 0), ('corr_key', 'left')])
+119.3228 	EXP 	stim_text: autoDraw = False
+119.3228 	EXP 	stim_image: autoDraw = False
+119.3228 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_1.jpg'
+119.3228 	EXP 	stim_image: autoDraw = True
+126.3062 	EXP 	stim_text: autoDraw = True
+126.3229 	EXP 	stim_image: autoDraw = False
+126.5944 	DATA 	Keypress: left
+129.2902 	EXP 	New trial (rep=0, index=5): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_5.jpg'), ('match', 0), ('corr_key', 'left')])
+129.3229 	EXP 	stim_text: autoDraw = False
+129.3229 	EXP 	stim_image: autoDraw = False
+129.3229 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_5.jpg'
+129.3229 	EXP 	stim_image: autoDraw = True
+136.3063 	EXP 	stim_text: autoDraw = True
+136.3230 	EXP 	stim_image: autoDraw = False
+136.9440 	DATA 	Keypress: left
+139.3064 	EXP 	stim_text: autoDraw = False
+139.3064 	EXP 	stim_image: autoDraw = False
+139.3064 	EXP 	pause_cross: autoDraw = True
+141.2900 	EXP 	New trial (rep=0, index=2): OrderedDict([('task_order', 'MM_stims-16571317858290405.csv')])
+141.3064 	EXP 	pause_cross: autoDraw = False
+141.3064 	EXP 	multi_move_text: autoDraw = True
+142.2759 	DATA 	Keypress: space
+143.2963 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\tower_of_london_conditions\MM_stims-16571317858290405.csv as conditions, 6 conditions, 3 params
+143.2965 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+143.2967 	EXP 	New trial (rep=0, index=0): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_1.jpg'), ('match', 1), ('corr_key', 'right')])
+143.3398 	EXP 	multi_move_text: autoDraw = False
+143.3398 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_1.jpg'
+143.3398 	EXP 	stim_image: autoDraw = True
+150.3232 	EXP 	stim_text: autoDraw = True
+150.3399 	EXP 	stim_image: autoDraw = False
+150.7112 	DATA 	Keypress: right
+153.3076 	EXP 	New trial (rep=0, index=1): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_4.jpg'), ('match', 0), ('corr_key', 'left')])
+153.3399 	EXP 	stim_text: autoDraw = False
+153.3399 	EXP 	stim_image: autoDraw = False
+153.3399 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_4.jpg'
+153.3399 	EXP 	stim_image: autoDraw = True
+160.3234 	EXP 	stim_text: autoDraw = True
+160.3401 	EXP 	stim_image: autoDraw = False
+160.7619 	DATA 	Keypress: left
+163.3075 	EXP 	New trial (rep=0, index=2): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_2.jpg'), ('match', 0), ('corr_key', 'left')])
+163.3401 	EXP 	stim_text: autoDraw = False
+163.3401 	EXP 	stim_image: autoDraw = False
+163.3401 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_2.jpg'
+163.3401 	EXP 	stim_image: autoDraw = True
+170.3236 	EXP 	stim_text: autoDraw = True
+170.3402 	EXP 	stim_image: autoDraw = False
+170.8445 	DATA 	Keypress: left
+173.3076 	EXP 	New trial (rep=0, index=3): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_5.jpg'), ('match', 0), ('corr_key', 'left')])
+173.3403 	EXP 	stim_text: autoDraw = False
+173.3403 	EXP 	stim_image: autoDraw = False
+173.3403 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_5.jpg'
+173.3403 	EXP 	stim_image: autoDraw = True
+180.3237 	EXP 	stim_text: autoDraw = True
+180.3404 	EXP 	stim_image: autoDraw = False
+180.6782 	DATA 	Keypress: left
+183.3077 	EXP 	New trial (rep=0, index=4): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_5.jpg'), ('match', 1), ('corr_key', 'right')])
+183.3404 	EXP 	stim_text: autoDraw = False
+183.3404 	EXP 	stim_image: autoDraw = False
+183.3404 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_5.jpg'
+183.3404 	EXP 	stim_image: autoDraw = True
+190.3239 	EXP 	stim_text: autoDraw = True
+190.3405 	EXP 	stim_image: autoDraw = False
+190.6451 	DATA 	Keypress: right
+193.3079 	EXP 	New trial (rep=0, index=5): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_4.jpg'), ('match', 1), ('corr_key', 'right')])
+193.3406 	EXP 	stim_text: autoDraw = False
+193.3406 	EXP 	stim_image: autoDraw = False
+193.3406 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_4.jpg'
+193.3406 	EXP 	stim_image: autoDraw = True
+200.3240 	EXP 	stim_text: autoDraw = True
+200.3407 	EXP 	stim_image: autoDraw = False
+200.8957 	DATA 	Keypress: right
+203.3241 	EXP 	stim_text: autoDraw = False
+203.3241 	EXP 	stim_image: autoDraw = False
+203.3241 	EXP 	pause_cross: autoDraw = True
+205.3077 	EXP 	New trial (rep=0, index=3): OrderedDict([('task_order', 'ZM_stims-1657131785814751.csv')])
+205.3241 	EXP 	pause_cross: autoDraw = False
+205.3241 	EXP 	multi_move_text: autoDraw = True
+206.4766 	DATA 	Keypress: space
+207.3140 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\tower_of_london_conditions\ZM_stims-1657131785814751.csv as conditions, 6 conditions, 3 params
+207.3142 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+207.3144 	EXP 	New trial (rep=0, index=0): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_5.jpg'), ('match', 0), ('corr_key', 'left')])
+207.3574 	EXP 	multi_move_text: autoDraw = False
+207.3574 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_5.jpg'
+207.3574 	EXP 	stim_image: autoDraw = True
+214.3409 	EXP 	stim_text: autoDraw = True
+214.3576 	EXP 	stim_image: autoDraw = False
+214.7621 	DATA 	Keypress: left
+217.3252 	EXP 	New trial (rep=0, index=1): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_4.jpg'), ('match', 0), ('corr_key', 'left')])
+217.3576 	EXP 	stim_text: autoDraw = False
+217.3576 	EXP 	stim_image: autoDraw = False
+217.3576 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_4.jpg'
+217.3576 	EXP 	stim_image: autoDraw = True
+224.3411 	EXP 	stim_text: autoDraw = True
+224.3577 	EXP 	stim_image: autoDraw = False
+224.7786 	DATA 	Keypress: left
+227.3251 	EXP 	New trial (rep=0, index=2): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_1.jpg'), ('match', 0), ('corr_key', 'left')])
+227.3578 	EXP 	stim_text: autoDraw = False
+227.3578 	EXP 	stim_image: autoDraw = False
+227.3578 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_1.jpg'
+227.3578 	EXP 	stim_image: autoDraw = True
+234.3412 	EXP 	stim_text: autoDraw = True
+234.3579 	EXP 	stim_image: autoDraw = False
+234.9956 	DATA 	Keypress: left
+237.3252 	EXP 	New trial (rep=0, index=3): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_3.jpg'), ('match', 0), ('corr_key', 'left')])
+237.3579 	EXP 	stim_text: autoDraw = False
+237.3579 	EXP 	stim_image: autoDraw = False
+237.3579 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_3.jpg'
+237.3579 	EXP 	stim_image: autoDraw = True
+244.3414 	EXP 	stim_text: autoDraw = True
+244.3580 	EXP 	stim_image: autoDraw = False
+245.0298 	DATA 	Keypress: left
+247.3254 	EXP 	New trial (rep=0, index=4): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_6.jpg'), ('match', 0), ('corr_key', 'left')])
+247.3581 	EXP 	stim_text: autoDraw = False
+247.3581 	EXP 	stim_image: autoDraw = False
+247.3581 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_6.jpg'
+247.3581 	EXP 	stim_image: autoDraw = True
+254.3415 	EXP 	stim_text: autoDraw = True
+254.3582 	EXP 	stim_image: autoDraw = False
+254.8459 	DATA 	Keypress: left
+257.3256 	EXP 	New trial (rep=0, index=5): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_2.jpg'), ('match', 0), ('corr_key', 'left')])
+257.3582 	EXP 	stim_text: autoDraw = False
+257.3582 	EXP 	stim_image: autoDraw = False
+257.3582 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_2.jpg'
+257.3582 	EXP 	stim_image: autoDraw = True
+264.3417 	EXP 	stim_text: autoDraw = True
+264.3584 	EXP 	stim_image: autoDraw = False
+264.7465 	DATA 	Keypress: left
+267.3417 	EXP 	stim_text: autoDraw = False
+267.3417 	EXP 	stim_image: autoDraw = False
+267.3417 	EXP 	pause_cross: autoDraw = True
+269.3253 	EXP 	New trial (rep=0, index=4): OrderedDict([('task_order', 'MM_stims-1657131785844743.csv')])
+269.3418 	EXP 	pause_cross: autoDraw = False
+269.3418 	EXP 	multi_move_text: autoDraw = True
+269.9116 	DATA 	Keypress: space
+271.3325 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\tower_of_london_conditions\MM_stims-1657131785844743.csv as conditions, 6 conditions, 3 params
+271.3327 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+271.3329 	EXP 	New trial (rep=0, index=0): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_6.jpg'), ('match', 0), ('corr_key', 'left')])
+271.3751 	EXP 	multi_move_text: autoDraw = False
+271.3751 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_6.jpg'
+271.3751 	EXP 	stim_image: autoDraw = True
+278.3586 	EXP 	stim_text: autoDraw = True
+278.3752 	EXP 	stim_image: autoDraw = False
+278.9636 	DATA 	Keypress: left
+281.3429 	EXP 	New trial (rep=0, index=1): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_1.jpg'), ('match', 1), ('corr_key', 'right')])
+281.3753 	EXP 	stim_text: autoDraw = False
+281.3753 	EXP 	stim_image: autoDraw = False
+281.3753 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_1.jpg'
+281.3753 	EXP 	stim_image: autoDraw = True
+288.3587 	EXP 	stim_text: autoDraw = True
+288.3754 	EXP 	stim_image: autoDraw = False
+288.7464 	DATA 	Keypress: right
+291.3428 	EXP 	New trial (rep=0, index=2): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_5.jpg'), ('match', 0), ('corr_key', 'left')])
+291.3754 	EXP 	stim_text: autoDraw = False
+291.3754 	EXP 	stim_image: autoDraw = False
+291.3754 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_5.jpg'
+291.3754 	EXP 	stim_image: autoDraw = True
+298.3589 	EXP 	stim_text: autoDraw = True
+298.3755 	EXP 	stim_image: autoDraw = False
+298.7307 	DATA 	Keypress: left
+301.3429 	EXP 	New trial (rep=0, index=3): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_5.jpg'), ('match', 1), ('corr_key', 'right')])
+301.3756 	EXP 	stim_text: autoDraw = False
+301.3756 	EXP 	stim_image: autoDraw = False
+301.3756 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_5.jpg'
+301.3756 	EXP 	stim_image: autoDraw = True
+308.3590 	EXP 	stim_text: autoDraw = True
+308.3757 	EXP 	stim_image: autoDraw = False
+308.9305 	DATA 	Keypress: right
+311.3431 	EXP 	New trial (rep=0, index=4): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_3.jpg'), ('match', 0), ('corr_key', 'left')])
+311.3758 	EXP 	stim_text: autoDraw = False
+311.3758 	EXP 	stim_image: autoDraw = False
+311.3758 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_not_two_move\\stim_not_two_move_3.jpg'
+311.3758 	EXP 	stim_image: autoDraw = True
+318.3592 	EXP 	stim_text: autoDraw = True
+318.3758 	EXP 	stim_image: autoDraw = False
+318.8810 	DATA 	Keypress: left
+321.3432 	EXP 	New trial (rep=0, index=5): OrderedDict([('image_stim', 'multi_move_stimuli\\stim_two_move\\stim_two_move_2.jpg'), ('match', 1), ('corr_key', 'right')])
+321.3759 	EXP 	stim_text: autoDraw = False
+321.3759 	EXP 	stim_image: autoDraw = False
+321.3759 	EXP 	stim_image: image = 'multi_move_stimuli\\stim_two_move\\stim_two_move_2.jpg'
+321.3759 	EXP 	stim_image: autoDraw = True
+328.3593 	EXP 	stim_text: autoDraw = True
+328.3760 	EXP 	stim_image: autoDraw = False
+328.7310 	DATA 	Keypress: right
+331.3594 	EXP 	stim_text: autoDraw = False
+331.3594 	EXP 	stim_image: autoDraw = False
+331.3594 	EXP 	pause_cross: autoDraw = True
+333.3430 	EXP 	New trial (rep=0, index=5): OrderedDict([('task_order', 'ZM_stims-16571317858290405.csv')])
+333.3594 	EXP 	pause_cross: autoDraw = False
+333.3594 	EXP 	multi_move_text: autoDraw = True
+334.2453 	DATA 	Keypress: space
+335.3495 	EXP 	Imported C:\Users\Sim\Desktop\KernelFlow_PsychoPy\participants\participant_03\tower_of_london\tower_of_london_conditions\ZM_stims-16571317858290405.csv as conditions, 6 conditions, 3 params
+335.3497 	EXP 	Created sequence: sequential, trialTypes=6, nReps=1, seed=None
+335.3499 	EXP 	New trial (rep=0, index=0): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_6.jpg'), ('match', 0), ('corr_key', 'left')])
+335.3928 	EXP 	multi_move_text: autoDraw = False
+335.3928 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_6.jpg'
+335.3928 	EXP 	stim_image: autoDraw = True
+342.3762 	EXP 	stim_text: autoDraw = True
+342.3929 	EXP 	stim_image: autoDraw = False
+342.9814 	DATA 	Keypress: left
+345.3606 	EXP 	New trial (rep=0, index=1): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_4.jpg'), ('match', 0), ('corr_key', 'left')])
+345.3929 	EXP 	stim_text: autoDraw = False
+345.3929 	EXP 	stim_image: autoDraw = False
+345.3929 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_4.jpg'
+345.3929 	EXP 	stim_image: autoDraw = True
+352.3764 	EXP 	stim_text: autoDraw = True
+352.3931 	EXP 	stim_image: autoDraw = False
+352.8311 	DATA 	Keypress: left
+355.3605 	EXP 	New trial (rep=0, index=2): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_3.jpg'), ('match', 0), ('corr_key', 'left')])
+355.3931 	EXP 	stim_text: autoDraw = False
+355.3931 	EXP 	stim_image: autoDraw = False
+355.3931 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_3.jpg'
+355.3931 	EXP 	stim_image: autoDraw = True
+362.3765 	EXP 	stim_text: autoDraw = True
+362.3932 	EXP 	stim_image: autoDraw = False
+362.8978 	DATA 	Keypress: left
+365.3606 	EXP 	New trial (rep=0, index=3): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_2.jpg'), ('match', 0), ('corr_key', 'left')])
+365.3933 	EXP 	stim_text: autoDraw = False
+365.3933 	EXP 	stim_image: autoDraw = False
+365.3933 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_2.jpg'
+365.3933 	EXP 	stim_image: autoDraw = True
+372.3767 	EXP 	stim_text: autoDraw = True
+372.3934 	EXP 	stim_image: autoDraw = False
+373.0303 	DATA 	Keypress: left
+375.3608 	EXP 	New trial (rep=0, index=4): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_1.jpg'), ('match', 0), ('corr_key', 'left')])
+375.3934 	EXP 	stim_text: autoDraw = False
+375.3934 	EXP 	stim_image: autoDraw = False
+375.3934 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_1.jpg'
+375.3934 	EXP 	stim_image: autoDraw = True
+382.3769 	EXP 	stim_text: autoDraw = True
+382.3935 	EXP 	stim_image: autoDraw = False
+383.0483 	DATA 	Keypress: left
+385.3609 	EXP 	New trial (rep=0, index=5): OrderedDict([('image_stim', 'zero_move_stimuli\\zero_move_5.jpg'), ('match', 0), ('corr_key', 'left')])
+385.3936 	EXP 	stim_text: autoDraw = False
+385.3936 	EXP 	stim_image: autoDraw = False
+385.3936 	EXP 	stim_image: image = 'zero_move_stimuli\\zero_move_5.jpg'
+385.3936 	EXP 	stim_image: autoDraw = True
+392.3770 	EXP 	stim_text: autoDraw = True
+392.3937 	EXP 	stim_image: autoDraw = False
+392.8988 	DATA 	Keypress: left
+395.3771 	EXP 	stim_text: autoDraw = False
+395.3771 	EXP 	stim_image: autoDraw = False
+395.3771 	EXP 	pause_cross: autoDraw = True
+397.3771 	EXP 	pause_cross: autoDraw = False
+397.3771 	EXP 	done_text: autoDraw = True
+400.3607 	EXP 	UDP Sent: marker_ID=8, marker_value=62, marker_string=tower_of_london_end, timestamp=1657137367234779136
+400.3772 	EXP 	done_text: autoDraw = False
+400.7962 	EXP 	window1: mouseVisible = True

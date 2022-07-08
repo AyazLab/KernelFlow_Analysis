@@ -1,4 +1,4 @@
-﻿test1_image.started,test1_image.stopped,test1_resp.keys,test1_resp.rt,test1_resp.started,test1_resp.stopped,test2_image.started,test2_image.stopped,test2_resp.keys,test2_resp.rt,test2_resp.started,test2_resp.stopped,test3_image.started,test3_image.stopped,test3_resp.keys,test3_resp.rt,test3_resp.started,test3_resp.stopped,participant,session,date,expName,psychopyVersion,frameRate,
-69.04403750000006,None,space,18.515139900000122,69.04403750000006,None,,,,,,,,,,,,,02,001,2022_Jun_17_1349,king_devick,2021.2.3,59.99480444993275,
-,,,,,,92.99438069999974,None,space,17.78063740000016,92.99438069999974,None,,,,,,,02,001,2022_Jun_17_1349,king_devick,2021.2.3,59.99480444993275,
-,,,,,,,,,,,,116.09475689999977,None,space,17.52842320000036,116.09475689999977,None,02,001,2022_Jun_17_1349,king_devick,2021.2.3,59.99480444993275,
+﻿task_order,king_devick_loop.thisRepN,king_devick_loop.thisTrialN,king_devick_loop.thisN,king_devick_loop.thisIndex,card_image.started,card_image.stopped,card_resp.keys,card_resp.rt,card_resp.started,card_resp.stopped,participant,session,date,expName,psychopyVersion,frameRate
+card_1.jpg,0,0,0,0,69.0440375,None,space,18.5151399,69.0440375,None,2,1,2022_Jun_17_1349,king_devick,2021.2.3,59.99480445
+card_2.jpg,0,1,1,1,92.9943807,None,space,17.7806374,92.9943807,None,2,1,2022_Jun_17_1349,king_devick,2021.2.3,59.99480445
+card_3.jpg,0,2,2,2,116.0947569,None,space,17.5284232,116.0947569,None,2,1,2022_Jun_17_1349,king_devick,2021.2.3,59.99480445
