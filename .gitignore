@@ -1,5 +1,5 @@
 *.snirf
 participants/
 results/
-__pycache__/behav_analysis.cpython-39.pyc
+__pycache__/
 *.pyc
