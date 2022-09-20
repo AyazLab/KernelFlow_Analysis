@@ -545,7 +545,7 @@ class vSAT(Data_Functions):
         self.df_simp.insert(loc=4, column="position", value=pos_list)
         self.df_simp.drop(columns=["x_pos", "y_pos"], inplace=True)
 
-class Participant(Data_Functions):
+class Participant_Behav(Data_Functions):
     def __init__(self, par_num):
         super().__init__()
         self.par_num = par_num
