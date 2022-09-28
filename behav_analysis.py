@@ -4,7 +4,9 @@ import numpy as np
 from statistics import mean
 
 class Data_Functions():
-    def get_exp_order(self):
+    def get_exp_order(self) -> list:
+        """Retuns the experiment order"""
+
         exp_order_filename = f"{self.par_ID}_experiment_order.txt"
         exp_order_filepath = os.path.join(self.par_dir, exp_order_filename)
 
@@ -20,7 +22,9 @@ class Data_Functions():
         
         return exp_order
 
-    def _parse_udp(self, udp):
+    def _parse_udp(self, udp) -> dict:
+        """Returns a dict of the parsed UDP marker information"""
+
         marker_ID_info = udp[2].strip(",").split("=")
         marker_ID_str = marker_ID_info[0]
         marker_ID = marker_ID_info[1]
@@ -41,7 +45,9 @@ class Data_Functions():
         
         return marker_data
 
-    def parse_log_file(self, par_dir, exp_name):
+    def parse_log_file(self, par_dir, exp_name) -> list:
+        """Returns a list of the marker data parsed from the log file"""
+
         log_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(log_dir):
             if ".log" in filename:
@@ -80,17 +86,21 @@ class Data_Functions():
 
         return marker_data
 
-    def parse_task_order_file(self, par_dir, exp_name):
+    def parse_task_order_file(self, par_dir, exp_name) -> pd.DataFrame:
+        """Returns a data frame of the task order parsed from the task order file"""
+
         exp_dir = os.path.join(par_dir, exp_name)
         for filename in os.listdir(exp_dir):
             if ".csv" in filename:
                 task_order_filename = filename
         task_order_filepath = os.path.join(exp_dir, task_order_filename)
-        test = pd.read_csv(task_order_filepath)
+        task_order = pd.read_csv(task_order_filepath)
 
-        return test
+        return task_order
 
-    def get_data_filepath(self, par_dir, exp_name):
+    def get_data_filepath(self, par_dir, exp_name) -> str:
+        """Returns the filepath"""
+
         data_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(data_dir):
             if ".csv" in filename:
@@ -122,6 +132,12 @@ class Data_Functions():
 
     def get_cols(self, df, cols):
         return df[cols]
+
+    def create_col(self, x, num_rows):
+        return pd.Series([x]*num_rows)
+
+    def flatten(self, input_list):
+        return [x for xs in input_list for x in xs]
 
     def parse_df(self, df, num_blocks, num_trials):
         df_by_block = {}
@@ -582,16 +598,11 @@ class Participant_Behav(Data_Functions):
             
             marker_ts_df.to_csv(filepath, index=False)
 
-def flatten(input_list):
-    return [x for xs in input_list for x in xs]
-
 def get_num_rows(exp):
     return int(exp.num_blocks * exp.num_trials)
 
-def create_col(x, num_rows):
-    return pd.Series([x]*num_rows)
-
-def create_results_tables(num_pars):
+def create_behav_results_tables(num_pars):
+    data_fun = Data_Functions()
     audio_df_list = []
     gng_df_list = []
     kd_df_list = []
@@ -603,12 +614,12 @@ def create_results_tables(num_pars):
 
     for i in range(num_pars):
         par_num = f"{(i+1):02d}"
-        par = Participant(par_num=par_num)
+        par = Participant_Behav(par_num=par_num)
 
         # Audio Narative ----
         exp = par.audio_narrative
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
         temp_audio_df = pd.DataFrame([exp.response], columns=["response"])
         temp_audio_df.insert(0, "participant", par_num_col)
@@ -617,7 +628,7 @@ def create_results_tables(num_pars):
         # Go/No-Go -----
         exp = par.go_no_go
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
         gng_by_block = exp.df_by_block
         temp_block_df = pd.DataFrame() 
@@ -628,7 +639,7 @@ def create_results_tables(num_pars):
             temp_block_df = block_df[["go_resp.corr", "go_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
-        block_col = pd.Series(flatten(block_list))
+        block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_gng_df = pd.DataFrame()
         temp_gng_df = pd.concat(block_df_list, axis=0)
@@ -641,7 +652,7 @@ def create_results_tables(num_pars):
         # King Devick -----
         exp = par.king_devick
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
         block_col = pd.Series(exp.task_order)
 
         temp_kd_df = exp.df_simp[["card_resp.rt", "num_incorrect"]]
@@ -653,7 +664,7 @@ def create_results_tables(num_pars):
         # N-Back -----
         exp = par.n_back
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
         n_back_by_block = exp.df_by_block
         temp_block_df = pd.DataFrame() 
@@ -664,7 +675,7 @@ def create_results_tables(num_pars):
             temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
-        block_col = pd.Series(flatten(block_list))
+        block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_n_back_df = pd.DataFrame()
         temp_n_back_df = pd.concat(block_df_list, axis=0)
@@ -677,7 +688,7 @@ def create_results_tables(num_pars):
         # Tower of London -----
         exp = par.tower_of_london
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
         tol_by_block = exp.df_by_block
         temp_block_df = pd.DataFrame() 
@@ -688,7 +699,7 @@ def create_results_tables(num_pars):
             temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
-        block_col = pd.Series(flatten(block_list))
+        block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_tol_df = pd.DataFrame()
         temp_tol_df = pd.concat(block_df_list, axis=0)
@@ -701,7 +712,7 @@ def create_results_tables(num_pars):
         # Video Narative CMIYC ----
         exp = par.video_narrative_cmiyc
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
         
         temp_video_cmiyc_df = pd.DataFrame([exp.response], columns=["response"])
         temp_video_cmiyc_df.insert(0, "participant", par_num_col)
@@ -710,7 +721,7 @@ def create_results_tables(num_pars):
         # Video Narative Sherlock ----
         exp = par.video_narrative_sherlock
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
         
         temp_video_sherlock_df = pd.DataFrame([exp.response], columns=["response"])
         temp_video_sherlock_df.insert(0, "participant", par_num_col)
@@ -719,7 +730,7 @@ def create_results_tables(num_pars):
         # vSAT -----
         exp = par.vsat
         num_rows = get_num_rows(exp=exp)
-        par_num_col = create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
         vsat_by_block = exp.df_by_block
         temp_block_df = pd.DataFrame() 
@@ -730,7 +741,7 @@ def create_results_tables(num_pars):
             temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
-        block_col = pd.Series(flatten(block_list))
+        block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_vsat_df = pd.DataFrame()
         temp_vsat_df = pd.concat(block_df_list, axis=0)
@@ -742,33 +753,33 @@ def create_results_tables(num_pars):
 
         # Audio Narative ----
         audio_df = pd.concat(audio_df_list, axis=0)
-        audio_filepath = os.path.join(os.getcwd(), "results", f"{par.audio_narrative.exp_name}_results.csv")
+        audio_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.audio_narrative.exp_name}_behav.csv")
         audio_df.to_csv(audio_filepath, index=False)
         # Go/No-Go -----
         gng_df = pd.concat(gng_df_list, axis=0)
-        gng_filepath = os.path.join(os.getcwd(), "results", f"{par.go_no_go.exp_name}_results.csv")
+        gng_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.go_no_go.exp_name}_behav.csv")
         gng_df.to_csv(gng_filepath, index=False)
         # King Devick -----
         kd_df = pd.concat(kd_df_list, axis=0)
-        kd_filepath = os.path.join(os.getcwd(), "results", f"{par.king_devick.exp_name}_results.csv")
+        kd_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.king_devick.exp_name}_behav.csv")
         kd_df.to_csv(kd_filepath, index=False)
         # N-Back -----
         n_back_df = pd.concat(n_back_df_list, axis=0)
-        n_back_filepath = os.path.join(os.getcwd(), "results", f"{par.n_back.exp_name}_results.csv")
+        n_back_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.n_back.exp_name}_behav.csv")
         n_back_df.to_csv(n_back_filepath, index=False)
         # Tower of London -----
         tol_df = pd.concat(tol_df_list, axis=0)
-        tol_filepath = os.path.join(os.getcwd(), "results", f"{par.tower_of_london.exp_name}_results.csv")
+        tol_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.tower_of_london.exp_name}_behav.csv")
         tol_df.to_csv(tol_filepath, index=False)
         # Video Narative CMIYC ----
         video_cmiyc_df = pd.concat(video_cmiyc_df_list, axis=0)
-        video_cmiyc_filepath = os.path.join(os.getcwd(), "results", f"{par.video_narrative_cmiyc.exp_name}_results.csv")
+        video_cmiyc_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.video_narrative_cmiyc.exp_name}_behav.csv")
         video_cmiyc_df.to_csv(video_cmiyc_filepath, index=False)
         # Video Narative Sherlock ----
         video_sherlock_df = pd.concat(video_sherlock_df_list, axis=0)
-        video_sherlock_filepath = os.path.join(os.getcwd(), "results", f"{par.video_narrative_sherlock.exp_name}_results.csv")
+        video_sherlock_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.video_narrative_sherlock.exp_name}_behav.csv")
         video_sherlock_df.to_csv(video_sherlock_filepath, index=False)
         # vSAT -----
         vsat_df = pd.concat(vsat_df_list, axis=0)
-        vsat_filepath = os.path.join(os.getcwd(), "results", f"{par.vsat.exp_name}_results.csv")
+        vsat_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.vsat.exp_name}_behav.csv")
         vsat_df.to_csv(vsat_filepath, index=False)
