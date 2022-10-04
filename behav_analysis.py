@@ -1,4 +1,5 @@
 import os
+import datetime
 import pandas as pd
 import numpy as np
 from statistics import mean
@@ -152,6 +153,42 @@ class Data_Functions():
             df_by_block[block_name] = temp_df
 
         return df_by_block, df_no_nan
+
+    def get_exp_ts(self, df, exp_name):
+        df_new = df[df["exp_name"] == exp_name]
+        start_ts = df_new["start_timestamp"].item()
+        end_ts = df_new["end_timestamp"].item()
+
+        return start_ts, end_ts
+
+    def get_exp_dt(self, df, exp_name):
+        df_new = df[df["exp_name"] == exp_name]
+        start_dt = datetime.datetime.fromtimestamp(df_new["start_timestamp"].item()/1e9)
+        end_dt = datetime.datetime.fromtimestamp(df_new["end_timestamp"].item()/1e9)
+
+        return start_dt, end_dt
+
+    def get_start_index(self, df, start_dt):
+        for loc, dt in enumerate(df["datetime"]):
+            if not dt < start_dt:
+                watch_start_dt = dt
+                break
+
+        return loc
+
+    def get_end_index(self, df, end_dt):
+        for loc, dt in enumerate(df["datetime"]):  
+            # NOTE: when slicing DataFrame, ending index is non-inclusive -> use exact loc value 
+            if dt > end_dt:
+                watch_end_dt = dt
+                break
+
+        return loc
+
+    def c_to_f(self, temp):
+        """Convert celsius to fahrenheit"""
+        
+        return round(temp * 9/5 + 32, 2)
 
 class Audio_Narrative(Data_Functions):
     def __init__(self, par_dir):
@@ -571,6 +608,7 @@ class Participant_Behav(Data_Functions):
         self.exp_order = self.get_exp_order()
         self.all_marker_timestamps = self.get_all_marker_timestamps(par_dir=self.par_dir, exp_order=self.exp_order)
         self._create_marker_ts_csv()
+        self.marker_ts_df = self._create_marker_ts_df()
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
         self.go_no_go = Go_No_Go(par_dir=self.par_dir)
@@ -597,6 +635,11 @@ class Participant_Behav(Data_Functions):
             marker_ts_df = pd.DataFrame(marker_list, columns=["exp_name", "start_timestamp", "end_timestamp"])
             
             marker_ts_df.to_csv(filepath, index=False)
+
+    def _create_marker_ts_df(self):
+        marker_ts_filepath = os.path.join(self.par_dir, f"{self.par_ID}_marker_timestamps.csv")
+        
+        return self.csv_to_df(marker_ts_filepath)
 
 def get_num_rows(exp):
     return int(exp.num_blocks * exp.num_trials)
