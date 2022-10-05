@@ -168,7 +168,7 @@ class Data_Functions():
 
         return start_dt, end_dt
 
-    def get_start_index(self, df, start_dt):
+    def get_start_index_dt(self, df, start_dt):
         for loc, dt in enumerate(df["datetime"]):
             if not dt < start_dt:
                 watch_start_dt = dt
@@ -176,11 +176,28 @@ class Data_Functions():
 
         return loc
 
-    def get_end_index(self, df, end_dt):
+    def get_end_index_dt(self, df, end_dt):
         for loc, dt in enumerate(df["datetime"]):  
             # NOTE: when slicing DataFrame, ending index is non-inclusive -> use exact loc value 
             if dt > end_dt:
                 watch_end_dt = dt
+                break
+
+        return loc
+
+    def get_start_index_ts(self, df, start_ts):
+        for loc, ts in enumerate(df["timestamps"]):
+            if not ts < start_ts:
+                watch_start_ts = ts
+                break
+
+        return loc
+
+    def get_end_index_ts(self, df, end_ts):
+        for loc, ts in enumerate(df["timestamps"]):  
+            # NOTE: when slicing DataFrame, ending index is non-inclusive -> use exact loc value 
+            if ts > end_ts:
+                watch_end_ts = ts
                 break
 
         return loc
@@ -228,8 +245,8 @@ class Go_No_Go(Data_Functions):
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
         self.df = self.csv_to_df(filepath=self.data_filepath)
-        cols = ["match", "go_image.started", "go_resp.corr", "go_resp.rt"]
-        self.df_simp = self.get_cols(df=self.df, cols=cols)  # TODO remove NA columns
+        cols = ["match", "inter_stim_plus.started", "go_image.started", "go_resp.corr", "go_resp.rt"]
+        self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
     
         self._correct_responses(df_by_block = self.df_by_block)
@@ -400,7 +417,19 @@ class Resting_State(Data_Functions):
         self.num_trials = 1
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
+
+        self.task_order = self.parse_task_order_file(par_dir=par_dir, exp_name=self.exp_name)
+        self.task_order_simp = self._simp_task_order(task_order=self.task_order)
+        
         self.df = self.csv_to_df(filepath=self.data_filepath)
+        cols = ["trial_cross.started", "halfway_tone.started", "done_sound.started"]
+        self.df_simp = self.get_cols(df=self.df, cols=cols)
+
+    def _simp_task_order(self, task_order):
+        task_order = task_order["task_order"].to_list()
+        task_order_simp = [task.replace(' ', '_') for task in task_order]
+
+        return task_order_simp
 
 class Tower_of_London(Data_Functions):
     def __init__(self, par_dir):
@@ -415,7 +444,7 @@ class Tower_of_London(Data_Functions):
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
         self.df = self.csv_to_df(filepath=self.data_filepath)
-        cols = ["match", "stim_image.started", "stim_resp.corr", "stim_resp.rt"]
+        cols = ["match", "stim_image.started", "stim_text.started", "stim_resp.corr", "stim_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
     
@@ -524,7 +553,7 @@ class vSAT(Data_Functions):
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
  
         self.df = self.csv_to_df(filepath=self.data_filepath)
-        cols = ["match", "stim_time", "x_pos", "y_pos", "vSAT_square.started", "stim_resp.corr", "stim_resp.rt"]
+        cols = ["match", "stim_time", "x_pos", "y_pos", "inter_stim_text.started", "vSAT_square.started", "stim_resp.corr", "stim_resp.rt", "feedback_sound.started"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self._add_pos_col()
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
@@ -620,6 +649,8 @@ class Participant_Behav(Data_Functions):
         self.video_narrative_sherlock = Video_Narrative_Sherlock(par_dir=self.par_dir)
         self.vsat = vSAT(par_dir=self.par_dir)
 
+        self.by_block_ts_df = self._create_by_block_ts_df()
+
     def _create_marker_ts_csv(self):
         filepath = os.path.join(self.par_dir, f"{self.par_ID}_marker_timestamps.csv", )
         if os.path.exists(filepath):
@@ -641,10 +672,92 @@ class Participant_Behav(Data_Functions):
         
         return self.csv_to_df(marker_ts_filepath)
 
-def get_num_rows(exp):
-    return int(exp.num_blocks * exp.num_trials)
+    def _create_by_block_ts_df(self):
+        def format_ts(exp_name):
+            start_ts, end_ts = self.get_exp_ts(self.marker_ts_df, exp_name=exp_name)
+            return start_ts/1e9, end_ts/1e9
+
+        by_block_ts_df = {}
+        for exp_name in self.exp_order:
+            block_ts_df = {}
+
+            if exp_name == "audio_narrative":
+                start_ts, end_ts = format_ts(exp_name)
+                clip_start_time = self.audio_narrative.df_simp["pieman_clip.started"].item()
+                block_start_ts = start_ts + clip_start_time
+                clip_length = 423  # 423 second clip
+                block_end_ts = block_start_ts + clip_length
+                block_ts_df[(block_start_ts, block_end_ts)] = exp_name
+            elif exp_name == "go_no_go":
+                start_ts, end_ts = format_ts(exp_name)
+                for block, block_df in zip(self.go_no_go.task_order_simp, self.go_no_go.df_by_block.values()):
+                    block_start_time = block_df["inter_stim_plus.started"].iloc[0]
+                    block_start_ts = start_ts + block_start_time
+                    block_end_time = block_df["go_image.started"].iloc[-1] + 0.5  # image shown for 0.5 seconds
+                    block_end_ts = end_ts + block_end_time
+                    block_ts_df[(block_start_ts, block_end_ts)] = block
+            elif exp_name == "king_devick":
+                start_ts, end_ts = format_ts(exp_name)
+                for block, block_start_time, rt in zip(self.king_devick.task_order, self.king_devick.df_simp["card_image.started"].values, self.king_devick.df_simp["card_resp.rt"].values):
+                    block_start_ts = start_ts + block_start_time
+                    block_end_ts = block_start_ts + rt
+                    block_ts_df[(block_start_ts, block_end_ts)] = block
+            elif exp_name == "n_back":
+                start_ts, end_ts = format_ts(exp_name)
+                for block, block_df in zip(self.n_back.task_order_simp2, self.n_back.df_by_block.values()):
+                    block_start_time = block_df["stim_text.started"].iloc[0]
+                    block_start_ts = start_ts + block_start_time
+                    block_end_time = block_df["stim_text.started"].iloc[-1] + 0.5  # number shown for 0.5 seconds
+                    block_end_ts = end_ts + block_end_time
+                    block_ts_df[(block_start_ts, block_end_ts)] = block
+            elif exp_name == "resting_state":
+                start_ts, end_ts = format_ts(exp_name)
+                block_start_time = self.resting_state.df_simp["trial_cross.started"].item()
+                block_start_ts = start_ts + block_start_time
+                block_end_ts = block_start_ts + (self.resting_state.df_simp["halfway_tone.started"].item() - block_start_time)
+                block_ts_df[(block_start_ts, block_end_ts)] = self.resting_state.task_order_simp[0]
+                block_start_time = self.resting_state.df_simp["halfway_tone.started"].item()
+                block_start_ts = start_ts + block_start_time
+                block_end_ts = block_start_ts + (self.resting_state.df_simp["done_sound.started"].item() - block_start_time)
+                block_ts_df[(block_start_ts, block_end_ts)] = self.resting_state.task_order_simp[1]
+            elif exp_name == "tower_of_london":
+                start_ts, end_ts = format_ts(exp_name)
+                for block, block_df in zip(self.tower_of_london.task_order_simp, self.tower_of_london.df_by_block.values()):
+                    block_start_time = block_df["stim_image.started"].iloc[0]
+                    block_start_ts = start_ts + block_start_time
+                    block_end_time = block_df["stim_text.started"].iloc[-1] + 3  # 3 seconds to respond
+                    block_end_ts = end_ts + block_end_time
+                    block_ts_df[(block_start_ts, block_end_ts)] = block
+            elif exp_name == "video_narrative_cmiyc":
+                start_ts, end_ts = format_ts(exp_name)
+                clip_start_time = self.video_narrative_cmiyc.df_simp["video_start.started"].item()
+                block_start_ts = start_ts + clip_start_time
+                clip_length = 300  # 300 second clip
+                block_end_ts = block_start_ts + clip_length
+                block_ts_df[(block_start_ts, block_end_ts)] = exp_name
+            elif exp_name == "video_narrative_sherlock":
+                start_ts, end_ts = format_ts(exp_name)
+                clip_start_time = self.video_narrative_sherlock.df_simp["video_start.started"].item()
+                block_start_ts = start_ts + clip_start_time
+                clip_length = 300  # 300 second clip
+                block_end_ts = block_start_ts + clip_length
+                block_ts_df[(block_start_ts, block_end_ts)] = exp_name
+            elif exp_name == "vSAT":
+                start_ts, end_ts = format_ts(exp_name)
+                for block, block_df in zip(self.vsat.task_order_simp, self.vsat.df_by_block.values()):
+                    block_start_time = block_df["inter_stim_text.started"].iloc[0]
+                    block_start_ts = start_ts + block_start_time
+                    block_end_time = block_df["feedback_sound.started"].iloc[-1] + 0.5  # 0.5 second delay
+                    block_end_ts = end_ts + block_end_time
+                    block_ts_df[(block_start_ts, block_end_ts)] = block
+            by_block_ts_df[exp_name] = block_ts_df
+
+        return by_block_ts_df
 
 def create_behav_results_tables(num_pars):
+    def get_num_rows(exp):
+        return int(exp.num_blocks * exp.num_trials)
+
     data_fun = Data_Functions()
     audio_df_list = []
     gng_df_list = []
