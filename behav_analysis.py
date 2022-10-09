@@ -694,7 +694,7 @@ class Participant_Behav(Data_Functions):
                     block_start_time = block_df["inter_stim_plus.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
                     block_end_time = block_df["go_image.started"].iloc[-1] + 0.5  # image shown for 0.5 seconds
-                    block_end_ts = block_start_ts + block_end_time
+                    block_end_ts = start_ts + block_end_time
                     block_ts_df[(block_start_ts, block_end_ts)] = block
             elif exp_name == "king_devick":
                 start_ts, _ = format_ts(exp_name)
@@ -708,7 +708,7 @@ class Participant_Behav(Data_Functions):
                     block_start_time = block_df["stim_text.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
                     block_end_time = block_df["stim_text.started"].iloc[-1] + 0.5  # number shown for 0.5 seconds
-                    block_end_ts = block_start_ts + block_end_time
+                    block_end_ts = start_ts + block_end_time
                     block_ts_df[(block_start_ts, block_end_ts)] = block
             elif exp_name == "resting_state":
                 start_ts, _ = format_ts(exp_name)
@@ -726,7 +726,7 @@ class Participant_Behav(Data_Functions):
                     block_start_time = block_df["stim_image.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
                     block_end_time = block_df["stim_text.started"].iloc[-1] + 3  # 3 seconds to respond
-                    block_end_ts = block_start_ts + block_end_time
+                    block_end_ts = start_ts + block_end_time
                     block_ts_df[(block_start_ts, block_end_ts)] = block
             elif exp_name == "video_narrative_cmiyc":
                 start_ts, _ = format_ts(exp_name)
@@ -748,7 +748,7 @@ class Participant_Behav(Data_Functions):
                     block_start_time = block_df["inter_stim_text.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
                     block_end_time = block_df["feedback_sound.started"].iloc[-1] + 0.5  # 0.5 second delay
-                    block_end_ts = block_start_ts + block_end_time
+                    block_end_ts = start_ts + block_end_time
                     block_ts_df[(block_start_ts, block_end_ts)] = block
             by_block_ts_df[exp_name] = block_ts_df
 
