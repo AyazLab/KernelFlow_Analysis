@@ -647,7 +647,7 @@ class Participant_Behav(Data_Functions):
         self.tower_of_london = Tower_of_London(par_dir=self.par_dir)
         self.video_narrative_cmiyc = Video_Narrative_CMIYC(par_dir=self.par_dir)
         self.video_narrative_sherlock = Video_Narrative_Sherlock(par_dir=self.par_dir)
-        self.vsat = vSAT(par_dir=self.par_dir)
+        self.vSAT = vSAT(par_dir=self.par_dir)
 
         self.by_block_ts_df = self._create_by_block_ts_df()
 
@@ -744,7 +744,7 @@ class Participant_Behav(Data_Functions):
                 block_ts_df[(block_start_ts, block_end_ts)] = exp_name
             elif exp_name == "vSAT":
                 start_ts, _ = format_ts(exp_name)
-                for block, block_df in zip(self.vsat.task_order_simp, self.vsat.df_by_block.values()):
+                for block, block_df in zip(self.vSAT.task_order_simp, self.vSAT.df_by_block.values()):
                     block_start_time = block_df["inter_stim_text.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
                     block_end_time = block_df["feedback_sound.started"].iloc[-1] + 0.5  # 0.5 second delay
