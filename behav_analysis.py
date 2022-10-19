@@ -68,7 +68,6 @@ class Data_Functions():
             start_udp = udp_lines[0].split(" ")
             marker_data.append(self._parse_udp(start_udp))
         except:
-            #print("ERROR", f"{exp_name}: Start marker not found!")
             marker_data.append("_")
         try:
             end_udp = udp_lines[1].split(" ")
@@ -82,10 +81,28 @@ class Data_Functions():
                 end_ts = int(float(end_ts) + float(lines[-1].split("\t")[0])*1e9 - 0.4*1e9)
                 marker_data.append({'marker_ID': marker_ID, 'marker_value': marker_val, 'marker_string': marker_string, 'timestamp': end_ts})
             else:
-                #print("ERROR", f"{exp_name}: End marker not found!")
                 marker_data.append("_")
 
         return marker_data
+
+    def parse_narrative_log_file(self, par_dir, exp_name):
+        log_dir = os.path.join(par_dir, exp_name, "data")
+        for filename in os.listdir(log_dir):
+            if ".log" in filename:
+                log_filename = filename
+        log_filepath = os.path.join(log_dir, log_filename)
+
+        with open(log_filepath) as f:
+            lines = f.readlines()
+
+        udp_lines = []
+        for line in lines:
+            if "UDP" in line:
+                udp_lines.append(line.split("\t")[0])
+
+        end_time = float(udp_lines[1])*1e9
+
+        return end_time
 
     def parse_task_order_file(self, par_dir, exp_name) -> pd.DataFrame:
         """Returns a data frame of the task order parsed from the task order file"""
@@ -119,14 +136,27 @@ class Data_Functions():
         all_marker_timestamps = {}
         for exp_name in exp_order:
             start_marker, end_marker = self.parse_log_file(par_dir=par_dir, exp_name=exp_name)
-            try:
-                start_ts = start_marker["timestamp"]
-            except:
-                start_ts = "_"
-            try:
-                end_ts = end_marker["timestamp"]
-            except:
-                end_ts = "_"
+            if "narrative" in exp_name and "participant_01" not in par_dir and "participant_02" not in par_dir and "participant_03" not in par_dir:
+                try:
+                    start_ts = start_marker["timestamp"]
+                except:
+                    start_ts = "_"
+                    print("ERROR: start marker not found", exp_name)
+                try:
+                    end_ts = float(start_ts) + self.parse_narrative_log_file(par_dir, exp_name)
+                except:
+                    print("ERROR: end marker not found", exp_name)
+            else:
+                try:
+                    start_ts = start_marker["timestamp"]
+                except:
+                    start_ts = "_"
+                    print("ERROR: start marker not found", exp_name)
+                try:
+                    end_ts = end_marker["timestamp"]
+                except:
+                    end_ts = "_"
+                    print("ERROR: end marker not found", exp_name)
             all_marker_timestamps[exp_name] = [start_ts, end_ts]
 
         return all_marker_timestamps
@@ -134,7 +164,7 @@ class Data_Functions():
     def get_cols(self, df, cols):
         return df[cols]
 
-    def create_col(self, x, num_rows):
+    def create_col(self, x, num_rows):  # TODO, specify dtype in function call
         return pd.Series([x]*num_rows)
 
     def flatten(self, input_list):
@@ -162,45 +192,59 @@ class Data_Functions():
         return start_ts, end_ts
 
     def get_exp_dt(self, df, exp_name):
-        df_new = df[df["exp_name"] == exp_name]
-        start_dt = datetime.datetime.fromtimestamp(df_new["start_timestamp"].item()/1e9)
-        end_dt = datetime.datetime.fromtimestamp(df_new["end_timestamp"].item()/1e9)
+        df_temp = df[df["exp_name"] == exp_name]
+        start_dt = datetime.datetime.fromtimestamp(df_temp["start_timestamp"].item()/1e9)
+        end_dt = datetime.datetime.fromtimestamp(df_temp["end_timestamp"].item()/1e9)
 
         return start_dt, end_dt
 
     def get_start_index_dt(self, df, start_dt):
-        for loc, dt in enumerate(df["datetime"]):
-            if not dt < start_dt:
-                watch_start_dt = dt
-                break
-
-        return loc
+        try:
+            for loc, dt in enumerate(df["datetime"]):
+                if not dt < start_dt:
+                    break
+            if loc < df["datetime"].shape[0]-1:
+                return loc
+            else:
+                print("ERROR: start index datetime not found!")
+                return None
+        except:
+            print("ERROR: start index datetime not found!")
+            return None
 
     def get_end_index_dt(self, df, end_dt):
-        for loc, dt in enumerate(df["datetime"]):  
-            # NOTE: when slicing DataFrame, ending index is non-inclusive -> use exact loc value 
-            if dt > end_dt:
-                watch_end_dt = dt
-                break
-
-        return loc
+        try:
+            for loc, dt in enumerate(df["datetime"]):  
+                if dt > end_dt:
+                    break
+            return loc
+        except:
+            print("ERROR: end index datetime not found!")
+            return None
 
     def get_start_index_ts(self, df, start_ts):
-        for loc, ts in enumerate(df["timestamps"]):
-            if not ts < start_ts:
-                watch_start_ts = ts
-                break
-
-        return loc
+        try:
+            for loc, ts in enumerate(df["timestamps"]):
+                if not ts < start_ts:
+                    break
+            if loc < df["timestamps"].shape[0]-1:
+                return loc
+            else:
+                print("ERROR: start index timestamp not found!")
+                return None
+        except:
+            print("ERROR: start index timestamp not found!")
+            return None
 
     def get_end_index_ts(self, df, end_ts):
-        for loc, ts in enumerate(df["timestamps"]):  
-            # NOTE: when slicing DataFrame, ending index is non-inclusive -> use exact loc value 
-            if ts > end_ts:
-                watch_end_ts = ts
-                break
-
-        return loc
+        try:    
+            for loc, ts in enumerate(df["timestamps"]):  
+                if ts > end_ts:
+                    break
+            return loc
+        except:
+            print("ERROR: end index timestamp not found!")
+            return None
 
     def c_to_f(self, temp):
         """Convert celsius to fahrenheit"""
@@ -221,7 +265,7 @@ class Audio_Narrative(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
 
         self.response = self.get_response()
-        self.clip_start_time = self.get_clip_start_time()
+        self.block_start_time = self.get_clip_start_time()
 
     def get_response(self):
         try:
@@ -504,7 +548,7 @@ class Video_Narrative_CMIYC(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
 
         self.response = self.get_response()
-        self.clip_start_time = self.get_clip_start_time()
+        self.block_start_time = self.get_clip_start_time()
 
     def get_response(self):
         try:
@@ -529,7 +573,7 @@ class Video_Narrative_Sherlock(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
 
         self.response = self.get_response()
-        self.clip_start_time = self.get_clip_start_time()
+        self.block_start_time = self.get_clip_start_time()
 
     def get_response(self):
         try:
@@ -657,9 +701,9 @@ class Participant_Behav(Data_Functions):
             pass
         else:
             marker_list = []
-            for exp, ts_list in self.all_marker_timestamps.items():
+            for exp_name, ts_list in self.all_marker_timestamps.items():
                 temp_list = []
-                temp_list.append(exp)
+                temp_list.append(exp_name)
                 temp_list.extend(ts_list)
                 marker_list.append(temp_list)
 
@@ -683,8 +727,8 @@ class Participant_Behav(Data_Functions):
 
             if exp_name == "audio_narrative":
                 start_ts, _ = format_ts(exp_name)
-                clip_start_time = self.audio_narrative.df_simp["pieman_clip.started"].item()
-                block_start_ts = start_ts + clip_start_time
+                block_start_time = self.audio_narrative.df_simp["pieman_clip.started"].item()
+                block_start_ts = start_ts + block_start_time
                 clip_length = 423  # 423 second clip
                 block_end_ts = block_start_ts + clip_length
                 block_ts_df[(block_start_ts, block_end_ts)] = exp_name
@@ -730,15 +774,15 @@ class Participant_Behav(Data_Functions):
                     block_ts_df[(block_start_ts, block_end_ts)] = block
             elif exp_name == "video_narrative_cmiyc":
                 start_ts, _ = format_ts(exp_name)
-                clip_start_time = self.video_narrative_cmiyc.df_simp["video_start.started"].item()
-                block_start_ts = start_ts + clip_start_time
+                block_start_time = self.video_narrative_cmiyc.df_simp["video_start.started"].item()
+                block_start_ts = start_ts + block_start_time  # NOTE
                 clip_length = 300  # 300 second clip
                 block_end_ts = block_start_ts + clip_length
                 block_ts_df[(block_start_ts, block_end_ts)] = exp_name
             elif exp_name == "video_narrative_sherlock":
                 start_ts, _ = format_ts(exp_name)
-                clip_start_time = self.video_narrative_sherlock.df_simp["video_start.started"].item()
-                block_start_ts = start_ts + clip_start_time
+                block_start_time = self.video_narrative_sherlock.df_simp["video_start.started"].item()
+                block_start_ts = start_ts + block_start_time
                 clip_length = 300  # 300 second clip
                 block_end_ts = block_start_ts + clip_length
                 block_ts_df[(block_start_ts, block_end_ts)] = exp_name
@@ -904,7 +948,7 @@ def create_behav_results_tables(num_pars):
         video_sherlock_df_list.append(temp_video_sherlock_df)
 
         # vSAT -----
-        exp = par.vsat
+        exp = par.vSAT
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
@@ -957,5 +1001,5 @@ def create_behav_results_tables(num_pars):
         video_sherlock_df.to_csv(video_sherlock_filepath, index=False)
         # vSAT -----
         vsat_df = pd.concat(vsat_df_list, axis=0)
-        vsat_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.vsat.exp_name}_behav.csv")
+        vsat_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.vSAT.exp_name}_behav.csv")
         vsat_df.to_csv(vsat_filepath, index=False)
