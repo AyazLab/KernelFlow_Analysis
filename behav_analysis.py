@@ -293,8 +293,8 @@ class Go_No_Go(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
     
-        self._correct_responses(df_by_block = self.df_by_block)
-        self._response_times(df_by_block = self.df_by_block)
+        self._correct_responses(df_by_block=self.df_by_block)
+        self._response_times(df_by_block=self.df_by_block)
 
     def _simp_task_order(self, task_order):
         task_order = task_order["task_order"].to_list()
@@ -391,8 +391,8 @@ class N_Back(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials)
 
-        self._correct_responses(df_by_block = self.df_by_block)
-        self._response_times(df_by_block = self.df_by_block)
+        self._correct_responses(df_by_block=self.df_by_block)
+        self._response_times(df_by_block=self.df_by_block)
 
     def _correct_responses(self, df_by_block):
         self.num_corr_ZB_list = []
@@ -495,8 +495,8 @@ class Tower_of_London(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
     
-        self._correct_responses(df_by_block = self.df_by_block)
-        self._response_times(df_by_block = self.df_by_block)
+        self._correct_responses(df_by_block=self.df_by_block)
+        self._response_times(df_by_block=self.df_by_block)
 
     def _correct_responses(self, df_by_block):
         self.num_corr_MM_list = []
