@@ -400,13 +400,13 @@ class N_Back(Data_Functions):
         self.num_corr_TB_list = []
 
         for task_type, block in zip(self.task_order_simp, df_by_block.values()):
-            if task_type[0:2] == "ZB":
+            if "0_back" in task_type:
                 num_corr_ZB = int(sum(block["stim_resp.corr"]))
                 self.num_corr_ZB_list.append(num_corr_ZB)
-            elif task_type[0:2] == "OB":
+            elif "1_back" in task_type:
                 num_corr_OB = int(sum(block["stim_resp.corr"]))
                 self.num_corr_OB_list.append(num_corr_OB)
-            elif task_type[0:2] == "TB":
+            elif "2_back" in task_type:
                 num_corr_TB = int(sum(block["stim_resp.corr"]))
                 self.num_corr_TB_list.append(num_corr_TB)
 
@@ -421,13 +421,13 @@ class N_Back(Data_Functions):
         self.resp_time_TB_list = []
 
         for task_type, block in zip(self.task_order_simp, df_by_block.values()):
-            if task_type[0:2] == "ZB":
+            if "0_back" in task_type:
                 resp_time_ZB = np.nanmean(block["stim_resp.rt"])
                 self.resp_time_ZB_list.append(resp_time_ZB)
-            elif task_type[0:2] == "OB":
+            elif "1_back" in task_type:
                 resp_time_OB = np.nanmean(block["stim_resp.rt"])
                 self.resp_time_OB_list.append(resp_time_OB)
-            elif task_type[0:2] == "TB":
+            elif "2_back" in task_type:
                 resp_time_TB = np.nanmean(block["stim_resp.rt"])
                 self.resp_time_TB_list.append(resp_time_TB)
 
@@ -443,11 +443,14 @@ class N_Back(Data_Functions):
         for task in task_order:
             if "ZB" in task:
                 temp = task.split("-")
-                task_simp = f"{temp[0]}-{temp[1]}"
-                task_simp2 = temp[0]
-            else:
-                task_simp = task.split("-")[0]
-                task_simp2 = task_simp
+                task_simp = f"0_back-{temp[1]}"
+                task_simp2 = "0_back"
+            elif "OB" in task:
+                task_simp = "1_back"
+                task_simp2 = "1_back"
+            elif "TB" in task:
+                task_simp = "2_back"
+                task_simp2 = "2_back"
             task_order_simp.append(task_simp)
             task_order_simp2.append(task_simp2)
         
@@ -669,7 +672,7 @@ class vSAT(Data_Functions):
                 pos_list.append(pos)
 
         self.df_simp.insert(loc=4, column="position", value=pos_list)
-        self.df_simp.drop(columns=["x_pos", "y_pos"], inplace=True)
+        self.df_simp = self.df_simp.drop(columns=["x_pos", "y_pos"])
 
 class Participant_Behav(Data_Functions):
     def __init__(self, par_num):
@@ -878,7 +881,7 @@ def create_behav_results_tables(num_pars):
         temp_kd_df = exp.df_simp[["card_resp.rt", "num_incorrect"]]
         temp_kd_df.insert(0, "block", block_col)
         temp_kd_df.insert(0, "participant", par_num_col)
-        temp_kd_df.rename(columns={"card_resp.rt": "response_time"}, inplace=True)
+        temp_kd_df = temp_kd_df.rename(columns={"card_resp.rt": "response_time"})
         kd_df_list.append(temp_kd_df.copy())
 
         # N-Back -----
