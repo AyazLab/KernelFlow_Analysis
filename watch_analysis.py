@@ -222,9 +222,8 @@ def create_watch_results_tables(num_pars, no_nan=False):
             filepath = os.path.join(os.getcwd(), "results", "watch_no_nan", f"{exp_name}_watch.xlsx")
         else:
             filepath = os.path.join(os.getcwd(), "results", "watch", f"{exp_name}_watch.xlsx")
-        if os.path.exists(os.path.dirname(filepath)):
-            pass
-        else:
+            
+        if not os.path.exists(os.path.dirname(filepath)):
             os.mkdir(os.path.dirname(filepath))
         
         with pd.ExcelWriter(filepath, engine='xlsxwriter') as writer:
