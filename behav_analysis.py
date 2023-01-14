@@ -365,11 +365,13 @@ class King_Devick(Data_Functions):
         self.exp_name = "king_devick"
         self.num_blocks = 1
         self.num_trials = 3
+        self.num_trials_new = 4  # added a card for participants 15+
         # NOTE: card duration depends on participant response
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         
         self.task_order = ["card_1", "card_2", "card_3"]
+        self.task_order_new = ["card_1", "card_2", "card_3", "card_4"]  # added a card for participants 15+
         
         self.df = self.csv_to_df(filepath=self.data_filepath)
         num_incorrect_col = pd.Series(self._parse_data_file(par_dir=par_dir))
@@ -897,8 +899,11 @@ class Participant_Behav(Data_Functions):
         return datetime.datetime.fromtimestamp(int(self.all_marker_timestamps[exp_name][0])/1e9)
 
 def create_behav_results_tables(num_pars):
-    def get_num_rows(exp):
-        return int(exp.num_blocks * exp.num_trials)
+    def get_num_rows(exp, new=False):
+        if new: 
+            return int(exp.num_blocks * exp.num_trials_new)
+        else:    
+            return int(exp.num_blocks * exp.num_trials)
 
     data_fun = Data_Functions()
     audio_df_list = []
@@ -949,10 +954,15 @@ def create_behav_results_tables(num_pars):
 
         # King Devick -----
         exp = par.king_devick
-        num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
-        block_col = pd.Series(exp.task_order)
 
+        if int(par_num) > 14:  # participants 15+ have a 4th card
+            num_rows = get_num_rows(exp=exp, new=True)
+            block_col = pd.Series(exp.task_order_new)
+        else:
+            num_rows = get_num_rows(exp=exp)
+            block_col = pd.Series(exp.task_order)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        
         temp_kd_df = exp.df_simp[["card_resp.rt", "num_incorrect"]]
         temp_kd_df.insert(0, "block", block_col)
         temp_kd_df.insert(0, "participant", par_num_col)
