@@ -679,7 +679,9 @@ class Participant_Behav(Data_Functions):
         super().__init__()
         self.par_num = par_num
         self.par_ID = f"participant_{self.par_num}"
-        self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
+        data_dir = r"C:\Kernel\participants"
+        #self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
+        self.par_dir = os.path.join(data_dir, self.par_ID)
         
         self.exp_order = self.get_exp_order()
         self.all_marker_timestamps = self.get_all_marker_timestamps(par_dir=self.par_dir, exp_order=self.exp_order)

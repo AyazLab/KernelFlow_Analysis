@@ -11,7 +11,9 @@ class Participant_Watch():
         self.data_fun = Data_Functions()
         self.par_num = par_num
         self.par_ID = f"participant_{self.par_num}"
-        self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
+        data_dir = r"C:\Kernel\participants"
+        #self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
+        self.par_dir = os.path.join(data_dir, self.par_ID)
         self.par_behav = Participant_Behav(par_num=self.par_num)
         self.exp_order = self.par_behav.exp_order
         self._dir_list = self._get_data_dirs()
