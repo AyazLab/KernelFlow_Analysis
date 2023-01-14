@@ -522,14 +522,26 @@ class Tower_of_London(Data_Functions):
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
         self.df = self.csv_to_df(filepath=self.data_filepath)
-        cols = ["match", "stim_image.started", "stim_text.started", "stim_resp.corr", "stim_resp.rt"]
+        cols = ["match", "image_stim", "stim_image.started", "stim_text.started", "stim_resp.corr", "stim_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp = self.df_simp.copy()
+        self.df_simp["image_stim"] = self.df_simp["image_stim"].apply(self._strip_stim)
         self.df_simp.insert(2, "stim_image.ended", self.df_simp["stim_image.started"] + self.stim_duration)
         self.df_simp.insert(4, "stim_text.ended", self.df_simp["stim_text.started"] + self.response_duration)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
 
         self._correct_responses(df_by_block=self.df_by_block)
         self._response_times(df_by_block=self.df_by_block)
+
+    def _strip_stim(self, row):
+        try:
+            temp_list = row.split("\\")
+            if len(temp_list) == 3:
+                return temp_list[1].split("stim_")[1]
+            else:
+                return temp_list[0].split("_stimuli")[0]
+        except: 
+            return row  
 
     def _correct_responses(self, df_by_block):
         self.num_corr_MM_list = []
@@ -1004,7 +1016,7 @@ def create_behav_results_tables(num_pars):
         block_list = []
         
         for block, block_df in zip(exp.task_order_simp, tol_by_block.values()):
-            temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
+            temp_block_df = block_df[["image_stim", "stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
         block_col = pd.Series(data_fun.flatten(block_list))
@@ -1014,7 +1026,7 @@ def create_behav_results_tables(num_pars):
         temp_tol_df.reset_index(inplace=True, drop=True)
         temp_tol_df.insert(0, "block", block_col)
         temp_tol_df.insert(0, "participant", par_num_col)
-        temp_tol_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
+        temp_tol_df.rename(columns={"image_stim": "stim", "stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         tol_df_list.append(temp_tol_df.copy())
 
         # Video Narrative CMIYC ----
