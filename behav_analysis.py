@@ -6,7 +6,7 @@ from statistics import mean
 
 class Data_Functions():
     def get_exp_order(self) -> list:
-        """Retuns the experiment order"""
+        """Returns the experiment order"""
 
         exp_order_filename = f"{self.par_ID}_experiment_order.txt"
         exp_order_filepath = os.path.join(self.par_dir, exp_order_filename)
@@ -23,31 +23,30 @@ class Data_Functions():
         
         return exp_order
 
-    def _parse_udp(self, udp) -> dict:
-        """Returns a dict of the parsed UDP marker information"""
-
-        marker_ID_info = udp[2].strip(",").split("=")
-        marker_ID_str = marker_ID_info[0]
-        marker_ID = marker_ID_info[1]
-
-        marker_val_info = udp[3].strip(",").split("=")
-        marker_val_str = marker_val_info[0]
-        marker_val = marker_val_info[1]
-
-        marker_string_info = udp[4].strip(",").split("=")
-        marker_string_str = marker_string_info[0]
-        marker_string = marker_string_info[1]
-
-        marker_ts_info = udp[5].strip("\n").split("=")
-        marker_ts_str = marker_ts_info[0]
-        marker_ts = marker_ts_info[1]
-
-        marker_data = {marker_ID_str: marker_ID, marker_val_str: marker_val, marker_string_str: marker_string, marker_ts_str: marker_ts}
-        
-        return marker_data
-
     def parse_log_file(self, par_dir, exp_name) -> list:
         """Returns a list of the marker data parsed from the log file"""
+        def _parse_udp(udp) -> dict:
+            """Returns a dict of the parsed UDP marker information"""
+
+            marker_ID_info = udp[2].strip(",").split("=")
+            marker_ID_str = marker_ID_info[0]
+            marker_ID = marker_ID_info[1]
+
+            marker_val_info = udp[3].strip(",").split("=")
+            marker_val_str = marker_val_info[0]
+            marker_val = marker_val_info[1]
+
+            marker_string_info = udp[4].strip(",").split("=")
+            marker_string_str = marker_string_info[0]
+            marker_string = marker_string_info[1]
+
+            marker_ts_info = udp[5].strip("\n").split("=")
+            marker_ts_str = marker_ts_info[0]
+            marker_ts = marker_ts_info[1]
+
+            marker_data = {marker_ID_str: marker_ID, marker_val_str: marker_val, marker_string_str: marker_string, marker_ts_str: marker_ts}
+            
+            return marker_data
 
         log_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(log_dir):
@@ -66,12 +65,12 @@ class Data_Functions():
         marker_data = []
         try:
             start_udp = udp_lines[0].split(" ")
-            marker_data.append(self._parse_udp(start_udp))
+            marker_data.append(_parse_udp(start_udp))
         except:
             marker_data.append("_")
         try:
             end_udp = udp_lines[1].split(" ")
-            marker_data.append(self._parse_udp(end_udp))
+            marker_data.append(_parse_udp(end_udp))
         except:
             if exp_name == "go_no_go":
                 marker_ID = int(marker_data[0]["marker_ID"]) + 1
@@ -246,6 +245,12 @@ class Data_Functions():
             print("ERROR: end index timestamp not found!")
             return None
 
+    def adjust_df_ts(self, df, start_ts, cols):
+        df = df.copy()
+        for col in cols:
+            df[col] = df[col] + start_ts
+        return df
+
     def c_to_f(self, temp):
         """Convert celsius to fahrenheit"""
         
@@ -257,12 +262,14 @@ class Audio_Narrative(Data_Functions):
         self.exp_name = "audio_narrative"
         self.num_blocks = 1
         self.num_trials = 1
+        self.clip_duration = 423  # seconds
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         self.df = self.csv_to_df(filepath=self.data_filepath)
 
         cols = ["pieman_clip.started", "participant_response.text"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp.insert(1, "pieman_clip.ended", self.df_simp["pieman_clip.started"] + self.clip_duration)
 
         self.response = self.get_response()
         self.block_start_time = self.get_clip_start_time()
@@ -282,6 +289,8 @@ class Go_No_Go(Data_Functions):
         self.exp_name = "go_no_go"
         self.num_blocks = 4
         self.num_trials = 20
+        # NOTE: stimulus duration depends on participant response
+        # NOTE: inter-stimulus duration is variable
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
 
@@ -291,6 +300,8 @@ class Go_No_Go(Data_Functions):
         self.df = self.csv_to_df(filepath=self.data_filepath)
         cols = ["match", "inter_stim_plus.started", "go_image.started", "go_resp.corr", "go_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp.insert(2, "inter_stim_plus.ended", self.df_simp["inter_stim_plus.started"] + self.df["inter_stim_interval"])
+        self.df_simp.insert(4, "go_image.ended", self.df_simp["go_image.started"] + self.df_simp["go_resp.rt"])
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
     
         self._correct_responses(df_by_block=self.df_by_block)
@@ -346,6 +357,7 @@ class King_Devick(Data_Functions):
         self.exp_name = "king_devick"
         self.num_blocks = 1
         self.num_trials = 3
+        # NOTE: card duration depends on participant response
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         
@@ -356,6 +368,7 @@ class King_Devick(Data_Functions):
         self.df.insert(len(self.df.columns), "num_incorrect", num_incorrect_col)
         cols = ["card_image.started", "card_resp.rt", "num_incorrect"]
         self.df_simp = self.get_cols(self.df, cols)
+        self.df_simp.insert(1, "card_image.ended", self.df_simp["card_image.started"] + self.df_simp["card_resp.rt"])
 
     def _parse_data_file(self, par_dir):
         data_dir = os.path.join(par_dir, self.exp_name, "data")
@@ -380,6 +393,8 @@ class N_Back(Data_Functions):
         self.exp_name = "n_back"
         self.num_blocks = 9
         self.num_trials = 20
+        self.stim_duration = 0.5  # seconds
+        self.inter_stim_duration = 3.0  # seconds
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         
@@ -389,6 +404,9 @@ class N_Back(Data_Functions):
         self.df = self.csv_to_df(filepath=self.data_filepath)
         cols = ["match", "stim_text.started", "stim_resp.corr", "stim_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp.insert(2, "stim_text.ended", self.df_simp["stim_text.started"] + 0.5)     # stimulus duration is 0.5 seconds 
+        self.df_simp.insert(3, "inter_stim.started", self.df_simp["stim_text.started"] + 0.5)  # inter-stimulus interval starts 0.5 seconds after stimulus 
+        self.df_simp.insert(4, "inter_stim.ended", self.df_simp["inter_stim.started"] + 3)     # inter-stimulus duration is 3 seconds
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials)
 
         self._correct_responses(df_by_block=self.df_by_block)
@@ -462,6 +480,7 @@ class Resting_State(Data_Functions):
         self.exp_name = "resting_state"
         self.num_blocks = 2
         self.num_trials = 1
+        self.session_duration = 210  # seconds for each task (eyes open and eyes closed)
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
 
@@ -484,6 +503,8 @@ class Tower_of_London(Data_Functions):
         self.exp_name = "tower_of_london"
         self.num_blocks = 6
         self.num_trials = 6
+        self.stim_duration = 7  # seconds
+        self.response_duration = 3  # seconds
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         
@@ -493,8 +514,10 @@ class Tower_of_London(Data_Functions):
         self.df = self.csv_to_df(filepath=self.data_filepath)
         cols = ["match", "stim_image.started", "stim_text.started", "stim_resp.corr", "stim_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp.insert(2, "stim_image.ended", self.df_simp["stim_image.started"] + self.stim_duration)
+        self.df_simp.insert(4, "stim_text.ended", self.df_simp["stim_text.started"] + self.response_duration)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
-    
+
         self._correct_responses(df_by_block=self.df_by_block)
         self._response_times(df_by_block=self.df_by_block)
 
@@ -542,6 +565,7 @@ class Video_Narrative_CMIYC(Data_Functions):
         self.exp_name = "video_narrative_cmiyc"
         self.num_blocks = 1
         self.num_trials = 1
+        self.clip_duration = 300  # seconds
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         self.df = self.csv_to_df(filepath=self.data_filepath)
@@ -549,6 +573,7 @@ class Video_Narrative_CMIYC(Data_Functions):
         self.df = self.csv_to_df(filepath=self.data_filepath)
         cols = ["video_start.started", "catchme_participant_response.text"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp.insert(1, "video_start.ended", self.df_simp["video_start.started"] + self.clip_duration)
 
         self.response = self.get_response()
         self.block_start_time = self.get_clip_start_time()
@@ -568,12 +593,14 @@ class Video_Narrative_Sherlock(Data_Functions):
         self.exp_name = "video_narrative_sherlock"
         self.num_blocks = 1
         self.num_trials = 1
+        self.clip_duration = 300  # seconds
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
 
         self.df = self.csv_to_df(filepath=self.data_filepath)
         cols = ["video_start.started", "sherlock_participant_response.text"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp.insert(1, "video_start.ended", self.df_simp["video_start.started"] + self.clip_duration)
 
         self.response = self.get_response()
         self.block_start_time = self.get_clip_start_time()
@@ -593,6 +620,9 @@ class vSAT(Data_Functions):
         self.exp_name = "vSAT"
         self.num_blocks = 4
         self.num_trials = 30
+        #NOTE: stimulus duration is variable 
+        #NOTE: stimulus location is variable 
+        #NOTE: inter-stimulus duration is variable 
         self.data_filepath = self.get_data_filepath(par_dir=par_dir, exp_name=self.exp_name)
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
 
@@ -600,9 +630,12 @@ class vSAT(Data_Functions):
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
  
         self.df = self.csv_to_df(filepath=self.data_filepath)
-        cols = ["match", "stim_time", "x_pos", "y_pos", "inter_stim_text.started", "vSAT_square.started", "stim_resp.corr", "stim_resp.rt", "feedback_sound.started"]
+        cols = ["match", "stim_time", "inter_stim_time", "x_pos", "y_pos", "inter_stim_text.started", "vSAT_square.started", "stim_resp.corr", "stim_resp.rt", "feedback_sound.started"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self._add_pos_col()
+        self.df_simp.insert(5, "inter_stim_text.ended", self.df_simp["inter_stim_text.started"]+self.df_simp["inter_stim_time"])  
+        self.df_simp.insert(7, "vSAT_square.ended", self.df_simp["vSAT_square.started"]+self.df_simp["stim_time"])  
+        self.df_simp.insert(11, "feedback_sound.ended", self.df_simp["feedback_sound.started"]+0.5)  # 0.5 second feedback sound  
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
 
         self._correct_responses(df_by_block=self.df_by_block)
@@ -689,14 +722,40 @@ class Participant_Behav(Data_Functions):
         self.marker_ts_df = self._create_marker_ts_df()
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
+        self.audio_narrative.start_ts = self.get_start_ts("audio_narrative")
+        self.audio_narrative.df_adjusted_ts = self.adjust_df_ts(self.audio_narrative.df_simp, self.audio_narrative.start_ts, ["pieman_clip.started", "pieman_clip.ended"])
+        
         self.go_no_go = Go_No_Go(par_dir=self.par_dir)
+        self.go_no_go.start_ts = self.get_start_ts("go_no_go")
+        self.go_no_go.df_adjusted_ts = self.adjust_df_ts(self.go_no_go.df_no_nan, self.go_no_go.start_ts, ["inter_stim_plus.started", "inter_stim_plus.ended", "go_image.started", "go_image.ended"])
+        
         self.king_devick = King_Devick(par_dir=self.par_dir)
+        self.king_devick.start_ts = self.get_start_ts("king_devick")
+        self.king_devick.df_adjusted_ts = self.adjust_df_ts(self.king_devick.df_simp, self.king_devick.start_ts, ["card_image.started", "card_image.ended"])
+        
         self.n_back = N_Back(par_dir=self.par_dir)
+        self.n_back.start_ts = self.get_start_ts("n_back")
+        self.n_back.df_adjusted_ts = self.adjust_df_ts(self.n_back.df_no_nan, self.n_back.start_ts, ["stim_text.started", "stim_text.ended", "inter_stim.started", "inter_stim.ended"])
+        
         self.resting_state = Resting_State(par_dir=self.par_dir)
+        self.resting_state.start_ts = self.get_start_ts("resting_state")
+        self.resting_state.df_adjusted_ts = self.adjust_df_ts(self.resting_state.df_simp, self.resting_state.start_ts, ["trial_cross.started", "halfway_tone.started","done_sound.started"])
+
         self.tower_of_london = Tower_of_London(par_dir=self.par_dir)
+        self.tower_of_london.start_ts = self.get_start_ts("tower_of_london")
+        self.tower_of_london.df_adjusted_ts = self.adjust_df_ts(self.tower_of_london.df_no_nan, self.tower_of_london.start_ts, ["stim_image.started", "stim_image.ended", "stim_text.started", "stim_text.ended"])
+
         self.video_narrative_cmiyc = Video_Narrative_CMIYC(par_dir=self.par_dir)
+        self.video_narrative_cmiyc.start_ts = self.get_start_ts("video_narrative_cmiyc")
+        self.video_narrative_cmiyc.df_adjusted_ts = self.adjust_df_ts(self.video_narrative_cmiyc.df_simp, self.video_narrative_cmiyc.start_ts, ["video_start.started", "video_start.ended"])
+         
         self.video_narrative_sherlock = Video_Narrative_Sherlock(par_dir=self.par_dir)
+        self.video_narrative_sherlock.start_ts = self.get_start_ts("video_narrative_sherlock")
+        self.video_narrative_sherlock.df_adjusted_ts = self.adjust_df_ts(self.video_narrative_sherlock.df_simp, self.video_narrative_sherlock.start_ts, ["video_start.started", "video_start.ended"])
+
         self.vSAT = vSAT(par_dir=self.par_dir)
+        self.vSAT.start_ts = self.get_start_ts("vSAT")
+        self.vSAT.df_adjusted_ts = self.adjust_df_ts(self.vSAT.df_no_nan, self.vSAT.start_ts, ["inter_stim_text.started", "inter_stim_text.ended", "vSAT_square.started", "vSAT_square.ended", "feedback_sound.started", "feedback_sound.ended"])
 
         self.by_block_ts_df = self._create_by_block_ts_df()
 
@@ -711,15 +770,19 @@ class Participant_Behav(Data_Functions):
                 temp_list.append(exp_name)
                 temp_list.extend(ts_list)
                 marker_list.append(temp_list)
-
             marker_ts_df = pd.DataFrame(marker_list, columns=["exp_name", "start_timestamp", "end_timestamp"])
-            
             marker_ts_df.to_csv(filepath, index=False)
 
     def _create_marker_ts_df(self):
         marker_ts_filepath = os.path.join(self.par_dir, f"{self.par_ID}_marker_timestamps.csv")
         
         return self.csv_to_df(marker_ts_filepath)
+
+    def get_start_ts(self, exp_name):
+        return int(self.all_marker_timestamps[exp_name][0])
+
+    def get_end_ts(self, exp_name):
+        return int(self.all_marker_timestamps[exp_name][1])
 
     def _create_by_block_ts_df(self):
         def format_ts(exp_name):
@@ -729,7 +792,6 @@ class Participant_Behav(Data_Functions):
         by_block_ts_df = {}
         for exp_name in self.exp_order:
             block_ts_df = {}
-
             if exp_name == "audio_narrative":
                 start_ts, _ = format_ts(exp_name)
                 block_start_time = self.audio_narrative.df_simp["pieman_clip.started"].item()
@@ -823,6 +885,9 @@ class Participant_Behav(Data_Functions):
             elif exp_name == "vSAT":
                 return self.vSAT
 
+    def get_start_dt(self, exp_name):
+        return datetime.datetime.fromtimestamp(int(self.all_marker_timestamps[exp_name][0])/1e9)
+
 def create_behav_results_tables(num_pars):
     def get_num_rows(exp):
         return int(exp.num_blocks * exp.num_trials)
@@ -841,7 +906,7 @@ def create_behav_results_tables(num_pars):
         par_num = f"{(i+1):02d}"
         par = Participant_Behav(par_num=par_num)
 
-        # Audio Narative ----
+        # Audio Narrative ----
         exp = par.audio_narrative
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
@@ -934,7 +999,7 @@ def create_behav_results_tables(num_pars):
         temp_tol_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         tol_df_list.append(temp_tol_df.copy())
 
-        # Video Narative CMIYC ----
+        # Video Narrative CMIYC ----
         exp = par.video_narrative_cmiyc
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
@@ -943,7 +1008,7 @@ def create_behav_results_tables(num_pars):
         temp_video_cmiyc_df.insert(0, "participant", par_num_col)
         video_cmiyc_df_list.append(temp_video_cmiyc_df)
 
-        # Video Narative Sherlock ----
+        # Video Narrative Sherlock ----
         exp = par.video_narrative_sherlock
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
@@ -976,7 +1041,7 @@ def create_behav_results_tables(num_pars):
         temp_vsat_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         vsat_df_list.append(temp_vsat_df.copy())
 
-        # Audio Narative ----
+        # Audio Narrative ----
         audio_df = pd.concat(audio_df_list, axis=0)
         audio_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.audio_narrative.exp_name}_behav.csv")
         audio_df.to_csv(audio_filepath, index=False)
@@ -996,11 +1061,11 @@ def create_behav_results_tables(num_pars):
         tol_df = pd.concat(tol_df_list, axis=0)
         tol_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.tower_of_london.exp_name}_behav.csv")
         tol_df.to_csv(tol_filepath, index=False)
-        # Video Narative CMIYC ----
+        # Video Narrative CMIYC ----
         video_cmiyc_df = pd.concat(video_cmiyc_df_list, axis=0)
         video_cmiyc_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.video_narrative_cmiyc.exp_name}_behav.csv")
         video_cmiyc_df.to_csv(video_cmiyc_filepath, index=False)
-        # Video Narative Sherlock ----
+        # Video Narrative Sherlock ----
         video_sherlock_df = pd.concat(video_sherlock_df_list, axis=0)
         video_sherlock_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.video_narrative_sherlock.exp_name}_behav.csv")
         video_sherlock_df.to_csv(video_sherlock_filepath, index=False)
