@@ -1,5 +1,7 @@
 *.snirf
+*.pyc
+*.docx
+.vscode/
 participants/
 results/
 __pycache__/
-*.pyc
