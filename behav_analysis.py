@@ -298,8 +298,10 @@ class Go_No_Go(Data_Functions):
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
         self.df = self.csv_to_df(filepath=self.data_filepath)
-        cols = ["match", "inter_stim_plus.started", "go_image.started", "go_resp.corr", "go_resp.rt"]
+        cols = ["match", "GNG_stim", "inter_stim_plus.started", "go_image.started", "go_resp.corr", "go_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
+        self.df_simp = self.df_simp.copy()
+        self.df_simp["GNG_stim"] = self.df_simp["GNG_stim"].apply(self._strip_stim)
         self.df_simp.insert(2, "inter_stim_plus.ended", self.df_simp["inter_stim_plus.started"] + self.df["inter_stim_interval"])
         self.df_simp.insert(4, "go_image.ended", self.df_simp["go_image.started"] + self.df_simp["go_resp.rt"])
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
@@ -312,6 +314,12 @@ class Go_No_Go(Data_Functions):
         task_order_simp = [task.split("_")[0] for task in task_order]
 
         return task_order_simp
+
+    def _strip_stim(self, row):
+        try:
+            return row.split("\\")[0].split("_stimuli")[0]
+        except: 
+            return row  
 
     def _correct_responses(self, df_by_block):
         self.num_corr_go_list = []
@@ -926,7 +934,7 @@ def create_behav_results_tables(num_pars):
         block_list = []
         
         for block, block_df in zip(exp.task_order_simp, gng_by_block.values()):
-            temp_block_df = block_df[["go_resp.corr", "go_resp.rt"]]
+            temp_block_df = block_df[["GNG_stim", "go_resp.corr", "go_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
         block_col = pd.Series(data_fun.flatten(block_list))
@@ -936,7 +944,7 @@ def create_behav_results_tables(num_pars):
         temp_gng_df.reset_index(inplace=True, drop=True)
         temp_gng_df.insert(0, "block", block_col)
         temp_gng_df.insert(0, "participant", par_num_col)
-        temp_gng_df.rename(columns={"go_resp.corr": "correct_response", "go_resp.rt": "response_time"}, inplace=True)
+        temp_gng_df.rename(columns={"GNG_stim": "stim", "go_resp.corr": "correct_response", "go_resp.rt": "response_time"}, inplace=True)
         gng_df_list.append(temp_gng_df.copy())
 
         # King Devick -----
