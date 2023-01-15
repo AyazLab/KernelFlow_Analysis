@@ -949,17 +949,21 @@ def create_behav_results_tables(num_pars):
         temp_block_df = pd.DataFrame() 
         block_df_list = []
         block_list = []
+        trial_list = []
         
-        for block, block_df in zip(exp.task_order_simp, gng_by_block.values()):
+        for i, (block, block_df) in enumerate(zip(exp.task_order_simp, gng_by_block.values())):
             temp_block_df = block_df[["GNG_stim", "go_resp.corr", "go_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
+            trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
+        trial_col = pd.Series(data_fun.flatten(trial_list))
         block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_gng_df = pd.DataFrame()
         temp_gng_df = pd.concat(block_df_list, axis=0)
         temp_gng_df.reset_index(inplace=True, drop=True)
         temp_gng_df.insert(0, "block", block_col)
+        temp_gng_df.insert(0, "trial", trial_col)
         temp_gng_df.insert(0, "participant", par_num_col)
         temp_gng_df.rename(columns={"GNG_stim": "stim", "go_resp.corr": "correct_response", "go_resp.rt": "response_time"}, inplace=True)
         gng_df_list.append(temp_gng_df.copy())
@@ -967,16 +971,19 @@ def create_behav_results_tables(num_pars):
         # King Devick -----
         exp = par.king_devick
 
-        if int(par_num) > 14:  # participants 15+ have a 4th card
+        if int(par_num) >= 15:  # participants 15+ have a 4th card
             num_rows = get_num_rows(exp=exp, new=True)
+            trial_col = pd.Series([1, 2, 3, 4])
             block_col = pd.Series(exp.task_order_new)
         else:
             num_rows = get_num_rows(exp=exp)
+            trial_col = pd.Series([1, 2, 3])
             block_col = pd.Series(exp.task_order)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
         
         temp_kd_df = exp.df_simp[["card_resp.rt", "num_incorrect"]]
         temp_kd_df.insert(0, "block", block_col)
+        temp_kd_df.insert(0, "trial", trial_col)
         temp_kd_df.insert(0, "participant", par_num_col)
         temp_kd_df = temp_kd_df.rename(columns={"card_resp.rt": "response_time"})
         kd_df_list.append(temp_kd_df.copy())
@@ -990,17 +997,21 @@ def create_behav_results_tables(num_pars):
         temp_block_df = pd.DataFrame() 
         block_df_list = []
         block_list = []
+        trial_list = []
         
-        for block, block_df in zip(exp.task_order_simp2, n_back_by_block.values()):
+        for i, (block, block_df) in enumerate(zip(exp.task_order_simp2, n_back_by_block.values())):
             temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
+            trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
+        trial_col = pd.Series(data_fun.flatten(trial_list))
         block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_n_back_df = pd.DataFrame()
         temp_n_back_df = pd.concat(block_df_list, axis=0)
         temp_n_back_df.reset_index(inplace=True, drop=True)
         temp_n_back_df.insert(0, "block", block_col)
+        temp_n_back_df.insert(0, "trial", trial_col)
         temp_n_back_df.insert(0, "participant", par_num_col)
         temp_n_back_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         n_back_df_list.append(temp_n_back_df.copy())
@@ -1014,17 +1025,21 @@ def create_behav_results_tables(num_pars):
         temp_block_df = pd.DataFrame() 
         block_df_list = []
         block_list = []
+        trial_list = []
         
-        for block, block_df in zip(exp.task_order_simp, tol_by_block.values()):
+        for i, (block, block_df) in enumerate(zip(exp.task_order_simp, tol_by_block.values())):
             temp_block_df = block_df[["image_stim", "stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
+            trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
+        trial_col = pd.Series(data_fun.flatten(trial_list))
         block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_tol_df = pd.DataFrame()
         temp_tol_df = pd.concat(block_df_list, axis=0)
         temp_tol_df.reset_index(inplace=True, drop=True)
         temp_tol_df.insert(0, "block", block_col)
+        temp_tol_df.insert(0, "trial", trial_col)
         temp_tol_df.insert(0, "participant", par_num_col)
         temp_tol_df.rename(columns={"image_stim": "stim", "stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         tol_df_list.append(temp_tol_df.copy())
@@ -1056,17 +1071,21 @@ def create_behav_results_tables(num_pars):
         temp_block_df = pd.DataFrame() 
         block_df_list = []
         block_list = []
+        trial_list = []
         
-        for block, block_df in zip(exp.task_order_simp, vsat_by_block.values()):
+        for i, (block, block_df) in enumerate(zip(exp.task_order_simp, vsat_by_block.values())):
             temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
             block_df_list.append(temp_block_df)
             block_list.append([block]*exp.num_trials)
+            trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
+        trial_col = pd.Series(data_fun.flatten(trial_list))
         block_col = pd.Series(data_fun.flatten(block_list))
 
         temp_vsat_df = pd.DataFrame()
         temp_vsat_df = pd.concat(block_df_list, axis=0)
         temp_vsat_df.reset_index(inplace=True, drop=True)
         temp_vsat_df.insert(0, "block", block_col)
+        temp_vsat_df.insert(0, "trial", trial_col)
         temp_vsat_df.insert(0, "participant", par_num_col)
         temp_vsat_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         vsat_df_list.append(temp_vsat_df.copy())
@@ -1075,30 +1094,37 @@ def create_behav_results_tables(num_pars):
         audio_df = pd.concat(audio_df_list, axis=0)
         audio_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.audio_narrative.exp_name}_behav.csv")
         audio_df.to_csv(audio_filepath, index=False)
+        
         # Go/No-Go -----
         gng_df = pd.concat(gng_df_list, axis=0)
         gng_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.go_no_go.exp_name}_behav.csv")
         gng_df.to_csv(gng_filepath, index=False)
+        
         # King Devick -----
         kd_df = pd.concat(kd_df_list, axis=0)
         kd_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.king_devick.exp_name}_behav.csv")
         kd_df.to_csv(kd_filepath, index=False)
+        
         # N-Back -----
         n_back_df = pd.concat(n_back_df_list, axis=0)
         n_back_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.n_back.exp_name}_behav.csv")
         n_back_df.to_csv(n_back_filepath, index=False)
+        
         # Tower of London -----
         tol_df = pd.concat(tol_df_list, axis=0)
         tol_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.tower_of_london.exp_name}_behav.csv")
         tol_df.to_csv(tol_filepath, index=False)
+        
         # Video Narrative CMIYC ----
         video_cmiyc_df = pd.concat(video_cmiyc_df_list, axis=0)
         video_cmiyc_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.video_narrative_cmiyc.exp_name}_behav.csv")
         video_cmiyc_df.to_csv(video_cmiyc_filepath, index=False)
+        
         # Video Narrative Sherlock ----
         video_sherlock_df = pd.concat(video_sherlock_df_list, axis=0)
         video_sherlock_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.video_narrative_sherlock.exp_name}_behav.csv")
         video_sherlock_df.to_csv(video_sherlock_filepath, index=False)
+        
         # vSAT -----
         vsat_df = pd.concat(vsat_df_list, axis=0)
         vsat_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.vSAT.exp_name}_behav.csv")
