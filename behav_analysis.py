@@ -245,10 +245,17 @@ class Data_Functions():
             print("ERROR: end index timestamp not found!")
             return None
 
-    def adjust_df_ts(self, df, start_ts, cols):
+    def adjust_df_ts(self, df, start_ts, cols, by_block=False):
         df = df.copy()
-        for col in cols:
-            df[col] = df[col] + start_ts
+        if by_block:
+            for block, temp_df in df.items():
+                temp_df = temp_df.copy()
+                for col in cols:
+                    temp_df[col] = temp_df[col] + start_ts
+                df[block] = temp_df
+        else:
+            for col in cols:
+                df[col] = df[col] + start_ts
         return df
 
     def c_to_f(self, temp):
@@ -302,8 +309,8 @@ class Go_No_Go(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_simp = self.df_simp.copy()
         self.df_simp["GNG_stim"] = self.df_simp["GNG_stim"].apply(self._strip_stim)
-        self.df_simp.insert(2, "inter_stim_plus.ended", self.df_simp["inter_stim_plus.started"] + self.df["inter_stim_interval"])
-        self.df_simp.insert(4, "go_image.ended", self.df_simp["go_image.started"] + self.df_simp["go_resp.rt"])
+        self.df_simp.insert(3, "inter_stim_plus.ended", self.df_simp["inter_stim_plus.started"] + self.df["inter_stim_interval"])
+        self.df_simp.insert(5, "go_image.ended", self.df_simp["go_image.started"] + self.df_simp["go_resp.rt"])
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
     
         self._correct_responses(df_by_block=self.df_by_block)
@@ -526,8 +533,8 @@ class Tower_of_London(Data_Functions):
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_simp = self.df_simp.copy()
         self.df_simp["image_stim"] = self.df_simp["image_stim"].apply(self._strip_stim)
-        self.df_simp.insert(2, "stim_image.ended", self.df_simp["stim_image.started"] + self.stim_duration)
-        self.df_simp.insert(4, "stim_text.ended", self.df_simp["stim_text.started"] + self.response_duration)
+        self.df_simp.insert(3, "stim_image.ended", self.df_simp["stim_image.started"] + self.stim_duration)
+        self.df_simp.insert(5, "stim_text.ended", self.df_simp["stim_text.started"] + self.response_duration)
         self.df_by_block, self.df_no_nan = self.parse_df(df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials) 
 
         self._correct_responses(df_by_block=self.df_by_block)
@@ -745,39 +752,81 @@ class Participant_Behav(Data_Functions):
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
         self.audio_narrative.start_ts = self.get_start_ts("audio_narrative")
-        self.audio_narrative.df_adjusted_ts = self.adjust_df_ts(self.audio_narrative.df_simp, self.audio_narrative.start_ts, ["pieman_clip.started", "pieman_clip.ended"])
+        self.audio_narrative.df_adj_ts = self.adjust_df_ts(self.audio_narrative.df_simp, self.audio_narrative.start_ts, ["pieman_clip.started", 
+                                                                                                                         "pieman_clip.ended"])
         
         self.go_no_go = Go_No_Go(par_dir=self.par_dir)
         self.go_no_go.start_ts = self.get_start_ts("go_no_go")
-        self.go_no_go.df_adjusted_ts = self.adjust_df_ts(self.go_no_go.df_no_nan, self.go_no_go.start_ts, ["inter_stim_plus.started", "inter_stim_plus.ended", "go_image.started", "go_image.ended"])
+        self.go_no_go.df_adj_ts = self.adjust_df_ts(self.go_no_go.df_no_nan, self.go_no_go.start_ts, ["inter_stim_plus.started", 
+                                                                                                      "inter_stim_plus.ended", 
+                                                                                                      "go_image.started", 
+                                                                                                      "go_image.ended"])
+        self.go_no_go.df_by_block_adj_ts = self.adjust_df_ts(self.go_no_go.df_by_block, self.go_no_go.start_ts, ["inter_stim_plus.started", 
+                                                                                                                 "inter_stim_plus.ended", 
+                                                                                                                 "go_image.started", 
+                                                                                                                 "go_image.ended"], 
+                                                                                                                 by_block=True)
         
         self.king_devick = King_Devick(par_dir=self.par_dir)
         self.king_devick.start_ts = self.get_start_ts("king_devick")
-        self.king_devick.df_adjusted_ts = self.adjust_df_ts(self.king_devick.df_simp, self.king_devick.start_ts, ["card_image.started", "card_image.ended"])
+        self.king_devick.df_adj_ts = self.adjust_df_ts(self.king_devick.df_simp, self.king_devick.start_ts, ["card_image.started", 
+                                                                                                             "card_image.ended"])
         
         self.n_back = N_Back(par_dir=self.par_dir)
         self.n_back.start_ts = self.get_start_ts("n_back")
-        self.n_back.df_adjusted_ts = self.adjust_df_ts(self.n_back.df_no_nan, self.n_back.start_ts, ["stim_text.started", "stim_text.ended", "inter_stim.started", "inter_stim.ended"])
+        self.n_back.df_adj_ts = self.adjust_df_ts(self.n_back.df_no_nan, self.n_back.start_ts, ["stim_text.started", 
+                                                                                                "stim_text.ended", 
+                                                                                                "inter_stim.started", 
+                                                                                                "inter_stim.ended"])
+        self.n_back.df_by_block_adj_ts = self.adjust_df_ts(self.n_back.df_by_block, self.n_back.start_ts, ["stim_text.started", 
+                                                                                                           "stim_text.ended", 
+                                                                                                           "inter_stim.started", 
+                                                                                                           "inter_stim.ended"], 
+                                                                                                           by_block=True)
         
         self.resting_state = Resting_State(par_dir=self.par_dir)
         self.resting_state.start_ts = self.get_start_ts("resting_state")
-        self.resting_state.df_adjusted_ts = self.adjust_df_ts(self.resting_state.df_simp, self.resting_state.start_ts, ["trial_cross.started", "halfway_tone.started","done_sound.started"])
+        self.resting_state.df_adj_ts = self.adjust_df_ts(self.resting_state.df_simp, self.resting_state.start_ts, ["trial_cross.started", 
+                                                                                                                   "halfway_tone.started", 
+                                                                                                                   "done_sound.started"])
 
         self.tower_of_london = Tower_of_London(par_dir=self.par_dir)
         self.tower_of_london.start_ts = self.get_start_ts("tower_of_london")
-        self.tower_of_london.df_adjusted_ts = self.adjust_df_ts(self.tower_of_london.df_no_nan, self.tower_of_london.start_ts, ["stim_image.started", "stim_image.ended", "stim_text.started", "stim_text.ended"])
+        self.tower_of_london.df_adj_ts = self.adjust_df_ts(self.tower_of_london.df_no_nan, self.tower_of_london.start_ts, ["stim_image.started", 
+                                                                                                                           "stim_image.ended", 
+                                                                                                                           "stim_text.started", 
+                                                                                                                            "stim_text.ended"])
+        self.tower_of_london.df_by_block_adj_ts = self.adjust_df_ts(self.tower_of_london.df_by_block, self.tower_of_london.start_ts, ["stim_image.started", 
+                                                                                                                                      "stim_image.ended", 
+                                                                                                                                      "stim_text.started", 
+                                                                                                                                      "stim_text.ended"],
+                                                                                                                                      by_block=True)
 
         self.video_narrative_cmiyc = Video_Narrative_CMIYC(par_dir=self.par_dir)
         self.video_narrative_cmiyc.start_ts = self.get_start_ts("video_narrative_cmiyc")
-        self.video_narrative_cmiyc.df_adjusted_ts = self.adjust_df_ts(self.video_narrative_cmiyc.df_simp, self.video_narrative_cmiyc.start_ts, ["video_start.started", "video_start.ended"])
+        self.video_narrative_cmiyc.df_adj_ts = self.adjust_df_ts(self.video_narrative_cmiyc.df_simp, self.video_narrative_cmiyc.start_ts, ["video_start.started", 
+                                                                                                                                           "video_start.ended"])
          
         self.video_narrative_sherlock = Video_Narrative_Sherlock(par_dir=self.par_dir)
         self.video_narrative_sherlock.start_ts = self.get_start_ts("video_narrative_sherlock")
-        self.video_narrative_sherlock.df_adjusted_ts = self.adjust_df_ts(self.video_narrative_sherlock.df_simp, self.video_narrative_sherlock.start_ts, ["video_start.started", "video_start.ended"])
+        self.video_narrative_sherlock.df_adj_ts = self.adjust_df_ts(self.video_narrative_sherlock.df_simp, self.video_narrative_sherlock.start_ts, ["video_start.started", 
+                                                                                                                                                    "video_start.ended"])
 
         self.vSAT = vSAT(par_dir=self.par_dir)
         self.vSAT.start_ts = self.get_start_ts("vSAT")
-        self.vSAT.df_adjusted_ts = self.adjust_df_ts(self.vSAT.df_no_nan, self.vSAT.start_ts, ["inter_stim_text.started", "inter_stim_text.ended", "vSAT_square.started", "vSAT_square.ended", "feedback_sound.started", "feedback_sound.ended"])
+        self.vSAT.df_adj_ts = self.adjust_df_ts(self.vSAT.df_no_nan, self.vSAT.start_ts, ["inter_stim_text.started", 
+                                                                                          "inter_stim_text.ended", 
+                                                                                          "vSAT_square.started", 
+                                                                                          "vSAT_square.ended", 
+                                                                                          "feedback_sound.started", 
+                                                                                          "feedback_sound.ended"])
+        self.vSAT.df_by_block_adj_ts = self.adjust_df_ts(self.vSAT.df_by_block, self.vSAT.start_ts, ["inter_stim_text.started", 
+                                                                                                     "inter_stim_text.ended", 
+                                                                                                     "vSAT_square.started", 
+                                                                                                     "vSAT_square.ended", 
+                                                                                                     "feedback_sound.started", 
+                                                                                                     "feedback_sound.ended"],
+                                                                                                     by_block=True)
 
         self.by_block_ts_df = self._create_by_block_ts_df()
 
@@ -940,10 +989,14 @@ def create_behav_results_tables(num_pars):
         trial_col = pd.Series([1])
         block_col = pd.Series(["audio_narrative"])
 
-        temp_audio_df = exp.df_adjusted_ts
+        temp_audio_df = exp.df_adj_ts
         temp_audio_df.insert(0, "block", block_col)
         temp_audio_df.insert(0, "trial", trial_col)
         temp_audio_df.insert(0, "participant", par_num_col)
+        temp_audio_df.rename(columns={"pieman_clip.started": "stim_start", 
+                                      "pieman_clip.ended": "stim_end", 
+                                      "participant_response.text": "response"}, 
+                                      inplace=True)
         audio_df_list.append(temp_audio_df)
 
         # Go/No-Go -----
@@ -951,15 +1004,15 @@ def create_behav_results_tables(num_pars):
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
-        gng_by_block = exp.df_by_block
-        temp_block_df = pd.DataFrame() 
+        gng_by_block = exp.df_by_block_adj_ts
+        # temp_block_df = pd.DataFrame() 
         block_df_list = []
         block_list = []
         trial_list = []
         
         for i, (block, block_df) in enumerate(zip(exp.task_order_simp, gng_by_block.values())):
-            temp_block_df = block_df[["GNG_stim", "go_resp.corr", "go_resp.rt"]]
-            block_df_list.append(temp_block_df)
+            # temp_block_df = block_df[["GNG_stim", "go_resp.corr", "go_resp.rt"]]
+            block_df_list.append(block_df)
             block_list.append([block]*exp.num_trials)
             trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
         trial_col = pd.Series(data_fun.flatten(trial_list))
@@ -971,7 +1024,14 @@ def create_behav_results_tables(num_pars):
         temp_gng_df.insert(0, "block", block_col)
         temp_gng_df.insert(0, "trial", trial_col)
         temp_gng_df.insert(0, "participant", par_num_col)
-        temp_gng_df.rename(columns={"GNG_stim": "stim", "go_resp.corr": "correct_response", "go_resp.rt": "response_time"}, inplace=True)
+        temp_gng_df.rename(columns={"GNG_stim": "stim", 
+                                    "inter_stim_plus.started": "inter_stim_start",
+                                    "inter_stim_plus.ended": "inter_stim_end",
+                                    "go_image.started": "stim_start",
+                                    "go_image.ended": "stim_end",
+                                    "go_resp.corr": "correct_response", 
+                                    "go_resp.rt": "response_time"}, 
+                                    inplace=True)
         gng_df_list.append(temp_gng_df.copy())
 
         # King Devick -----
@@ -987,11 +1047,13 @@ def create_behav_results_tables(num_pars):
             block_col = pd.Series(exp.task_order)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
         
-        temp_kd_df = exp.df_simp[["card_resp.rt", "num_incorrect"]]
+        temp_kd_df = exp.df_adj_ts
         temp_kd_df.insert(0, "block", block_col)
         temp_kd_df.insert(0, "trial", trial_col)
         temp_kd_df.insert(0, "participant", par_num_col)
-        temp_kd_df = temp_kd_df.rename(columns={"card_resp.rt": "response_time"})
+        temp_kd_df = temp_kd_df.rename(columns={"card_image.started": "stim_start",
+                                                "card_image.ended": "stim_end",
+                                                "card_resp.rt": "response_time"})
         kd_df_list.append(temp_kd_df.copy())
 
         # N-Back -----
@@ -999,15 +1061,13 @@ def create_behav_results_tables(num_pars):
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
-        n_back_by_block = exp.df_by_block
-        temp_block_df = pd.DataFrame() 
+        n_back_by_block = exp.df_by_block_adj_ts
         block_df_list = []
         block_list = []
         trial_list = []
         
         for i, (block, block_df) in enumerate(zip(exp.task_order_simp2, n_back_by_block.values())):
-            temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
-            block_df_list.append(temp_block_df)
+            block_df_list.append(block_df)
             block_list.append([block]*exp.num_trials)
             trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
         trial_col = pd.Series(data_fun.flatten(trial_list))
@@ -1019,11 +1079,16 @@ def create_behav_results_tables(num_pars):
         temp_n_back_df.insert(0, "block", block_col)
         temp_n_back_df.insert(0, "trial", trial_col)
         temp_n_back_df.insert(0, "participant", par_num_col)
-        temp_n_back_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
+        temp_n_back_df.rename(columns={"stim_text.started": "stim_start", 
+                                       "stim_text.ended": "stim_end",
+                                       "inter_stim.started": "inter_stim_start", 
+                                       "inter_stim.ended": "inter_stim_end",
+                                       "stim_resp.corr": "correct_response", 
+                                       "stim_resp.rt": "response_time"}, 
+                                       inplace=True)
         n_back_df_list.append(temp_n_back_df.copy())
 
         # Resting State -----
-        temp_rs_df = pd.DataFrame()
         exp = par.resting_state
         num_rows = get_num_rows(exp=exp)
 
@@ -1031,10 +1096,11 @@ def create_behav_results_tables(num_pars):
         trial_col = pd.Series([1, 2])
         block_col = pd.Series(exp.task_order_simp)
 
+        temp_rs_df = pd.DataFrame({"stim_start": [exp.df_adj_ts["trial_cross.started"][0], exp.df_adj_ts["halfway_tone.started"][0]], 
+                                   "stim_end": [exp.df_adj_ts["halfway_tone.started"][0], exp.df_adj_ts["done_sound.started"][0]]})
         temp_rs_df.insert(0, "block", block_col)
         temp_rs_df.insert(0, "trial", trial_col)
         temp_rs_df.insert(0, "participant", par_num_col)
-
         rs_df_list.append(temp_rs_df)
         
         # Tower of London -----
@@ -1042,15 +1108,13 @@ def create_behav_results_tables(num_pars):
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
-        tol_by_block = exp.df_by_block
-        temp_block_df = pd.DataFrame() 
+        tol_by_block = exp.df_by_block_adj_ts
         block_df_list = []
         block_list = []
         trial_list = []
         
         for i, (block, block_df) in enumerate(zip(exp.task_order_simp, tol_by_block.values())):
-            temp_block_df = block_df[["image_stim", "stim_resp.corr", "stim_resp.rt"]]
-            block_df_list.append(temp_block_df)
+            block_df_list.append(block_df)
             block_list.append([block]*exp.num_trials)
             trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
         trial_col = pd.Series(data_fun.flatten(trial_list))
@@ -1062,7 +1126,14 @@ def create_behav_results_tables(num_pars):
         temp_tol_df.insert(0, "block", block_col)
         temp_tol_df.insert(0, "trial", trial_col)
         temp_tol_df.insert(0, "participant", par_num_col)
-        temp_tol_df.rename(columns={"image_stim": "stim", "stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
+        temp_tol_df.rename(columns={"image_stim": "stim", 
+                                    "stim_image.started": "stim_start",
+                                    "stim_image.ended": "stim_end",
+                                    "stim_text.started": "response_start",
+                                    "stim_text.ended": "response_end",
+                                    "stim_resp.corr": "correct_response", 
+                                    "stim_resp.rt": "response_time"}, 
+                                    inplace=True)
         tol_df_list.append(temp_tol_df.copy())
 
         # Video Narrative CMIYC ----
@@ -1072,10 +1143,14 @@ def create_behav_results_tables(num_pars):
         trial_col = pd.Series([1])
         block_col = pd.Series(["video_narrative_cmiyc"])
 
-        temp_video_cmiyc_df = pd.DataFrame([exp.response], columns=["response"])
+        temp_video_cmiyc_df = exp.df_adj_ts
         temp_video_cmiyc_df.insert(0, "block", block_col)
         temp_video_cmiyc_df.insert(0, "trial", trial_col)
         temp_video_cmiyc_df.insert(0, "participant", par_num_col)
+        temp_video_cmiyc_df.rename(columns={"video_start.started": "stim_start", 
+                                            "video_start.ended": "stim_end", 
+                                            "catchme_participant_response.text": "response"}, 
+                                            inplace=True)
         video_cmiyc_df_list.append(temp_video_cmiyc_df)
 
         # Video Narrative Sherlock ----
@@ -1084,11 +1159,15 @@ def create_behav_results_tables(num_pars):
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
         trial_col = pd.Series([1])
         block_col = pd.Series(["video_narrative_sherlock"])
-
-        temp_video_sherlock_df = pd.DataFrame([exp.response], columns=["response"])
+    
+        temp_video_sherlock_df = exp.df_adj_ts
         temp_video_sherlock_df.insert(0, "block", block_col)
         temp_video_sherlock_df.insert(0, "trial", trial_col)
         temp_video_sherlock_df.insert(0, "participant", par_num_col)
+        temp_video_sherlock_df.rename(columns={"video_start.started": "stim_start", 
+                                               "video_start.ended": "stim_end", 
+                                               "sherlock_participant_response.text": "response"}, 
+                                               inplace=True)
         video_sherlock_df_list.append(temp_video_sherlock_df)
 
         # vSAT -----
@@ -1096,15 +1175,13 @@ def create_behav_results_tables(num_pars):
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
 
-        vsat_by_block = exp.df_by_block
-        temp_block_df = pd.DataFrame() 
+        vsat_by_block = exp.df_by_block_adj_ts
         block_df_list = []
         block_list = []
         trial_list = []
         
         for i, (block, block_df) in enumerate(zip(exp.task_order_simp, vsat_by_block.values())):
-            temp_block_df = block_df[["stim_resp.corr", "stim_resp.rt"]]
-            block_df_list.append(temp_block_df)
+            block_df_list.append(block_df)
             block_list.append([block]*exp.num_trials)
             trial_list.append([(i+1)]*block_df.shape[0])  # num rows in the block
         trial_col = pd.Series(data_fun.flatten(trial_list))
@@ -1116,7 +1193,15 @@ def create_behav_results_tables(num_pars):
         temp_vsat_df.insert(0, "block", block_col)
         temp_vsat_df.insert(0, "trial", trial_col)
         temp_vsat_df.insert(0, "participant", par_num_col)
-        temp_vsat_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
+        temp_vsat_df.rename(columns={"stim_resp.corr": "correct_response", 
+                                     "inter_stim_text.started": "inter_stim_start",
+                                     "inter_stim_text.ended": "inter_stim_end",
+                                     "vSAT_square.started": "stim_start",
+                                     "vSAT_square.ended": "stim_end",
+                                     "stim_resp.rt": "response_time",
+                                     "feedback_sound.started": "feedback_sound_start", 
+                                     "feedback_sound.ended": "feedback_sound_end"}, 
+                                     inplace=True)
         vsat_df_list.append(temp_vsat_df.copy())
 
         # Audio Narrative ----
