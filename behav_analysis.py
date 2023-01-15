@@ -1162,3 +1162,19 @@ def create_behav_results_tables(num_pars):
         vsat_df = pd.concat(vsat_df_list, axis=0)
         vsat_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.vSAT.exp_name}_behav.csv")
         vsat_df.to_csv(vsat_filepath, index=False)
+
+def load_results(results_dir, exp_name=None):
+    if exp_name:
+        for results_csv in os.listdir(results_dir):
+            if exp_name in results_csv:
+                full_path = os.path.join(results_dir, results_csv)
+                return pd.read_csv(full_path)
+        print("Invalid experiment name.")  # only reached if invalid experiment name argument 
+    else:
+        exp_dict = {}
+        for results_csv in os.listdir(results_dir):
+            exp_name = results_csv.split("_behav")[0]
+            full_path = os.path.join(results_dir, results_csv)
+            df = pd.read_csv(full_path)
+            exp_dict[exp_name] = df
+        return exp_dict
