@@ -801,10 +801,10 @@ class Participant_Behav(Data_Functions):
         return self.csv_to_df(marker_ts_filepath)
 
     def get_start_ts(self, exp_name):
-        return int(self.all_marker_timestamps[exp_name][0])
+        return float(int(self.all_marker_timestamps[exp_name][0])/1e9)
 
     def get_end_ts(self, exp_name):
-        return int(self.all_marker_timestamps[exp_name][1])
+        return float(int(self.all_marker_timestamps[exp_name][1])/1e9)
 
     def _create_by_block_ts_df(self):
         def format_ts(exp_name):
@@ -913,11 +913,12 @@ class Participant_Behav(Data_Functions):
 def create_behav_results_tables(num_pars):
     def get_num_rows(exp, new=False):
         if new: 
-            return int(exp.num_blocks * exp.num_trials_new)
+            return int(exp.num_blocks*exp.num_trials_new)
         else:    
-            return int(exp.num_blocks * exp.num_trials)
+            return int(exp.num_blocks*exp.num_trials)
 
     data_fun = Data_Functions()
+
     audio_df_list = []
     gng_df_list = []
     kd_df_list = []
@@ -939,7 +940,7 @@ def create_behav_results_tables(num_pars):
         trial_col = pd.Series([1])
         block_col = pd.Series(["audio_narrative"])
 
-        temp_audio_df = pd.DataFrame([exp.response], columns=["response"])
+        temp_audio_df = exp.df_adjusted_ts
         temp_audio_df.insert(0, "block", block_col)
         temp_audio_df.insert(0, "trial", trial_col)
         temp_audio_df.insert(0, "participant", par_num_col)
@@ -1162,7 +1163,7 @@ def create_behav_results_tables(num_pars):
         vsat_df = pd.concat(vsat_df_list, axis=0)
         vsat_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.vSAT.exp_name}_behav.csv")
         vsat_df.to_csv(vsat_filepath, index=False)
-
+    
 def load_results(results_dir, exp_name=None):
     if exp_name:
         for results_csv in os.listdir(results_dir):
