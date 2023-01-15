@@ -922,6 +922,7 @@ def create_behav_results_tables(num_pars):
     gng_df_list = []
     kd_df_list = []
     n_back_df_list = []
+    rs_df_list = []
     tol_df_list = []
     video_cmiyc_df_list = []
     video_sherlock_df_list = []
@@ -1020,6 +1021,21 @@ def create_behav_results_tables(num_pars):
         temp_n_back_df.rename(columns={"stim_resp.corr": "correct_response", "stim_resp.rt": "response_time"}, inplace=True)
         n_back_df_list.append(temp_n_back_df.copy())
 
+        # Resting State -----
+        temp_rs_df = pd.DataFrame()
+        exp = par.resting_state
+        num_rows = get_num_rows(exp=exp)
+
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        trial_col = pd.Series([1, 2])
+        block_col = pd.Series(exp.task_order_simp)
+
+        temp_rs_df.insert(0, "block", block_col)
+        temp_rs_df.insert(0, "trial", trial_col)
+        temp_rs_df.insert(0, "participant", par_num_col)
+
+        rs_df_list.append(temp_rs_df)
+        
         # Tower of London -----
         exp = par.tower_of_london
         num_rows = get_num_rows(exp=exp)
@@ -1122,6 +1138,11 @@ def create_behav_results_tables(num_pars):
         n_back_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.n_back.exp_name}_behav.csv")
         n_back_df.to_csv(n_back_filepath, index=False)
         
+        # Resting State -----
+        rs_df = pd.concat(rs_df_list, axis=0)
+        rs_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.resting_state.exp_name}_behav.csv")
+        rs_df.to_csv(rs_filepath, index=False)
+
         # Tower of London -----
         tol_df = pd.concat(tol_df_list, axis=0)
         tol_filepath = os.path.join(os.getcwd(), "results/behavioral", f"{par.tower_of_london.exp_name}_behav.csv")
