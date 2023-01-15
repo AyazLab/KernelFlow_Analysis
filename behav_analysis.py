@@ -935,8 +935,12 @@ def create_behav_results_tables(num_pars):
         exp = par.audio_narrative
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        trial_col = pd.Series([1])
+        block_col = pd.Series(["audio_narrative"])
 
         temp_audio_df = pd.DataFrame([exp.response], columns=["response"])
+        temp_audio_df.insert(0, "block", block_col)
+        temp_audio_df.insert(0, "trial", trial_col)
         temp_audio_df.insert(0, "participant", par_num_col)
         audio_df_list.append(temp_audio_df)
 
@@ -1048,8 +1052,12 @@ def create_behav_results_tables(num_pars):
         exp = par.video_narrative_cmiyc
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
-        
+        trial_col = pd.Series([1])
+        block_col = pd.Series(["video_narrative_cmiyc"])
+
         temp_video_cmiyc_df = pd.DataFrame([exp.response], columns=["response"])
+        temp_video_cmiyc_df.insert(0, "block", block_col)
+        temp_video_cmiyc_df.insert(0, "trial", trial_col)
         temp_video_cmiyc_df.insert(0, "participant", par_num_col)
         video_cmiyc_df_list.append(temp_video_cmiyc_df)
 
@@ -1057,8 +1065,12 @@ def create_behav_results_tables(num_pars):
         exp = par.video_narrative_sherlock
         num_rows = get_num_rows(exp=exp)
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
-        
+        trial_col = pd.Series([1])
+        block_col = pd.Series(["video_narrative_sherlock"])
+
         temp_video_sherlock_df = pd.DataFrame([exp.response], columns=["response"])
+        temp_video_sherlock_df.insert(0, "block", block_col)
+        temp_video_sherlock_df.insert(0, "trial", trial_col)
         temp_video_sherlock_df.insert(0, "participant", par_num_col)
         video_sherlock_df_list.append(temp_video_sherlock_df)
 
