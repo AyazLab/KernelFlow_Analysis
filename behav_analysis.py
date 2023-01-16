@@ -1098,6 +1098,9 @@ class Participant_Behav(Data_Functions):
             start_ts, end_ts = self.get_exp_ts(self.marker_ts_df, exp_name=exp_name)
             return start_ts / 1e9, end_ts / 1e9
 
+        def get_value_dict(block, trial):
+            return {"block": block, "trial": trial}
+
         by_block_ts_df = {}
         for exp_name in self.exp_order:
             block_ts_df = {}
@@ -1110,12 +1113,16 @@ class Participant_Behav(Data_Functions):
                 block_start_ts = start_ts + block_start_time
                 clip_length = 423  # 423 second clip
                 block_end_ts = block_start_ts + clip_length
+                value_dict = get_value_dict("audio_narrative", 1)
                 block_ts_df[(block_start_ts, block_end_ts)] = exp_name
 
             elif exp_name == "go_no_go":
                 start_ts, _ = format_ts(exp_name)
-                for block, block_df in zip(
-                    self.go_no_go.task_order_simp, self.go_no_go.df_by_block.values()
+                for i, (block, block_df) in enumerate(
+                    zip(
+                        self.go_no_go.task_order_simp,
+                        self.go_no_go.df_by_block.values(),
+                    )
                 ):
                     block_start_time = block_df["inter_stim_plus.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
@@ -1123,23 +1130,32 @@ class Participant_Behav(Data_Functions):
                         block_df["go_image.started"].iloc[-1] + 0.5
                     )  # image shown for 0.5 seconds
                     block_end_ts = start_ts + block_end_time
-                    block_ts_df[(block_start_ts, block_end_ts)] = block
+                    value_dict = get_value_dict(block, i + 1)
+                    block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "king_devick":
                 start_ts, _ = format_ts(exp_name)
-                for block, block_start_time, rt in zip(
-                    self.king_devick.task_order,
-                    self.king_devick.df_simp["card_image.started"].values,
-                    self.king_devick.df_simp["card_resp.rt"].values,
+                task_order = (
+                    self.king_devick.task_order_new
+                    if self.king_devick.task_order_new
+                    else self.king_devick.task_order
+                )
+                for i, (block, block_start_time, rt) in enumerate(
+                    zip(
+                        task_order,
+                        self.king_devick.df_simp["card_image.started"].values,
+                        self.king_devick.df_simp["card_resp.rt"].values,
+                    )
                 ):
                     block_start_ts = start_ts + block_start_time
                     block_end_ts = block_start_ts + rt
-                    block_ts_df[(block_start_ts, block_end_ts)] = block
+                    value_dict = get_value_dict(block, i + 1)
+                    block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "n_back":
                 start_ts, _ = format_ts(exp_name)
-                for block, block_df in zip(
-                    self.n_back.task_order_simp2, self.n_back.df_by_block.values()
+                for i, (block, block_df) in enumerate(
+                    zip(self.n_back.task_order_simp2, self.n_back.df_by_block.values())
                 ):
                     block_start_time = block_df["stim_text.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
@@ -1147,7 +1163,8 @@ class Participant_Behav(Data_Functions):
                         block_df["stim_text.started"].iloc[-1] + 0.5
                     )  # number shown for 0.5 seconds
                     block_end_ts = start_ts + block_end_time
-                    block_ts_df[(block_start_ts, block_end_ts)] = block
+                    value_dict = get_value_dict(block, i + 1)
+                    block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "resting_state":
                 start_ts, _ = format_ts(exp_name)
@@ -1159,9 +1176,8 @@ class Participant_Behav(Data_Functions):
                     self.resting_state.df_simp["halfway_tone.started"].item()
                     - block_start_time
                 )
-                block_ts_df[
-                    (block_start_ts, block_end_ts)
-                ] = self.resting_state.task_order_simp[0]
+                value_dict = get_value_dict(self.resting_state.task_order_simp[0], 1)
+                block_ts_df[(block_start_ts, block_end_ts)] = value_dict
                 block_start_time = self.resting_state.df_simp[
                     "halfway_tone.started"
                 ].item()
@@ -1170,15 +1186,16 @@ class Participant_Behav(Data_Functions):
                     self.resting_state.df_simp["done_sound.started"].item()
                     - block_start_time
                 )
-                block_ts_df[
-                    (block_start_ts, block_end_ts)
-                ] = self.resting_state.task_order_simp[1]
+                value_dict = get_value_dict(self.resting_state.task_order_simp[1], 2)
+                block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "tower_of_london":
                 start_ts, _ = format_ts(exp_name)
-                for block, block_df in zip(
-                    self.tower_of_london.task_order_simp,
-                    self.tower_of_london.df_by_block.values(),
+                for i, (block, block_df) in enumerate(
+                    zip(
+                        self.tower_of_london.task_order_simp,
+                        self.tower_of_london.df_by_block.values(),
+                    )
                 ):
                     block_start_time = block_df["stim_image.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
@@ -1186,7 +1203,8 @@ class Participant_Behav(Data_Functions):
                         block_df["stim_text.started"].iloc[-1] + 3
                     )  # 3 seconds to respond
                     block_end_ts = start_ts + block_end_time
-                    block_ts_df[(block_start_ts, block_end_ts)] = block
+                    value_dict = get_value_dict(block, i + 1)
+                    block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "video_narrative_cmiyc":
                 start_ts, _ = format_ts(exp_name)
@@ -1196,7 +1214,8 @@ class Participant_Behav(Data_Functions):
                 block_start_ts = start_ts + block_start_time  # NOTE
                 clip_length = 300  # 300 second clip
                 block_end_ts = block_start_ts + clip_length
-                block_ts_df[(block_start_ts, block_end_ts)] = exp_name
+                value_dict = get_value_dict("video_narrative_cmiyc", 1)
+                block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "video_narrative_sherlock":
                 start_ts, _ = format_ts(exp_name)
@@ -1206,12 +1225,13 @@ class Participant_Behav(Data_Functions):
                 block_start_ts = start_ts + block_start_time
                 clip_length = 300  # 300 second clip
                 block_end_ts = block_start_ts + clip_length
-                block_ts_df[(block_start_ts, block_end_ts)] = exp_name
+                value_dict = get_value_dict("video_narrative_sherlock", 1)
+                block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "vSAT":
                 start_ts, _ = format_ts(exp_name)
-                for block, block_df in zip(
-                    self.vSAT.task_order_simp, self.vSAT.df_by_block.values()
+                for i, (block, block_df) in enumerate(
+                    zip(self.vSAT.task_order_simp, self.vSAT.df_by_block.values())
                 ):
                     block_start_time = block_df["inter_stim_text.started"].iloc[0]
                     block_start_ts = start_ts + block_start_time
@@ -1219,7 +1239,8 @@ class Participant_Behav(Data_Functions):
                         block_df["feedback_sound.started"].iloc[-1] + 0.5
                     )  # 0.5 second delay
                     block_end_ts = start_ts + block_end_time
-                    block_ts_df[(block_start_ts, block_end_ts)] = block
+                    value_dict = get_value_dict(block, i + 1)
+                    block_ts_df[(block_start_ts, block_end_ts)] = value_dict
             by_block_ts_df[exp_name] = block_ts_df
 
         return by_block_ts_df
@@ -1634,3 +1655,4 @@ def load_results(results_dir, exp_name=None):
             df = pd.read_csv(full_path)
             exp_dict[exp_name] = df
         return exp_dict
+
