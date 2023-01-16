@@ -1114,7 +1114,7 @@ class Participant_Behav(Data_Functions):
                 clip_length = 423  # 423 second clip
                 block_end_ts = block_start_ts + clip_length
                 value_dict = get_value_dict("audio_narrative", 1)
-                block_ts_df[(block_start_ts, block_end_ts)] = exp_name
+                block_ts_df[(block_start_ts, block_end_ts)] = value_dict
 
             elif exp_name == "go_no_go":
                 start_ts, _ = format_ts(exp_name)
