@@ -2,13 +2,29 @@ import os
 import datetime
 import pandas as pd
 import numpy as np
+from typing import Tuple
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from behav_analysis import Data_Functions, Participant_Behav
 
 
 class Participant_Watch:
-    def __init__(self, par_num):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing physiological data from the smart watch. 
+
+    Attributes:
+        modality_df_dict - Full physiological datasets from the smart watch 
+        exp_modality_df_dict - Physiological datasets sliced to the duration of each experiment
+
+    """
+    def __init__(self, par_num: str):
+        """
+        Generate smart watch physiology data structures for a participant.
+
+        Args:
+            par_num (str): Participant number
+        """
         self.data_fun = Data_Functions()
         self.par_num = par_num
         self.par_ID = f"participant_{self.par_num}"
@@ -24,7 +40,13 @@ class Participant_Watch:
         self.marker_ts_df = self.par_behav.marker_ts_df
         self.exp_modality_dict = self._create_exp_modality_dict()
 
-    def _get_data_dirs(self):
+    def _get_data_dirs(self) -> list:
+        """
+        Get the path(s) to each of the watch data dir(s).
+
+        Returns:
+            list: Path(s) to watch data dir(s)
+        """
         watch_dir = os.path.join(self.par_dir, "watch_data")
         dir_list = []
         for dir_name in os.listdir(watch_dir):
@@ -32,22 +54,32 @@ class Participant_Watch:
 
         return dir_list
 
-    def _create_modality_df(self, modality):
+    def _create_modality_df(self, modality: str) -> pd.DataFrame:
+        """
+        Reads physiological data from CSV files, creates timestamp and datetime columns,
+        and complies this data into a DataFrame. 
+
+        Args:
+            modality (str): Name of the modality
+
+        Returns:
+            pd.DataFrame: Full physiological dataset for a modality with time columns
+        """
         df_list = []
         for watch_dir in self._dir_list:
             filepath = os.path.join(watch_dir, modality + ".csv")
             temp_df = pd.read_csv(filepath)
-            initial_ts = int(float(temp_df.columns[0]))
+            initial_ts = int(float(temp_df.columns[0]))  # initial timestamp of the dataset
 
             if modality != "IBI":
-                samp_freq = int(temp_df.iloc[0][0])
+                samp_freq = int(temp_df.iloc[0][0])  # dataset sampling frequency 
                 ts_col = pd.Series(
                     [initial_ts + i / samp_freq for i in range(temp_df.size)]
                 )
                 dt_col = pd.Series(
                     [datetime.datetime.fromtimestamp(ts) for ts in ts_col]
                 )
-                temp_df = temp_df[1:]
+                temp_df = temp_df[1:]  # remove non-data row
                 temp_df.insert(loc=0, column="timestamps", value=ts_col)
                 temp_df.insert(loc=1, column="datetime", value=dt_col)
                 if modality == "ACC":
@@ -59,9 +91,9 @@ class Participant_Watch:
                         },
                         inplace=True,
                     )
-                    temp_df["accel_x"] = temp_df["accel_x"] / 64
-                    temp_df["accel_y"] = temp_df["accel_y"] / 64
-                    temp_df["accel_z"] = temp_df["accel_z"] / 64
+                    temp_df["accel_x"] = temp_df["accel_x"] / 64  # scale to +/- 2g
+                    temp_df["accel_y"] = temp_df["accel_y"] / 64  # scale to +/- 2g
+                    temp_df["accel_z"] = temp_df["accel_z"] / 64  # scale to +/- 2g
                 elif modality == "BVP" or modality == "EDA" or modality == "HR":
                     temp_df.rename(columns={temp_df.columns[2]: modality}, inplace=True)
                 elif modality == "TEMP":
@@ -82,20 +114,57 @@ class Participant_Watch:
                 temp_df.rename(columns={temp_df.columns[2]: modality}, inplace=True)
             df_list.append(temp_df)
 
-        df = pd.concat(df_list, axis=0)
+        df = pd.concat(df_list, axis=0)  # vertically concatenate datasets for a modality
         df.reset_index(inplace=True, drop=True)
 
         return df
 
-    def _create_modality_df_dict(self):
+    def _create_modality_df_dict(self) -> dict:
+        """
+        Creates a dictionary containing full physiological datasets for all modalities.
+
+        Returns:
+            dict: Physiological data dict
+                keys: 'ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP'
+            values:
+                Modality DataFrame w/ columns 'timestamps', 'datetime', ... 
+                'modality specific columns'
+        """
         modality_df_dict = {}
         for modality in self.modalities:
             modality_df_dict[modality] = self._create_modality_df(modality)
 
         return modality_df_dict
 
-    def _create_exp_modality_dict(self):
-        def _get_behav_cols(exp_name, df):
+    def _create_exp_modality_dict(self) -> dict:
+        """
+        Creates a dictionary containing physiological datasets sliced to the duration
+        of each experiment.
+
+        Returns:
+            dict: Sliced physiological datasets that can be indexed by experiment name
+                keys: 
+                    'resting_state', 'go_no_go', 'video_narrative_sherlock', 'king_devick', 
+                    'vSAT', 'audio_narrative', 'n_back', 'tower_of_london', 'video_narrative_cmiyc'
+                values:
+                    Modality DataFrame dicts
+                        keys: 
+                            'ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP'
+                        values:
+                            Modality DataFrame w/ columns 'block', 'trial', 'timestamps', 'datetime', ...
+                            'modality specific columns'
+        """
+        def _get_behav_cols(exp_name: str, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+            """
+            Creates two behavioral columns for the given experiment: block and trial.
+
+            Args:
+                exp_name (str): Name of the experiment
+                df (pd.DataFrame): Full physiological dataset for a modality with time columns
+
+            Returns:
+                Tuple[pd.DataFrame, pd.DataFrame]: block column and trial column 
+            """
             exp = self.par_behav.get_exp(exp_name=exp_name)
             num_blocks = exp.num_blocks
             num_rows = df.shape[0]  # num rows for the modality
@@ -108,14 +177,14 @@ class Participant_Watch:
                 exp_name == "audio_narrative"
                 or exp_name == "video_narrative_cmiyc"
                 or exp_name == "video_narrative_sherlock"
-            ):
+            ):  # these experiment have 1 block and 1 trial
                 for ts_tuple, value_dict in self.par_behav.by_block_ts_df[
                     exp_name
                 ].items():
-                    start_ts = ts_tuple[0]
-                    end_ts = ts_tuple[1]
-                    start_idx = self.data_fun.get_start_index_ts(df, start_ts)
-                    end_idx = self.data_fun.get_end_index_ts(df, end_ts)
+                    start_ts = ts_tuple[0]  # start timestamp of the experiment
+                    end_ts = ts_tuple[1]  # end timestamp of the experiment
+                    start_idx = self.data_fun.get_start_index_ts(df, start_ts)  # start index of the experiment
+                    end_idx = self.data_fun.get_end_index_ts(df, end_ts)  # end index of the experiment
                     block = value_dict["block"]
                     trial = value_dict["trial"]
                     if start_idx == None or end_idx == None:
@@ -141,12 +210,12 @@ class Participant_Watch:
                             self.data_fun.create_col(
                                 trial, end_idx - start_idx, dtype=int
                             )
-                        )
+                        )  # between start/end idx
                         trial_col_list.append(
                             self.data_fun.create_col(
                                 None, num_rows - end_idx, dtype=object
                             )
-                        )
+                        )  # end_idx to -1
 
             elif (
                 exp_name == "go_no_go"
@@ -155,14 +224,14 @@ class Participant_Watch:
                 or exp_name == "resting_state"
                 or exp_name == "tower_of_london"
                 or exp_name == "vSAT"
-            ):
+            ):  # these experiment have > 1 block and > 1 trial
                 for i, (ts_tuple, value_dict) in enumerate(
                     self.par_behav.by_block_ts_df[exp_name].items()
                 ):
-                    start_ts = ts_tuple[0]
-                    end_ts = ts_tuple[1]
-                    start_idx = self.data_fun.get_start_index_ts(df, start_ts)
-                    end_idx = self.data_fun.get_end_index_ts(df, end_ts)
+                    start_ts = ts_tuple[0]  # start timestamp of the experiment
+                    end_ts = ts_tuple[1]  # end timestamp of the experiment
+                    start_idx = self.data_fun.get_start_index_ts(df, start_ts)  # start index of the experiment
+                    end_idx = self.data_fun.get_end_index_ts(df, end_ts)  # end index of the experiment
                     block = value_dict["block"]
                     trial = value_dict["trial"]
                     if start_idx == None or end_idx == None:
@@ -171,57 +240,57 @@ class Participant_Watch:
                         if i == 0:
                             block_col_list.append(
                                 self.data_fun.create_col(None, start_idx, dtype=object)
-                            )
+                            )  # 0 to start_idx
                             block_col_list.append(
                                 self.data_fun.create_col(
                                     block, end_idx - start_idx, dtype=pd.StringDtype()
                                 )
-                            )
+                            )  # between start/end idx
                             trial_col_list.append(
                                 self.data_fun.create_col(None, start_idx, dtype=object)
-                            )
+                            )  # 0 to start_idx
                             trial_col_list.append(
                                 self.data_fun.create_col(
                                     trial, end_idx - start_idx, dtype=int
                                 )
-                            )
+                            )  # between start/end idx
                         elif i == exp.num_blocks - 1:
                             block_col_list.append(
                                 self.data_fun.create_col(
                                     block, end_idx - start_idx, dtype=pd.StringDtype()
                                 )
-                            )
+                            )  # between start/end idx
                             block_col_list.append(
                                 self.data_fun.create_col(
                                     None, num_rows - end_idx, dtype=object
                                 )
-                            )
+                            )  # end_idx to -1
                             trial_col_list.append(
                                 self.data_fun.create_col(
                                     trial, end_idx - start_idx, dtype=int
                                 )
-                            )
+                            )  # between start/end idx
                             trial_col_list.append(
                                 self.data_fun.create_col(
                                     None, num_rows - end_idx, dtype=object
                                 )
-                            )
+                            )  # end_idx to -1
                         else:
                             block_col_list.append(
                                 self.data_fun.create_col(
                                     block, end_idx - start_idx, dtype=pd.StringDtype()
                                 )
-                            )
+                            )  # between start/end idx
                             trial_col_list.append(
                                 self.data_fun.create_col(
                                     trial, end_idx - start_idx, dtype=int
                                 )
-                            )
+                            )  # between start/end idx
 
             try:
                 block_col = pd.concat(block_col_list, axis=0, ignore_index=True)
                 trial_col = pd.concat(trial_col_list, axis=0, ignore_index=True)
-            except ValueError:  # Par 08 start index timestamp not found!
+            except ValueError:  # catch exception when watch data is missing for a participant
                 block_col = None
                 trial_col = None
 
@@ -231,30 +300,30 @@ class Participant_Watch:
         for exp_name in self.exp_order:
             start_dt, end_dt = self.data_fun.get_exp_dt(
                 self.marker_ts_df, exp_name=exp_name
-            )  # start/end of an exp
+            )  # start/end datetime of an experiment
             exp_modality_data_dict = {}
             for modality, df in self.modality_df_dict.items():
                 block_col, trial_col = _get_behav_cols(
                     exp_name, df
-                )  # get block/trial rows for the exp duration
+                )  # block and trial rows for the experiment duration
                 start_idx = self.data_fun.get_start_index_dt(
                     df=df, start_dt=start_dt
-                )  # exp start idx for this modality
+                )  # experiment start index for this modality
                 end_idx = self.data_fun.get_end_index_dt(
                     df=df, end_dt=end_dt
-                )  # exp end idx for this modality
+                )  # experiment end index for this modality
                 if start_idx == None or end_idx == None:
                     exp_modality_data_dict[modality] = None
                 else:
                     block_col_sel = block_col.iloc[start_idx:end_idx].reset_index(
                         drop=True
-                    )
+                    )  # block rows for the experiment duration
                     trial_col_sel = trial_col.iloc[start_idx:end_idx].reset_index(
                         drop=True
-                    )
+                    )  # trial rows for the experiment duration
                     modality_df = self.modality_df_dict[modality].iloc[
                         start_idx:end_idx
-                    ]  # get modality rows for the exp duration
+                    ]  # modality rows for the experiment duration
                     modality_df = modality_df.reset_index(drop=True)
                     modality_df.insert(0, "trial", trial_col_sel)
                     modality_df.insert(0, "block", block_col_sel)
@@ -267,11 +336,17 @@ class Participant_Watch:
 
         return exp_modality_dict
 
-    def _plot_exp_regions(self, ax):
+    def _plot_exp_regions(self, ax: plt.Axes) -> None:
+        """
+        Plots x-axis spans with color-corresponding modalities. 
+
+        Args:
+            ax (plt.Axes): Axes of the plot
+        """
         for exp_name in self.exp_order:
             start_dt, end_dt = self.data_fun.get_exp_dt(
                 self.marker_ts_df, exp_name=exp_name
-            )
+            )  # start/end datetime of an experiment
             ax.axvline(start_dt, linestyle="dashed", color="k", alpha=0.75)
             ax.axvline(end_dt, linestyle="dashed", color="k", alpha=0.75)
             if exp_name == "audio_narrative":
@@ -315,7 +390,13 @@ class Participant_Watch:
             elif exp_name == "vSAT":
                 ax.axvspan(start_dt, end_dt, color="cyan", alpha=0.4, label="vSAT")
 
-    def plot_modality(self, modality):
+    def plot_modality(self, modality: str) -> None:
+        """
+        Plots and displays time-series data for a modality.
+
+        Args:
+            modality (str): Name of the modality to plot
+        """
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
         modality_df = self.modality_df_dict[modality]
         fig, ax = plt.subplots(1, 1, figsize=(15, 6))
@@ -355,8 +436,26 @@ class Participant_Watch:
         ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
 
 
-def create_watch_results_tables(num_pars):
-    def _create_df(par_list, exp_name, modality):
+def create_watch_results_tables(num_pars: int) -> None:
+    """
+    Generate an Excel file for each experiment that contains the time-synchronized
+    behavioral and physiological data for all participants.
+
+    Args:
+        num_pars (int): Number of participants in the study.
+    """
+    def _create_df(par_list: list, exp_name: str, modality: str) -> pd.DataFrame:
+        """
+        Create a DataFrame containing time-synchronized behavioral/physiological datasets
+
+        Args:
+            par_list (list): List of participant in the study
+            exp_name (str): Name of the experiment
+            modality (str): Name of the modality
+
+        Returns:
+            pd.DataFrame: Time-synchronized behavioral/physiological datasets
+        """
         temp_df_list = []
         for par in par_list:
             temp_df = pd.DataFrame()
@@ -379,7 +478,15 @@ def create_watch_results_tables(num_pars):
         df.reset_index(inplace=True, drop=True)
         return df
 
-    def _data_to_excel(exp_name, data_dict):
+    def _data_to_excel(exp_name: str, data_dict: dict) -> None:
+        """
+        Write the data to Excel files.
+
+        Args:
+            exp_name (str): Name of the experiment
+            data_dict (dict): Time-synchronized behavioral/physiological datasets 
+                              organized by experiment name
+        """
         filepath = os.path.join(
             os.getcwd(), "results", "watch", f"{exp_name}_watch.xlsx"
         )
@@ -393,7 +500,7 @@ def create_watch_results_tables(num_pars):
     par_list = []
     for i in range(num_pars):
         par_num = f"{(i+1):02d}"
-        print("\n-----", par_num, "-----")
+        print(f"Generating results for Participant {par_num} ...")
         par = Participant_Watch(par_num=par_num)
         par_list.append(par)
 
@@ -446,6 +553,6 @@ def create_watch_results_tables(num_pars):
                 or modality == "TEMP"
             ):
                 modality_df = _create_df(par_list, exp_name, modality)
-                data_dict[modality] = modality_df.dropna()
+                data_dict[modality] = modality_df.dropna()  # remove rows with Nan values
 
         _data_to_excel(exp_name, data_dict)
