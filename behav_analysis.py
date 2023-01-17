@@ -188,8 +188,8 @@ class Data_Functions:
     def get_cols(self, df, cols):
         return df[cols]
 
-    def create_col(self, x, num_rows):  # TODO, specify dtype in function call
-        return pd.Series([x] * num_rows)
+    def create_col(self, x, num_rows, dtype=object):
+        return pd.Series([x] * num_rows, dtype=dtype)
 
     def flatten(self, input_list):
         return [x for xs in input_list for x in xs]
@@ -1297,7 +1297,7 @@ def create_behav_results_tables(num_pars):
         # Audio Narrative ----
         exp = par.audio_narrative
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
         trial_col = pd.Series([1])
         block_col = pd.Series(["audio_narrative"])
 
@@ -1318,7 +1318,7 @@ def create_behav_results_tables(num_pars):
         # Go/No-Go -----
         exp = par.go_no_go
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
 
         gng_by_block = exp.df_by_block_adj_ts
         # temp_block_df = pd.DataFrame()
@@ -1367,7 +1367,7 @@ def create_behav_results_tables(num_pars):
             num_rows = get_num_rows(exp=exp)
             trial_col = pd.Series([1, 2, 3])
             block_col = pd.Series(exp.task_order)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
 
         temp_kd_df = exp.df_adj_ts
         temp_kd_df.insert(0, "block", block_col)
@@ -1385,7 +1385,7 @@ def create_behav_results_tables(num_pars):
         # N-Back -----
         exp = par.n_back
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
 
         n_back_by_block = exp.df_by_block_adj_ts
         block_df_list = []
@@ -1424,7 +1424,7 @@ def create_behav_results_tables(num_pars):
         exp = par.resting_state
         num_rows = get_num_rows(exp=exp)
 
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
         trial_col = pd.Series([1, 2])
         block_col = pd.Series(exp.task_order_simp)
 
@@ -1448,7 +1448,7 @@ def create_behav_results_tables(num_pars):
         # Tower of London -----
         exp = par.tower_of_london
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
 
         tol_by_block = exp.df_by_block_adj_ts
         block_df_list = []
@@ -1487,7 +1487,7 @@ def create_behav_results_tables(num_pars):
         # Video Narrative CMIYC ----
         exp = par.video_narrative_cmiyc
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
         trial_col = pd.Series([1])
         block_col = pd.Series(["video_narrative_cmiyc"])
 
@@ -1508,7 +1508,7 @@ def create_behav_results_tables(num_pars):
         # Video Narrative Sherlock ----
         exp = par.video_narrative_sherlock
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
         trial_col = pd.Series([1])
         block_col = pd.Series(["video_narrative_sherlock"])
 
@@ -1529,7 +1529,7 @@ def create_behav_results_tables(num_pars):
         # vSAT -----
         exp = par.vSAT
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows)
+        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
 
         vsat_by_block = exp.df_by_block_adj_ts
         block_df_list = []
