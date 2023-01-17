@@ -225,15 +225,13 @@ def create_watch_results_tables(num_pars):
         for par in par_list:
             temp_df = pd.DataFrame()
             try:
+                temp_df["trial"] = par.exp_modality_dict[exp_name][modality]["trial"]
+                temp_df["block"] = par.exp_modality_dict[exp_name][modality]["block"]
                 temp_df["timestamps"] = par.exp_modality_dict[exp_name][modality]["timestamps"]
                 temp_df[modality] = par.exp_modality_dict[exp_name][modality][modality]
                 temp_df.reset_index(inplace=True, drop=True)
                 par_num_col = par.data_fun.create_col(par.par_num, num_rows=temp_df.shape[0])
-                temp_df.insert(loc=0, column="participant", value=par_num_col)
-                # block_col = par.exp_modality_dict[exp_name][modality]["block"]  
-                # temp_df.insert(loc=1, column="block", value=block_col)  
-                # trial_col = par.exp_modality_dict[exp_name][modality]["trial"]  
-                # temp_df.insert(loc=1, column="trial", value=trial_col)  
+                temp_df.insert(loc=0, column="participant", value=par_num_col) 
             except:
                 temp_df[modality] = None
             temp_df_list.append(temp_df)
@@ -265,6 +263,8 @@ def create_watch_results_tables(num_pars):
                 for par in par_list:
                     temp_df = pd.DataFrame()
                     try:
+                        temp_df["trial"] = par.exp_modality_dict[exp_name][modality]["trial"]
+                        temp_df["block"] = par.exp_modality_dict[exp_name][modality]["block"]
                         temp_df["timestamps"] = par.exp_modality_dict[exp_name][modality]["timestamps"]
                         temp_df["accel_x"] = par.exp_modality_dict[exp_name][modality]["accel_x"]
                         temp_df["accel_y"] = par.exp_modality_dict[exp_name][modality]["accel_y"]
@@ -272,10 +272,6 @@ def create_watch_results_tables(num_pars):
                         temp_df.reset_index(inplace=True, drop=True)
                         par_num_col = par.data_fun.create_col(par.par_num, num_rows=temp_df.shape[0])
                         temp_df.insert(loc=0, column="participant", value=par_num_col)
-                        # block_col = par.exp_modality_dict[exp_name][modality]["block"]
-                        # temp_df.insert(loc=1, column="block", value=block_col)
-                        # trial_col = par.exp_modality_dict[exp_name][modality]["trial"]  
-                        # temp_df.insert(loc=1, column="trial", value=trial_col)  
                     except:
                         temp_df["accel_x"] = None
                         temp_df["accel_y"] = None
