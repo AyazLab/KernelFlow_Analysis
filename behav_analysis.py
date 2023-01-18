@@ -482,16 +482,16 @@ class Audio_Narrative(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        clip_duration: number of seconds in the narrative clip
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        df: full experimental data
-        df_simp: selection of experimental data
-        response: participant response to the narrative
-        block_start_time: start timestamp of the narrative clip
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        clip_duration: Number of seconds in the narrative clip
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        response: Participant response to the narrative
+        block_start_time: Start timestamp of the narrative clip
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -538,16 +538,16 @@ class Go_No_Go(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        task_order: order of experiment tasks
-        task_order_simp: simplified order of experiment tasks
-        df: full experimental data
-        df_simp: selection of experimental data
-        df_by_block: selection of experimental data organized into task blocks
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        task_order: Order of experiment tasks
+        task_order_simp: Simplified order of experiment tasks
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        df_by_block: Selection of experimental data organized into task blocks
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -655,15 +655,15 @@ class King_Devick(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        task_order: order of experiment tasks
-        task_order_new: simplified order of experiment tasks
-        df: full experimental data
-        df_simp: selection of experimental data
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        task_order: Order of experiment tasks
+        task_order_new: Simplified order of experiment tasks
+        df: Full experimental data
+        df_simp: Selection of experimental data
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -723,18 +723,18 @@ class N_Back(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        stim_duration: duration of stimulus
-        inter_stim_duration: duration between stimuli
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        task_order: order of experiment tasks
-        task_order_simp: simplified order of experiment tasks
-        df: full experimental data
-        df_simp: selection of experimental data
-        df_by_block: selection of experimental data organized into task blocks
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        stim_duration: Duration of stimulus
+        inter_stim_duration: Duration between stimuli
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        task_order: Order of experiment tasks
+        task_order_simp: Simplified order of experiment tasks
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        df_by_block: Selection of experimental data organized into task blocks
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -850,17 +850,17 @@ class Resting_State(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        session_duration: duration of each session (eyes open and eyes closed)
-        inter_stim_duration: duration between stimuli
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        task_order: order of experiment tasks
-        task_order_simp: simplified order of experiment tasks
-        df: full experimental data
-        df_simp: selection of experimental data
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        session_duration: Duration of each session (eyes open and eyes closed)
+        inter_stim_duration: Duration between stimuli
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        task_order: Order of experiment tasks
+        task_order_simp: Simplified order of experiment tasks
+        df: Full experimental data
+        df_simp: Selection of experimental data
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -898,18 +898,18 @@ class Tower_of_London(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        stim_duration: duration of stimulus
-        response_duration: duration the participant has to respond
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        task_order: order of experiment tasks
-        task_order_simp: simplified order of experiment tasks
-        df: full experimental data
-        df_simp: selection of experimental data
-        df_by_block: selection of experimental data organized into task blocks
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        stim_duration: Duration of stimulus
+        response_duration: Duration the participant has to respond
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        task_order: Order of experiment tasks
+        task_order_simp: Simplified order of experiment tasks
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        df_by_block: Selection of experimental data organized into task blocks
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -1015,16 +1015,16 @@ class Video_Narrative_CMIYC(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        clip_duration: number of seconds in the narrative clip
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        df: full experimental data
-        df_simp: selection of experimental data
-        response: participant response to the narrative
-        block_start_time: start timestamp of the narrative clip
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        clip_duration: Number of seconds in the narrative clip
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        response: Participant response to the narrative
+        block_start_time: Start timestamp of the narrative clip
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -1070,16 +1070,16 @@ class Video_Narrative_Sherlock(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        clip_duration: number of seconds in the narrative clip
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        df: full experimental data
-        df_simp: selection of experimental data
-        response: participant response to the narrative
-        block_start_time: start timestamp of the narrative clip
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        clip_duration: Number of seconds in the narrative clip
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        response: Participant response to the narrative
+        block_start_time: Start timestamp of the narrative clip
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -1125,16 +1125,16 @@ class vSAT(Data_Functions):
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        exp_name: name of the experiment
-        num_blocks: number of blocks in the experiment
-        num_trials: number of trials in the experiment
-        data_filepath: path to the experiment directory
-        marker_data: start and end marker data for the experiment
-        task_order: order of experiment tasks
-        task_order_simp: simplified order of experiment tasks
-        df: full experimental data
-        df_simp: selection of experimental data
-        df_by_block: selection of experimental data organized into task blocks
+        exp_name: Name of the experiment
+        num_blocks: Number of blocks in the experiment
+        num_trials: Number of trials in the experiment
+        data_filepath: Path to the experiment directory
+        marker_data: Start and end marker data for the experiment
+        task_order: Order of experiment tasks
+        task_order_simp: Simplified order of experiment tasks
+        df: Full experimental data
+        df_simp: Selection of experimental data
+        df_by_block: Selection of experimental data organized into task blocks
     """
     def __init__(self, par_dir):
         super().__init__()
@@ -1261,9 +1261,24 @@ class Participant_Behav(Data_Functions):
     This class contains functions, data structures, and info necessary for
     processing participants and behavioral data from the experiments. 
 
-    Attributes:
-        
+    Args:
+        Data_Functions (class): Experiment processing functions
 
+    Attributes:
+        par_num: Participant number 
+        par_id: Participant ID
+        par_dir: Path to specific participant directory
+        exp_order: Experiment order
+        all_marker_timestamps: Dictionary with start and end timestamps for each experiment 
+        marker_ts_df: DataFrame with start and end timestamps for each experiment 
+        audio_narrative: Audio Narrative experiment instance
+        go_no_go: Go/No-Go experiment instance
+        king_devick: King Devick experiment instance
+        n_back: N-Back experiment instance
+        tower_of_london: Tower of London experiment instance
+        video_narrative_cmiyc: Video Narrative CMIYC experiment instance
+        video_narrative_sherlock: Video Narrative Sherlock experiment instance
+        vSAT: vSAT experiment instance
     """
     def __init__(self, par_num):
         super().__init__()
@@ -1422,7 +1437,7 @@ class Participant_Behav(Data_Functions):
             by_block=True,
         )
 
-        self.by_block_ts_df = self._create_by_block_ts_df()
+        self.by_block_ts_dict = self._create_by_block_ts_dict()
 
     def get_exp_order(self) -> list:
         """
@@ -1447,7 +1462,10 @@ class Participant_Behav(Data_Functions):
 
         return exp_order
 
-    def _create_marker_ts_csv(self):
+    def _create_marker_ts_csv(self) -> None:
+        """
+        Create a CSV file containing the start and end timestamps for each experiment.
+        """
         filepath = os.path.join(
             self.par_dir,
             f"{self.par_ID}_marker_timestamps.csv",
@@ -1466,28 +1484,92 @@ class Participant_Behav(Data_Functions):
             )
             marker_ts_df.to_csv(filepath, index=False)
 
-    def _create_marker_ts_df(self):
+    def _create_marker_ts_df(self) -> pd.DataFrame:
+        """
+        Create a DataFrame from a CSV file containing the start and end timestamps for each experiment.
+
+        Returns:
+            pd.DataFrame: Start and end timestamps for each experiment
+        """
         marker_ts_filepath = os.path.join(
             self.par_dir, f"{self.par_ID}_marker_timestamps.csv"
         )
 
         return pd.read_csv(marker_ts_filepath)
 
-    def get_start_ts(self, exp_name):
+    def get_start_ts(self, exp_name: str) -> float:
+        """
+        Get the start timestamp of an experiment 
+
+        Args:
+            exp_name (str): Name of the experiment
+
+        Returns:
+            float: Start timestamp of the experiment
+        """
         return float(int(self.all_marker_timestamps[exp_name][0]) / 1e9)
 
-    def get_end_ts(self, exp_name):
+    def get_end_ts(self, exp_name: str) -> float:
+        """
+        Get the end timestamp of an experiment 
+
+        Args:
+            exp_name (str): Name of the experiment
+
+        Returns:
+            float: End timestamp of the experiment
+        """
         return float(int(self.all_marker_timestamps[exp_name][1]) / 1e9)
 
-    def _create_by_block_ts_df(self):
-        def format_ts(exp_name):
+    def _create_by_block_ts_dict(self) -> dict:
+        """
+        Creates a dictionary with the start and end timestamps for each block and trial of each experiment.
+
+        Returns:
+            dict: Block and trial start and end timestamps for each experiment
+                keys: 
+                    'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
+                    'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
+                values: start and end timestamp dict 
+                    keys:
+                        (start timestamp, end_timestamp)
+                    values: block and trial dict
+                        keys: 
+                            'block', 'trial'
+                        values:
+                            'block name', 'trial number'
+        """
+        def format_ts(exp_name: str) -> Tuple[float, float]:
+            """
+            Format timestamp into UTC second format from nanosecond format.
+
+            Args:
+                exp_name (str): Experiment name
+
+            Returns:
+                Tuple[float, float]: Start timestamp, end timestamp
+            """
             start_ts, end_ts = self.get_exp_ts(self.marker_ts_df, exp_name=exp_name)
             return start_ts / 1e9, end_ts / 1e9
 
-        def get_value_dict(block, trial):
+        def get_value_dict(block: str, trial: int) -> dict:
+            """
+            Create a dictionary with block and trial values.
+
+            Args:
+                block (str): Experiment block
+                trial (int): Experiment trial
+
+            Returns:
+                dict: Block and trial dictionary
+                    keys:
+                        'block', 'trial'
+                    values:
+                        'block name', 'trial number'
+            """
             return {"block": block, "trial": trial}
 
-        by_block_ts_df = {}
+        by_block_ts_dict = {}
         for exp_name in self.exp_order:
             block_ts_df = {}
 
@@ -1627,11 +1709,20 @@ class Participant_Behav(Data_Functions):
                     block_end_ts = start_ts + block_end_time
                     value_dict = get_value_dict(block, i + 1)
                     block_ts_df[(block_start_ts, block_end_ts)] = value_dict
-            by_block_ts_df[exp_name] = block_ts_df
+            by_block_ts_dict[exp_name] = block_ts_df
 
-        return by_block_ts_df
+        return by_block_ts_dict
 
-    def get_exp(self, exp_name):
+    def get_exp(self, exp_name: str):
+        """
+        Get an instance of the experiment class.
+
+        Args:
+            exp_name (str): Experiment name
+
+        Returns:
+            class: Instance of experiment class
+        """
         if exp_name == "audio_narrative":
             return self.audio_narrative
         elif exp_name == "go_no_go":
@@ -1651,14 +1742,39 @@ class Participant_Behav(Data_Functions):
         elif exp_name == "vSAT":
             return self.vSAT
 
-    def get_start_dt(self, exp_name):
+    def get_start_dt(self, exp_name: str) -> datetime.datetime:
+        """
+        Convert start timestamp of an experiment into the start datetime.
+
+        Args:
+            exp_name (str): Experiment name
+
+        Returns:
+            datetime.datetime: Start datetime of an experiment
+        """
         return datetime.datetime.fromtimestamp(
             int(self.all_marker_timestamps[exp_name][0]) / 1e9
         )
 
 
-def create_behav_results_tables(num_pars):
-    def get_num_rows(exp, new=False):
+def create_behav_results_tables(num_pars: int) -> None:
+    """
+    Write the processed experiment and behavioral data into CSV files. 
+
+    Args:
+        num_pars (int): Number of participants
+    """
+    def get_num_rows(exp, new: bool=False) -> int:
+        """
+        Get the number of rows needed for the experiment (number of blocks * number of trials).
+
+        Args:
+            exp (class): Instance of an experiment class
+            new (bool, optional): Is there a new number of rows? Defaults to False
+
+        Returns:
+            int: Number of rows in the experiment
+        """
         if new:
             return int(exp.num_blocks * exp.num_trials_new)
         else:
@@ -1707,7 +1823,6 @@ def create_behav_results_tables(num_pars):
         par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
 
         gng_by_block = exp.df_by_block_adj_ts
-        # temp_block_df = pd.DataFrame()
         block_df_list = []
         block_list = []
         trial_list = []
@@ -1715,7 +1830,6 @@ def create_behav_results_tables(num_pars):
         for i, (block, block_df) in enumerate(
             zip(exp.task_order_simp, gng_by_block.values())
         ):
-            # temp_block_df = block_df[["GNG_stim", "go_resp.corr", "go_resp.rt"]]
             block_df_list.append(block_df)
             block_list.append([block] * exp.num_trials)
             trial_list.append([(i + 1)] * block_df.shape[0])  # num rows in the block
@@ -2024,7 +2138,22 @@ def create_behav_results_tables(num_pars):
         vsat_df.to_csv(vsat_filepath, index=False)
 
 
-def load_results(results_dir, exp_name=None):
+def load_results(results_dir: str, exp_name: str=None) -> dict:
+    """
+    Read the experiment behavioral results from CSV files into a dictionary of DataFrames.
+
+    Args:
+        results_dir (str): Path to the results directory
+        exp_name (str, optional): Get results for a specific experiment? Defaults to None
+
+    Returns:
+        dict: Behavioral results dictionary
+            keys:
+                'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
+                'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
+            values:
+                DataFrame of behavioral results for each experiment
+    """
     if exp_name:
         for results_csv in os.listdir(results_dir):
             if exp_name in results_csv:
