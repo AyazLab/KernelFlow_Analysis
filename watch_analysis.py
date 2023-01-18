@@ -178,7 +178,7 @@ class Participant_Watch:
                 or exp_name == "video_narrative_cmiyc"
                 or exp_name == "video_narrative_sherlock"
             ):  # these experiment have 1 block and 1 trial
-                for ts_tuple, value_dict in self.par_behav.by_block_ts_df[
+                for ts_tuple, value_dict in self.par_behav.by_block_ts_dict[
                     exp_name
                 ].items():
                     start_ts = ts_tuple[0]  # start timestamp of the experiment
@@ -226,7 +226,7 @@ class Participant_Watch:
                 or exp_name == "vSAT"
             ):  # these experiment have > 1 block and > 1 trial
                 for i, (ts_tuple, value_dict) in enumerate(
-                    self.par_behav.by_block_ts_df[exp_name].items()
+                    self.par_behav.by_block_ts_dict[exp_name].items()
                 ):
                     start_ts = ts_tuple[0]  # start timestamp of the experiment
                     end_ts = ts_tuple[1]  # end timestamp of the experiment
