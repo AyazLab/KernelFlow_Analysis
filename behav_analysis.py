@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 import numpy as np
 from statistics import mean
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Type
 
 
 class Data_Functions:
@@ -470,11 +470,29 @@ class Data_Functions:
         Returns:
             float: Temperature in celsius
         """
-
         return round(temp * 9 / 5 + 32, 2)
 
 
 class Audio_Narrative(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the Audio Narrative experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        clip_duration: number of seconds in the narrative clip
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        df: full experimental data
+        df_simp: selection of experimental data
+        response: participant response to the narrative
+        block_start_time: start timestamp of the narrative clip
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "audio_narrative"
@@ -484,6 +502,7 @@ class Audio_Narrative(Data_Functions):
         self.data_filepath = self.get_data_filepath(
             par_dir=par_dir, exp_name=self.exp_name
         )
+        
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         self.df = pd.read_csv(self.data_filepath)
 
@@ -503,7 +522,7 @@ class Audio_Narrative(Data_Functions):
             return self.df_simp["participant_response.text"][0]
         except:
             print(
-                "ERROR: Pieman - Need to combine 'participant response' columns into a single column."
+                "Audio Narrative: Need to combine 'participant response' columns into a single column."
             )
 
     def get_clip_start_time(self):
@@ -511,6 +530,25 @@ class Audio_Narrative(Data_Functions):
 
 
 class Go_No_Go(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the Go/No-Go experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        task_order: order of experiment tasks
+        task_order_simp: simplified order of experiment tasks
+        df: full experimental data
+        df_simp: selection of experimental data
+        df_by_block: selection of experimental data organized into task blocks
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "go_no_go"
@@ -609,6 +647,24 @@ class Go_No_Go(Data_Functions):
 
 
 class King_Devick(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the King Devick experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        task_order: order of experiment tasks
+        task_order_new: simplified order of experiment tasks
+        df: full experimental data
+        df_simp: selection of experimental data
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "king_devick"
@@ -659,6 +715,27 @@ class King_Devick(Data_Functions):
 
 
 class N_Back(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the N-Back experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        stim_duration: duration of stimulus
+        inter_stim_duration: duration between stimuli
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        task_order: order of experiment tasks
+        task_order_simp: simplified order of experiment tasks
+        df: full experimental data
+        df_simp: selection of experimental data
+        df_by_block: selection of experimental data organized into task blocks
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "n_back"
@@ -765,6 +842,26 @@ class N_Back(Data_Functions):
 
 
 class Resting_State(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the Resting State experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        session_duration: duration of each session (eyes open and eyes closed)
+        inter_stim_duration: duration between stimuli
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        task_order: order of experiment tasks
+        task_order_simp: simplified order of experiment tasks
+        df: full experimental data
+        df_simp: selection of experimental data
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "resting_state"
@@ -793,6 +890,27 @@ class Resting_State(Data_Functions):
 
 
 class Tower_of_London(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the Tower of London experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        stim_duration: duration of stimulus
+        response_duration: duration the participant has to respond
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        task_order: order of experiment tasks
+        task_order_simp: simplified order of experiment tasks
+        df: full experimental data
+        df_simp: selection of experimental data
+        df_by_block: selection of experimental data organized into task blocks
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "tower_of_london"
@@ -889,6 +1007,25 @@ class Tower_of_London(Data_Functions):
 
 
 class Video_Narrative_CMIYC(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the Video Narrative CMIYC experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        clip_duration: number of seconds in the narrative clip
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        df: full experimental data
+        df_simp: selection of experimental data
+        response: participant response to the narrative
+        block_start_time: start timestamp of the narrative clip
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "video_narrative_cmiyc"
@@ -917,7 +1054,7 @@ class Video_Narrative_CMIYC(Data_Functions):
             return self.df_simp["catchme_participant_response.text"][0]
         except:
             print(
-                "ERROR: Catchme - Need to combine 'participant response' columns into a single column."
+                "Video Narrative CMIYC: Need to combine 'participant response' columns into a single column."
             )
 
     def get_clip_start_time(self):
@@ -925,6 +1062,25 @@ class Video_Narrative_CMIYC(Data_Functions):
 
 
 class Video_Narrative_Sherlock(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the Video Narrative Sherlock experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        clip_duration: number of seconds in the narrative clip
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        df: full experimental data
+        df_simp: selection of experimental data
+        response: participant response to the narrative
+        block_start_time: start timestamp of the narrative clip
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "video_narrative_sherlock"
@@ -961,6 +1117,25 @@ class Video_Narrative_Sherlock(Data_Functions):
 
 
 class vSAT(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing the vSAT experiment.
+
+    Args:
+        Data_Functions (class): Experiment processing functions
+
+    Attributes:
+        exp_name: name of the experiment
+        num_blocks: number of blocks in the experiment
+        num_trials: number of trials in the experiment
+        data_filepath: path to the experiment directory
+        marker_data: start and end marker data for the experiment
+        task_order: order of experiment tasks
+        task_order_simp: simplified order of experiment tasks
+        df: full experimental data
+        df_simp: selection of experimental data
+        df_by_block: selection of experimental data organized into task blocks
+    """
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "vSAT"
