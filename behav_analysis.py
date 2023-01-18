@@ -3,33 +3,47 @@ import datetime
 import pandas as pd
 import numpy as np
 from statistics import mean
+from typing import List, Tuple, Optional
 
 
 class Data_Functions:
-    def get_exp_order(self) -> list:
-        """Returns the experiment order"""
+    """
+    This class contains functions used for processing experiment files as well as 
+    participant, behavioral, and physiological data.
+    """
+    def parse_log_file(self, par_dir: str, exp_name: str) -> dict:
+        """
+        Parses the experiment log file into start and end marker data. 
 
-        exp_order_filename = f"{self.par_ID}_experiment_order.txt"
-        exp_order_filepath = os.path.join(self.par_dir, exp_order_filename)
+        Args:
+            par_dir (str): Path to specific participant directory
+            exp_name (str): Name of the experiment
 
-        with open(exp_order_filepath) as f:
-            lines = f.readlines()
+        Returns:
+            dict: Start and end marker data
+                keys:
+                    'start_marker', 'end_marker'
+                values:
+                    start marker dictionary, end marker dictionary
+                        keys:
+                            'marker_ID', 'marker_value', 'marker_string', 'timestamp'
+                        values:
+                            'marker_ID', 'marker_value', 'marker_string', 'timestamp'
+        """
+        def _parse_udp(udp: str) -> dict:
+            """
+            Parses UDP file lines into marker information. 
 
-        exp_order = []
-        for line in lines:
-            if "Block" in line or "-" in line or line == "\n":
-                pass
-            else:
-                exp_order.append(line.strip("\n"))
+            Args:
+                udp (str): File line with UDP data
 
-        return exp_order
-
-    def parse_log_file(self, par_dir, exp_name) -> list:
-        """Returns a list of the marker data parsed from the log file"""
-
-        def _parse_udp(udp) -> dict:
-            """Returns a dict of the parsed UDP marker information"""
-
+            Returns:
+                dict: Marker data
+                    keys:
+                        'marker_ID', 'marker_value', 'marker_string', 'timestamp'
+                    values:
+                        'marker_ID', 'marker_value', 'marker_string', 'timestamp'
+            """
             marker_ID_info = udp[2].strip(",").split("=")
             marker_ID_str = marker_ID_info[0]
             marker_ID = marker_ID_info[1]
@@ -46,14 +60,14 @@ class Data_Functions:
             marker_ts_str = marker_ts_info[0]
             marker_ts = marker_ts_info[1]
 
-            marker_data = {
+            marker_dict = {
                 marker_ID_str: marker_ID,
                 marker_val_str: marker_val,
                 marker_string_str: marker_string,
                 marker_ts_str: marker_ts,
             }
 
-            return marker_data
+            return marker_dict
 
         log_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(log_dir):
@@ -66,41 +80,49 @@ class Data_Functions:
 
         udp_lines = []
         for line in lines:
-            if "UDP" in line:
+            if "UDP" in line:  # only select lines with UDP info
                 udp_lines.append(line.split("\t")[-1])
 
-        marker_data = []
+        marker_data = {}
         try:
             start_udp = udp_lines[0].split(" ")
-            marker_data.append(_parse_udp(start_udp))
+            marker_data["start_marker"] = _parse_udp(start_udp)
         except:
-            marker_data.append("_")
+            marker_data["start_marker"] = "_"
         try:
             end_udp = udp_lines[1].split(" ")
-            marker_data.append(_parse_udp(end_udp))
+            marker_data["end_marker"] =_parse_udp(end_udp)
         except:
-            if exp_name == "go_no_go":
-                marker_ID = int(marker_data[0]["marker_ID"]) + 1
+            if exp_name == "go_no_go":  # Go/No-go start marker did not write to log file
+                marker_ID = int(marker_data["start_marker"]["marker_ID"]) + 1
                 marker_val = 22
                 marker_string = "go_no_go_end"
-                end_ts = marker_data[0]["timestamp"]
+                end_ts = marker_data["start_marker"]["timestamp"]
                 end_ts = int(
                     float(end_ts) + float(lines[-1].split("\t")[0]) * 1e9 - 0.4 * 1e9
                 )
-                marker_data.append(
-                    {
+                marker_data["end_marker"] = {
                         "marker_ID": marker_ID,
                         "marker_value": marker_val,
                         "marker_string": marker_string,
                         "timestamp": end_ts,
                     }
-                )
             else:
-                marker_data.append("_")
+                marker_data["end_marker"] = "_"
 
         return marker_data
 
-    def parse_narrative_log_file(self, par_dir, exp_name):
+    def parse_narrative_log_file(self, par_dir: str, exp_name: str) -> float:
+        """
+        Parses the narrative log file to get the end timestamp for narrative experiments.
+
+        Args:
+            par_dir (str): Path to specific participant directory
+            exp_name (str): Name of the experiment
+
+        Returns:
+            float: End timestamp of a narrative experiment
+        """
         log_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(log_dir):
             if ".log" in filename:
@@ -119,8 +141,18 @@ class Data_Functions:
 
         return end_time
 
-    def parse_task_order_file(self, par_dir, exp_name) -> pd.DataFrame:
-        """Returns a data frame of the task order parsed from the task order file"""
+    def parse_task_order_file(self, par_dir: str, exp_name: str) -> pd.DataFrame:
+        """
+        Parses the task order file to get the order of task CSV files for a given experiment.
+
+        Args:
+            par_dir (str): Path to specific participant directory
+            exp_name (str): Name of the experiment
+
+        Returns:
+            pd.DataFrame: Column of task order CSV filenames
+                column name: 'task_order'
+        """
 
         exp_dir = os.path.join(par_dir, exp_name)
         for filename in os.listdir(exp_dir):
@@ -131,8 +163,17 @@ class Data_Functions:
 
         return task_order
 
-    def get_data_filepath(self, par_dir, exp_name) -> str:
-        """Returns the filepath"""
+    def get_data_filepath(self, par_dir: str, exp_name: str) -> str:
+        """
+        Gets the file path to the data CSV file for a given experiment.
+
+        Args:
+            par_dir (str): Path to specific participant directory
+            exp_name (str): Name of the experiment
+
+        Returns:
+            str: Path to experiment CSV data file
+        """
 
         data_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(data_dir):
@@ -142,64 +183,124 @@ class Data_Functions:
 
         return data_filepath
 
-    def csv_to_df(self, filepath):
-        df = pd.read_csv(filepath)
+    def get_all_marker_timestamps(self, par_dir: str, exp_order: list) -> dict:
+        """
+        Organize the start and end timestamps for each experiment into a dictionary. 
 
-        return df
+        Args:
+            par_dir (str): Path to specific participant directory
+            exp_order (list): _description_
 
-    def get_all_marker_timestamps(self, par_dir, exp_order):
+        Returns:
+            dict: Start and end timestamps for each experiment
+                keys:
+                     'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
+                     'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
+                values:
+                    [start timestamp, end timestamp]    
+        """
         all_marker_timestamps = {}
         for exp_name in exp_order:
-            start_marker, end_marker = self.parse_log_file(
+            marker_dict = self.parse_log_file(
                 par_dir=par_dir, exp_name=exp_name
             )
+            start_marker, end_marker = marker_dict["start_marker"], marker_dict["end_marker"]
             if (
                 "narrative" in exp_name
                 and "participant_01" not in par_dir
                 and "participant_02" not in par_dir
                 and "participant_03" not in par_dir
-            ):
+            ):  # Narrative experiment timestamps changed for Participant 04+
                 try:
                     start_ts = start_marker["timestamp"]
                 except:
                     start_ts = "_"
-                    print("ERROR: start marker not found", exp_name)
+                    print("Start marker not found for {exp_name}")
                 try:
                     end_ts = float(start_ts) + self.parse_narrative_log_file(
                         par_dir, exp_name
                     )
                 except:
-                    print("ERROR: end marker not found", exp_name)
+                    print("End marker not found for {exp_name}")
+
             else:
                 try:
                     start_ts = start_marker["timestamp"]
                 except:
                     start_ts = "_"
-                    print("ERROR: start marker not found", exp_name)
+                    print("Start marker not found for {exp_name}")
+
                 try:
                     end_ts = end_marker["timestamp"]
                 except:
                     end_ts = "_"
-                    print("ERROR: end marker not found", exp_name)
+                    print("End marker not found for {exp_name}")
             all_marker_timestamps[exp_name] = [start_ts, end_ts]
 
         return all_marker_timestamps
 
-    def get_cols(self, df, cols):
+    def get_cols(self, df: pd.DataFrame, cols: list) -> pd.DataFrame:
+        """
+        Get a selection of columns from a given DataFrame.
+
+        Args:
+            df (pd.DataFrame): Experiment data
+            cols (list): List of columns to select from the DataFrame
+
+        Returns:
+            pd.DataFrame: DataFrame with selected columns only 
+        """
         return df[cols]
 
-    def create_col(self, x, num_rows, dtype=object):
+    def create_col(self, x, num_rows: int, dtype=object) -> pd.Series:
+        """
+        Create a Series column of a value.
+
+        Args:
+            x (Any): Value for each row in the column
+            num_rows (int): Number of rows in the column
+            dtype (_type_, optional): Type of x
+
+        Returns:
+            pd.Series: Column with num_rows rows of x 
+        """
         return pd.Series([x] * num_rows, dtype=dtype)
 
-    def flatten(self, input_list):
+    def flatten(self, input_list: List[list]) -> list:
+        """
+        Flatten a list of lists into a single list.
+
+        Args:
+            input_list (List[list]): List of lists
+
+        Returns:
+            list: Single list with all elements of the input list
+        """
         return [x for xs in input_list for x in xs]
 
-    def parse_df(self, df, num_blocks, num_trials):
+    def parse_df(self, df: pd.DataFrame, num_blocks: int, num_trials: int) -> Tuple[dict, pd.DataFrame]:
+        """
+        Parses a DataFrame into a dictionary organized by block and a DataFrame with NaN rows removed.
+
+        Args:
+            df (pd.DataFrame): DataFrame to prase
+            num_blocks (int): Number of blocks in the experiment
+            num_trials (int): Number of trials in the experiment
+
+        Returns:
+            Tuple[dict, pd.DataFrame]:
+                dict: dictionary organized by block
+                    keys:
+                        'block_1', 'block2', ... 'block_N'
+                    values:
+                        DataFrame of behavioral data for that block
+                pd.DataFrame: DataFrame with no NaN rows        
+        """
         df_by_block = {}
         for i in range(num_blocks):
             block_name = f"block_{i+1}"
             if i == 0:
-                temp_df = df.iloc[i * num_trials : (i + 1) * num_trials]
+                temp_df = df.iloc[i * num_trials : (i + 1) * num_trials]  # select rows for this block
                 df_no_nan = temp_df.copy()
             else:
                 temp_df = df.iloc[
@@ -210,14 +311,34 @@ class Data_Functions:
 
         return df_by_block, df_no_nan
 
-    def get_exp_ts(self, df, exp_name):
+    def get_exp_ts(self, df: pd.DataFrame, exp_name: str) -> Tuple[int, int]:
+        """
+        Get the start and end timestamps from an experiment-organized DataFrame
+
+        Args:
+            df (pd.DataFrame): DataFrame with experiment-organized start and end marker timestamps
+            exp_name (str): Name of the experiment
+
+        Returns:
+            Tuple[int, int]: start timestamp, end timestamp
+        """ 
         df_temp = df[df["exp_name"] == exp_name]
         start_ts = df_temp["start_timestamp"].item()
         end_ts = df_temp["end_timestamp"].item()
 
         return start_ts, end_ts
 
-    def get_exp_dt(self, df, exp_name):
+    def get_exp_dt(self, df: pd.DataFrame, exp_name: str) -> Tuple[datetime.datetime, datetime.datetime]:
+        """
+        Get the start and end datetimes from an experiment-organized DataFrame
+
+        Args:
+            df (pd.DataFrame): DataFrame with experiment-organized start and end marker timestamps
+            exp_name (str): Name of the experiment
+
+        Returns:
+            Tuple[datetime.datetime, datetime.datetime]: start datetime, end datetime
+        """
         df_temp = df[df["exp_name"] == exp_name]
         start_dt = datetime.datetime.fromtimestamp(
             df_temp["start_timestamp"].item() / 1e9
@@ -226,7 +347,17 @@ class Data_Functions:
 
         return start_dt, end_dt
 
-    def get_start_index_dt(self, df, start_dt):
+    def get_start_index_dt(self, df: pd.DataFrame, start_dt: datetime.datetime) -> Optional[int]:
+        """
+        Get the index of the start datetime of an experiment
+
+        Args:
+            df (pd.DataFrame): Experiment data with datetime column
+            start_dt (datetime.datetime): Start datetime of the experiment
+
+        Returns:
+            Optional[int]: Start index or None
+        """
         try:
             for loc, dt in enumerate(df["datetime"]):
                 if not dt < start_dt:
@@ -234,23 +365,43 @@ class Data_Functions:
             if loc < df["datetime"].shape[0] - 1:
                 return loc
             else:
-                print("ERROR: start index datetime not found!")
+                print("Start index datetime not found!")
                 return None
         except:
-            print("ERROR: start index datetime not found!")
+            print("Start index datetime not found!")
             return None
 
-    def get_end_index_dt(self, df, end_dt):
+    def get_end_index_dt(self, df: pd.DataFrame, end_dt: datetime.datetime) -> Optional[int]:
+        """
+        Get the index of the end datetime of an experiment
+
+        Args:
+            df (pd.DataFrame): Experiment data with datetime column
+            end_dt (datetime.datetime): End datetime of the experiment
+
+        Returns:
+            Optional[int]: End index or None
+        """
         try:
             for loc, dt in enumerate(df["datetime"]):
                 if dt > end_dt:
                     break
             return loc
         except:
-            print("ERROR: end index datetime not found!")
+            print("End index datetime not found!")
             return None
 
-    def get_start_index_ts(self, df, start_ts):
+    def get_start_index_ts(self, df: pd.DataFrame, start_ts: float) -> Optional[int]:
+        """
+        Get the index of the start timestamp of an experiment
+
+        Args:
+            df (pd.DataFrame): Experiment data with timestamp column
+            start_ts (float): Start timestamp of the experiment
+
+        Returns:
+            Optional[int]: Start index or None
+        """
         try:
             for loc, ts in enumerate(df["timestamps"]):
                 if not ts < start_ts:
@@ -258,37 +409,67 @@ class Data_Functions:
             if loc < df["timestamps"].shape[0] - 1:
                 return loc
             else:
-                print("ERROR: start index timestamp not found!")
+                print("Start index timestamp not found!")
                 return None
         except:
-            print("ERROR: start index timestamp not found!")
+            print("Start index timestamp not found!")
             return None
 
-    def get_end_index_ts(self, df, end_ts):
+    def get_end_index_ts(self, df: pd.DataFrame, end_ts: float) -> Optional[int]:
+        """
+        Get the index of the end timestamp of an experiment
+
+        Args:
+            df (pd.DataFrame): Experiment data with timestamp column
+            end_ts (float): End timestamp of the experiment
+
+        Returns:
+            Optional[int]: End index or None
+        """
         try:
             for loc, ts in enumerate(df["timestamps"]):
                 if ts > end_ts:
                     break
             return loc
         except:
-            print("ERROR: end index timestamp not found!")
+            print("End index timestamp not found!")
             return None
 
-    def adjust_df_ts(self, df, start_ts, cols, by_block=False):
+    def adjust_df_ts(self, df: pd.DataFrame, start_ts: int, cols: list, by_block: bool=False) -> pd.DataFrame:
+        """
+        Offset experiment times by the initial timestamp of the experiment (relative to absolute timestamps).
+
+        Args:
+            df (pd.DataFrame): DataFrame to time-adjust 
+            start_ts (int): Start timestamp of the experiment
+            cols (list): Columns to adjust the timestamps of
+            by_block (bool, optional): Is the DataFrame organized by block? Defaults to False
+
+        Returns:
+            pd.DataFrame: Timestamp-adjusted DataFrame
+        """
         df = df.copy()
         if by_block:
             for block, temp_df in df.items():
                 temp_df = temp_df.copy()
                 for col in cols:
-                    temp_df[col] = temp_df[col] + start_ts
+                    temp_df[col] = temp_df[col] + start_ts  # add start timestamp to relative timestamps
                 df[block] = temp_df
         else:
             for col in cols:
-                df[col] = df[col] + start_ts
+                df[col] = df[col] + start_ts  # add start timestamp to relative timestamps
         return df
 
-    def c_to_f(self, temp):
-        """Convert celsius to fahrenheit"""
+    def c_to_f(self, temp: float) -> float:
+        """
+        Convert celsius to fahrenheit.
+
+        Args:
+            temp (float): Temperature in fahrenheit
+
+        Returns:
+            float: Temperature in celsius
+        """
 
         return round(temp * 9 / 5 + 32, 2)
 
@@ -304,7 +485,7 @@ class Audio_Narrative(Data_Functions):
             par_dir=par_dir, exp_name=self.exp_name
         )
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
 
         cols = ["pieman_clip.started", "participant_response.text"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
@@ -347,7 +528,7 @@ class Go_No_Go(Data_Functions):
         )
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = [
             "match",
             "GNG_stim",
@@ -448,7 +629,7 @@ class King_Devick(Data_Functions):
             "card_4",
         ]  # added a card for participants 15+
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         num_incorrect_col = pd.Series(self._parse_data_file(par_dir=par_dir))
         self.df.insert(len(self.df.columns), "num_incorrect", num_incorrect_col)
         cols = ["card_image.started", "card_resp.rt", "num_incorrect"]
@@ -497,7 +678,7 @@ class N_Back(Data_Functions):
             task_order=self.task_order
         )
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = ["match", "stim_text.started", "stim_resp.corr", "stim_resp.rt"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_simp.insert(
@@ -600,7 +781,7 @@ class Resting_State(Data_Functions):
         )
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = ["trial_cross.started", "halfway_tone.started", "done_sound.started"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
 
@@ -629,7 +810,7 @@ class Tower_of_London(Data_Functions):
         )
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = [
             "match",
             "image_stim",
@@ -718,9 +899,8 @@ class Video_Narrative_CMIYC(Data_Functions):
             par_dir=par_dir, exp_name=self.exp_name
         )
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
-        self.df = self.csv_to_df(filepath=self.data_filepath)
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = ["video_start.started", "catchme_participant_response.text"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_simp.insert(
@@ -756,7 +936,7 @@ class Video_Narrative_Sherlock(Data_Functions):
         )
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = ["video_start.started", "sherlock_participant_response.text"]
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_simp.insert(
@@ -799,7 +979,7 @@ class vSAT(Data_Functions):
         )
         self.task_order_simp = self._simp_task_order(task_order=self.task_order)
 
-        self.df = self.csv_to_df(filepath=self.data_filepath)
+        self.df = pd.read_csv(self.data_filepath)
         cols = [
             "match",
             "stim_time",
@@ -902,6 +1082,14 @@ class vSAT(Data_Functions):
 
 
 class Participant_Behav(Data_Functions):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing participants and behavioral data from the experiments. 
+
+    Attributes:
+        
+
+    """
     def __init__(self, par_num):
         super().__init__()
         self.par_num = par_num
@@ -1061,6 +1249,29 @@ class Participant_Behav(Data_Functions):
 
         self.by_block_ts_df = self._create_by_block_ts_df()
 
+    def get_exp_order(self) -> list:
+        """
+        Gets the experiment order from a text file.
+
+        Returns:
+            list: Experiment order
+        """
+
+        exp_order_filename = f"{self.par_ID}_experiment_order.txt"
+        exp_order_filepath = os.path.join(self.par_dir, exp_order_filename)
+
+        with open(exp_order_filepath) as f:
+            lines = f.readlines()
+
+        exp_order = []
+        for line in lines:
+            if "Block" in line or "-" in line or line == "\n":
+                pass
+            else:
+                exp_order.append(line.strip("\n"))
+
+        return exp_order
+
     def _create_marker_ts_csv(self):
         filepath = os.path.join(
             self.par_dir,
@@ -1085,7 +1296,7 @@ class Participant_Behav(Data_Functions):
             self.par_dir, f"{self.par_ID}_marker_timestamps.csv"
         )
 
-        return self.csv_to_df(marker_ts_filepath)
+        return pd.read_csv(marker_ts_filepath)
 
     def get_start_ts(self, exp_name):
         return float(int(self.all_marker_timestamps[exp_name][0]) / 1e9)
