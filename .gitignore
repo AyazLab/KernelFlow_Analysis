@@ -6,3 +6,4 @@ participants/
 results/
 __pycache__/
 *.pyc
+processFNIRS2/
