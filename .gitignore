@@ -7,3 +7,4 @@ results/
 __pycache__/
 *.pyc
 processFNIRS2/
+pysnirf2.log
