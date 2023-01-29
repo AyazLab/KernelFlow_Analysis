@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 import numpy as np
 from statistics import mean
-from typing import List, Tuple, Optional, Type
+from typing import List, Tuple, Optional, Union
 
 
 class Data_Functions:
@@ -2138,27 +2138,41 @@ def create_behav_results_tables(num_pars: int) -> None:
         vsat_df.to_csv(vsat_filepath, index=False)
 
 
-def load_results(results_dir: str, exp_name: str=None) -> dict:
+def load_results(results_dir: str, exp_name: str=None, par: list[int | list | tuple]=None) -> Union[pd.DataFrame, dict]:
     """
-    Read the experiment behavioral results from CSV files into a dictionary of DataFrames.
+    Read the experiment behavioral results from CSV files into DataFrame or a dictionary of DataFrames.
 
     Args:
         results_dir (str): Path to the results directory
         exp_name (str, optional): Get results for a specific experiment? Defaults to None
+        par (list[int  |  list  |  tuple], optional): Participants to select. Single participant, list of participants, or slice of participants. 
+                                                      Defaults to None (all participants).
 
     Returns:
-        dict: Behavioral results dictionary
-            keys:
-                'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
-                'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
-            values:
-                DataFrame of behavioral results for each experiment
+        Union[pd.DataFrame, dict]:
+            pd.DataFrame: Behavioral data for a specified experiment.
+            -or-
+            dict: Behavioral results dictionary
+                keys:
+                    'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
+                    'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
+                values:
+                    DataFrame of behavioral results for each experiment
     """
+
     if exp_name:
         for results_csv in os.listdir(results_dir):
             if exp_name in results_csv:
                 full_path = os.path.join(results_dir, results_csv)
-                return pd.read_csv(full_path)
+                df = pd.read_csv(full_path)
+                if isinstance(par, int):
+                    return df[df['participant'] == par]
+                elif isinstance(par, list):
+                    return df[df['participant'].isin(par)]
+                elif isinstance(par, tuple):
+                    return df[(df['participant'] >= par[0]) & (df['participant'] <= par[1])]
+                else:
+                    return df
         print(
             "Invalid experiment name."
         )  # only reached if invalid experiment name argument
@@ -2168,6 +2182,14 @@ def load_results(results_dir: str, exp_name: str=None) -> dict:
             exp_name = results_csv.split("_behav")[0]
             full_path = os.path.join(results_dir, results_csv)
             df = pd.read_csv(full_path)
+            if isinstance(par, int):
+                df = df[df['participant'] == par]
+            elif isinstance(par, list):
+                df = df[df['participant'].isin(par)]
+            elif isinstance(par, tuple):
+                df = df[(df['participant'] >= par[0]) & (df['participant'] <= par[1])]
+            else:  
+                pass
             exp_dict[exp_name] = df
         return exp_dict
 
