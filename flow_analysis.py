@@ -1,26 +1,42 @@
 import snirf
 import numpy as np
-from datetime import datetime
+import datetime
+from typing import Union
 
 
 def load_snirf(filepath: str) -> snirf.Snirf:
     return snirf.Snirf(filepath, "r+", dynamic_loading=True)
 
 
-def get_time_origin(snirf_file: snirf.Snirf) -> datetime:
+def get_time_origin(snirf_file: snirf.Snirf, fmt: str="datetime") -> Union[datetime.datetime, float]:
     start_date = snirf_file.nirs[0].metaDataTags.MeasurementDate
     start_time = snirf_file.nirs[0].metaDataTags.MeasurementTime
     start_str = start_date + " " + start_time
-    time_origin = datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
-    return time_origin
+    time_origin = datetime.datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
+    if fmt.lower() == "datetime":
+        return time_origin
+    elif fmt.lower() == "timestamp":
+        return datetime.datetime.timestamp(time_origin)
+    else:
+        raise Exception("Invalid 'fmt' argument. Must be 'datetime' or 'timestamp'.")
 
 
 def get_subject_ID(snirf_file: snirf.Snirf) -> str:
     return snirf_file.nirs[0].metaDataTags.SubjectID
 
 
-def get_time(snirf_file: snirf.Snirf) -> np.ndarray:
-    return snirf_file.nirs[0].data[0].time
+def get_time_rel(snirf_file: snirf.Snirf) -> np.ndarray:
+        return snirf_file.nirs[0].data[0].time
+
+
+def get_time_abs(snirf_file: snirf.Snirf, fmt: str="datetime") -> np.ndarray:
+    time_rel = get_time_rel(snirf_file)
+    if fmt.lower() == "datetime":
+        time_origin_dt = get_time_origin(snirf_file, "datetime")
+        return np.array([datetime.timedelta(seconds=time_rel[i]) + time_origin_dt for i in range(len(time_rel))])
+    elif fmt.lower() == "timestamp":
+        time_origin_ts = get_time_origin(snirf_file, "timestamp")
+        return time_rel + time_origin_ts
 
 
 def get_data(snirf_file: snirf.Snirf, cols: list[int | list | slice]) -> np.ndarray:
