@@ -1,14 +1,42 @@
 import snirf
 import numpy as np
+import matplotlib.pyplot as plt
 import datetime
 from typing import Union
 
 
 def load_snirf(filepath: str) -> snirf.Snirf:
+    """
+    Load SNIRF file.
+
+    Args:
+        filepath (str): Path to SNIRF file.
+
+    Returns:
+        snirf.Snirf: SNIRF file object.
+    """
     return snirf.Snirf(filepath, "r+", dynamic_loading=True)
 
 
-def get_time_origin(snirf_file: snirf.Snirf, fmt: str="datetime") -> Union[datetime.datetime, float]:
+def get_time_origin(
+    snirf_file: snirf.Snirf, fmt: str = "datetime"
+) -> Union[datetime.datetime, float]:
+    """
+    Get the time origin (start time) from the SNIRF file.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+        fmt (str, optional): Format to get the time origin in: "datetime" or "timestamp". Defaults to "datetime".
+
+    Raises:
+        Exception: Invalid fmt argument.
+
+    Returns:
+        Union[datetime.datetime, float]:
+            datetime.datetime: Time origin datetime.
+            -or-
+            float: Time origin timestamp.
+    """
     start_date = snirf_file.nirs[0].metaDataTags.MeasurementDate
     start_time = snirf_file.nirs[0].metaDataTags.MeasurementTime
     start_str = start_date + " " + start_time
@@ -22,31 +50,83 @@ def get_time_origin(snirf_file: snirf.Snirf, fmt: str="datetime") -> Union[datet
 
 
 def get_subject_ID(snirf_file: snirf.Snirf) -> str:
+    """
+    Get the subject ID from the SNIRF file.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+
+    Returns:
+        str: Subject ID.
+    """
     return snirf_file.nirs[0].metaDataTags.SubjectID
 
 
 def get_time_rel(snirf_file: snirf.Snirf) -> np.ndarray:
-        return snirf_file.nirs[0].data[0].time
+    """
+    Get the relative time array from the SNIRF file.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+
+    Returns:
+        np.ndarray: Relative time array.
+    """
+    return snirf_file.nirs[0].data[0].time
 
 
-def get_time_abs(snirf_file: snirf.Snirf, fmt: str="datetime") -> np.ndarray:
+def get_time_abs(snirf_file: snirf.Snirf, fmt: str = "datetime") -> np.ndarray:
+    """
+    Convert relative time array into an absolute time array.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+        fmt (str, optional): Format to get the time array in: "datetime" or "timestamp". Defaults to "datetime".
+
+    Returns:
+        np.ndarray: Absolute time array.
+    """
     time_rel = get_time_rel(snirf_file)
     if fmt.lower() == "datetime":
         time_origin_dt = get_time_origin(snirf_file, "datetime")
-        return np.array([datetime.timedelta(seconds=time_rel[i]) + time_origin_dt for i in range(len(time_rel))])
+        return np.array(
+            [
+                datetime.timedelta(seconds=time_rel[i]) + time_origin_dt
+                for i in range(len(time_rel))
+            ]
+        )
     elif fmt.lower() == "timestamp":
         time_origin_ts = get_time_origin(snirf_file, "timestamp")
         return time_rel + time_origin_ts
 
 
-def get_data(snirf_file: snirf.Snirf, cols: list[int | list | slice]) -> np.ndarray:
-    if type(cols) == tuple:
+def get_data(snirf_file: snirf.Snirf, cols: list[int | list | tuple]) -> np.ndarray:
+    """
+    Get timeseries data from the SNIRF file.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+        cols (list[int  |  list  |  tuple]): Data cols to select. Single col, list of cols, or slice of cols.
+
+    Returns:
+        np.ndarray: Timeseries data array.
+    """
+    if isinstance(cols, tuple):
         return snirf_file.nirs[0].data[0].dataTimeSeries[:, cols[0] : cols[1]]
     else:
         return snirf_file.nirs[0].data[0].dataTimeSeries[:, cols]
 
 
 def get_unique_data_types(snirf_file: snirf.Snirf) -> list:
+    """
+    Get unique data types from the SNIRF file.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+
+    Returns:
+        list: Unique data types.
+    """
     data_types = []
     for i in range(len(snirf_file.nirs[0].data[0].measurementList)):
         data_type = snirf_file.nirs[0].data[0].measurementList[i].dataType
@@ -56,6 +136,15 @@ def get_unique_data_types(snirf_file: snirf.Snirf) -> list:
 
 
 def get_unique_data_type_labels(snirf_file: snirf.Snirf) -> list:
+    """
+    Get unique data type labels from the SNIRF file.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+
+    Returns:
+        list: Unique data type labels.
+    """
     data_type_labels = []
     for i in range(len(snirf_file.nirs[0].data[0].measurementList)):
         data_type_label = snirf_file.nirs[0].data[0].measurementList[i].dataTypeLabel
@@ -65,6 +154,19 @@ def get_unique_data_type_labels(snirf_file: snirf.Snirf) -> list:
 
 
 def sort_dict(dictionary: dict, sort_by: str) -> dict:
+    """
+    Sort a dictionary by keys or values.
+
+    Args:
+        dictionary (dict): Dictionary to sort.
+        sort_by (str): How to sort to dictionary: by "keys" or by "values".
+
+    Raises:
+        Exception: Invalid sort_by argument.
+
+    Returns:
+        dict: Sorted dictionary.
+    """
     if "key" in sort_by.lower():
         return dict(sorted(dictionary.items(), key=lambda item: item[0]))
     elif "value" in sort_by.lower():
@@ -74,6 +176,15 @@ def sort_dict(dictionary: dict, sort_by: str) -> dict:
 
 
 def create_source_dict(snirf_file: snirf.Snirf) -> dict:
+    """
+    Count the occurrences of each source index.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+
+    Returns:
+        dict: Counts for each source index.
+    """
     source_dict = {}
     for i in range(len(snirf_file.nirs[0].data[0].measurementList)):
         source = snirf_file.nirs[0].data[0].measurementList[i].sourceIndex
@@ -83,6 +194,15 @@ def create_source_dict(snirf_file: snirf.Snirf) -> dict:
 
 
 def create_detector_dict(snirf_file: snirf.Snirf) -> dict:
+    """
+    Count the occurrences of each detector index.
+
+    Args:
+        snirf_file (snirf.Snirf): SNIRF file object.
+
+    Returns:
+        dict: Counts for each detector index.
+    """
     detector_dict = {}
     for i in range(len(snirf_file.nirs[0].data[0].measurementList)):
         detector = snirf_file.nirs[0].data[0].measurementList[i].detectorIndex
