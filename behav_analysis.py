@@ -8,12 +8,13 @@ from typing import List, Tuple, Optional, Union
 
 class Data_Functions:
     """
-    This class contains functions used for processing experiment files as well as 
+    This class contains functions used for processing experiment files as well as
     participant, behavioral, and physiological data.
     """
+
     def parse_log_file(self, par_dir: str, exp_name: str) -> dict:
         """
-        Parses the experiment log file into start and end marker data. 
+        Parses the experiment log file into start and end marker data.
 
         Args:
             par_dir (str): Path to specific participant directory
@@ -30,9 +31,10 @@ class Data_Functions:
                         values:
                             'marker_ID', 'marker_value', 'marker_string', 'timestamp'
         """
+
         def _parse_udp(udp: str) -> dict:
             """
-            Parses UDP file lines into marker information. 
+            Parses UDP file lines into marker information.
 
             Args:
                 udp (str): File line with UDP data
@@ -91,9 +93,11 @@ class Data_Functions:
             marker_data["start_marker"] = "_"
         try:
             end_udp = udp_lines[1].split(" ")
-            marker_data["end_marker"] =_parse_udp(end_udp)
+            marker_data["end_marker"] = _parse_udp(end_udp)
         except:
-            if exp_name == "go_no_go":  # Go/No-go start marker did not write to log file
+            if (
+                exp_name == "go_no_go"
+            ):  # Go/No-go start marker did not write to log file
                 marker_ID = int(marker_data["start_marker"]["marker_ID"]) + 1
                 marker_val = 22
                 marker_string = "go_no_go_end"
@@ -102,11 +106,11 @@ class Data_Functions:
                     float(end_ts) + float(lines[-1].split("\t")[0]) * 1e9 - 0.4 * 1e9
                 )
                 marker_data["end_marker"] = {
-                        "marker_ID": marker_ID,
-                        "marker_value": marker_val,
-                        "marker_string": marker_string,
-                        "timestamp": end_ts,
-                    }
+                    "marker_ID": marker_ID,
+                    "marker_value": marker_val,
+                    "marker_string": marker_string,
+                    "timestamp": end_ts,
+                }
             else:
                 marker_data["end_marker"] = "_"
 
@@ -185,7 +189,7 @@ class Data_Functions:
 
     def get_all_marker_timestamps(self, par_dir: str, exp_order: list) -> dict:
         """
-        Organize the start and end timestamps for each experiment into a dictionary. 
+        Organize the start and end timestamps for each experiment into a dictionary.
 
         Args:
             par_dir (str): Path to specific participant directory
@@ -197,14 +201,15 @@ class Data_Functions:
                      'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
                      'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
                 values:
-                    [start timestamp, end timestamp]    
+                    [start timestamp, end timestamp]
         """
         all_marker_timestamps = {}
         for exp_name in exp_order:
-            marker_dict = self.parse_log_file(
-                par_dir=par_dir, exp_name=exp_name
+            marker_dict = self.parse_log_file(par_dir=par_dir, exp_name=exp_name)
+            start_marker, end_marker = (
+                marker_dict["start_marker"],
+                marker_dict["end_marker"],
             )
-            start_marker, end_marker = marker_dict["start_marker"], marker_dict["end_marker"]
             if (
                 "narrative" in exp_name
                 and "participant_01" not in par_dir
@@ -248,7 +253,7 @@ class Data_Functions:
             cols (list): List of columns to select from the DataFrame
 
         Returns:
-            pd.DataFrame: DataFrame with selected columns only 
+            pd.DataFrame: DataFrame with selected columns only
         """
         return df[cols]
 
@@ -262,7 +267,7 @@ class Data_Functions:
             dtype (_type_, optional): Type of x
 
         Returns:
-            pd.Series: Column with num_rows rows of x 
+            pd.Series: Column with num_rows rows of x
         """
         return pd.Series([x] * num_rows, dtype=dtype)
 
@@ -278,7 +283,9 @@ class Data_Functions:
         """
         return [x for xs in input_list for x in xs]
 
-    def parse_df(self, df: pd.DataFrame, num_blocks: int, num_trials: int) -> Tuple[dict, pd.DataFrame]:
+    def parse_df(
+        self, df: pd.DataFrame, num_blocks: int, num_trials: int
+    ) -> Tuple[dict, pd.DataFrame]:
         """
         Parses a DataFrame into a dictionary organized by block and a DataFrame with NaN rows removed.
 
@@ -294,13 +301,15 @@ class Data_Functions:
                         'block_1', 'block2', ... 'block_N'
                     values:
                         DataFrame of behavioral data for that block
-                pd.DataFrame: DataFrame with no NaN rows        
+                pd.DataFrame: DataFrame with no NaN rows
         """
         df_by_block = {}
         for i in range(num_blocks):
             block_name = f"block_{i+1}"
             if i == 0:
-                temp_df = df.iloc[i * num_trials : (i + 1) * num_trials]  # select rows for this block
+                temp_df = df.iloc[
+                    i * num_trials : (i + 1) * num_trials
+                ]  # select rows for this block
                 df_no_nan = temp_df.copy()
             else:
                 temp_df = df.iloc[
@@ -321,14 +330,16 @@ class Data_Functions:
 
         Returns:
             Tuple[int, int]: start timestamp, end timestamp
-        """ 
+        """
         df_temp = df[df["exp_name"] == exp_name]
         start_ts = df_temp["start_timestamp"].item()
         end_ts = df_temp["end_timestamp"].item()
 
         return start_ts, end_ts
 
-    def get_exp_dt(self, df: pd.DataFrame, exp_name: str) -> Tuple[datetime.datetime, datetime.datetime]:
+    def get_exp_dt(
+        self, df: pd.DataFrame, exp_name: str
+    ) -> Tuple[datetime.datetime, datetime.datetime]:
         """
         Get the start and end datetimes from an experiment-organized DataFrame
 
@@ -347,7 +358,9 @@ class Data_Functions:
 
         return start_dt, end_dt
 
-    def get_start_index_dt(self, df: pd.DataFrame, start_dt: datetime.datetime) -> Optional[int]:
+    def get_start_index_dt(
+        self, df: pd.DataFrame, start_dt: datetime.datetime
+    ) -> Optional[int]:
         """
         Get the index of the start datetime of an experiment
 
@@ -371,7 +384,9 @@ class Data_Functions:
             print("Start index datetime not found!")
             return None
 
-    def get_end_index_dt(self, df: pd.DataFrame, end_dt: datetime.datetime) -> Optional[int]:
+    def get_end_index_dt(
+        self, df: pd.DataFrame, end_dt: datetime.datetime
+    ) -> Optional[int]:
         """
         Get the index of the end datetime of an experiment
 
@@ -435,12 +450,14 @@ class Data_Functions:
             print("End index timestamp not found!")
             return None
 
-    def adjust_df_ts(self, df: pd.DataFrame, start_ts: int, cols: list, by_block: bool=False) -> pd.DataFrame:
+    def adjust_df_ts(
+        self, df: pd.DataFrame, start_ts: int, cols: list, by_block: bool = False
+    ) -> pd.DataFrame:
         """
         Offset experiment times by the initial timestamp of the experiment (relative to absolute timestamps).
 
         Args:
-            df (pd.DataFrame): DataFrame to time-adjust 
+            df (pd.DataFrame): DataFrame to time-adjust
             start_ts (int): Start timestamp of the experiment
             cols (list): Columns to adjust the timestamps of
             by_block (bool, optional): Is the DataFrame organized by block? Defaults to False
@@ -453,11 +470,15 @@ class Data_Functions:
             for block, temp_df in df.items():
                 temp_df = temp_df.copy()
                 for col in cols:
-                    temp_df[col] = temp_df[col] + start_ts  # add start timestamp to relative timestamps
+                    temp_df[col] = (
+                        temp_df[col] + start_ts
+                    )  # add start timestamp to relative timestamps
                 df[block] = temp_df
         else:
             for col in cols:
-                df[col] = df[col] + start_ts  # add start timestamp to relative timestamps
+                df[col] = (
+                    df[col] + start_ts
+                )  # add start timestamp to relative timestamps
         return df
 
     def c_to_f(self, temp: float) -> float:
@@ -493,6 +514,7 @@ class Audio_Narrative(Data_Functions):
         response: Participant response to the narrative
         block_start_time: Start timestamp of the narrative clip
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "audio_narrative"
@@ -502,7 +524,7 @@ class Audio_Narrative(Data_Functions):
         self.data_filepath = self.get_data_filepath(
             par_dir=par_dir, exp_name=self.exp_name
         )
-        
+
         self.marker_data = self.parse_log_file(par_dir=par_dir, exp_name=self.exp_name)
         self.df = pd.read_csv(self.data_filepath)
 
@@ -549,6 +571,7 @@ class Go_No_Go(Data_Functions):
         df_simp: Selection of experimental data
         df_by_block: Selection of experimental data organized into task blocks
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "go_no_go"
@@ -665,6 +688,7 @@ class King_Devick(Data_Functions):
         df: Full experimental data
         df_simp: Selection of experimental data
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "king_devick"
@@ -736,6 +760,7 @@ class N_Back(Data_Functions):
         df_simp: Selection of experimental data
         df_by_block: Selection of experimental data organized into task blocks
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "n_back"
@@ -862,6 +887,7 @@ class Resting_State(Data_Functions):
         df: Full experimental data
         df_simp: Selection of experimental data
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "resting_state"
@@ -911,6 +937,7 @@ class Tower_of_London(Data_Functions):
         df_simp: Selection of experimental data
         df_by_block: Selection of experimental data organized into task blocks
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "tower_of_london"
@@ -1026,6 +1053,7 @@ class Video_Narrative_CMIYC(Data_Functions):
         response: Participant response to the narrative
         block_start_time: Start timestamp of the narrative clip
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "video_narrative_cmiyc"
@@ -1081,6 +1109,7 @@ class Video_Narrative_Sherlock(Data_Functions):
         response: Participant response to the narrative
         block_start_time: Start timestamp of the narrative clip
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "video_narrative_sherlock"
@@ -1136,6 +1165,7 @@ class vSAT(Data_Functions):
         df_simp: Selection of experimental data
         df_by_block: Selection of experimental data organized into task blocks
     """
+
     def __init__(self, par_dir):
         super().__init__()
         self.exp_name = "vSAT"
@@ -1259,18 +1289,18 @@ class vSAT(Data_Functions):
 class Participant_Behav(Data_Functions):
     """
     This class contains functions, data structures, and info necessary for
-    processing participants and behavioral data from the experiments. 
+    processing participants and behavioral data from the experiments.
 
     Args:
         Data_Functions (class): Experiment processing functions
 
     Attributes:
-        par_num: Participant number 
+        par_num: Participant number
         par_id: Participant ID
         par_dir: Path to specific participant directory
         exp_order: Experiment order
-        all_marker_timestamps: Dictionary with start and end timestamps for each experiment 
-        marker_ts_df: DataFrame with start and end timestamps for each experiment 
+        all_marker_timestamps: Dictionary with start and end timestamps for each experiment
+        marker_ts_df: DataFrame with start and end timestamps for each experiment
         audio_narrative: Audio Narrative experiment instance
         go_no_go: Go/No-Go experiment instance
         king_devick: King Devick experiment instance
@@ -1280,6 +1310,7 @@ class Participant_Behav(Data_Functions):
         video_narrative_sherlock: Video Narrative Sherlock experiment instance
         vSAT: vSAT experiment instance
     """
+
     def __init__(self, par_num):
         super().__init__()
         self.par_num = par_num
@@ -1499,7 +1530,7 @@ class Participant_Behav(Data_Functions):
 
     def get_start_ts(self, exp_name: str) -> float:
         """
-        Get the start timestamp of an experiment 
+        Get the start timestamp of an experiment
 
         Args:
             exp_name (str): Name of the experiment
@@ -1511,7 +1542,7 @@ class Participant_Behav(Data_Functions):
 
     def get_end_ts(self, exp_name: str) -> float:
         """
-        Get the end timestamp of an experiment 
+        Get the end timestamp of an experiment
 
         Args:
             exp_name (str): Name of the experiment
@@ -1527,18 +1558,19 @@ class Participant_Behav(Data_Functions):
 
         Returns:
             dict: Block and trial start and end timestamps for each experiment
-                keys: 
+                keys:
                     'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
                     'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
-                values: start and end timestamp dict 
+                values: start and end timestamp dict
                     keys:
                         (start timestamp, end_timestamp)
                     values: block and trial dict
-                        keys: 
+                        keys:
                             'block', 'trial'
                         values:
                             'block name', 'trial number'
         """
+
         def format_ts(exp_name: str) -> Tuple[float, float]:
             """
             Format timestamp into UTC second format from nanosecond format.
@@ -1759,12 +1791,13 @@ class Participant_Behav(Data_Functions):
 
 def create_behav_results_tables(num_pars: int) -> None:
     """
-    Write the processed experiment and behavioral data into CSV files. 
+    Write the processed experiment and behavioral data into CSV files.
 
     Args:
         num_pars (int): Number of participants
     """
-    def get_num_rows(exp, new: bool=False) -> int:
+
+    def get_num_rows(exp, new: bool = False) -> int:
         """
         Get the number of rows needed for the experiment (number of blocks * number of trials).
 
@@ -1799,7 +1832,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # Audio Narrative ----
         exp = par.audio_narrative
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
         trial_col = pd.Series([1])
         block_col = pd.Series(["audio_narrative"])
 
@@ -1820,7 +1855,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # Go/No-Go -----
         exp = par.go_no_go
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
 
         gng_by_block = exp.df_by_block_adj_ts
         block_df_list = []
@@ -1867,7 +1904,9 @@ def create_behav_results_tables(num_pars: int) -> None:
             num_rows = get_num_rows(exp=exp)
             trial_col = pd.Series([1, 2, 3])
             block_col = pd.Series(exp.task_order)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
 
         temp_kd_df = exp.df_adj_ts
         temp_kd_df.insert(0, "block", block_col)
@@ -1885,7 +1924,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # N-Back -----
         exp = par.n_back
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
 
         n_back_by_block = exp.df_by_block_adj_ts
         block_df_list = []
@@ -1924,7 +1965,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         exp = par.resting_state
         num_rows = get_num_rows(exp=exp)
 
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
         trial_col = pd.Series([1, 2])
         block_col = pd.Series(exp.task_order_simp)
 
@@ -1948,7 +1991,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # Tower of London -----
         exp = par.tower_of_london
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
 
         tol_by_block = exp.df_by_block_adj_ts
         block_df_list = []
@@ -1987,7 +2032,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # Video Narrative CMIYC ----
         exp = par.video_narrative_cmiyc
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
         trial_col = pd.Series([1])
         block_col = pd.Series(["video_narrative_cmiyc"])
 
@@ -2008,7 +2055,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # Video Narrative Sherlock ----
         exp = par.video_narrative_sherlock
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
         trial_col = pd.Series([1])
         block_col = pd.Series(["video_narrative_sherlock"])
 
@@ -2029,7 +2078,9 @@ def create_behav_results_tables(num_pars: int) -> None:
         # vSAT -----
         exp = par.vSAT
         num_rows = get_num_rows(exp=exp)
-        par_num_col = data_fun.create_col(par_num, num_rows=num_rows, dtype=pd.StringDtype())
+        par_num_col = data_fun.create_col(
+            par_num, num_rows=num_rows, dtype=pd.StringDtype()
+        )
 
         vsat_by_block = exp.df_by_block_adj_ts
         block_df_list = []
@@ -2138,14 +2189,16 @@ def create_behav_results_tables(num_pars: int) -> None:
         vsat_df.to_csv(vsat_filepath, index=False)
 
 
-def load_results(results_dir: str, exp_name: str=None, par: list[int | list | tuple]=None) -> Union[pd.DataFrame, dict]:
+def load_results(
+    results_dir: str, exp_name: str = None, par: list[int | list | tuple] = None
+) -> Union[pd.DataFrame, dict]:
     """
     Read the experiment behavioral results from CSV files into DataFrame or a dictionary of DataFrames.
 
     Args:
         results_dir (str): Path to the results directory
         exp_name (str, optional): Get results for a specific experiment? Defaults to None
-        par (list[int  |  list  |  tuple], optional): Participants to select. Single participant, list of participants, or slice of participants. 
+        par (list[int  |  list  |  tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
                                                       Defaults to None (all participants).
 
     Returns:
@@ -2166,11 +2219,13 @@ def load_results(results_dir: str, exp_name: str=None, par: list[int | list | tu
                 full_path = os.path.join(results_dir, results_csv)
                 df = pd.read_csv(full_path)
                 if isinstance(par, int):
-                    return df[df['participant'] == par]
+                    return df[df["participant"] == par]
                 elif isinstance(par, list):
-                    return df[df['participant'].isin(par)]
+                    return df[df["participant"].isin(par)]
                 elif isinstance(par, tuple):
-                    return df[(df['participant'] >= par[0]) & (df['participant'] <= par[1])]
+                    return df[
+                        (df["participant"] >= par[0]) & (df["participant"] <= par[1])
+                    ]
                 else:
                     return df
         print(
@@ -2183,13 +2238,12 @@ def load_results(results_dir: str, exp_name: str=None, par: list[int | list | tu
             full_path = os.path.join(results_dir, results_csv)
             df = pd.read_csv(full_path)
             if isinstance(par, int):
-                df = df[df['participant'] == par]
+                df = df[df["participant"] == par]
             elif isinstance(par, list):
-                df = df[df['participant'].isin(par)]
+                df = df[df["participant"].isin(par)]
             elif isinstance(par, tuple):
-                df = df[(df['participant'] >= par[0]) & (df['participant'] <= par[1])]
-            else:  
+                df = df[(df["participant"] >= par[0]) & (df["participant"] <= par[1])]
+            else:
                 pass
             exp_dict[exp_name] = df
         return exp_dict
-
