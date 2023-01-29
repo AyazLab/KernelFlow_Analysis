@@ -1313,8 +1313,7 @@ class Participant_Behav(Data_Functions):
 
     def __init__(self, par_num):
         super().__init__()
-        self.par_num = par_num
-        self.par_ID = f"participant_{self.par_num}"
+        self.par_num, self.par_ID = self._process_par(par_num)
         data_dir = r"C:\Kernel\participants"
         # self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
         self.par_dir = os.path.join(data_dir, self.par_ID)
@@ -1469,6 +1468,32 @@ class Participant_Behav(Data_Functions):
         )
 
         self.by_block_ts_dict = self._create_by_block_ts_dict()
+
+    def _process_par(self, par_num: list[str | int]) -> Tuple[int, str]:
+        """
+        Create the participant number and ID.
+
+        Args:
+            par_num (list[str  |  int]): Participant number.
+
+        Raises:
+            Exception: Invalid participant number.
+
+        Returns:
+            Tuple[int, str]:
+                Participant number
+                -and-
+                Participant ID
+        """
+        if isinstance(par_num, str):
+            par_num = int(par_num)
+        elif isinstance(par_num, int):
+            pass
+        else:
+            raise Exception("Invalid participant number.")
+        par_num_str = "{:02d}".format(par_num)
+        par_ID = f"participant_{par_num_str}"
+        return par_num, par_ID
 
     def get_exp_order(self) -> list:
         """
@@ -2224,7 +2249,8 @@ def load_results(
                     return df[df["participant"].isin(par_num)]
                 elif isinstance(par_num, tuple):
                     return df[
-                        (df["participant"] >= par_num[0]) & (df["participant"] <= par_num[1])
+                        (df["participant"] >= par_num[0])
+                        & (df["participant"] <= par_num[1])
                     ]
                 else:
                     return df
@@ -2242,7 +2268,10 @@ def load_results(
             elif isinstance(par_num, list):
                 df = df[df["participant"].isin(par_num)]
             elif isinstance(par_num, tuple):
-                df = df[(df["participant"] >= par_num[0]) & (df["participant"] <= par_num[1])]
+                df = df[
+                    (df["participant"] >= par_num[0])
+                    & (df["participant"] <= par_num[1])
+                ]
             else:
                 pass
             exp_dict[exp_name] = df
