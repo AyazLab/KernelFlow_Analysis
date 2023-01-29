@@ -1813,6 +1813,20 @@ class Participant_Behav(Data_Functions):
             int(self.all_marker_timestamps[exp_name][0]) / 1e9
         )
 
+    def get_end_dt(self, exp_name: str) -> datetime.datetime:
+        """
+        Convert end timestamp of an experiment into the end datetime.
+
+        Args:
+            exp_name (str): Experiment name
+
+        Returns:
+            datetime.datetime: End datetime of an experiment
+        """
+        return datetime.datetime.fromtimestamp(
+            int(self.all_marker_timestamps[exp_name][1]) / 1e9
+        )
+
 
 def create_behav_results_tables(num_pars: int) -> None:
     """
