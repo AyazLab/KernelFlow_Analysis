@@ -2190,7 +2190,7 @@ def create_behav_results_tables(num_pars: int) -> None:
 
 
 def load_results(
-    results_dir: str, exp_name: str = None, par: list[int | list | tuple] = None
+    results_dir: str, exp_name: str = None, par_num: list[int | list | tuple] = None
 ) -> Union[pd.DataFrame, dict]:
     """
     Read the experiment behavioral results from CSV files into DataFrame or a dictionary of DataFrames.
@@ -2198,7 +2198,7 @@ def load_results(
     Args:
         results_dir (str): Path to the results directory
         exp_name (str, optional): Get results for a specific experiment? Defaults to None
-        par (list[int  |  list  |  tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
+        par_num (list[int  |  list  |  tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
                                                       Defaults to None (all participants).
 
     Returns:
@@ -2218,13 +2218,13 @@ def load_results(
             if exp_name in results_csv:
                 full_path = os.path.join(results_dir, results_csv)
                 df = pd.read_csv(full_path)
-                if isinstance(par, int):
-                    return df[df["participant"] == par]
-                elif isinstance(par, list):
-                    return df[df["participant"].isin(par)]
-                elif isinstance(par, tuple):
+                if isinstance(par_num, int):
+                    return df[df["participant"] == par_num]
+                elif isinstance(par_num, list):
+                    return df[df["participant"].isin(par_num)]
+                elif isinstance(par_num, tuple):
                     return df[
-                        (df["participant"] >= par[0]) & (df["participant"] <= par[1])
+                        (df["participant"] >= par_num[0]) & (df["participant"] <= par_num[1])
                     ]
                 else:
                     return df
@@ -2237,12 +2237,12 @@ def load_results(
             exp_name = results_csv.split("_behav")[0]
             full_path = os.path.join(results_dir, results_csv)
             df = pd.read_csv(full_path)
-            if isinstance(par, int):
-                df = df[df["participant"] == par]
-            elif isinstance(par, list):
-                df = df[df["participant"].isin(par)]
-            elif isinstance(par, tuple):
-                df = df[(df["participant"] >= par[0]) & (df["participant"] <= par[1])]
+            if isinstance(par_num, int):
+                df = df[df["participant"] == par_num]
+            elif isinstance(par_num, list):
+                df = df[df["participant"].isin(par_num)]
+            elif isinstance(par_num, tuple):
+                df = df[(df["participant"] >= par_num[0]) & (df["participant"] <= par_num[1])]
             else:
                 pass
             exp_dict[exp_name] = df
