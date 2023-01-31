@@ -29,10 +29,19 @@ def sort_dict(dictionary: dict, sort_by: str) -> dict:
         raise Exception("Invalid 'sort_by' argument. Must be 'key' or 'value'.")
 
 
-class Flow_Processing:
+class Process_Flow:
     """
     This class contains functions for processing Kernel Flow data.
     """
+
+    def __init__(self, filepath: str) -> None:
+        """
+        Initialize by loading SNIRF file.
+
+        Args:
+            filepath (str): Path to SNIRF file.
+        """
+        self.snirf_file = self.load_snirf(filepath)
 
     def load_snirf(self, filepath: str) -> snirf.Snirf:
         """
@@ -190,19 +199,15 @@ class Flow_Processing:
         return detector_dict
 
 
-class Participant_Flow(Flow_Processing):
+class Participant_Flow:
     """
     This class contains functions, data structures, and info necessary for
     processing Kernel Flow data from the experiments.
-
-    Args:
-        Flow_Processing (class): Kernel Flow processing functions.
     """
 
     def __init__(self, par_num):
-        super().__init__()
         self.data_fun = Data_Functions()
-        self.par = Participant_Behav(par_num)
+        self.par_behav = Participant_Behav(par_num)
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
         data_dir = r"C:\Kernel\participants"
         self.flow_data_dir = os.path.join(data_dir, self.par_ID, "flow_data")
@@ -229,10 +234,11 @@ class Participant_Flow(Flow_Processing):
             raise Exception("Invalid session number.")
         session_num_str = f"session_{session_num}"
         filepath = os.path.join(self.flow_data_dir, session_num_str)
-        return snirf.Snirf(filepath, "r+", dynamic_loading=True)
+        return Process_Flow(filepath).snirf_file
 
     def load_flow_exp(self, exp_name: str) -> snirf.Snirf:
         # TODO: load kernel flow data from start to end timestamp of an experiment
+        # include ts-adjusted time column as first column
         pass
 
     def create_flow_session_dict(self) -> dict:
