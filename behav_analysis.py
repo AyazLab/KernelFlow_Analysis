@@ -1318,7 +1318,7 @@ class Participant_Behav(Data_Functions):
     processing participants and behavioral data from the experiments.
 
     Args:
-        Data_Functions (class): Experiment processing functions
+        Data_Functions (class): Experiment processing functions.
 
     Attributes:
         par_num: Participant number
@@ -1343,8 +1343,9 @@ class Participant_Behav(Data_Functions):
         data_dir = r"C:\Kernel\participants"
         # self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
         self.par_dir = os.path.join(data_dir, self.par_ID)
-
         self.exp_order = self.get_exp_order()
+        self.session_dict = self.create_session_dict()
+
         self.all_marker_timestamps = self.get_all_marker_timestamps(
             par_dir=self.par_dir, exp_order=self.exp_order
         )
@@ -1497,7 +1498,7 @@ class Participant_Behav(Data_Functions):
 
     def get_exp_order(self) -> list:
         """
-        Gets the experiment order from a text file.
+        Get the experiment order from a text file.
 
         Returns:
             list: Experiment order
@@ -1517,6 +1518,29 @@ class Participant_Behav(Data_Functions):
                 exp_order.append(line.strip("\n"))
 
         return exp_order
+
+    def create_session_dict(self) -> dict:
+        """
+        Create a dictionary containing the experiment names for each session.
+
+        Returns:
+            dict: Experiment names for each session.
+                keys:
+                    "session_1001", "session_1002", "session_1003"
+                values:
+                    list of experiment names
+        """
+        session_dict = {}
+        session_exp_list = []
+        session_num = 1
+        for i, exp_name in enumerate(self.exp_order):
+            session_exp_list.append(exp_name)
+            if (i+1)%3 == 0:
+                session_name = f"session_100{session_num}"
+                session_dict[session_name] = session_exp_list
+                session_num += 1
+                session_exp_list = []
+        return session_dict
 
     def _create_marker_ts_csv(self) -> None:
         """
@@ -1576,6 +1600,34 @@ class Participant_Behav(Data_Functions):
             float: End timestamp of the experiment
         """
         return float(int(self.all_marker_timestamps[exp_name][1]) / 1e9)
+
+    def get_start_dt(self, exp_name: str) -> datetime.datetime:
+        """
+        Convert start timestamp of an experiment into the start datetime.
+
+        Args:
+            exp_name (str): Experiment name
+
+        Returns:
+            datetime.datetime: Start datetime of an experiment
+        """
+        return datetime.datetime.fromtimestamp(
+            int(self.all_marker_timestamps[exp_name][0]) / 1e9
+        )
+
+    def get_end_dt(self, exp_name: str) -> datetime.datetime:
+        """
+        Convert end timestamp of an experiment into the end datetime.
+
+        Args:
+            exp_name (str): Experiment name
+
+        Returns:
+            datetime.datetime: End datetime of an experiment
+        """
+        return datetime.datetime.fromtimestamp(
+            int(self.all_marker_timestamps[exp_name][1]) / 1e9
+        )
 
     def _create_by_block_ts_dict(self) -> dict:
         """
@@ -1798,34 +1850,6 @@ class Participant_Behav(Data_Functions):
             return self.video_narrative_sherlock
         elif exp_name == "vSAT":
             return self.vSAT
-
-    def get_start_dt(self, exp_name: str) -> datetime.datetime:
-        """
-        Convert start timestamp of an experiment into the start datetime.
-
-        Args:
-            exp_name (str): Experiment name
-
-        Returns:
-            datetime.datetime: Start datetime of an experiment
-        """
-        return datetime.datetime.fromtimestamp(
-            int(self.all_marker_timestamps[exp_name][0]) / 1e9
-        )
-
-    def get_end_dt(self, exp_name: str) -> datetime.datetime:
-        """
-        Convert end timestamp of an experiment into the end datetime.
-
-        Args:
-            exp_name (str): Experiment name
-
-        Returns:
-            datetime.datetime: End datetime of an experiment
-        """
-        return datetime.datetime.fromtimestamp(
-            int(self.all_marker_timestamps[exp_name][1]) / 1e9
-        )
 
 
 def create_behav_results_tables(num_pars: int) -> None:
