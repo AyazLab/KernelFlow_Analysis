@@ -233,7 +233,9 @@ class Participant_Flow:
         else:
             raise Exception("Invalid session number.")
         session_num_str = f"session_{session_num}"
-        filepath = os.path.join(self.flow_data_dir, session_num_str)
+        session_dir = os.path.join(self.flow_data_dir, session_num_str)
+        filename = os.listdir(session_dir)[0]
+        filepath = os.path.join(session_dir, filename)
         return Process_Flow(filepath).snirf_file
 
     def load_flow_exp(self, exp_name: str) -> snirf.Snirf:
