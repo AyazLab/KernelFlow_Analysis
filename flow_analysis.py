@@ -29,7 +29,7 @@ def sort_dict(dictionary: dict, sort_by: str) -> dict:
         raise Exception("Invalid 'sort_by' argument. Must be 'key' or 'value'.")
 
 
-class Flow_Processing():
+class Flow_Processing:
     """
     This class contains functions for processing Kernel Flow data.
     """
@@ -46,10 +46,7 @@ class Flow_Processing():
         """
         return snirf.Snirf(filepath, "r+", dynamic_loading=True)
 
-
-    def get_time_origin(
-        self, fmt: str = "datetime"
-    ) -> Union[datetime.datetime, float]:
+    def get_time_origin(self, fmt: str = "datetime") -> Union[datetime.datetime, float]:
         """
         Get the time origin (start time) from the SNIRF file.
 
@@ -74,8 +71,9 @@ class Flow_Processing():
         elif fmt.lower() == "timestamp":
             return datetime.datetime.timestamp(time_origin)
         else:
-            raise Exception("Invalid 'fmt' argument. Must be 'datetime' or 'timestamp'.")
-
+            raise Exception(
+                "Invalid 'fmt' argument. Must be 'datetime' or 'timestamp'."
+            )
 
     def get_subject_ID(self) -> str:
         """
@@ -86,7 +84,6 @@ class Flow_Processing():
         """
         return self.snirf_file.nirs[0].metaDataTags.SubjectID
 
-
     def get_time_rel(self) -> np.ndarray:
         """
         Get the relative time array from the SNIRF file.
@@ -95,7 +92,6 @@ class Flow_Processing():
             np.ndarray: Relative time array.
         """
         return self.snirf_file.nirs[0].data[0].time
-
 
     def get_time_abs(self, fmt: str = "datetime") -> np.ndarray:
         """
@@ -120,7 +116,6 @@ class Flow_Processing():
             time_origin_ts = self.get_time_origin("timestamp")
             return time_rel + time_origin_ts
 
-
     def get_data(self, cols: list[int | list | tuple]) -> np.ndarray:
         """
         Get timeseries data from the SNIRF file.
@@ -136,7 +131,6 @@ class Flow_Processing():
         else:
             return self.snirf_file.nirs[0].data[0].dataTimeSeries[:, cols]
 
-
     def get_unique_data_types(self) -> list:
         """
         Get unique data types from the SNIRF file.
@@ -151,7 +145,6 @@ class Flow_Processing():
                 data_types.append(data_type)
         return data_types
 
-
     def get_unique_data_type_labels(self) -> list:
         """
         Get unique data type labels from the SNIRF file.
@@ -161,11 +154,12 @@ class Flow_Processing():
         """
         data_type_labels = []
         for i in range(len(self.snirf_file.nirs[0].data[0].measurementList)):
-            data_type_label = self.snirf_file.nirs[0].data[0].measurementList[i].dataTypeLabel
+            data_type_label = (
+                self.snirf_file.nirs[0].data[0].measurementList[i].dataTypeLabel
+            )
             if data_type_label not in data_type_labels:
                 data_type_labels.append(data_type_label)
         return data_type_labels
-
 
     def create_source_dict(self) -> dict:
         """
@@ -181,7 +175,6 @@ class Flow_Processing():
         source_dict = sort_dict(source_dict, "keys")
         return source_dict
 
-
     def create_detector_dict(self) -> dict:
         """
         Count the occurrences of each detector index.
@@ -195,6 +188,7 @@ class Flow_Processing():
             detector_dict[detector] = detector_dict.get(detector, 0) + 1
         detector_dict = sort_dict(detector_dict, "keys")
         return detector_dict
+
 
 class Participant_Flow(Flow_Processing):
     """
@@ -216,7 +210,7 @@ class Participant_Flow(Flow_Processing):
 
     def load_flow_session(self, session_num: int) -> snirf.Snirf:
         """
-        Load Kernel Flow data for an experiment session. 
+        Load Kernel Flow data for an experiment session.
 
         Args:
             session_num (int): Experiment session number.
@@ -236,7 +230,6 @@ class Participant_Flow(Flow_Processing):
         session_num_str = f"session_{session_num}"
         filepath = os.path.join(self.flow_data_dir, session_num_str)
         return snirf.Snirf(filepath, "r+", dynamic_loading=True)
-        
 
     def load_flow_exp(self, exp_name: str) -> snirf.Snirf:
         # TODO: load kernel flow data from start to end timestamp of an experiment
@@ -248,7 +241,7 @@ class Participant_Flow(Flow_Processing):
 
         Returns:
             dict: Kernel Flow data for all experiment sessions.
-                keys: 
+                keys:
                     "session_1001", "session_1002", "session_1003"
                 values:
                     SNIRF file object for each experiment session
@@ -257,4 +250,3 @@ class Participant_Flow(Flow_Processing):
         for session in self.session_list:
             flow_session_dict[session] = self.load_flow_session(session)
         return flow_session_dict
-
