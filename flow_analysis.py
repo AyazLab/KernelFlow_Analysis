@@ -1,9 +1,10 @@
+import os
 import snirf
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from typing import Union
-from behav_analysis import load_results
+from behav_analysis import Data_Functions, Participant_Behav, load_results
 
 
 def sort_dict(dictionary: dict, sort_by: str) -> dict:
@@ -32,15 +33,6 @@ class Flow_Processing():
     """
     This class contains functions for processing Kernel Flow data.
     """
-    def __init__(self, filepath: str) -> None:
-        """
-        Initialize class with the SNIRF file path.
-
-        Args:
-            filepath (str): Path to SNIRF file.
-        """
-        self.snirf_file = self.load_snirf(filepath)
-
 
     def load_snirf(self, filepath: str) -> snirf.Snirf:
         """
@@ -203,3 +195,66 @@ class Flow_Processing():
             detector_dict[detector] = detector_dict.get(detector, 0) + 1
         detector_dict = sort_dict(detector_dict, "keys")
         return detector_dict
+
+class Participant_Flow(Flow_Processing):
+    """
+    This class contains functions, data structures, and info necessary for
+    processing Kernel Flow data from the experiments.
+
+    Args:
+        Flow_Processing (class): Kernel Flow processing functions.
+    """
+
+    def __init__(self, par_num):
+        super().__init__()
+        self.data_fun = Data_Functions()
+        self.par = Participant_Behav(par_num)
+        self.par_num, self.par_ID = self.data_fun.process_par(par_num)
+        data_dir = r"C:\Kernel\participants"
+        self.flow_data_dir = os.path.join(data_dir, self.par_ID, "flow_data")
+        self.session_list = ["1001", "1002", "1003"]
+
+    def load_flow_session(self, session_num: int) -> snirf.Snirf:
+        """
+        Load Kernel Flow data for an experiment session. 
+
+        Args:
+            session_num (int): Experiment session number.
+
+        Raises:
+            Exception: Invalid session number argument.
+
+        Returns:
+            snirf.Snirf: SNIRF file object.
+        """
+        if isinstance(session_num, str):
+            session_num = int(session_num)
+        elif isinstance(session_num, int):
+            pass
+        else:
+            raise Exception("Invalid session number.")
+        session_num_str = f"session_{session_num}"
+        filepath = os.path.join(self.flow_data_dir, session_num_str)
+        return snirf.Snirf(filepath, "r+", dynamic_loading=True)
+        
+
+    def load_flow_exp(self, exp_name: str) -> snirf.Snirf:
+        # TODO: load kernel flow data from start to end timestamp of an experiment
+        pass
+
+    def create_flow_session_dict(self) -> dict:
+        """
+        Create a dictionary of Kernel Flow data for all experiment sessions.
+
+        Returns:
+            dict: Kernel Flow data for all experiment sessions.
+                keys: 
+                    "session_1001", "session_1002", "session_1003"
+                values:
+                    SNIRF file object for each experiment session
+        """
+        flow_session_dict = {}
+        for session in self.session_list:
+            flow_session_dict[session] = self.load_flow_session(session)
+        return flow_session_dict
+
