@@ -1,6 +1,7 @@
 import os
 import snirf
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 from typing import Union
@@ -32,6 +33,7 @@ def sort_dict(dictionary: dict, sort_by: str) -> dict:
 class Process_Flow:
     """
     This class contains functions for processing Kernel Flow data.
+    # NOTE: Wrapper around snirf.Snirf
     """
 
     def __init__(self, filepath: str) -> None:
@@ -74,7 +76,11 @@ class Process_Flow:
         start_date = self.snirf_file.nirs[0].metaDataTags.MeasurementDate
         start_time = self.snirf_file.nirs[0].metaDataTags.MeasurementTime
         start_str = start_date + " " + start_time
-        time_origin = datetime.datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
+        time_origin = datetime.datetime.strptime(
+            start_str, "%Y-%m-%d %H:%M:%S"
+        ) - datetime.timedelta(
+            hours=4
+        )  # 4 hour offset
         if fmt.lower() == "datetime":
             return time_origin
         elif fmt.lower() == "timestamp":
@@ -125,20 +131,39 @@ class Process_Flow:
             time_origin_ts = self.get_time_origin("timestamp")
             return time_rel + time_origin_ts
 
-    def get_data(self, cols: list[int | list | tuple]) -> np.ndarray:
+    def get_data(
+        self, fmt: str = "array", cols: list[int | list | tuple] = None
+    ) -> Union[np.ndarray, pd.DataFrame]:
         """
         Get timeseries data from the SNIRF file.
 
         Args:
-            cols (list[int  |  list  |  tuple]): Data cols to select. Single col, list of cols, or slice of cols.
+            fmt (str): Format of data (np.ndarray or pd.DataFrame). Defaults to "array".
+            cols (list[int | list | tuple]): Data cols to select. Single col, list of cols, or slice of cols.
+                                             Defaults to None (all columns).
+
+        Raises:
+            Exception: Invalid fmt argument.
 
         Returns:
             np.ndarray: Timeseries data array.
         """
-        if isinstance(cols, tuple):
-            return self.snirf_file.nirs[0].data[0].dataTimeSeries[:, cols[0] : cols[1]]
+        if cols:
+            if isinstance(cols, tuple):
+                data = (
+                    self.snirf_file.nirs[0].data[0].dataTimeSeries[:, cols[0] : cols[1]]
+                )
+            else:
+                data = self.snirf_file.nirs[0].data[0].dataTimeSeries[:, cols]
         else:
-            return self.snirf_file.nirs[0].data[0].dataTimeSeries[:, cols]
+            data = self.snirf_file.nirs[0].data[0].dataTimeSeries
+
+        if "array" in fmt.lower():
+            return data
+        elif "dataframe" in fmt.lower():
+            return pd.DataFrame(data)
+        else:
+            raise Exception("Invalid fmt argument. Must be 'array' or 'dataframe'.")
 
     def get_unique_data_types(self) -> list:
         """
@@ -211,41 +236,73 @@ class Participant_Flow:
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
         data_dir = r"C:\Kernel\participants"
         self.flow_data_dir = os.path.join(data_dir, self.par_ID, "flow_data")
-        self.session_list = ["1001", "1002", "1003"]
 
-    def load_flow_session(self, session_num: int) -> snirf.Snirf:
+    def load_flow_session(
+        self, session: list[str | int], wrapper: bool = False
+    ) -> snirf.Snirf:
         """
         Load Kernel Flow data for an experiment session.
 
         Args:
-            session_num (int): Experiment session number.
+            session list[str | int]: Experiment session.
+            wrapper (bool, optional) Option to return Process_Flow-wrapped SNIRF file.
+                                     Defaults to false.
 
         Raises:
             Exception: Invalid session number argument.
 
         Returns:
             snirf.Snirf: SNIRF file object.
+            -or-
+            Process_Flow object for each experiment session.
         """
-        if isinstance(session_num, str):
-            session_num = int(session_num)
-        elif isinstance(session_num, int):
-            pass
-        else:
-            raise Exception("Invalid session number.")
-        session_num_str = f"session_{session_num}"
-        session_dir = os.path.join(self.flow_data_dir, session_num_str)
-        filename = os.listdir(session_dir)[0]
-        filepath = os.path.join(session_dir, filename)
-        return Process_Flow(filepath).snirf_file
+        if isinstance(session, str):
+            if "session" not in session:
+                session = f"session_{session}"
+        elif isinstance(session, int):
+            session = f"session_{session}"
+        try:
+            session_dir = os.path.join(self.flow_data_dir, session)
+            filename = os.listdir(session_dir)[0]
+            filepath = os.path.join(session_dir, filename)
+            if wrapper:
+                return Process_Flow(filepath)
+            else:
+                return Process_Flow(filepath).snirf_file
+        except:
+            print("Invalid session number.")
+            raise
 
-    def load_flow_exp(self, exp_name: str) -> snirf.Snirf:
-        # TODO: load kernel flow data from start to end timestamp of an experiment
-        # include ts-adjusted time column as first column
-        pass
+    def load_flow_exp(self, exp_name: str) -> pd.DataFrame:
+        """
+        Load Kernel Flow data for the time frame of a specified experiment.
 
-    def create_flow_session_dict(self) -> dict:
+        Args:
+            exp_name (str): Name of the experiment.
+
+        Returns:
+            pd.DataFrame: Kernel Flow data for an experiment.
+        """
+        session = self.par_behav.get_key_from_value(
+            self.par_behav.session_dict, exp_name
+        )
+        flow_session = self.load_flow_session(session, wrapper=True)
+        start_dt = self.par_behav.get_start_dt(exp_name)
+        end_dt = self.par_behav.get_end_dt(exp_name)
+        time_abs_dt = flow_session.get_time_abs("datetime")
+        start_idx = self.par_behav.get_start_index_dt(time_abs_dt, start_dt)
+        end_idx = self.par_behav.get_end_index_dt(time_abs_dt, end_dt)
+        exp_time_abs = time_abs_dt[start_idx:end_idx]
+        flow_data = flow_session.get_data("dataframe")
+        flow_data.insert(0, "datetime", time_abs_dt)
+        return flow_data.iloc[start_idx:end_idx, :]
+
+    def create_flow_session_dict(self, wrapper: bool = False) -> dict:
         """
         Create a dictionary of Kernel Flow data for all experiment sessions.
+
+        wrapper (bool, optional) Option to return Process_Flow-wrapped SNIRF file.
+                                 Default to false.
 
         Returns:
             dict: Kernel Flow data for all experiment sessions.
@@ -253,8 +310,10 @@ class Participant_Flow:
                     "session_1001", "session_1002", "session_1003"
                 values:
                     SNIRF file object for each experiment session
+                    -or-
+                    Process_Flow object for each experiment session
         """
         flow_session_dict = {}
-        for session in self.session_list:
-            flow_session_dict[session] = self.load_flow_session(session)
+        for session in self.par_behav.session_dict.keys():
+            flow_session_dict[session] = self.load_flow_session(session, wrapper)
         return flow_session_dict
