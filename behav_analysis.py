@@ -17,7 +17,7 @@ class Data_Functions:
         Create the participant number and ID.
 
         Args:
-            par_num (list[str  |  int]): Participant number.
+            par_num (list[str | int]): Participant number.
 
         Raises:
             Exception: Invalid participant number.
@@ -297,18 +297,6 @@ class Data_Functions:
         """
         return pd.Series([x] * num_rows, dtype=dtype)
 
-    def flatten(self, input_list: List[list]) -> list:
-        """
-        Flatten a list of lists into a single list.
-
-        Args:
-            input_list (List[list]): List of lists
-
-        Returns:
-            list: Single list with all elements of the input list
-        """
-        return [x for xs in input_list for x in xs]
-
     def parse_df(
         self, df: pd.DataFrame, num_blocks: int, num_trials: int
     ) -> Tuple[dict, pd.DataFrame]:
@@ -348,7 +336,7 @@ class Data_Functions:
 
     def get_exp_ts(self, df: pd.DataFrame, exp_name: str) -> Tuple[int, int]:
         """
-        Get the start and end timestamps from an experiment-organized DataFrame
+        Get the start and end timestamps from an experiment-organized DataFrame.
 
         Args:
             df (pd.DataFrame): DataFrame with experiment-organized start and end marker timestamps
@@ -367,7 +355,7 @@ class Data_Functions:
         self, df: pd.DataFrame, exp_name: str
     ) -> Tuple[datetime.datetime, datetime.datetime]:
         """
-        Get the start and end datetimes from an experiment-organized DataFrame
+        Get the start and end datetimes from an experiment-organized DataFrame.
 
         Args:
             df (pd.DataFrame): DataFrame with experiment-organized start and end marker timestamps
@@ -385,49 +373,65 @@ class Data_Functions:
         return start_dt, end_dt
 
     def get_start_index_dt(
-        self, df: pd.DataFrame, start_dt: datetime.datetime
+        self, array_like: list[pd.DataFrame | np.ndarray], start_dt: datetime.datetime
     ) -> Optional[int]:
         """
-        Get the index of the start datetime of an experiment
+        Get the index of the start datetime of an experiment.
 
         Args:
-            df (pd.DataFrame): Experiment data with datetime column
+            array_like list[pd.DataFrame, np.ndarray]: Experiment data DataFrame or Array
             start_dt (datetime.datetime): Start datetime of the experiment
 
         Returns:
             Optional[int]: Start index or None
         """
         try:
-            for loc, dt in enumerate(df["datetime"]):
-                if not dt < start_dt:
-                    break
-            if loc < df["datetime"].shape[0] - 1:
-                return loc
-            else:
-                print("Start index datetime not found!")
-                return None
+            if isinstance(array_like, pd.DataFrame):
+                for loc, dt in enumerate(array_like["datetime"]):
+                    if not dt < start_dt:
+                        break
+                if loc < array_like["datetime"].shape[0] - 1:
+                    return loc
+                else:
+                    print("Start index datetime not found!")
+                    return None
+            elif isinstance(array_like, np.ndarray):
+                for loc, dt in enumerate(array_like):
+                    if not dt < start_dt:
+                        break
+                if loc < array_like.shape[0] - 1:
+                    return loc
+                else:
+                    print("Start index datetime not found!")
+                    return None
         except:
             print("Start index datetime not found!")
             return None
 
     def get_end_index_dt(
-        self, df: pd.DataFrame, end_dt: datetime.datetime
+        self, array_like: list[pd.DataFrame | np.ndarray], end_dt: datetime.datetime
     ) -> Optional[int]:
         """
-        Get the index of the end datetime of an experiment
+        Get the index of the end datetime of an experiment.
 
         Args:
-            df (pd.DataFrame): Experiment data with datetime column
+            array_like list[pd.DataFrame, np.ndarray]: Experiment data DataFrame or Array
             end_dt (datetime.datetime): End datetime of the experiment
 
         Returns:
             Optional[int]: End index or None
         """
         try:
-            for loc, dt in enumerate(df["datetime"]):
-                if dt > end_dt:
-                    break
-            return loc
+            if isinstance(array_like, pd.DataFrame):
+                for loc, dt in enumerate(array_like["datetime"]):
+                    if dt > end_dt:
+                        break
+                return loc
+            elif isinstance(array_like, np.ndarray):
+                for loc, dt in enumerate(array_like):
+                    if dt > end_dt:
+                        break
+                return loc
         except:
             print("End index datetime not found!")
             return None
@@ -518,6 +522,31 @@ class Data_Functions:
             float: Temperature in celsius
         """
         return round(temp * 9 / 5 + 32, 2)
+
+    def flatten(self, input_list: List[list]) -> list:
+        """
+        Flatten a list of lists into a single list.
+
+        Args:
+            input_list (List[list]): List of lists
+
+        Returns:
+            list: Single list with all elements of the input list
+        """
+        return [x for xs in input_list for x in xs]
+
+    def get_key_from_value(self, dictionary: dict, value: List[int | str]):
+        """
+        Get a dictionary key that contains a specified value.
+
+        Args:
+            dictionary (dict): Dictionary.
+            value (List[int | str]): Value to get the key of.
+
+        Returns:
+            Any: Key corresponding to the specified value.
+        """
+        return [k for k, v in dictionary.items() if value in v][0]
 
 
 class Audio_Narrative(Data_Functions):
@@ -1496,6 +1525,18 @@ class Participant_Behav(Data_Functions):
 
         self.by_block_ts_dict = self._create_by_block_ts_dict()
 
+        self.exp_color_dict = {
+            "audio_narrative": "yellow",
+            "go_no_go": "green",
+            "king_devick": "blue",
+            "n_back": "purple",
+            "resting_state": "pink",
+            "tower_of_london": "orange",
+            "video_narrative_cmiyc": "red",
+            "video_narrative_sherlock": "olive",
+            "vSAT": "cyan"
+        }
+
     def get_exp_order(self) -> list:
         """
         Get the experiment order from a text file.
@@ -2261,7 +2302,7 @@ def load_results(
     Args:
         results_dir (str): Path to the results directory
         exp_name (str, optional): Get results for a specific experiment? Defaults to None
-        par_num (list[int  |  list  |  tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
+        par_num (list[int | list | tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
                                                       Defaults to None (all participants).
 
     Returns:
