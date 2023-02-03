@@ -3,6 +3,7 @@ import snirf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import datetime
 from typing import Union
 from behav_analysis import Data_Functions, Participant_Behav, load_results
@@ -148,7 +149,7 @@ class Process_Flow:
         Returns:
             np.ndarray: Timeseries data array.
         """
-        if cols:
+        if cols or cols == 0:
             if isinstance(cols, tuple):
                 data = (
                     self.snirf_file.nirs[0].data[0].dataTimeSeries[:, cols[0] : cols[1]]
@@ -317,3 +318,49 @@ class Participant_Flow:
         for session in self.par_behav.session_dict.keys():
             flow_session_dict[session] = self.load_flow_session(session, wrapper)
         return flow_session_dict
+
+    def plot_flow_session(self, session: str) -> None:
+        flow_session = self.load_flow_session(session, wrapper=True)
+        time_abs_dt = flow_session.get_time_abs("datetime")
+        fig, ax = plt.subplots(1, 1, figsize=(15, 6))
+        ax.plot(
+            time_abs_dt, flow_session.get_data(cols=0)
+        )  # NOTE: get_data argument is a placeholder
+        for exp_name in self.par_behav.session_dict[session]:
+            exp_start_dt = self.par_behav.get_start_dt(exp_name)
+            exp_end_dt = self.par_behav.get_end_dt(exp_name)
+            ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
+            ax.axvline(exp_end_dt, linestyle="dashed", color="k", alpha=0.75)
+            ax.axvspan(
+                exp_start_dt,
+                exp_end_dt,
+                color=self.par_behav.exp_color_dict[exp_name],
+                alpha=0.4,
+                label=exp_name,
+            )
+        datetime_fmt = mdates.DateFormatter("%H:%M:%S")
+        ax.xaxis.set_major_formatter(datetime_fmt)
+        ax.set_xlabel("Time", fontsize=16, color="k")
+        ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
+
+    def plot_flow_exp(self, exp_name: str) -> None:
+        flow_exp = self.load_flow_exp(exp_name)
+        fig, ax = plt.subplots(1, 1, figsize=(15, 6))
+        ax.plot(
+            flow_exp["datetime"], flow_exp.iloc[:, 0 + 1], color="black"
+        )  # NOTE: placeholder column
+        exp_start_dt = self.par_behav.get_start_dt(exp_name)
+        exp_end_dt = self.par_behav.get_end_dt(exp_name)
+        ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
+        ax.axvline(exp_end_dt, linestyle="dashed", color="k", alpha=0.75)
+        ax.axvspan(
+            exp_start_dt,
+            exp_end_dt,
+            color=self.par_behav.exp_color_dict[exp_name],
+            alpha=0.4,
+            label=exp_name,
+        )
+        datetime_fmt = mdates.DateFormatter("%H:%M:%S")
+        ax.xaxis.set_major_formatter(datetime_fmt)
+        ax.set_xlabel("Time", fontsize=16, color="k")
+        ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
