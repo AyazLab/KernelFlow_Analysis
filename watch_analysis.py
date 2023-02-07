@@ -307,10 +307,10 @@ class Participant_Watch:
                     exp_name, df
                 )  # block and trial rows for the experiment duration
                 start_idx = self.data_fun.get_start_index_dt(
-                    df=df, start_dt=start_dt
+                    array_like=df, start_dt=start_dt
                 )  # experiment start index for this modality
                 end_idx = self.data_fun.get_end_index_dt(
-                    df=df, end_dt=end_dt
+                    array_like=df, end_dt=end_dt
                 )  # experiment end index for this modality
                 if start_idx == None or end_idx == None:
                     exp_modality_data_dict[modality] = None
