@@ -548,6 +548,43 @@ class Data_Functions:
         """
         return [k for k, v in dictionary.items() if value in v][0]
 
+    def format_exp_name(self, exp_name: str) -> str:
+        """
+        Format an experiment name into title case.
+
+        Args:
+            exp_name (str): Experiment name.
+
+        Returns:
+            str: Formatted experiment name.
+        """
+        if exp_name == "tower_of_london":
+            return "Tower of London"
+        elif exp_name == "video_narrative_cmiyc":
+            return "Video Narrative CMIYC"
+        elif exp_name == "vSAT":
+            return exp_name
+        else:
+            return " ".join([word.capitalize() for word in exp_name.split("_")])
+
+    def create_unique_stim_dict(self, df: pd.DataFrame, col_name: str = "stim") -> dict:
+        """
+        Create a dictionary of unique items in a DataFrame column.
+
+        Args:
+            df (pd.DataFrame): DataFrame.
+            col_name (str, optional): Column name to get unique values from. Defaults to "stim".
+
+        Returns:
+            dict: Dictionary of unique column items.
+                keys:
+                    unique items
+                values:
+                    unique ID number (int) for each item
+        """
+        unique_stims = df[col_name].unique()
+        return {value: i for i, value in enumerate(unique_stims)}
+
 
 class Audio_Narrative(Data_Functions):
     """
@@ -1534,7 +1571,7 @@ class Participant_Behav(Data_Functions):
             "tower_of_london": "orange",
             "video_narrative_cmiyc": "red",
             "video_narrative_sherlock": "olive",
-            "vSAT": "cyan"
+            "vSAT": "cyan",
         }
 
     def get_exp_order(self) -> list:
@@ -1576,7 +1613,7 @@ class Participant_Behav(Data_Functions):
         session_num = 1
         for i, exp_name in enumerate(self.exp_order):
             session_exp_list.append(exp_name)
-            if (i+1)%3 == 0:
+            if (i + 1) % 3 == 0:
                 session_name = f"session_100{session_num}"
                 session_dict[session_name] = session_exp_list
                 session_num += 1
@@ -2301,7 +2338,7 @@ def load_results(
 
     Args:
         results_dir (str): Path to the results directory
-        exp_name (str, optional): Get results for a specific experiment? Defaults to None
+        exp_name (str, optional): Get results for a specific experiment. Defaults to None
         par_num (list[int | list | tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
                                                       Defaults to None (all participants).
 
