@@ -1981,6 +1981,7 @@ def create_behav_results_tables(num_pars: int) -> None:
 
         temp_audio_df = exp.df_adj_ts
         temp_audio_df.insert(0, "block", block_col)
+        temp_audio_df.insert(0, "stim", ["audio_narrative"])
         temp_audio_df.insert(0, "trial", trial_col)
         temp_audio_df.insert(0, "participant", par_num_col)
         temp_audio_df.rename(
@@ -2181,6 +2182,7 @@ def create_behav_results_tables(num_pars: int) -> None:
 
         temp_video_cmiyc_df = exp.df_adj_ts
         temp_video_cmiyc_df.insert(0, "block", block_col)
+        temp_video_cmiyc_df.insert(0, "stim", ["video_narrative"])
         temp_video_cmiyc_df.insert(0, "trial", trial_col)
         temp_video_cmiyc_df.insert(0, "participant", par_num_col)
         temp_video_cmiyc_df.rename(
@@ -2204,6 +2206,7 @@ def create_behav_results_tables(num_pars: int) -> None:
 
         temp_video_sherlock_df = exp.df_adj_ts
         temp_video_sherlock_df.insert(0, "block", block_col)
+        temp_video_sherlock_df.insert(0, "stim", ["video_narrative"])
         temp_video_sherlock_df.insert(0, "trial", trial_col)
         temp_video_sherlock_df.insert(0, "participant", par_num_col)
         temp_video_sherlock_df.rename(
