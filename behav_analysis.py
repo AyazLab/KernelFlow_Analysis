@@ -88,14 +88,14 @@ class Data_Functions:
             marker_ts_str = marker_ts_info[0]
             marker_ts = marker_ts_info[1]
 
-            marker_dict = {
+            udp_dict = {
                 marker_ID_str: marker_ID,
                 marker_val_str: marker_val,
                 marker_string_str: marker_string,
                 marker_ts_str: marker_ts,
             }
 
-            return marker_dict
+            return udp_dict
 
         log_dir = os.path.join(par_dir, exp_name, "data")
         for filename in os.listdir(log_dir):
@@ -213,6 +213,22 @@ class Data_Functions:
 
         return data_filepath
 
+    def load_marker_dict(self, filepath: str) -> dict:
+        """
+        Load the marker and experiment code CSV file into a dictionary.
+
+        Args:
+            filepath (str): Filepath to the marker CSV file.
+
+        Returns:
+            dict: Marker and experiment code dictionary.
+        """
+        df = pd.read_csv(filepath)
+        marker_dict = {}
+        for _, row in df.iterrows():
+            marker_dict[row["marker_val"]] = row["marker_str"]
+        return marker_dict
+
     def get_all_marker_timestamps(self, par_dir: str, exp_order: list) -> dict:
         """
         Organize the start and end timestamps for each experiment into a dictionary.
@@ -231,10 +247,10 @@ class Data_Functions:
         """
         all_marker_timestamps = {}
         for exp_name in exp_order:
-            marker_dict = self.parse_log_file(par_dir=par_dir, exp_name=exp_name)
+            udp_dict = self.parse_log_file(par_dir=par_dir, exp_name=exp_name)
             start_marker, end_marker = (
-                marker_dict["start_marker"],
-                marker_dict["end_marker"],
+                udp_dict["start_marker"],
+                udp_dict["end_marker"],
             )
             if (
                 "narrative" in exp_name
@@ -1416,6 +1432,8 @@ class Participant_Behav(Data_Functions):
             par_dir=self.par_dir, exp_order=self.exp_order
         )
         self._create_marker_ts_csv()
+        marker_csv_filepath = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Experiment\main\marker_dict.csv"
+        self.marker_dict = self.load_marker_dict(marker_csv_filepath)  # TODO: make this path relative
         self.marker_ts_df = self._create_marker_ts_df()
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
