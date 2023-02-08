@@ -2,6 +2,8 @@ import os
 import snirf
 import numpy as np
 import pandas as pd
+
+# %matplotlib widget
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime
@@ -237,6 +239,14 @@ class Participant_Flow:
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
         data_dir = r"C:\Kernel\participants"
         self.flow_data_dir = os.path.join(data_dir, self.par_ID, "flow_data")
+        self.plot_color_dict = {
+            0: "blue",
+            1: "green",
+            2: "red",
+            3: "yellow",
+            4: "pink",
+            5: "orange",
+        }
 
     def load_flow_session(
         self, session: list[str | int], wrapper: bool = False
@@ -353,14 +363,49 @@ class Participant_Flow:
         exp_end_dt = self.par_behav.get_end_dt(exp_name)
         ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
         ax.axvline(exp_end_dt, linestyle="dashed", color="k", alpha=0.75)
-        ax.axvspan(
-            exp_start_dt,
-            exp_end_dt,
-            color=self.par_behav.exp_color_dict[exp_name],
-            alpha=0.4,
-            label=exp_name,
-        )
+        results_dir = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Analysis\results\behavioral"  # NOTE: temporary
+        exp_results = load_results(results_dir, exp_name, self.par_num)
+        exp_title = self.par_behav.format_exp_name(exp_name)
+
+        num_rows = exp_results.shape[0]
+        for _, row in exp_results.iterrows():
+            try:
+                uni_stim_dict = self.par_behav.create_unique_stim_dict(
+                    exp_results, "stim"
+                )
+                stim = row["stim"]
+                label = self.par_behav.format_exp_name(row["stim"])
+            except KeyError:
+                uni_stim_dict = self.par_behav.create_unique_stim_dict(
+                    exp_results, "block"
+                )
+                stim = row["block"]
+                label = self.par_behav.format_exp_name(row["block"])
+            color_index = uni_stim_dict[stim]
+            try:
+                stim_start = datetime.datetime.fromtimestamp(row["stim_start"])
+                stim_end = datetime.datetime.fromtimestamp(row["stim_end"])
+                ax.axvspan(
+                    stim_start,
+                    stim_end,
+                    color=self.plot_color_dict[color_index],
+                    alpha=0.4,
+                    label=label,
+                )
+            except ValueError:
+                print("Error while plotting.")
+
+        ax.set_title(exp_title)
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
         ax.xaxis.set_major_formatter(datetime_fmt)
         ax.set_xlabel("Time", fontsize=16, color="k")
-        ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
+        handles, labels = plt.gca().get_legend_handles_labels()
+        uni_labels = dict(zip(labels, handles))
+        plt.legend(
+            uni_labels.values(),
+            uni_labels.keys(),
+            bbox_to_anchor=(1.0, 0.75),
+            facecolor="white",
+            framealpha=1,
+            title="Stimulus",
+        )
