@@ -182,6 +182,20 @@ class Process_Flow:
                 data_types.append(data_type)
         return data_types
 
+    def get_data_type_label(self, channel_num: int) -> str:
+        """
+        Get the data type label for a channel(s).
+
+        Args:
+            channel_num (int): Channel number to get the data type label of.
+
+        Returns:
+            str: Data type label of the channel.
+        """
+        return (
+            self.snirf_file.nirs[0].data[0].measurementList[channel_num].dataTypeLabel
+        )
+
     def get_unique_data_type_labels(self) -> list:
         """
         Get unique data type labels from the SNIRF file.
@@ -240,13 +254,14 @@ class Participant_Flow:
         data_dir = r"C:\Kernel\participants"
         self.flow_data_dir = os.path.join(data_dir, self.par_ID, "flow_data")
         self.plot_color_dict = {
-            0: "blue",
-            1: "green",
-            2: "red",
+            0: "purple",
+            1: "orange",
+            2: "green",
             3: "yellow",
             4: "pink",
-            5: "orange",
+            5: "skyblue",
         }
+        self.flow_session_dict = self.create_flow_session_dict(wrapper=True)
 
     def load_flow_session(
         self, session: list[str | int], wrapper: bool = False
@@ -298,12 +313,14 @@ class Participant_Flow:
             self.par_behav.session_dict, exp_name
         )
         flow_session = self.load_flow_session(session, wrapper=True)
+
         start_dt = self.par_behav.get_start_dt(exp_name)
         end_dt = self.par_behav.get_end_dt(exp_name)
         time_abs_dt = flow_session.get_time_abs("datetime")
         start_idx = self.par_behav.get_start_index_dt(time_abs_dt, start_dt)
         end_idx = self.par_behav.get_end_index_dt(time_abs_dt, end_dt)
         exp_time_abs = time_abs_dt[start_idx:end_idx]
+
         flow_data = flow_session.get_data("dataframe")
         flow_data.insert(0, "datetime", time_abs_dt)
         return flow_data.iloc[start_idx:end_idx, :]
@@ -330,7 +347,7 @@ class Participant_Flow:
         return flow_session_dict
 
     def plot_flow_session(self, session: str) -> None:
-        flow_session = self.load_flow_session(session, wrapper=True)
+        flow_session = self.flow_session_dict[session]
         time_abs_dt = flow_session.get_time_abs("datetime")
         fig, ax = plt.subplots(1, 1, figsize=(15, 6))
         ax.plot(
@@ -354,11 +371,27 @@ class Participant_Flow:
         ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
 
     def plot_flow_exp(self, exp_name: str) -> None:
+        channel_nums = [0, 1]  # NOTE testing
         flow_exp = self.load_flow_exp(exp_name)
+        session = self.par_behav.get_key_from_value(
+            self.par_behav.session_dict, exp_name
+        )
         fig, ax = plt.subplots(1, 1, figsize=(15, 6))
-        ax.plot(
-            flow_exp["datetime"], flow_exp.iloc[:, 0 + 1], color="black"
-        )  # NOTE: placeholder column
+        for channel_num in channel_nums:
+            data_type_label = self.flow_session_dict[session].get_data_type_label(
+                channel_num
+            )
+            legend_label = f"Channel {channel_num} ({data_type_label})"
+            if data_type_label == "HbO":
+                color = "red"
+            elif data_type_label == "HbR":
+                color = "blue"
+            ax.plot(
+                flow_exp["datetime"],
+                flow_exp.iloc[:, channel_num + 1],
+                color=color,
+                label=legend_label,  # TODO add to separate legend
+            )
         exp_start_dt = self.par_behav.get_start_dt(exp_name)
         exp_end_dt = self.par_behav.get_end_dt(exp_name)
         ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
@@ -374,13 +407,13 @@ class Participant_Flow:
                     exp_results, "stim"
                 )
                 stim = row["stim"]
-                label = self.par_behav.format_exp_name(row["stim"])
+                legend_label = self.par_behav.format_exp_name(row["stim"])
             except KeyError:
                 uni_stim_dict = self.par_behav.create_unique_stim_dict(
                     exp_results, "block"
                 )
                 stim = row["block"]
-                label = self.par_behav.format_exp_name(row["block"])
+                legend_label = self.par_behav.format_exp_name(row["block"])
             color_index = uni_stim_dict[stim]
             try:
                 stim_start = datetime.datetime.fromtimestamp(row["stim_start"])
@@ -390,7 +423,7 @@ class Participant_Flow:
                     stim_end,
                     color=self.plot_color_dict[color_index],
                     alpha=0.4,
-                    label=label,
+                    label=legend_label,
                 )
             except ValueError:
                 print("Error while plotting.")
