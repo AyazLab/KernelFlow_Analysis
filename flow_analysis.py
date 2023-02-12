@@ -8,29 +8,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime
 from typing import Union
-from behav_analysis import Data_Functions, Participant_Behav, load_results
-
-
-def sort_dict(dictionary: dict, sort_by: str) -> dict:
-    """
-    Sort a dictionary by keys or values.
-
-    Args:
-        dictionary (dict): Dictionary to sort.
-        sort_by (str): How to sort to dictionary: by "keys" or by "values".
-
-    Raises:
-        Exception: Invalid sort_by argument.
-
-    Returns:
-        dict: Sorted dictionary.
-    """
-    if "key" in sort_by.lower():
-        return dict(sorted(dictionary.items(), key=lambda item: item[0]))
-    elif "value" in sort_by.lower():
-        return dict(sorted(dictionary.items(), key=lambda item: item[1]))
-    else:
-        raise Exception("Invalid 'sort_by' argument. Must be 'key' or 'value'.")
+from behav_analysis import Participant_Behav, load_results
+from data_functions import Data_Functions
 
 
 class Process_Flow:
@@ -46,6 +25,7 @@ class Process_Flow:
         Args:
             filepath (str): Path to SNIRF file.
         """
+        self.data_fun = Data_Functions()
         self.snirf_file = self.load_snirf(filepath)
 
     def load_snirf(self, filepath: str) -> snirf.Snirf:
@@ -234,7 +214,7 @@ class Process_Flow:
         for i in range(len(self.snirf_file.nirs[0].data[0].measurementList)):
             source = self.snirf_file.nirs[0].data[0].measurementList[i].sourceIndex
             source_dict[source] = source_dict.get(source, 0) + 1
-        source_dict = sort_dict(source_dict, "keys")
+        source_dict = self.data_fun.sort_dict(source_dict, "keys")
         return source_dict
 
     def create_detector_dict(self) -> dict:
@@ -248,7 +228,7 @@ class Process_Flow:
         for i in range(len(self.snirf_file.nirs[0].data[0].measurementList)):
             detector = self.snirf_file.nirs[0].data[0].measurementList[i].detectorIndex
             detector_dict[detector] = detector_dict.get(detector, 0) + 1
-        detector_dict = sort_dict(detector_dict, "keys")
+        detector_dict = self.data_fun.sort_dict(detector_dict, "keys")
         return detector_dict
 
 

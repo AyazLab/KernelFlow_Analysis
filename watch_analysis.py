@@ -5,7 +5,8 @@ import numpy as np
 from typing import Tuple
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from behav_analysis import Data_Functions, Participant_Behav
+from behav_analysis import Participant_Behav
+from data_functions import Data_Functions
 
 
 class Participant_Watch:
