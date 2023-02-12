@@ -58,19 +58,20 @@ class Data_Functions:
                             'marker_ID', 'marker_value', 'marker_string', 'timestamp'
         """
 
-        def _parse_udp(udp: str) -> dict:
+        def _parse_udp(udp: str, sent_time: str) -> dict:
             """
             Parses UDP file lines into marker information.
 
             Args:
                 udp (str): File line with UDP data
+                sent_time (str): Relative time this marker was sent
 
             Returns:
                 dict: Marker data
                     keys:
-                        'marker_ID', 'marker_value', 'marker_string', 'timestamp'
+                        'sent_time', 'marker_ID', 'marker_value', 'marker_string', 'timestamp'
                     values:
-                        'marker_ID', 'marker_value', 'marker_string', 'timestamp'
+                        'sent_time', 'marker_ID', 'marker_value', 'marker_string', 'timestamp'
             """
             marker_ID_info = udp[2].strip(",").split("=")
             marker_ID_str = marker_ID_info[0]
@@ -89,6 +90,7 @@ class Data_Functions:
             marker_ts = marker_ts_info[1]
 
             udp_dict = {
+                "sent_time": sent_time,
                 marker_ID_str: marker_ID,
                 marker_val_str: marker_val,
                 marker_string_str: marker_string,
@@ -107,19 +109,22 @@ class Data_Functions:
             lines = f.readlines()
 
         udp_lines = []
+        sent_time_list = []
         for line in lines:
             if "UDP" in line:  # only select lines with UDP info
-                udp_lines.append(line.split("\t")[-1])
+                split_line = line.split("\t")
+                udp_lines.append(split_line[-1])
+                sent_time_list.append(split_line[0].strip())
 
         marker_data = {}
         try:
             start_udp = udp_lines[0].split(" ")
-            marker_data["start_marker"] = _parse_udp(start_udp)
+            marker_data["start_marker"] = _parse_udp(start_udp, sent_time_list[0])
         except:
             marker_data["start_marker"] = "_"
         try:
             end_udp = udp_lines[1].split(" ")
-            marker_data["end_marker"] = _parse_udp(end_udp)
+            marker_data["end_marker"] = _parse_udp(end_udp, sent_time_list[1])
         except:
             if (
                 exp_name == "go_no_go"
@@ -132,6 +137,7 @@ class Data_Functions:
                     float(end_ts) + float(lines[-1].split("\t")[0]) * 1e9 - 0.4 * 1e9
                 )
                 marker_data["end_marker"] = {
+                    "sent_time": float("NaN"),
                     "marker_ID": marker_ID,
                     "marker_value": marker_val,
                     "marker_string": marker_string,
@@ -1433,7 +1439,9 @@ class Participant_Behav(Data_Functions):
         )
         self._create_marker_ts_csv()
         marker_csv_filepath = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Experiment\main\marker_dict.csv"
-        self.marker_dict = self.load_marker_dict(marker_csv_filepath)  # TODO: make this path relative
+        self.marker_dict = self.load_marker_dict(
+            marker_csv_filepath
+        )  # TODO: make this path relative
         self.marker_ts_df = self._create_marker_ts_df()
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
