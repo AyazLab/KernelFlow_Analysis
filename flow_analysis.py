@@ -244,7 +244,7 @@ class Participant_Flow:
         self.par_behav = Participant_Behav(par_num)
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
         data_dir = r"C:\Kernel\participants"
-        self.flow_data_dir = os.path.join(data_dir, self.par_ID, "flow_data")
+        self.flow_data_dir = os.path.join(data_dir, self.par_ID, "kernel_data")
         self.plot_color_dict = {
             0: "purple",
             1: "orange",
@@ -301,6 +301,7 @@ class Participant_Flow:
         Returns:
             pd.DataFrame: Kernel Flow data for an experiment.
         """
+
         def _offset_time_array(exp_name: str, time_array: np.ndarray) -> np.ndarray:
             """
             Offset a Kernel Flow datetime array for an experiment by the time-offset.
