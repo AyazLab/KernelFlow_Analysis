@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime
 from typing import Union
+from statistics import mean
 from behav_analysis import Participant_Behav, load_results
 from data_functions import Data_Functions
 
@@ -300,6 +301,32 @@ class Participant_Flow:
         Returns:
             pd.DataFrame: Kernel Flow data for an experiment.
         """
+        def _offset_time_array(exp_name: str, time_array: np.ndarray) -> np.ndarray:
+            """
+            Offset a Kernel Flow datetime array for an experiment by the time-offset.
+
+            Args:
+                exp_name (str): Name of the experiment.
+                time_array (np.ndarray): Datetime array.
+
+            Returns:
+                np.ndarray: Time-offset datetime array.
+            """
+            try:
+                time_offset = self.get_time_offset(exp_name)
+            except KeyError:  # if experiment start time missing, use avg of all other experiments
+                time_offset_list = []
+                for exp_name in self.par_behav.exp_order:
+                    try:
+                        time_offset = self.get_time_offset(exp_name)
+                        time_offset_list.append(time_offset)
+                    except KeyError:
+                        pass
+                time_offset = mean(time_offset_list)
+            time_offset_dt = datetime.timedelta(seconds=time_offset)
+            time_abs_dt_offset = time_array + time_offset_dt
+            return time_abs_dt_offset
+
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
         )
@@ -308,12 +335,13 @@ class Participant_Flow:
         start_dt = self.par_behav.get_start_dt(exp_name)
         end_dt = self.par_behav.get_end_dt(exp_name)
         time_abs_dt = flow_session.get_time_abs("datetime")
-        start_idx = self.par_behav.get_start_index_dt(time_abs_dt, start_dt)
-        end_idx = self.par_behav.get_end_index_dt(time_abs_dt, end_dt)
-        exp_time_abs = time_abs_dt[start_idx:end_idx]
+        time_abs_dt_offset = _offset_time_array(exp_name, time_abs_dt)
+        start_idx = self.par_behav.get_start_index_dt(time_abs_dt_offset, start_dt)
+        end_idx = self.par_behav.get_end_index_dt(time_abs_dt_offset, end_dt)
+        exp_time_abs = time_abs_dt_offset[start_idx:end_idx]
 
         flow_data = flow_session.get_data("dataframe")
-        flow_data.insert(0, "datetime", time_abs_dt)
+        flow_data.insert(0, "datetime", time_abs_dt_offset)
         return flow_data.iloc[start_idx:end_idx, :]
 
     def create_flow_session_dict(self, wrapper: bool = False) -> dict:
@@ -369,6 +397,7 @@ class Participant_Flow:
     def get_time_offset(self, exp_name: str) -> float:
         """
         Get the time offset (in seconds) between the behavioral and Kernel Flow data files.
+        Number of seconds that the Kernel Flow data is ahead of the behavioral data.
 
         Args:
             exp_name (str): Name of the experiment.
