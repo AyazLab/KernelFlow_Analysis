@@ -2,7 +2,6 @@ import os
 import snirf
 import numpy as np
 import pandas as pd
-
 # %matplotlib widget
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -16,7 +15,7 @@ from data_functions import Data_Functions
 class Process_Flow:
     """
     This class contains functions for processing Kernel Flow data.
-    # NOTE: Wrapper around snirf.Snirf
+    Wrapper around an snirf.Snirf object.
     """
 
     def __init__(self, filepath: str) -> None:
@@ -418,6 +417,7 @@ class Participant_Flow:
         return float(time_offset)
 
     def plot_flow_session(self, session: str) -> None:
+        # NOTE not time offset
         flow_session = self.flow_session_dict[session]
         time_abs_dt = flow_session.get_time_abs("datetime")
         fig, ax = plt.subplots(1, 1, figsize=(15, 6))
@@ -448,21 +448,27 @@ class Participant_Flow:
             self.par_behav.session_dict, exp_name
         )
         fig, ax = plt.subplots(1, 1, figsize=(15, 6))
+
+        data_traces = []
+        data_labels = []
         for channel_num in channel_nums:
             data_type_label = self.flow_session_dict[session].get_data_type_label(
                 channel_num
             )
-            legend_label = f"Channel {channel_num} ({data_type_label})"
+            legend_label = f"Ch {channel_num} ({data_type_label})"
             if data_type_label == "HbO":
                 color = "red"
             elif data_type_label == "HbR":
                 color = "blue"
-            ax.plot(
+            data_trace, = ax.plot(
                 flow_exp["datetime"],
                 flow_exp.iloc[:, channel_num + 1],
                 color=color,
-                label=legend_label,  # TODO add to separate legend
+                label=legend_label, 
             )
+            data_traces.append(data_trace)
+            data_labels.append(legend_label)
+
         exp_start_dt = self.par_behav.get_start_dt(exp_name)
         exp_end_dt = self.par_behav.get_end_dt(exp_name)
         ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
@@ -471,7 +477,7 @@ class Participant_Flow:
         exp_results = load_results(results_dir, exp_name, self.par_num)
         exp_title = self.par_behav.format_exp_name(exp_name)
 
-        num_rows = exp_results.shape[0]
+        stim_spans = []
         for _, row in exp_results.iterrows():
             try:
                 uni_stim_dict = self.par_behav.create_unique_stim_dict(
@@ -495,25 +501,38 @@ class Participant_Flow:
                 stim_end = datetime.datetime.fromtimestamp(
                     row["stim_start"] + stim_time
                 )
-            ax.axvspan(
+            stim_span = ax.axvspan(
                 stim_start,
                 stim_end,
                 color=self.plot_color_dict[color_index],
                 alpha=0.4,
                 label=legend_label,
             )
+            stim_spans.append(stim_span)
+        
+        data_legend = ax.legend(
+        handles = data_traces,
+        bbox_to_anchor=(1.0, 1.0),
+        facecolor="white",
+        framealpha=1,
+        title="Kernel Flow Data",
+        )
 
+        handles, labels = plt.gca().get_legend_handles_labels()
+        uni_labels = dict(zip(labels, handles))
+        [uni_labels.pop(data_label) for data_label in data_labels]
+
+        stim_legend = ax.legend(
+        uni_labels.values(),
+        uni_labels.keys(),
+        bbox_to_anchor=(1.0, 0.75),
+        facecolor="white",
+        framealpha=1,
+        title="Stimulus",
+        )
+
+        ax.add_artist(data_legend)
         ax.set_title(exp_title)
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
         ax.xaxis.set_major_formatter(datetime_fmt)
         ax.set_xlabel("Time", fontsize=16, color="k")
-        handles, labels = plt.gca().get_legend_handles_labels()
-        uni_labels = dict(zip(labels, handles))
-        plt.legend(
-            uni_labels.values(),
-            uni_labels.keys(),
-            bbox_to_anchor=(1.0, 0.75),
-            facecolor="white",
-            framealpha=1,
-            title="Stimulus",
-        )
