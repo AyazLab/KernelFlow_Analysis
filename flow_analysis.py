@@ -168,6 +168,17 @@ class Process_Flow:
         else:
             raise Exception("Invalid fmt argument. Must be 'array' or 'dataframe'.")
 
+    def get_marker_df(self) -> pd.DataFrame:
+        """
+        Get a DataFrame of marker data from the "stim" part of the SNIRF file.
+
+        Returns:
+            pd.DataFrame: Marker "stim" data.
+        """
+        marker_data = self.snirf_file.nirs[0].stim[0].data
+        marker_data_cols = self.snirf_file.nirs[0].stim[0].dataLabels
+        return pd.DataFrame(marker_data, columns=marker_data_cols)
+
     def get_unique_data_types(self) -> list:
         """
         Get unique data types from the SNIRF file.
@@ -345,6 +356,57 @@ class Participant_Flow:
         for session in self.par_behav.session_dict.keys():
             flow_session_dict[session] = self.load_flow_session(session, wrapper)
         return flow_session_dict
+
+    def create_abs_marker_df(self, session: str) -> pd.DataFrame:
+        """
+        Convert the "stim" marker DataFrame into absolute time.
+
+        Args:
+            session (str): Experiment session.
+
+        Returns:
+            pd.DataFrame: Marker "stim" data in absolute time.
+        """
+        marker_df = self.flow_session_dict[session].get_marker_df()
+        time_origin_ts = self.flow_session_dict[session].get_time_origin("timestamp")
+        marker_df["Timestamp"] = marker_df["Timestamp"] + time_origin_ts
+        marker_df.rename({"Timestamp": "Start timestamp"}, axis=1, inplace=True)
+
+        for idx, row in marker_df.iterrows():
+            end_ts = row["Start timestamp"] + row["Duration"]
+            marker_df.at[idx, "End timestamp"] = end_ts
+            exp_num = int(row["Experiment"])
+            exp_name = self.par_behav.marker_dict[exp_num]
+            marker_df.at[idx, "Experiment"] = exp_name
+
+        marker_df.rename({"Experiment": "Marker"}, axis=1, inplace=True)
+        marker_df.drop(["Value"], axis=1, inplace=True)
+        marker_df = marker_df[
+            ["Marker", "Start timestamp", "Duration", "End timestamp"]
+        ]
+        return marker_df
+
+    def get_time_offset(self, exp_name: str) -> float:
+        """
+        Get the time offset (in seconds) between the behavioral and Kernel Flow data files.
+
+        Args:
+            exp_name (str): Name of the experiment.
+
+        Returns:
+            float: Time offset (in seconds).
+        """
+        exp = self.par_behav.get_exp(exp_name)
+        exp_start_ts = exp.start_ts
+        marker_sent_time = float(exp.marker_data["start_marker"]["sent_time"])
+        session = self.par_behav.get_key_from_value(
+            self.par_behav.session_dict, exp_name
+        )
+        marker_df = self.create_abs_marker_df(session)
+        row = marker_df.loc[marker_df["Marker"].str.startswith(exp_name)].reset_index()
+        kernel_start_ts = row.loc[0, "Start timestamp"]
+        time_offset = kernel_start_ts - (exp_start_ts + marker_sent_time)
+        return float(time_offset)
 
     def plot_flow_session(self, session: str) -> None:
         flow_session = self.flow_session_dict[session]
