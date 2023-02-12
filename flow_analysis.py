@@ -339,7 +339,6 @@ class Participant_Flow:
         time_abs_dt_offset = _offset_time_array(exp_name, time_abs_dt)
         start_idx = self.par_behav.get_start_index_dt(time_abs_dt_offset, start_dt)
         end_idx = self.par_behav.get_end_index_dt(time_abs_dt_offset, end_dt)
-        exp_time_abs = time_abs_dt_offset[start_idx:end_idx]
 
         flow_data = flow_session.get_data("dataframe")
         flow_data.insert(0, "datetime", time_abs_dt_offset)
@@ -487,18 +486,22 @@ class Participant_Flow:
                 stim = row["block"]
                 legend_label = self.par_behav.format_exp_name(row["block"])
             color_index = uni_stim_dict[stim]
+            stim_start = datetime.datetime.fromtimestamp(row["stim_start"])
             try:
-                stim_start = datetime.datetime.fromtimestamp(row["stim_start"])
                 stim_end = datetime.datetime.fromtimestamp(row["stim_end"])
-                ax.axvspan(
-                    stim_start,
-                    stim_end,
-                    color=self.plot_color_dict[color_index],
-                    alpha=0.4,
-                    label=legend_label,
-                )
             except ValueError:
-                print("Error while plotting.")
+                if exp_name == "go_no_go":
+                    stim_time = 0.5  # seconds
+                stim_end = datetime.datetime.fromtimestamp(
+                    row["stim_start"] + stim_time
+                )
+            ax.axvspan(
+                stim_start,
+                stim_end,
+                color=self.plot_color_dict[color_index],
+                alpha=0.4,
+                label=legend_label,
+            )
 
         ax.set_title(exp_title)
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
