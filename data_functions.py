@@ -311,7 +311,7 @@ class Data_Functions:
         Args:
             x (Any): Value for each row in the column
             num_rows (int): Number of rows in the column
-            dtype (_type_, optional): Type of x
+            dtype (object, optional): Type of x
 
         Returns:
             pd.Series: Column with num_rows rows of x
@@ -626,3 +626,29 @@ class Data_Functions:
             return dict(sorted(dictionary.items(), key=lambda item: item[1]))
         else:
             raise Exception("Invalid 'sort_by' argument. Must be 'key' or 'value'.")
+
+    def insert_df_after_col(
+        self, df_orig: pd.DataFrame, df_insert: pd.DataFrame, col_name: str
+    ) -> pd.DataFrame:
+        """
+        Inserts a dataframe into an existing dataframe after the specified column.
+
+        Arguments:
+        df_orig (pd.DataFrame): Original DataFrame.
+        df_insert (pd.DataFrame): DataFrame to insert.
+        col_name (str): Name of the column after which to insert the DataFrame.
+
+        Returns:
+        pd.DataFrame: Original DataFrame with a DataFrame inserted after the specified column.
+        """
+        col_index = df_orig.columns.get_loc(col_name)
+        new_df = pd.concat(
+            [
+                df_orig.iloc[:, : col_index + 1],
+                df_insert,
+                df_orig.iloc[:, col_index + 1 :],
+            ],
+            axis=1,
+        )
+
+        return new_df

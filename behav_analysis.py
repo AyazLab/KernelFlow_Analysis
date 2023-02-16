@@ -829,8 +829,12 @@ class Participant_Behav(Data_Functions):
         self.par_num, self.par_ID = self.process_par(par_num)
         data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
         self.par_dir = os.path.join(data_dir, self.par_ID)
+        self.forms_filepath = os.path.join(
+            os.getcwd(), "processed_data", "participant_forms.xlsx"
+        )
         self.exp_order = self.get_exp_order()
         self.session_dict = self.create_session_dict()
+        self.form_info = self.load_form_info()
 
         self.all_marker_timestamps = self.get_all_marker_timestamps(
             par_dir=self.par_dir, exp_order=self.exp_order
@@ -1043,6 +1047,17 @@ class Participant_Behav(Data_Functions):
                 session_num += 1
                 session_exp_list = []
         return session_dict
+
+    def load_form_info(self) -> pd.DataFrame:
+        """
+        Load the information from a participant's forms info a DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame of participant form info.
+        """
+        forms_df = pd.read_excel(self.forms_filepath)
+        form_info = forms_df[forms_df["participant"] == self.par_num]
+        return form_info.reset_index()
 
     def _create_marker_ts_csv(self) -> None:
         """
@@ -1378,6 +1393,24 @@ def create_behav_results_tables(num_pars: int) -> None:
         else:
             return int(exp.num_blocks * exp.num_trials)
 
+    def get_form_info_df(num_rows: int, form_info_cols: list) -> pd.DataFrame:
+        """
+        Get a DataFrame of form info for the specified columns.
+
+        Args:
+            num_rows (int): Number of rows in the experiment.
+            form_info_cols (list): Columns to select from the form info.
+
+        Returns:
+            pd.DataFrame: DataFrame of specified form info.
+        """
+        cols = []
+        for col_name, dtype in form_info_cols.items():
+            form_data = par.form_info.loc[0, col_name]
+            cols.append(data_fun.create_col(form_data, num_rows, dtype))
+        form_info_df = pd.concat(cols, keys=[k for k in form_info_cols.keys()], axis=1)
+        return form_info_df
+
     data_fun = Data_Functions()
 
     audio_df_list = []
@@ -1389,6 +1422,12 @@ def create_behav_results_tables(num_pars: int) -> None:
     video_cmiyc_df_list = []
     video_sherlock_df_list = []
     vsat_df_list = []
+
+    form_info_cols = {
+        "sex": pd.StringDtype(),
+        "age": int,
+        "hours_of_sleep": float,
+    }  # columns to select from the form info
 
     for i in range(num_pars):
         par_num = f"{(i+1):02d}"
@@ -1408,6 +1447,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_audio_df.insert(0, "stim", ["audio_narrative"])
         temp_audio_df.insert(0, "trial", trial_col)
         temp_audio_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_audio_df = data_fun.insert_df_after_col(
+            temp_audio_df, form_info_df, "participant"
+        )
         temp_audio_df.rename(
             columns={
                 "pieman_clip.started": "stim_start",
@@ -1445,6 +1488,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_gng_df.insert(0, "block", block_col)
         temp_gng_df.insert(0, "trial", trial_col)
         temp_gng_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_gng_df = data_fun.insert_df_after_col(
+            temp_gng_df, form_info_df, "participant"
+        )
         temp_gng_df.rename(
             columns={
                 "GNG_stim": "stim",
@@ -1478,6 +1525,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_kd_df.insert(0, "block", block_col)
         temp_kd_df.insert(0, "trial", trial_col)
         temp_kd_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_kd_df = data_fun.insert_df_after_col(
+            temp_kd_df, form_info_df, "participant"
+        )
         temp_kd_df = temp_kd_df.rename(
             columns={
                 "card_image.started": "stim_start",
@@ -1514,6 +1565,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_n_back_df.insert(0, "block", block_col)
         temp_n_back_df.insert(0, "trial", trial_col)
         temp_n_back_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_n_back_df = data_fun.insert_df_after_col(
+            temp_n_back_df, form_info_df, "participant"
+        )
         temp_n_back_df.rename(
             columns={
                 "stim_text.started": "stim_start",
@@ -1552,6 +1607,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_rs_df.insert(0, "block", block_col)
         temp_rs_df.insert(0, "trial", trial_col)
         temp_rs_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_rs_df = data_fun.insert_df_after_col(
+            temp_rs_df, form_info_df, "participant"
+        )
         rs_df_list.append(temp_rs_df)
 
         # Tower of London -----
@@ -1581,6 +1640,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_tol_df.insert(0, "block", block_col)
         temp_tol_df.insert(0, "trial", trial_col)
         temp_tol_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_tol_df = data_fun.insert_df_after_col(
+            temp_tol_df, form_info_df, "participant"
+        )
         temp_tol_df.rename(
             columns={
                 "image_stim": "stim",
@@ -1609,6 +1672,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_video_cmiyc_df.insert(0, "stim", ["video_narrative"])
         temp_video_cmiyc_df.insert(0, "trial", trial_col)
         temp_video_cmiyc_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_video_cmiyc_df = data_fun.insert_df_after_col(
+            temp_video_cmiyc_df, form_info_df, "participant"
+        )
         temp_video_cmiyc_df.rename(
             columns={
                 "video_start.started": "stim_start",
@@ -1633,6 +1700,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_video_sherlock_df.insert(0, "stim", ["video_narrative"])
         temp_video_sherlock_df.insert(0, "trial", trial_col)
         temp_video_sherlock_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_video_sherlock_df = data_fun.insert_df_after_col(
+            temp_video_sherlock_df, form_info_df, "participant"
+        )
         temp_video_sherlock_df.rename(
             columns={
                 "video_start.started": "stim_start",
@@ -1670,6 +1741,10 @@ def create_behav_results_tables(num_pars: int) -> None:
         temp_vsat_df.insert(0, "block", block_col)
         temp_vsat_df.insert(0, "trial", trial_col)
         temp_vsat_df.insert(0, "participant", par_num_col)
+        form_info_df = get_form_info_df(num_rows, form_info_cols)
+        temp_vsat_df = data_fun.insert_df_after_col(
+            temp_vsat_df, form_info_df, "participant"
+        )
         temp_vsat_df.rename(
             columns={
                 "stim_resp.corr": "correct_response",
