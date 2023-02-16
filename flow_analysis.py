@@ -2,6 +2,7 @@ import os
 import snirf
 import numpy as np
 import pandas as pd
+
 # %matplotlib widget
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -40,12 +41,15 @@ class Process_Flow:
         """
         return snirf.Snirf(filepath, "r+", dynamic_loading=True)
 
-    def get_time_origin(self, fmt: str = "datetime") -> Union[datetime.datetime, float]:
+    def get_time_origin(
+        self, fmt: str = "datetime", offset=True
+    ) -> Union[datetime.datetime, float]:
         """
         Get the time origin (start time) from the SNIRF file.
 
         Args:
             fmt (str, optional): Format to get the time origin in: "datetime" or "timestamp". Defaults to "datetime".
+            offset (bool): Offset the datetime by 4 hours. Defaults to True.
 
         Raises:
             Exception: Invalid fmt argument.
@@ -59,11 +63,14 @@ class Process_Flow:
         start_date = self.snirf_file.nirs[0].metaDataTags.MeasurementDate
         start_time = self.snirf_file.nirs[0].metaDataTags.MeasurementTime
         start_str = start_date + " " + start_time
-        time_origin = datetime.datetime.strptime(
-            start_str, "%Y-%m-%d %H:%M:%S"
-        ) - datetime.timedelta(
-            hours=4
-        )  # 4 hour offset
+        if offset:
+            time_origin = datetime.datetime.strptime(
+                start_str, "%Y-%m-%d %H:%M:%S"
+            ) - datetime.timedelta(
+                hours=4
+            )  # 4 hour offset
+        else:
+            time_origin = datetime.datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
         if fmt.lower() == "datetime":
             return time_origin
         elif fmt.lower() == "timestamp":
@@ -148,6 +155,42 @@ class Process_Flow:
         else:
             raise Exception("Invalid fmt argument. Must be 'array' or 'dataframe'.")
 
+    def get_source_pos_2d(self) -> np.ndarray:
+        """
+        Get the 2D source position array.
+
+        Returns:
+            np.ndarray: 2D source position array
+        """
+        return self.snirf_file.nirs[0].probe.sourcePos2D
+
+    def get_source_pos_3d(self) -> np.ndarray:
+        """
+        Get the 3D source position array.
+
+        Returns:
+            np.ndarray: 3D source position array
+        """
+        return self.snirf_file.nirs[0].probe.sourcePos3D
+
+    def get_detector_pos_2d(self) -> np.ndarray:
+        """
+        Get the 2D detector position array.
+
+        Returns:
+            np.ndarray: 2D detector position array
+        """
+        return self.snirf_file.nirs[0].probe.detectorPos2D
+
+    def get_detector_pos_3d(self) -> np.ndarray:
+        """
+        Get the 3D detector position array.
+
+        Returns:
+            np.ndarray: 3D detector position array
+        """
+        return self.snirf_file.nirs[0].probe.detectorPos3D
+
     def get_marker_df(self) -> pd.DataFrame:
         """
         Get a DataFrame of marker data from the "stim" part of the SNIRF file.
@@ -230,6 +273,51 @@ class Process_Flow:
             detector_dict[detector] = detector_dict.get(detector, 0) + 1
         detector_dict = self.data_fun.sort_dict(detector_dict, "keys")
         return detector_dict
+
+    def plot_pos_2d(self) -> None:
+        """
+        Plot the detector/source 2D positions.
+        """
+        detector_pos_2d = self.get_detector_pos_2d()
+        x_detector = detector_pos_2d[:, 0]
+        y_detector = detector_pos_2d[:, 1]
+
+        source_pos_2d = self.get_source_pos_2d()
+        x_source = source_pos_2d[:, 0]
+        y_source = source_pos_2d[:, 1]
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.scatter(x_detector, y_detector)
+        ax.scatter(x_source, y_source)
+        ax.set_title("Detector/Source 2D Plot")
+        ax.set_xlabel("X-Position (mm)")
+        ax.set_ylabel("Y-Position (mm)")
+        ax.legend(["Detector", "Source"])
+
+    def plot_pos_3d(self) -> None:
+        """
+        Plot the detector/source 3D positions.
+        """
+        detector_pos_3d = self.get_detector_pos_3d()
+        x_detector = detector_pos_3d[:, 0]
+        y_detector = detector_pos_3d[:, 1]
+        z_detector = detector_pos_3d[:, 2]
+
+        source_pos_3d = self.get_source_pos_3d()
+        x_source = source_pos_3d[:, 0]
+        y_source = source_pos_3d[:, 1]
+        z_source = source_pos_3d[:, 2]
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection="3d")
+        ax.scatter(x_detector, y_detector, z_detector)
+        ax.scatter(x_source, y_source, z_source)
+        ax.set_title("Detector/Source 3D Plot")
+        ax.set_xlabel("X-Position (mm)")
+        ax.set_ylabel("Y-Position (mm)")
+        ax.set_zlabel("Z-Position (mm)")
+        ax.legend(["Detector", "Source"])
 
 
 class Participant_Flow:
@@ -460,11 +548,11 @@ class Participant_Flow:
                 color = "red"
             elif data_type_label == "HbR":
                 color = "blue"
-            data_trace, = ax.plot(
+            (data_trace,) = ax.plot(
                 flow_exp["datetime"],
                 flow_exp.iloc[:, channel_num + 1],
                 color=color,
-                label=legend_label, 
+                label=legend_label,
             )
             data_traces.append(data_trace)
             data_labels.append(legend_label)
@@ -509,13 +597,13 @@ class Participant_Flow:
                 label=legend_label,
             )
             stim_spans.append(stim_span)
-        
+
         data_legend = ax.legend(
-        handles = data_traces,
-        bbox_to_anchor=(1.0, 1.0),
-        facecolor="white",
-        framealpha=1,
-        title="Kernel Flow Data",
+            handles=data_traces,
+            bbox_to_anchor=(1.0, 1.0),
+            facecolor="white",
+            framealpha=1,
+            title="Kernel Flow Data",
         )
 
         handles, labels = plt.gca().get_legend_handles_labels()
@@ -523,12 +611,12 @@ class Participant_Flow:
         [uni_labels.pop(data_label) for data_label in data_labels]
 
         stim_legend = ax.legend(
-        uni_labels.values(),
-        uni_labels.keys(),
-        bbox_to_anchor=(1.0, 0.75),
-        facecolor="white",
-        framealpha=1,
-        title="Stimulus",
+            uni_labels.values(),
+            uni_labels.keys(),
+            bbox_to_anchor=(1.0, 0.75),
+            facecolor="white",
+            framealpha=1,
+            title="Stimulus",
         )
 
         ax.add_artist(data_legend)
