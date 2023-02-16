@@ -4,6 +4,8 @@
 .vscode/
 participants/
 results/
+raw_data/
+processed_data/
 __pycache__/
 *.pyc
 processFNIRS2/

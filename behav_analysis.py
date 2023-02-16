@@ -6,6 +6,7 @@ from statistics import mean
 from typing import Tuple, Union
 from data_functions import Data_Functions
 
+
 class Audio_Narrative(Data_Functions):
     """
     This class contains functions, data structures, and info necessary for
@@ -826,8 +827,7 @@ class Participant_Behav(Data_Functions):
     def __init__(self, par_num):
         super().__init__()
         self.par_num, self.par_ID = self.process_par(par_num)
-        data_dir = r"C:\Kernel\participants"
-        # self.par_dir = os.path.join(os.getcwd(), "participants", self.par_ID)
+        data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
         self.par_dir = os.path.join(data_dir, self.par_ID)
         self.exp_order = self.get_exp_order()
         self.session_dict = self.create_session_dict()
@@ -1689,7 +1689,7 @@ def create_behav_results_tables(num_pars: int) -> None:
         audio_df = pd.concat(audio_df_list, axis=0)
         audio_filepath = os.path.join(
             os.getcwd(),
-            "results/behavioral",
+            "processed_data/behavioral",
             f"{par.audio_narrative.exp_name}_behav.csv",
         )
         audio_df.to_csv(audio_filepath, index=False)
@@ -1697,28 +1697,34 @@ def create_behav_results_tables(num_pars: int) -> None:
         # Go/No-Go -----
         gng_df = pd.concat(gng_df_list, axis=0)
         gng_filepath = os.path.join(
-            os.getcwd(), "results/behavioral", f"{par.go_no_go.exp_name}_behav.csv"
+            os.getcwd(),
+            "processed_data/behavioral",
+            f"{par.go_no_go.exp_name}_behav.csv",
         )
         gng_df.to_csv(gng_filepath, index=False)
 
         # King Devick -----
         kd_df = pd.concat(kd_df_list, axis=0)
         kd_filepath = os.path.join(
-            os.getcwd(), "results/behavioral", f"{par.king_devick.exp_name}_behav.csv"
+            os.getcwd(),
+            "processed_data/behavioral",
+            f"{par.king_devick.exp_name}_behav.csv",
         )
         kd_df.to_csv(kd_filepath, index=False)
 
         # N-Back -----
         n_back_df = pd.concat(n_back_df_list, axis=0)
         n_back_filepath = os.path.join(
-            os.getcwd(), "results/behavioral", f"{par.n_back.exp_name}_behav.csv"
+            os.getcwd(), "processed_data/behavioral", f"{par.n_back.exp_name}_behav.csv"
         )
         n_back_df.to_csv(n_back_filepath, index=False)
 
         # Resting State -----
         rs_df = pd.concat(rs_df_list, axis=0)
         rs_filepath = os.path.join(
-            os.getcwd(), "results/behavioral", f"{par.resting_state.exp_name}_behav.csv"
+            os.getcwd(),
+            "processed_data/behavioral",
+            f"{par.resting_state.exp_name}_behav.csv",
         )
         rs_df.to_csv(rs_filepath, index=False)
 
@@ -1726,7 +1732,7 @@ def create_behav_results_tables(num_pars: int) -> None:
         tol_df = pd.concat(tol_df_list, axis=0)
         tol_filepath = os.path.join(
             os.getcwd(),
-            "results/behavioral",
+            "processed_data/behavioral",
             f"{par.tower_of_london.exp_name}_behav.csv",
         )
         tol_df.to_csv(tol_filepath, index=False)
@@ -1735,7 +1741,7 @@ def create_behav_results_tables(num_pars: int) -> None:
         video_cmiyc_df = pd.concat(video_cmiyc_df_list, axis=0)
         video_cmiyc_filepath = os.path.join(
             os.getcwd(),
-            "results/behavioral",
+            "processed_data/behavioral",
             f"{par.video_narrative_cmiyc.exp_name}_behav.csv",
         )
         video_cmiyc_df.to_csv(video_cmiyc_filepath, index=False)
@@ -1744,7 +1750,7 @@ def create_behav_results_tables(num_pars: int) -> None:
         video_sherlock_df = pd.concat(video_sherlock_df_list, axis=0)
         video_sherlock_filepath = os.path.join(
             os.getcwd(),
-            "results/behavioral",
+            "processed_data/behavioral",
             f"{par.video_narrative_sherlock.exp_name}_behav.csv",
         )
         video_sherlock_df.to_csv(video_sherlock_filepath, index=False)
@@ -1752,7 +1758,7 @@ def create_behav_results_tables(num_pars: int) -> None:
         # vSAT -----
         vsat_df = pd.concat(vsat_df_list, axis=0)
         vsat_filepath = os.path.join(
-            os.getcwd(), "results/behavioral", f"{par.vSAT.exp_name}_behav.csv"
+            os.getcwd(), "processed_data/behavioral", f"{par.vSAT.exp_name}_behav.csv"
         )
         vsat_df.to_csv(vsat_filepath, index=False)
 
