@@ -1,4 +1,5 @@
 import os
+import bisect
 import datetime
 import pandas as pd
 import numpy as np
@@ -239,11 +240,11 @@ class Data_Functions:
         Organize the start and end timestamps for each experiment into a dictionary.
 
         Args:
-            par_dir (str): Path to specific participant directory
-            exp_order (list): _description_
+            par_dir (str): Path to specific participant directory.
+            exp_order (list): Experiment order.
 
         Returns:
-            dict: Start and end timestamps for each experiment
+            dict: Start and end timestamps for each experiment.
                 keys:
                      'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
                      'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
@@ -652,3 +653,41 @@ class Data_Functions:
         )
 
         return new_df
+
+    def find_closest_ts(
+        self, given_ts: float, ts_list: list[list | np.ndarray]
+    ) -> Tuple[int, float]:
+        """
+        Find the closest timestamp to a given timestamp. The closet timestamp
+        will not be more recent than the given timestamp.
+
+        Args:
+            given_ts (float): Timestamp to find the closet one to.
+            ts_list (list[list | np.ndarray]): List or array of timestamps.
+
+        Raises:
+            Exception: No valid timestamp found.
+
+        Returns:
+            Tuple[int, float]: Index of the closet timestamp to the given timestamp
+                               and the closest timestamp.
+        """
+
+        ts_arr = np.asarray(ts_list)
+        valid_ts = ts_arr[ts_arr <= given_ts]
+        if len(valid_ts) == 0:
+            raise Exception("No valid timestamp found.")
+        idx = bisect.bisect_left(valid_ts, given_ts)  # index of closest timestamp
+        if idx == 0:
+            closest_ts = valid_ts[0]
+        elif idx == len(valid_ts):
+            closest_ts = valid_ts[-1]
+        else:
+            diff1 = abs(valid_ts[idx - 1] - given_ts)
+            diff2 = abs(valid_ts[idx] - given_ts)
+            if diff1 < diff2:
+                closest_ts = valid_ts[idx - 1]
+            else:
+                closest_ts = valid_ts[idx]
+        closest_idx = np.where(ts_arr == closest_ts)[0][0]
+        return closest_idx, closest_ts
