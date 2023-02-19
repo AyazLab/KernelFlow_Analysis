@@ -108,9 +108,19 @@ class Go_No_Go(Data_Functions):
             "GNG_stim",
             "inter_stim_plus.started",
             "go_image.started",
+            "go_image.stopped",
             "go_resp.corr",
             "go_resp.rt",
         ]
+        for idx, row in self.df.iterrows():
+            if (
+                row["go_image.stopped"] == float("NaN")
+                or row["go_image.stopped"] == "None"
+            ):
+                self.df.at[idx, "go_image.stopped"] = (
+                    row["go_image.started"] + row["go_resp.rt"]
+                )
+
         self.df_simp = self.get_cols(df=self.df, cols=cols)
         self.df_simp = self.df_simp.copy()
         self.df_simp["GNG_stim"] = self.df_simp["GNG_stim"].apply(self._strip_stim)
@@ -119,11 +129,18 @@ class Go_No_Go(Data_Functions):
             "inter_stim_plus.ended",
             self.df_simp["inter_stim_plus.started"] + self.df["inter_stim_interval"],
         )
-        self.df_simp.insert(
-            5,
-            "go_image.ended",
-            self.df_simp["go_image.started"] + self.df_simp["go_resp.rt"],
-        )
+        # self.df_simp.rename(
+        #     columns={
+        #         "go_image.stopped": "go_image.ended",
+        #     },
+        #     inplace=True,
+        # )
+        # self.df_simp.insert(
+        #     5,
+        #     "go_image.ended",
+        #     self.df_simp["go_image.started"] + self.df_simp["go_resp.rt"],
+        # )
+
         self.df_by_block, self.df_no_nan = self.parse_df(
             df=self.df_simp, num_blocks=self.num_blocks, num_trials=self.num_trials
         )
@@ -827,8 +844,9 @@ class Participant_Behav(Data_Functions):
     def __init__(self, par_num):
         super().__init__()
         self.par_num, self.par_ID = self.process_par(par_num)
-        data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
-        self.par_dir = os.path.join(data_dir, self.par_ID)
+        raw_data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
+        processed_data_dir = os.path.join(os.getcwd(), "processed_data", "behavioral")
+        self.par_dir = os.path.join(raw_data_dir, self.par_ID)
         self.forms_filepath = os.path.join(
             os.getcwd(), "processed_data", "participant_forms.xlsx"
         )
@@ -839,6 +857,9 @@ class Participant_Behav(Data_Functions):
         self.all_marker_timestamps = self.get_all_marker_timestamps(
             par_dir=self.par_dir, exp_order=self.exp_order
         )
+        # self.all_marker_timestamps = self.adjust_all_marker_timestamps(
+        #     self.all_marker_timestamps, processed_data_dir, self.par_num, self.exp_order
+        # )
         self._create_marker_ts_csv()
         marker_csv_filepath = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Experiment\main\marker_dict.csv"
         self.marker_dict = self.load_marker_dict(
@@ -848,6 +869,7 @@ class Participant_Behav(Data_Functions):
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
         self.audio_narrative.start_ts = self.get_start_ts("audio_narrative")
+        self.audio_narrative.end_ts = self.get_end_ts("audio_narrative")
         self.audio_narrative.df_adj_ts = self.adjust_df_ts(
             self.audio_narrative.df_simp,
             self.audio_narrative.start_ts,
@@ -856,6 +878,7 @@ class Participant_Behav(Data_Functions):
 
         self.go_no_go = Go_No_Go(par_dir=self.par_dir)
         self.go_no_go.start_ts = self.get_start_ts("go_no_go")
+        self.go_no_go.end_ts = self.get_end_ts("go_no_go")
         self.go_no_go.df_adj_ts = self.adjust_df_ts(
             self.go_no_go.df_no_nan,
             self.go_no_go.start_ts,
@@ -863,7 +886,7 @@ class Participant_Behav(Data_Functions):
                 "inter_stim_plus.started",
                 "inter_stim_plus.ended",
                 "go_image.started",
-                "go_image.ended",
+                "go_image.stopped",
             ],
         )
         self.go_no_go.df_by_block_adj_ts = self.adjust_df_ts(
@@ -873,13 +896,14 @@ class Participant_Behav(Data_Functions):
                 "inter_stim_plus.started",
                 "inter_stim_plus.ended",
                 "go_image.started",
-                "go_image.ended",
+                "go_image.stopped",
             ],
             by_block=True,
         )
 
         self.king_devick = King_Devick(par_dir=self.par_dir)
         self.king_devick.start_ts = self.get_start_ts("king_devick")
+        self.king_devick.end_ts = self.get_end_ts("king_devick")
         self.king_devick.df_adj_ts = self.adjust_df_ts(
             self.king_devick.df_simp,
             self.king_devick.start_ts,
@@ -888,6 +912,7 @@ class Participant_Behav(Data_Functions):
 
         self.n_back = N_Back(par_dir=self.par_dir)
         self.n_back.start_ts = self.get_start_ts("n_back")
+        self.n_back.end_ts = self.get_end_ts("n_back")
         self.n_back.df_adj_ts = self.adjust_df_ts(
             self.n_back.df_no_nan,
             self.n_back.start_ts,
@@ -912,6 +937,7 @@ class Participant_Behav(Data_Functions):
 
         self.resting_state = Resting_State(par_dir=self.par_dir)
         self.resting_state.start_ts = self.get_start_ts("resting_state")
+        self.resting_state.end_ts = self.get_end_ts("resting_state")
         self.resting_state.df_adj_ts = self.adjust_df_ts(
             self.resting_state.df_simp,
             self.resting_state.start_ts,
@@ -920,6 +946,7 @@ class Participant_Behav(Data_Functions):
 
         self.tower_of_london = Tower_of_London(par_dir=self.par_dir)
         self.tower_of_london.start_ts = self.get_start_ts("tower_of_london")
+        self.tower_of_london.end_ts = self.get_end_ts("tower_of_london")
         self.tower_of_london.df_adj_ts = self.adjust_df_ts(
             self.tower_of_london.df_no_nan,
             self.tower_of_london.start_ts,
@@ -944,6 +971,7 @@ class Participant_Behav(Data_Functions):
 
         self.video_narrative_cmiyc = Video_Narrative_CMIYC(par_dir=self.par_dir)
         self.video_narrative_cmiyc.start_ts = self.get_start_ts("video_narrative_cmiyc")
+        self.video_narrative_cmiyc.end_ts = self.get_end_ts("video_narrative_cmiyc")
         self.video_narrative_cmiyc.df_adj_ts = self.adjust_df_ts(
             self.video_narrative_cmiyc.df_simp,
             self.video_narrative_cmiyc.start_ts,
@@ -954,6 +982,9 @@ class Participant_Behav(Data_Functions):
         self.video_narrative_sherlock.start_ts = self.get_start_ts(
             "video_narrative_sherlock"
         )
+        self.video_narrative_sherlock.end_ts = self.get_end_ts(
+            "video_narrative_sherlock"
+        )
         self.video_narrative_sherlock.df_adj_ts = self.adjust_df_ts(
             self.video_narrative_sherlock.df_simp,
             self.video_narrative_sherlock.start_ts,
@@ -962,6 +993,7 @@ class Participant_Behav(Data_Functions):
 
         self.vSAT = vSAT(par_dir=self.par_dir)
         self.vSAT.start_ts = self.get_start_ts("vSAT")
+        self.vSAT.end_ts = self.get_end_ts("vSAT")
         self.vSAT.df_adj_ts = self.adjust_df_ts(
             self.vSAT.df_no_nan,
             self.vSAT.start_ts,
@@ -1498,7 +1530,7 @@ def create_behav_results_tables(num_pars: int) -> None:
                 "inter_stim_plus.started": "inter_stim_start",
                 "inter_stim_plus.ended": "inter_stim_end",
                 "go_image.started": "stim_start",
-                "go_image.ended": "stim_end",
+                "go_image.stopped": "stim_end",
                 "go_resp.corr": "correct_response",
                 "go_resp.rt": "response_time",
             },

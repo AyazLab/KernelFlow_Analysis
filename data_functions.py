@@ -523,13 +523,13 @@ class Data_Functions:
                 temp_df = temp_df.copy()
                 for col in cols:
                     temp_df[col] = (
-                        temp_df[col] + start_ts
+                        temp_df[col].astype(float) + start_ts
                     )  # add start timestamp to relative timestamps
                 df[block] = temp_df
         else:
             for col in cols:
                 df[col] = (
-                    df[col] + start_ts
+                    df[col].astype(float) + start_ts
                 )  # add start timestamp to relative timestamps
         return df
 
