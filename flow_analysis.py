@@ -328,9 +328,10 @@ class Participant_Flow:
 
     def __init__(self, par_num):
         self.data_fun = Data_Functions()
-        self.par_behav = Participant_Behav(par_num)
+        self.adj_ts_markers = True
+        self.par_behav = Participant_Behav(par_num, self.adj_ts_markers)
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
-        data_dir = r"C:\Kernel\participants"
+        data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
         self.flow_data_dir = os.path.join(data_dir, self.par_ID, "kernel_data")
         self.plot_color_dict = {
             0: "purple",
@@ -420,8 +421,8 @@ class Participant_Flow:
         )
         flow_session = self.load_flow_session(session, wrapper=True)
 
-        start_dt = self.par_behav.get_start_dt(exp_name)
-        end_dt = self.par_behav.get_end_dt(exp_name)
+        start_dt = self.par_behav.get_start_dt(exp_name, self.adj_ts_markers)
+        end_dt = self.par_behav.get_end_dt(exp_name, self.adj_ts_markers)
         time_abs_dt = flow_session.get_time_abs("datetime")
         time_abs_dt_offset = _offset_time_array(exp_name, time_abs_dt)
         start_idx = self.par_behav.get_start_index_dt(time_abs_dt_offset, start_dt)
@@ -557,11 +558,11 @@ class Participant_Flow:
             data_traces.append(data_trace)
             data_labels.append(legend_label)
 
-        exp_start_dt = self.par_behav.get_start_dt(exp_name)
-        exp_end_dt = self.par_behav.get_end_dt(exp_name)
+        exp_start_dt = self.par_behav.get_start_dt(exp_name, self.adj_ts_markers)
+        exp_end_dt = self.par_behav.get_end_dt(exp_name, self.adj_ts_markers)
         ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
         ax.axvline(exp_end_dt, linestyle="dashed", color="k", alpha=0.75)
-        results_dir = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Analysis\results\behavioral"  # NOTE: temporary
+        results_dir = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Analysis\processed_data\behavioral"  # NOTE: temporary
         exp_results = load_results(results_dir, exp_name, self.par_num)
         exp_title = self.par_behav.format_exp_name(exp_name)
 

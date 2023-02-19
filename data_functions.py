@@ -317,7 +317,6 @@ class Data_Functions:
         from behav_analysis import load_results
 
         for exp_name in all_marker_timestamps.keys():
-            # print(exp_name)
             orig_end_ts = float(all_marker_timestamps[exp_name][1])
             exp_df = load_results(processed_data_dir, exp_name, par_num)
             end_ts = float(exp_df.iloc[-1]["stim_end"])
