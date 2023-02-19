@@ -292,6 +292,40 @@ class Data_Functions:
 
         return all_marker_timestamps
 
+    def adjust_all_marker_timestamps(
+        self,
+        all_marker_timestamps: dict,
+        processed_data_dir: str,
+        par_num: int,
+    ) -> dict:
+        """
+        Adjust experiment end timestamp markers using the final stim end timestamp.
+
+        Args:
+            all_marker_timestamps (dict): Start and end timestamps for each experiment.
+            processed_data_dir (str): Processed data directory.
+            par_num (int): Participant number.
+
+        Returns:
+            dict: Start and adjusted end timestamp for each experiment.
+                keys:
+                     'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
+                     'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
+                values:
+                    [start timestamp, adjusted end timestamp]
+        """
+        from behav_analysis import load_results
+
+        for exp_name in all_marker_timestamps.keys():
+            # print(exp_name)
+            orig_end_ts = float(all_marker_timestamps[exp_name][1])
+            exp_df = load_results(processed_data_dir, exp_name, par_num)
+            end_ts = float(exp_df.iloc[-1]["stim_end"])
+            adj_end_ts = (end_ts + 3) * 1e9
+            if orig_end_ts < adj_end_ts:  # only replace if adjusted end timestamp is more recent
+                all_marker_timestamps[exp_name][1] = adj_end_ts
+        return all_marker_timestamps
+
     def get_cols(self, df: pd.DataFrame, cols: list) -> pd.DataFrame:
         """
         Get a selection of columns from a given DataFrame.

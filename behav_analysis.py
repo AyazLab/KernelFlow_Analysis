@@ -1,4 +1,5 @@
 import os
+import copy
 import datetime
 import pandas as pd
 import numpy as np
@@ -841,7 +842,7 @@ class Participant_Behav(Data_Functions):
         vSAT: vSAT experiment instance
     """
 
-    def __init__(self, par_num):
+    def __init__(self, par_num, adj_ts_markers=True):
         super().__init__()
         self.par_num, self.par_ID = self.process_par(par_num)
         raw_data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
@@ -857,9 +858,12 @@ class Participant_Behav(Data_Functions):
         self.all_marker_timestamps = self.get_all_marker_timestamps(
             par_dir=self.par_dir, exp_order=self.exp_order
         )
-        # self.all_marker_timestamps = self.adjust_all_marker_timestamps(
-        #     self.all_marker_timestamps, processed_data_dir, self.par_num, self.exp_order
-        # )
+        if adj_ts_markers:
+            self.all_marker_timestamps_adj = self.adjust_all_marker_timestamps(
+                copy.deepcopy(self.all_marker_timestamps),
+                processed_data_dir,
+                self.par_num,
+            )
         self._create_marker_ts_csv()
         marker_csv_filepath = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Experiment\main\marker_dict.csv"
         self.marker_dict = self.load_marker_dict(
@@ -868,8 +872,10 @@ class Participant_Behav(Data_Functions):
         self.marker_ts_df = self._create_marker_ts_df()
 
         self.audio_narrative = Audio_Narrative(par_dir=self.par_dir)
-        self.audio_narrative.start_ts = self.get_start_ts("audio_narrative")
-        self.audio_narrative.end_ts = self.get_end_ts("audio_narrative")
+        self.audio_narrative.start_ts = self.get_start_ts(
+            "audio_narrative", adj_ts_markers
+        )
+        self.audio_narrative.end_ts = self.get_end_ts("audio_narrative", adj_ts_markers)
         self.audio_narrative.df_adj_ts = self.adjust_df_ts(
             self.audio_narrative.df_simp,
             self.audio_narrative.start_ts,
@@ -877,8 +883,8 @@ class Participant_Behav(Data_Functions):
         )
 
         self.go_no_go = Go_No_Go(par_dir=self.par_dir)
-        self.go_no_go.start_ts = self.get_start_ts("go_no_go")
-        self.go_no_go.end_ts = self.get_end_ts("go_no_go")
+        self.go_no_go.start_ts = self.get_start_ts("go_no_go", adj_ts_markers)
+        self.go_no_go.end_ts = self.get_end_ts("go_no_go", adj_ts_markers)
         self.go_no_go.df_adj_ts = self.adjust_df_ts(
             self.go_no_go.df_no_nan,
             self.go_no_go.start_ts,
@@ -902,8 +908,8 @@ class Participant_Behav(Data_Functions):
         )
 
         self.king_devick = King_Devick(par_dir=self.par_dir)
-        self.king_devick.start_ts = self.get_start_ts("king_devick")
-        self.king_devick.end_ts = self.get_end_ts("king_devick")
+        self.king_devick.start_ts = self.get_start_ts("king_devick", adj_ts_markers)
+        self.king_devick.end_ts = self.get_end_ts("king_devick", adj_ts_markers)
         self.king_devick.df_adj_ts = self.adjust_df_ts(
             self.king_devick.df_simp,
             self.king_devick.start_ts,
@@ -911,8 +917,8 @@ class Participant_Behav(Data_Functions):
         )
 
         self.n_back = N_Back(par_dir=self.par_dir)
-        self.n_back.start_ts = self.get_start_ts("n_back")
-        self.n_back.end_ts = self.get_end_ts("n_back")
+        self.n_back.start_ts = self.get_start_ts("n_back", adj_ts_markers)
+        self.n_back.end_ts = self.get_end_ts("n_back", adj_ts_markers)
         self.n_back.df_adj_ts = self.adjust_df_ts(
             self.n_back.df_no_nan,
             self.n_back.start_ts,
@@ -936,8 +942,8 @@ class Participant_Behav(Data_Functions):
         )
 
         self.resting_state = Resting_State(par_dir=self.par_dir)
-        self.resting_state.start_ts = self.get_start_ts("resting_state")
-        self.resting_state.end_ts = self.get_end_ts("resting_state")
+        self.resting_state.start_ts = self.get_start_ts("resting_state", adj_ts_markers)
+        self.resting_state.end_ts = self.get_end_ts("resting_state", adj_ts_markers)
         self.resting_state.df_adj_ts = self.adjust_df_ts(
             self.resting_state.df_simp,
             self.resting_state.start_ts,
@@ -945,8 +951,10 @@ class Participant_Behav(Data_Functions):
         )
 
         self.tower_of_london = Tower_of_London(par_dir=self.par_dir)
-        self.tower_of_london.start_ts = self.get_start_ts("tower_of_london")
-        self.tower_of_london.end_ts = self.get_end_ts("tower_of_london")
+        self.tower_of_london.start_ts = self.get_start_ts(
+            "tower_of_london", adj_ts_markers
+        )
+        self.tower_of_london.end_ts = self.get_end_ts("tower_of_london", adj_ts_markers)
         self.tower_of_london.df_adj_ts = self.adjust_df_ts(
             self.tower_of_london.df_no_nan,
             self.tower_of_london.start_ts,
@@ -970,8 +978,12 @@ class Participant_Behav(Data_Functions):
         )
 
         self.video_narrative_cmiyc = Video_Narrative_CMIYC(par_dir=self.par_dir)
-        self.video_narrative_cmiyc.start_ts = self.get_start_ts("video_narrative_cmiyc")
-        self.video_narrative_cmiyc.end_ts = self.get_end_ts("video_narrative_cmiyc")
+        self.video_narrative_cmiyc.start_ts = self.get_start_ts(
+            "video_narrative_cmiyc", adj_ts_markers
+        )
+        self.video_narrative_cmiyc.end_ts = self.get_end_ts(
+            "video_narrative_cmiyc", adj_ts_markers
+        )
         self.video_narrative_cmiyc.df_adj_ts = self.adjust_df_ts(
             self.video_narrative_cmiyc.df_simp,
             self.video_narrative_cmiyc.start_ts,
@@ -980,10 +992,10 @@ class Participant_Behav(Data_Functions):
 
         self.video_narrative_sherlock = Video_Narrative_Sherlock(par_dir=self.par_dir)
         self.video_narrative_sherlock.start_ts = self.get_start_ts(
-            "video_narrative_sherlock"
+            "video_narrative_sherlock", adj_ts_markers
         )
         self.video_narrative_sherlock.end_ts = self.get_end_ts(
-            "video_narrative_sherlock"
+            "video_narrative_sherlock", adj_ts_markers
         )
         self.video_narrative_sherlock.df_adj_ts = self.adjust_df_ts(
             self.video_narrative_sherlock.df_simp,
@@ -992,8 +1004,8 @@ class Participant_Behav(Data_Functions):
         )
 
         self.vSAT = vSAT(par_dir=self.par_dir)
-        self.vSAT.start_ts = self.get_start_ts("vSAT")
-        self.vSAT.end_ts = self.get_end_ts("vSAT")
+        self.vSAT.start_ts = self.get_start_ts("vSAT", adj_ts_markers)
+        self.vSAT.end_ts = self.get_end_ts("vSAT", adj_ts_markers)
         self.vSAT.df_adj_ts = self.adjust_df_ts(
             self.vSAT.df_no_nan,
             self.vSAT.start_ts,
@@ -1126,57 +1138,81 @@ class Participant_Behav(Data_Functions):
 
         return pd.read_csv(marker_ts_filepath)
 
-    def get_start_ts(self, exp_name: str) -> float:
+    def get_start_ts(self, exp_name: str, adj_ts_markers: bool = True) -> float:
         """
-        Get the start timestamp of an experiment
+        Get the start timestamp of an experiment.
 
         Args:
-            exp_name (str): Name of the experiment
+            exp_name (str): Name of the experiment.
+            adj_ts_markers (bool): Use adjusted end timestamp marker. Defaults to True.
 
         Returns:
-            float: Start timestamp of the experiment
+            float: Start timestamp of the experiment.
         """
-        return float(int(self.all_marker_timestamps[exp_name][0]) / 1e9)
+        if adj_ts_markers:
+            return float(int(self.all_marker_timestamps_adj[exp_name][0]) / 1e9)
+        else:
+            return float(int(self.all_marker_timestamps[exp_name][0]) / 1e9)
 
-    def get_end_ts(self, exp_name: str) -> float:
+    def get_end_ts(self, exp_name: str, adj_ts_markers: bool = True) -> float:
         """
-        Get the end timestamp of an experiment
+        Get the end timestamp of an experiment.
 
         Args:
-            exp_name (str): Name of the experiment
+            exp_name (str): Name of the experiment.
+            adj_ts_markers (bool): Use adjusted end timestamp marker. Defaults to True.
 
         Returns:
-            float: End timestamp of the experiment
+            float: End timestamp of the experiment.
         """
-        return float(int(self.all_marker_timestamps[exp_name][1]) / 1e9)
+        if adj_ts_markers:
+            return float(int(self.all_marker_timestamps_adj[exp_name][1]) / 1e9)
+        else:
+            return float(int(self.all_marker_timestamps[exp_name][1]) / 1e9)
 
-    def get_start_dt(self, exp_name: str) -> datetime.datetime:
+    def get_start_dt(
+        self, exp_name: str, adj_ts_markers: bool = True
+    ) -> datetime.datetime:
         """
         Convert start timestamp of an experiment into the start datetime.
 
         Args:
-            exp_name (str): Experiment name
+            exp_name (str): Experiment name.
+            adj_ts_markers (bool): Use adjusted end timestamp marker. Defaults to True.
 
         Returns:
-            datetime.datetime: Start datetime of an experiment
+            datetime.datetime: Start datetime of an experiment.
         """
-        return datetime.datetime.fromtimestamp(
-            int(self.all_marker_timestamps[exp_name][0]) / 1e9
-        )
+        if adj_ts_markers:
+            return datetime.datetime.fromtimestamp(
+                int(self.all_marker_timestamps_adj[exp_name][0]) / 1e9
+            )
+        else:
+            return datetime.datetime.fromtimestamp(
+                int(self.all_marker_timestamps[exp_name][0]) / 1e9
+            )
 
-    def get_end_dt(self, exp_name: str) -> datetime.datetime:
+    def get_end_dt(
+        self, exp_name: str, adj_ts_markers: bool = True
+    ) -> datetime.datetime:
         """
         Convert end timestamp of an experiment into the end datetime.
 
         Args:
-            exp_name (str): Experiment name
+            exp_name (str): Experiment name.
+            adj_ts_markers (bool): Use adjusted end timestamp marker. Defaults to True.
 
         Returns:
-            datetime.datetime: End datetime of an experiment
+            datetime.datetime: End datetime of an experiment.
         """
-        return datetime.datetime.fromtimestamp(
-            int(self.all_marker_timestamps[exp_name][1]) / 1e9
-        )
+        if adj_ts_markers:
+            return datetime.datetime.fromtimestamp(
+                int(self.all_marker_timestamps_adj[exp_name][1]) / 1e9
+            )
+        else:
+            return datetime.datetime.fromtimestamp(
+                int(self.all_marker_timestamps[exp_name][1]) / 1e9
+            )
 
     def _create_by_block_ts_dict(self) -> dict:
         """
