@@ -845,9 +845,11 @@ class Participant_Behav(Data_Functions):
     def __init__(self, par_num, adj_ts_markers=True):
         super().__init__()
         self.par_num, self.par_ID = self.process_par(par_num)
-        raw_data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
-        processed_data_dir = os.path.join(os.getcwd(), "processed_data", "behavioral")
-        self.par_dir = os.path.join(raw_data_dir, self.par_ID)
+        self.raw_data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
+        self.processed_data_dir = os.path.join(
+            os.getcwd(), "processed_data", "behavioral"
+        )
+        self.par_dir = os.path.join(self.raw_data_dir, self.par_ID)
         self.forms_filepath = os.path.join(
             os.getcwd(), "processed_data", "participant_forms.xlsx"
         )
@@ -861,7 +863,7 @@ class Participant_Behav(Data_Functions):
         if adj_ts_markers:
             self.all_marker_timestamps_adj = self.adjust_all_marker_timestamps(
                 copy.deepcopy(self.all_marker_timestamps),
-                processed_data_dir,
+                self.processed_data_dir,
                 self.par_num,
             )
         self._create_marker_ts_csv()
@@ -1499,7 +1501,7 @@ def create_behav_results_tables(num_pars: int) -> None:
 
     for i in range(num_pars):
         par_num = f"{(i+1):02d}"
-        par = Participant_Behav(par_num=par_num)
+        par = Participant_Behav(par_num=par_num, adj_ts_markers=False)
 
         # Audio Narrative ----
         exp = par.audio_narrative
