@@ -331,8 +331,9 @@ class Participant_Flow:
         self.adj_ts_markers = True
         self.par_behav = Participant_Behav(par_num, self.adj_ts_markers)
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
-        data_dir = r"C:\Kernel\raw_data"  # TODO: make this path relative
-        self.flow_data_dir = os.path.join(data_dir, self.par_ID, "kernel_data")
+        self.flow_data_dir = os.path.join(
+            self.par_behav.raw_data_dir, self.par_ID, "kernel_data"
+        )
         self.plot_color_dict = {
             0: "purple",
             1: "orange",
@@ -504,6 +505,50 @@ class Participant_Flow:
         ]
         return marker_df
 
+    def create_exp_stim_response_dict(self, exp_name: str) -> dict:
+        """
+        Create a dictionary that contains the processed Kernel Flow data in response
+        to a stimulus. It is organized by block (keys) and for each block, the value is
+        a list of Pandas series.  Each series is normalized, averaged, Kernel Flow data
+        during a presented stimulus duration for each channel.
+
+        Args:
+            exp_name (str): Name of the experiment.
+
+        Returns:
+            dict:
+                keys:
+                    "block 1", "block 2", ... "block N"
+                values:
+                    lists of averaged, normalized Kernel Flow data series for each
+                    channel during the stimulus duration
+        """
+        exp_results = load_results(
+            self.par_behav.processed_data_dir, exp_name, self.par_behav.par_num
+        )
+        flow_exp = self.load_flow_exp(exp_name)
+        session = self.par_behav.get_key_from_value(
+            self.par_behav.session_dict, exp_name
+        )
+        ts_list = self.flow_session_dict[session].get_time_abs("timestamp")
+        blocks = list(exp_results["block"].unique())
+        exp_stim_resp_dict = {
+            block: [] for block in blocks
+        }  # initialize with unique blocks
+        for _, row in exp_results.iterrows():
+            stim_start_ts = row["stim_start"]
+            start_idx, _ = self.data_fun.find_closest_ts(stim_start_ts, ts_list)
+            stim_end_ts = row["stim_end"]
+            end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts, ts_list)
+
+            baseline_row = flow_exp.loc[start_idx, 0:]
+            stim_rows = flow_exp.loc[start_idx:end_idx, 0:]
+            avg_norm_rows = (stim_rows - baseline_row).mean()  # all channels for a stim
+            exp_stim_resp_dict[row["block"]].append(
+                avg_norm_rows
+            )  # add to a block in dict
+        return exp_stim_resp_dict
+
     def plot_flow_session(self, session: str) -> None:
         # NOTE not time offset
         flow_session = self.flow_session_dict[session]
@@ -605,7 +650,6 @@ class Participant_Flow:
             framealpha=1,
             title="Kernel Flow Data",
         )
-
         handles, labels = plt.gca().get_legend_handles_labels()
         uni_labels = dict(zip(labels, handles))
         [uni_labels.pop(data_label) for data_label in data_labels]
@@ -618,7 +662,6 @@ class Participant_Flow:
             framealpha=1,
             title="Stimulus",
         )
-
         ax.add_artist(data_legend)
         ax.set_title(exp_title)
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
