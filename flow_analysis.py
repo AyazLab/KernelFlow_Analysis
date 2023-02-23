@@ -520,8 +520,12 @@ class Participant_Flow:
                 keys:
                     "block 1", "block 2", ... "block N"
                 values:
-                    lists of averaged, normalized Kernel Flow data series for each
-                    channel during the stimulus duration
+                    dicts:
+                        keys:
+                            "trial 1", "trial 2", ... "trial N"
+                        values:
+                            lists of averaged, normalized Kernel Flow data series for each
+                            channel during the stimulus duration
         """
         exp_results = load_results(
             self.par_behav.processed_data_dir, exp_name, self.par_behav.par_num
@@ -532,8 +536,9 @@ class Participant_Flow:
         )
         ts_list = self.flow_session_dict[session].get_time_abs("timestamp")
         blocks = list(exp_results["block"].unique())
+        trials = list(exp_results["trial"].unique())
         exp_stim_resp_dict = {
-            block: [] for block in blocks
+            block: {} for block in blocks
         }  # initialize with unique blocks
         for _, row in exp_results.iterrows():
             stim_start_ts = row["stim_start"]
@@ -544,7 +549,12 @@ class Participant_Flow:
             baseline_row = flow_exp.loc[start_idx, 0:]
             stim_rows = flow_exp.loc[start_idx:end_idx, 0:]
             avg_norm_rows = (stim_rows - baseline_row).mean()  # all channels for a stim
-            exp_stim_resp_dict[row["block"]].append(
+
+            block = row["block"]
+            trial = row["trial"]
+            if trial not in exp_stim_resp_dict[block].keys():
+                exp_stim_resp_dict[block][trial] = []
+            exp_stim_resp_dict[block][trial].append(
                 avg_norm_rows
             )  # add to a block in dict
         return exp_stim_resp_dict
