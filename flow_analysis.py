@@ -536,7 +536,6 @@ class Participant_Flow:
         )
         ts_list = self.flow_session_dict[session].get_time_abs("timestamp")
         blocks = list(exp_results["block"].unique())
-        trials = list(exp_results["trial"].unique())
         exp_stim_resp_dict = {
             block: {} for block in blocks
         }  # initialize with unique blocks
@@ -558,6 +557,56 @@ class Participant_Flow:
                 avg_norm_rows
             )  # add to a block in dict
         return exp_stim_resp_dict
+
+    def create_exp_stim_response_df(self, exp_name: str) -> pd.DataFrame:
+        """
+        Create a DataFrame that contains the processed Kernel Flow data in response
+        to each stimulus in an experiment. Each channel is normalized and averaged.
+
+        Args:
+            exp_name (str): Name of the experiment.
+
+        Returns:
+            pd.DataFrame: Processed Kernel Flow data.
+        """
+
+        def split_col(row: pd.Series) -> pd.Series:
+            """
+            Split a column containing an array into separate columns for each
+            element in the array.
+
+            Args:
+                row (pd.Series): DataFrame row.
+
+            Returns:
+                pd.Series: DataFrame row with split column.
+            """
+            arr = row["Channels"]
+            num_elements = len(arr)
+            col_names = [i for i in range(num_elements)]
+            return pd.Series(arr, index=col_names)
+
+        exp_baseline_avg_dict = self.create_exp_stim_response_dict(exp_name)
+        rows = []
+        for block, block_data in sorted(exp_baseline_avg_dict.items()):
+            for trial, stim_resp_data in block_data.items():
+                trial_avg = np.mean(stim_resp_data, axis=0)
+                row = {
+                    "Participant": self.par_num,
+                    "Block": block,
+                    "Channels": trial_avg,
+                }
+                rows.append(row)
+
+        stim_resp_df = pd.DataFrame(rows)
+        channel_cols = stim_resp_df.apply(split_col, axis=1)
+        stim_resp_df = pd.concat(
+            [stim_resp_df, channel_cols], axis=1
+        )  # merge with original DataFrame
+        stim_resp_df = stim_resp_df.drop(
+            "Channels", axis=1
+        )  # drop the original "Channels" column
+        return stim_resp_df
 
     def plot_flow_session(self, session: str) -> None:
         # NOTE not time offset
