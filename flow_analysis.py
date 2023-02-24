@@ -1,12 +1,13 @@
 import os
 import snirf
+import datetime
 import numpy as np
 import pandas as pd
 
 # %matplotlib widget
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import datetime
+from scipy.signal import firwin, lfilter
 from typing import Union
 from statistics import mean
 from behav_analysis import Participant_Behav, load_results
@@ -607,6 +608,25 @@ class Participant_Flow:
             "Channels", axis=1
         )  # drop the original "Channels" column
         return stim_resp_df
+
+    def lowpass_filter(self, data: np.ndarray) -> np.ndarray:
+        """
+        Lowpass filter input data.
+
+        Args:
+            data (np.ndarray): Data to filter.
+
+        Returns:
+            np.ndarray: Lowpass filtered data.
+        """
+        order = 20  # filter order
+        fs = 1.0  # sampling frequency (Hz)
+        cutoff = 0.1  # cut-off frequency (Hz)
+        nyq = 0.5 * fs  # nyquist
+        taps = firwin(order + 1, cutoff / nyq)
+
+        data_out = lfilter(taps, 1.0, data)  # apply lowpass filter
+        return data_out
 
     def plot_flow_session(self, session: str) -> None:
         # NOTE not time offset
