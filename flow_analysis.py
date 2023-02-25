@@ -408,6 +408,11 @@ class Participant_Flow:
                     time_offset_dict[exp_name] = avg_time_offset
             else:
                 time_offset_dict[exp_name] = self.calc_time_offset(exp_name)
+        for session, exp_list in self.par_behav.session_dict.items():
+            session_offset = np.mean(
+                [time_offset_dict[exp_name] for exp_name in exp_list]
+            )
+            time_offset_dict[session] = session_offset
         return time_offset_dict
 
     def get_time_offset(self, exp_name: str) -> float:
