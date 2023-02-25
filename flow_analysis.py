@@ -335,6 +335,8 @@ class Participant_Flow:
         self.flow_data_dir = os.path.join(
             self.par_behav.raw_data_dir, self.par_ID, "kernel_data"
         )
+        self.flow_session_dict = self.create_flow_session_dict(wrapper=True)
+        self.time_offset_dict = self.create_time_offset_dict()
         self.plot_color_dict = {
             0: "purple",
             1: "orange",
@@ -343,7 +345,6 @@ class Participant_Flow:
             4: "pink",
             5: "skyblue",
         }
-        self.flow_session_dict = self.create_flow_session_dict(wrapper=True)
 
     def get_time_offset(self, exp_name: str) -> float:
         """
@@ -364,9 +365,50 @@ class Participant_Flow:
         )
         marker_df = self.create_abs_marker_df(session)
         row = marker_df.loc[marker_df["Marker"].str.startswith(exp_name)].reset_index()
-        kernel_start_ts = row.loc[0, "Start timestamp"]
-        time_offset = kernel_start_ts - (exp_start_ts + marker_sent_time)
+        if (
+            exp_name == "go_no_go"
+        ):  # Go/No-go experiment is missing start timestamp marker
+            try:
+                kernel_start_ts = row.loc[0, "Start timestamp"]
+                time_offset = kernel_start_ts - (exp_start_ts + marker_sent_time)
+            except:
+                time_offset = "NaN"
+        else:
+            kernel_start_ts = row.loc[0, "Start timestamp"]
+            time_offset = kernel_start_ts - (exp_start_ts + marker_sent_time)
         return float(time_offset)
+
+    def create_time_offset_dict(self) -> dict:
+        """
+        Create a dictionary containing the time offset (in seconds) for each experiment.
+
+        Returns:
+            dict: Time offset dictionary.
+        """
+        time_offset_dict = {}
+        for exp_name in self.par_behav.exp_order:
+            if (
+                exp_name == "go_no_go"
+            ):  # Go/No-go experiment is missing start timestamp marker
+                if np.isnan(self.get_time_offset(exp_name)):
+                    session = self.par_behav.get_key_from_value(
+                        self.par_behav.session_dict, exp_name
+                    )
+                    session_exp_names = self.par_behav.session_dict[session]
+                    other_exp_names = [
+                        temp_exp_name
+                        for temp_exp_name in session_exp_names
+                        if temp_exp_name != "go_no_go"
+                    ]
+                    other_exp_time_offsets = []
+                    for temp_exp_name in other_exp_names:
+                        time_offset = self.get_time_offset(temp_exp_name)
+                        other_exp_time_offsets.append(time_offset)
+                    avg_time_offset = np.mean(other_exp_time_offsets)
+                    time_offset_dict[exp_name] = avg_time_offset
+            else:
+                time_offset_dict[exp_name] = self.get_time_offset(exp_name)
+        return time_offset_dict
 
     def offset_time_array(self, exp_name: str, time_array: np.ndarray) -> np.ndarray:
         """
@@ -381,7 +423,7 @@ class Participant_Flow:
         """
         try:
             time_offset = self.get_time_offset(exp_name)
-        except KeyError:  # if experiment start time missing, use avg of all other experiments
+        except KeyError:  # if experiment start time is missing, use avg of other session experiments
             time_offset_list = []
             for exp_name in self.par_behav.exp_order:
                 try:
