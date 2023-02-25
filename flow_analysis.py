@@ -710,8 +710,17 @@ class Participant_Flow:
         ax.set_xlabel("Time", fontsize=16, color="k")
         ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
 
-    def plot_flow_exp(self, exp_name: str) -> None:
-        channel_nums = [0, 1]  # NOTE testing
+    def plot_flow_exp(
+        self, exp_name: str, channels: list, filter_type: str = None
+    ) -> None:
+        """
+        Plot Kernel Flow data for an experiment.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            channels (list): Kernel Flow channels to plot.
+            filter_type (str, optional): Filter type to apply. Defaults to None.
+        """
         flow_exp = self.load_flow_exp(exp_name)
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
@@ -720,7 +729,11 @@ class Participant_Flow:
 
         data_traces = []
         data_labels = []
-        for channel_num in channel_nums:
+        for channel_num in channels:
+            timeseries = flow_exp["datetime"]
+            flow_data = flow_exp.iloc[:, channel_num + 1]
+            if filter_type == "lowpass":
+                flow_data = self.lowpass_filter(flow_data)
             data_type_label = self.flow_session_dict[session].get_data_type_label(
                 channel_num
             )
@@ -730,8 +743,8 @@ class Participant_Flow:
             elif data_type_label == "HbR":
                 color = "blue"
             (data_trace,) = ax.plot(
-                flow_exp["datetime"],
-                flow_exp.iloc[:, channel_num + 1],
+                timeseries,
+                flow_data,
                 color=color,
                 label=legend_label,
             )
