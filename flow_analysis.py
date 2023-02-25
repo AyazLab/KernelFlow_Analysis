@@ -346,10 +346,10 @@ class Participant_Flow:
             5: "skyblue",
         }
 
-    def get_time_offset(self, exp_name: str) -> float:
+    def calc_time_offset(self, exp_name: str) -> float:
         """
-        Get the time offset (in seconds) between the behavioral and Kernel Flow data files.
-        Number of seconds that the Kernel Flow data is ahead of the behavioral data.
+        Calculate the time offset (in seconds) between the behavioral and Kernel Flow data
+        files. Number of seconds that the Kernel Flow data is ahead of the behavioral data.
 
         Args:
             exp_name (str): Name of the experiment.
@@ -390,7 +390,7 @@ class Participant_Flow:
             if (
                 exp_name == "go_no_go"
             ):  # Go/No-go experiment is missing start timestamp marker
-                if np.isnan(self.get_time_offset(exp_name)):
+                if np.isnan(self.calc_time_offset(exp_name)):
                     session = self.par_behav.get_key_from_value(
                         self.par_behav.session_dict, exp_name
                     )
@@ -402,13 +402,25 @@ class Participant_Flow:
                     ]
                     other_exp_time_offsets = []
                     for temp_exp_name in other_exp_names:
-                        time_offset = self.get_time_offset(temp_exp_name)
+                        time_offset = self.calc_time_offset(temp_exp_name)
                         other_exp_time_offsets.append(time_offset)
                     avg_time_offset = np.mean(other_exp_time_offsets)
                     time_offset_dict[exp_name] = avg_time_offset
             else:
-                time_offset_dict[exp_name] = self.get_time_offset(exp_name)
+                time_offset_dict[exp_name] = self.calc_time_offset(exp_name)
         return time_offset_dict
+
+    def get_time_offset(self, exp_name: str) -> float:
+        """
+        Get the time offset for an experiment.
+
+        Args:
+            exp_name (str): Experiment name.
+
+        Returns:
+            float: Time offset (in seconds).
+        """
+        return self.time_offset_dict[exp_name]
 
     def offset_time_array(self, exp_name: str, time_array: np.ndarray) -> np.ndarray:
         """
@@ -578,15 +590,18 @@ class Participant_Flow:
             self.par_behav.session_dict, exp_name
         )
         ts_list = self.flow_session_dict[session].get_time_abs("timestamp")
+        exp_time_offset = self.time_offset_dict[exp_name]
         blocks = list(exp_results["block"].unique())
         exp_stim_resp_dict = {
             block: {} for block in blocks
         }  # initialize with unique blocks
         for _, row in exp_results.iterrows():
             stim_start_ts = row["stim_start"]
-            start_idx, _ = self.data_fun.find_closest_ts(stim_start_ts, ts_list)
+            stim_start_ts_offset = stim_start_ts + exp_time_offset
+            start_idx, _ = self.data_fun.find_closest_ts(stim_start_ts_offset, ts_list)
             stim_end_ts = row["stim_end"]
-            end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts, ts_list)
+            stim_end_ts_offset = stim_end_ts + exp_time_offset
+            end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts_offset, ts_list)
 
             baseline_row = flow_exp.loc[start_idx, 0:]
             stim_rows = flow_exp.loc[start_idx:end_idx, 0:]
