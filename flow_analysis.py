@@ -803,3 +803,43 @@ class Participant_Flow:
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
         ax.xaxis.set_major_formatter(datetime_fmt)
         ax.set_xlabel("Time", fontsize=16, color="k")
+
+
+def create_flow_results_tables(num_pars: int) -> None:
+    """
+    Generate an Excel file that contains the Kernel Flow stimulus response data
+    for all experiments and participants.
+
+    Args:
+        num_pars (int): Number of participants in the study.
+    """
+    exp_order = [
+        "audio_narrative",
+        "go_no_go",
+        "king_devick",
+        "n_back",
+        "resting_state",
+        "tower_of_london",
+        "vSAT",
+        "video_narrative_cmiyc",
+        "video_narrative_sherlock",
+    ]
+    all_exp_results_list = []
+    for par_num in range(1, num_pars + 1):
+        print(f"Processing participant {par_num} ...")
+        par = Participant_Flow(par_num)
+        exp_results_list = []
+        for exp_name in exp_order:
+            stim_resp_df = par.create_exp_stim_response_df(exp_name)
+            exp_results_list.append(stim_resp_df)
+        all_exp_results_list.append(exp_results_list)
+
+    filedir = os.path.join(os.getcwd(), "processed_data", "flow")
+    if not os.path.exists(os.path.dirname(filedir)):
+        os.mkdir(os.path.dirname(filedir))
+
+    for i, exp_name in enumerate(exp_order):
+        exp_rows = [exp_results_list[i] for exp_results_list in all_exp_results_list]
+        exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
+        filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
+        exp_df.to_csv(filepath, index=False)
