@@ -671,15 +671,19 @@ class Participant_Flow:
         )  # drop the original "Channels" column
         return stim_resp_df
 
-    def lowpass_filter(self, data: np.ndarray) -> np.ndarray:
+    def lowpass_filter(
+        self, data: list[np.ndarray | pd.DataFrame]
+    ) -> Union[np.ndarray, pd.DataFrame]:
         """
         Lowpass filter input data.
 
         Args:
-            data (np.ndarray): Data to filter.
+            data list([np.ndarray | pd.DataFrame]): Data to filter.
 
         Returns:
             np.ndarray: Lowpass filtered data.
+            -or-
+            pd.DataFrame: Lowpass filtered data.
         """
         order = 20  # filter order
         fs = 1.0  # sampling frequency (Hz)
@@ -687,7 +691,12 @@ class Participant_Flow:
         nyq = 0.5 * fs  # nyquist
         taps = firwin(order + 1, cutoff / nyq)
 
-        data_out = lfilter(taps, 1.0, data)  # apply lowpass filter
+        if type(data) == pd.DataFrame:
+            data_out = data.apply(
+                lambda x: lfilter(taps, 1.0, x)
+            )  # apply lowpass filter
+        else:
+            data_out = lfilter(taps, 1.0, data)  # apply lowpass filter
         return data_out
 
     def plot_flow_session(self, session: str) -> None:
