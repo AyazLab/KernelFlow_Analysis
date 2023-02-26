@@ -699,36 +699,93 @@ class Participant_Flow:
             data_out = lfilter(taps, 1.0, data)  # apply lowpass filter
         return data_out
 
-    def plot_flow_session(self, session: str) -> None:
-        # NOTE not time offset
+    def plot_flow_session(
+        self, session: str, channels: list[int | list | tuple], filter_type: str = None
+    ) -> None:
+        """
+        Plot Kernel flow session data.
+
+        Args:
+            session (str): Session number.
+            channels (list[int | list | tuple]): Kernel Flow channels to plot.
+            filter_type (str, optional): Filter type to apply. Defaults to None.
+        """
         flow_session = self.flow_session_dict[session]
+        sel_flow_data = flow_session.get_data("dataframe", channels)  # TODO
+        if filter_type == "lowpass":
+            sel_flow_data = self.lowpass_filter(sel_flow_data)
+        session_time_offset = self.time_offset_dict[session]
         time_abs_dt = flow_session.get_time_abs("datetime")
+        time_abs_dt_offset = time_abs_dt - datetime.timedelta(
+            seconds=session_time_offset
+        )
         fig, ax = plt.subplots(1, 1, figsize=(15, 6))
-        ax.plot(
-            time_abs_dt, flow_session.get_data(cols=0)
-        )  # NOTE: get_data argument is a placeholder
+
+        data_traces = []
+        data_labels = []
+        for channel_num in channels:
+            flow_data = sel_flow_data.iloc[:, channel_num]
+            data_type_label = self.flow_session_dict[session].get_data_type_label(
+                channel_num
+            )
+            legend_label = f"Ch {channel_num} ({data_type_label})"
+            if data_type_label == "HbO":
+                color = "red"
+            elif data_type_label == "HbR":
+                color = "blue"
+            (data_trace,) = ax.plot(
+                time_abs_dt_offset, flow_data, color=color, label=legend_label
+            )
+            data_traces.append(data_trace)
+            data_labels.append(legend_label)
+
+        exp_spans = []
         for exp_name in self.par_behav.session_dict[session]:
             exp_start_dt = self.par_behav.get_start_dt(exp_name)
             exp_end_dt = self.par_behav.get_end_dt(exp_name)
             ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
             ax.axvline(exp_end_dt, linestyle="dashed", color="k", alpha=0.75)
-            ax.axvspan(
+            exp_span = ax.axvspan(
                 exp_start_dt,
                 exp_end_dt,
                 color=self.par_behav.exp_color_dict[exp_name],
                 alpha=0.4,
                 label=exp_name,
             )
+            exp_spans.append(exp_span)
+
+        data_legend = ax.legend(
+            handles=data_traces,
+            bbox_to_anchor=(1.0, 1.0),
+            facecolor="white",
+            framealpha=1,
+            title="Kernel Flow Data",
+        )
+        handles, labels = plt.gca().get_legend_handles_labels()
+        uni_labels = dict(zip(labels, handles))
+        [uni_labels.pop(data_label) for data_label in data_labels]
+
+        stim_legend = ax.legend(
+            uni_labels.values(),
+            uni_labels.keys(),
+            bbox_to_anchor=(1.0, 0.75),
+            facecolor="white",
+            framealpha=1,
+            title="Experiment",
+        )
+        ax.add_artist(data_legend)
+        session_split = session.split("_")
+        exp_title = session_split[0].capitalize() + " " + session_split[1]
+        ax.set_title(exp_title)
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
         ax.xaxis.set_major_formatter(datetime_fmt)
         ax.set_xlabel("Time", fontsize=16, color="k")
-        ax.legend(bbox_to_anchor=(1.0, 0.75), facecolor="white", framealpha=1)
 
     def plot_flow_exp(
         self, exp_name: str, channels: list, filter_type: str = None
     ) -> None:
         """
-        Plot Kernel Flow data for an experiment.
+        Plot Kernel Flow experiment data.
 
         Args:
             exp_name (str): Name of the experiment.
@@ -757,10 +814,7 @@ class Participant_Flow:
             elif data_type_label == "HbR":
                 color = "blue"
             (data_trace,) = ax.plot(
-                timeseries,
-                flow_data,
-                color=color,
-                label=legend_label,
+                timeseries, flow_data, color=color, label=legend_label
             )
             data_traces.append(data_trace)
             data_labels.append(legend_label)
