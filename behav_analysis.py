@@ -1912,7 +1912,8 @@ def load_results(
     results_dir: str, exp_name: str = None, par_num: list[int | list | tuple] = None
 ) -> Union[pd.DataFrame, dict]:
     """
-    Read the experiment behavioral results from CSV files into DataFrame or a dictionary of DataFrames.
+    Read the experiment behavioral or Kernel Flow results from CSV files into
+    DataFrame or a dictionary of DataFrames.
 
     Args:
         results_dir (str): Path to the results directory
@@ -1922,14 +1923,14 @@ def load_results(
 
     Returns:
         Union[pd.DataFrame, dict]:
-            pd.DataFrame: Behavioral data for a specified experiment.
+            pd.DataFrame: Data for a specified experiment.
             -or-
-            dict: Behavioral results dictionary
+            dict: Results dictionary
                 keys:
                     'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
                     'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
                 values:
-                    DataFrame of behavioral results for each experiment
+                    DataFrame of results for each experiment
     """
 
     if exp_name:
@@ -1954,7 +1955,8 @@ def load_results(
     else:
         exp_dict = {}
         for results_csv in os.listdir(results_dir):
-            exp_name = results_csv.split("_behav")[0]
+            end_idx = results_csv.rfind("_")
+            exp_name = results_csv[0:end_idx]
             full_path = os.path.join(results_dir, results_csv)
             df = pd.read_csv(full_path)
             if isinstance(par_num, int):
