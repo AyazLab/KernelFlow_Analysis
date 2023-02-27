@@ -332,8 +332,11 @@ class Participant_Flow:
         self.adj_ts_markers = True
         self.par_behav = Participant_Behav(par_num, self.adj_ts_markers)
         self.par_num, self.par_ID = self.data_fun.process_par(par_num)
-        self.flow_data_dir = os.path.join(
+        self.flow_raw_data_dir = os.path.join(
             self.par_behav.raw_data_dir, self.par_ID, "kernel_data"
+        )
+        self.flow_processed_data_dir = os.path.join(
+            os.getcwd(), "processed_data", "flow"
         )
         self.flow_session_dict = self.create_flow_session_dict(wrapper=True)
         self.time_offset_dict = self.create_time_offset_dict()
@@ -478,7 +481,7 @@ class Participant_Flow:
         elif isinstance(session, int):
             session = f"session_{session}"
         try:
-            session_dir = os.path.join(self.flow_data_dir, session)
+            session_dir = os.path.join(self.flow_raw_data_dir, session)
             filename = os.listdir(session_dir)[0]
             filepath = os.path.join(session_dir, filename)
             if wrapper:
@@ -915,7 +918,7 @@ def create_flow_results_tables(num_pars: int) -> None:
             exp_results_list.append(stim_resp_df)
         all_exp_results_list.append(exp_results_list)
 
-    filedir = os.path.join(os.getcwd(), "processed_data", "flow")
+    filedir = par.flow_processed_data_dir
     if not os.path.exists(os.path.dirname(filedir)):
         os.mkdir(os.path.dirname(filedir))
 
