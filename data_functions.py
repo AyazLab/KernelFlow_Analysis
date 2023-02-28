@@ -314,8 +314,6 @@ class Data_Functions:
                 values:
                     [start timestamp, adjusted end timestamp]
         """
-        from behav_analysis import load_results
-
         for exp_name in all_marker_timestamps.keys():
             orig_end_ts = float(all_marker_timestamps[exp_name][1])
             exp_df = load_results(processed_data_dir, exp_name, par_num)
