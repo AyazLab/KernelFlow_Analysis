@@ -3,7 +3,7 @@ import bisect
 import datetime
 import pandas as pd
 import numpy as np
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 
 
 class Data_Functions:
@@ -321,7 +321,9 @@ class Data_Functions:
             exp_df = load_results(processed_data_dir, exp_name, par_num)
             end_ts = float(exp_df.iloc[-1]["stim_end"])
             adj_end_ts = (end_ts + 3) * 1e9
-            if orig_end_ts < adj_end_ts:  # only replace if adjusted end timestamp is more recent
+            if (
+                orig_end_ts < adj_end_ts
+            ):  # only replace if adjusted end timestamp is more recent
                 all_marker_timestamps[exp_name][1] = adj_end_ts
         return all_marker_timestamps
 
@@ -724,3 +726,69 @@ class Data_Functions:
                 closest_ts = valid_ts[idx]
         closest_idx = np.where(ts_arr == closest_ts)[0][0]
         return closest_idx, closest_ts
+
+
+def load_results(
+    results_dir: str, exp_name: str = None, par_num: list[int | list | tuple] = None
+) -> Union[pd.DataFrame, dict]:
+    """
+    Read the experiment behavioral or Kernel Flow results from CSV files into
+    DataFrame or a dictionary of DataFrames.
+
+    Args:
+        results_dir (str): Path to the results directory
+        exp_name (str, optional): Get results for a specific experiment. Defaults to None
+        par_num (list[int | list | tuple], optional): Participants to select. Single participant, list of participants, or slice of participants.
+                                                      Defaults to None (all participants).
+
+    Returns:
+        Union[pd.DataFrame, dict]:
+            pd.DataFrame: Data for a specified experiment.
+            -or-
+            dict: Results dictionary
+                keys:
+                    'audio_narrative', 'go_no_go', 'king_devick', 'n_back', 'resting_state',
+                    'tower_of_london', 'video_narrative_cmiyc', 'video_narrative_sherlock', 'vSAT'
+                values:
+                    DataFrame of results for each experiment
+    """
+
+    if exp_name:
+        for results_csv in os.listdir(results_dir):
+            if exp_name in results_csv:
+                full_path = os.path.join(results_dir, results_csv)
+                df = pd.read_csv(full_path)
+                if isinstance(par_num, int):
+                    return df[df["participant"] == par_num]
+                elif isinstance(par_num, list):
+                    return df[df["participant"].isin(par_num)]
+                elif isinstance(par_num, tuple):
+                    return df[
+                        (df["participant"] >= par_num[0])
+                        & (df["participant"] <= par_num[1])
+                    ]
+                else:
+                    return df
+        print(
+            "Invalid experiment name."
+        )  # only reached if invalid experiment name argument
+    else:
+        exp_dict = {}
+        for results_csv in os.listdir(results_dir):
+            end_idx = results_csv.rfind("_")
+            exp_name = results_csv[0:end_idx]
+            full_path = os.path.join(results_dir, results_csv)
+            df = pd.read_csv(full_path)
+            if isinstance(par_num, int):
+                df = df[df["participant"] == par_num]
+            elif isinstance(par_num, list):
+                df = df[df["participant"].isin(par_num)]
+            elif isinstance(par_num, tuple):
+                df = df[
+                    (df["participant"] >= par_num[0])
+                    & (df["participant"] <= par_num[1])
+                ]
+            else:
+                pass
+            exp_dict[exp_name] = df
+        return exp_dict

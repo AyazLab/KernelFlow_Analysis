@@ -10,8 +10,8 @@ import matplotlib.dates as mdates
 from scipy.signal import firwin, lfilter
 from typing import Union
 from statistics import mean
-from behav_analysis import Participant_Behav, load_results
-from data_functions import Data_Functions
+from behav_analysis import Participant_Behav
+from data_functions import Data_Functions, load_results
 
 
 class Process_Flow:
