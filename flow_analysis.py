@@ -161,7 +161,7 @@ class Process_Flow:
         Get the 2D source position array.
 
         Returns:
-            np.ndarray: 2D source position array
+            np.ndarray: 2D source position array.
         """
         return self.snirf_file.nirs[0].probe.sourcePos2D
 
@@ -170,7 +170,7 @@ class Process_Flow:
         Get the 3D source position array.
 
         Returns:
-            np.ndarray: 3D source position array
+            np.ndarray: 3D source position array.
         """
         return self.snirf_file.nirs[0].probe.sourcePos3D
 
@@ -179,7 +179,7 @@ class Process_Flow:
         Get the 2D detector position array.
 
         Returns:
-            np.ndarray: 2D detector position array
+            np.ndarray: 2D detector position array.
         """
         return self.snirf_file.nirs[0].probe.detectorPos2D
 
@@ -188,18 +188,36 @@ class Process_Flow:
         Get the 3D detector position array.
 
         Returns:
-            np.ndarray: 3D detector position array
+            np.ndarray: 3D detector position array.
         """
         return self.snirf_file.nirs[0].probe.detectorPos3D
-    
+
     def get_measurement_list(self) -> np.array:
         """
         Get the data measurement list.
 
         Returns:
-            np.array: Data measurement list.
+            np.array: Data measurement list array.
         """
         return self.snirf_file.nirs[0].data[0].measurementList
+
+    def get_source_labels(self) -> np.array:
+        """
+        Get the source labels.
+
+        Returns:
+            np.array: Source label array.
+        """
+        return self.snirf_file.nirs[0].probe.sourceLabels
+
+    def get_detector_labels(self) -> np.array:
+        """
+        Get the detector labels.
+
+        Returns:
+            np.array: Detector label array.
+        """
+        return self.snirf_file.nirs[0].probe.detectorLabels
 
     def get_marker_df(self) -> pd.DataFrame:
         """
@@ -283,12 +301,12 @@ class Process_Flow:
             detector_dict[detector] = detector_dict.get(detector, 0) + 1
         detector_dict = self.data_fun.sort_dict(detector_dict, "keys")
         return detector_dict
-    
+
     def create_measurement_list_df(self) -> pd.DataFrame:
         """
         Create a DataFrame with all the data measurement list information.
 
-        
+
         Returns:
             pd.DataFrame: Data measurement list DataFrame.
         """
@@ -298,7 +316,7 @@ class Process_Flow:
         for i in range(len(measurement_list)):
             measurement_list_i = measurement_list[i]
             measurement_dict = {}
-            measurement_dict["measurement_list_index"] = i+1 
+            measurement_dict["measurement_list_index"] = i + 1
             measurement_dict["data_type"] = measurement_list_i.dataType
             measurement_dict["data_type_index"] = measurement_list_i.dataTypeLabel
             measurement_dict["detector_index"] = measurement_list_i.detectorIndex
@@ -307,6 +325,71 @@ class Process_Flow:
 
         measurement_list_df = pd.DataFrame(dict_list)
         return measurement_list_df
+
+    def create_source_df(self, dim: str) -> pd.DataFrame:
+        """
+        Create a DataFrame with the source labels and 2D or 3D source positions.
+
+        Returns:
+            pd.DataFrame: Source labels and positions.
+        """
+        source_labels = self.get_source_labels()
+        if dim.lower() == "2d":
+            source_pos_2d = self.get_source_pos_2d()
+            source_data = [
+                (label, *lst) for label, lst in zip(source_labels, source_pos_2d)
+            ]
+            source_df = pd.DataFrame(
+                source_data, columns=["source_label", "source_x_pos", "source_y_pos"]
+            )
+        elif dim.lower() == "3d":
+            source_pos_3d = self.get_source_pos_3d()
+            source_data = [
+                (label, *lst) for label, lst in zip(source_labels, source_pos_3d)
+            ]
+            source_df = pd.DataFrame(
+                source_data,
+                columns=[
+                    "source_label",
+                    "source_x_pos",
+                    "source_y_pos",
+                    "source_pos_z",
+                ],
+            )
+        return source_df
+
+    def create_detector_df(self, dim: str) -> pd.DataFrame:
+        """
+        Create a DataFrame with the detector labels and 2D or 3D detector positions.
+
+        Returns:
+            pd.DataFrame: Detector labels and positions.
+        """
+        detector_labels = self.get_detector_labels()
+        if dim.lower() == "2d":
+            detector_pos_2d = self.get_detector_pos_2d()
+            detector_data = [
+                (label, *lst) for label, lst in zip(detector_labels, detector_pos_2d)
+            ]
+            detector_df = pd.DataFrame(
+                detector_data,
+                columns=["detector_label", "detector_x_pos", "detector_y_pos"],
+            )
+        elif dim.lower() == "3d":
+            detector_pos_3d = self.get_detector_pos_3d()
+            detector_data = [
+                (label, *lst) for label, lst in zip(detector_labels, detector_pos_3d)
+            ]
+            detector_df = pd.DataFrame(
+                detector_data,
+                columns=[
+                    "detector_label",
+                    "detector_x_pos",
+                    "detector_y_pos",
+                    "detector_pos_z",
+                ],
+            )
+        return detector_df
 
     def plot_pos_2d(self) -> None:
         """
