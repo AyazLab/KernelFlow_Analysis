@@ -191,6 +191,15 @@ class Process_Flow:
             np.ndarray: 3D detector position array
         """
         return self.snirf_file.nirs[0].probe.detectorPos3D
+    
+    def get_measurement_list(self) -> np.array:
+        """
+        Get the data measurement list.
+
+        Returns:
+            np.array: Data measurement list.
+        """
+        return self.snirf_file.nirs[0].data[0].measurementList
 
     def get_marker_df(self) -> pd.DataFrame:
         """
@@ -274,6 +283,30 @@ class Process_Flow:
             detector_dict[detector] = detector_dict.get(detector, 0) + 1
         detector_dict = self.data_fun.sort_dict(detector_dict, "keys")
         return detector_dict
+    
+    def create_measurement_list_df(self) -> pd.DataFrame:
+        """
+        Create a DataFrame with all the data measurement list information.
+
+        
+        Returns:
+            pd.DataFrame: Data measurement list DataFrame.
+        """
+        measurement_list = self.get_measurement_list()
+        dict_list = []
+
+        for i in range(len(measurement_list)):
+            measurement_list_i = measurement_list[i]
+            measurement_dict = {}
+            measurement_dict["measurement_list_index"] = i+1 
+            measurement_dict["data_type"] = measurement_list_i.dataType
+            measurement_dict["data_type_index"] = measurement_list_i.dataTypeLabel
+            measurement_dict["detector_index"] = measurement_list_i.detectorIndex
+            measurement_dict["source_index"] = measurement_list_i.sourceIndex
+            dict_list.append(measurement_dict)
+
+        measurement_list_df = pd.DataFrame(dict_list)
+        return measurement_list_df
 
     def plot_pos_2d(self) -> None:
         """
