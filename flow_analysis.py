@@ -356,6 +356,8 @@ class Process_Flow:
                     "source_pos_z",
                 ],
             )
+        f = lambda x: int(x.lstrip("S"))
+        source_df.insert(1, "source_index", source_df["source_label"].apply(f))
         return source_df
 
     def create_detector_df(self, dim: str) -> pd.DataFrame:
@@ -389,6 +391,9 @@ class Process_Flow:
                     "detector_pos_z",
                 ],
             )
+        f = lambda x: int(x[1:3])
+        detector_df.insert(1, "source_index", detector_df["detector_label"].apply(f))
+        detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
         return detector_df
 
     def plot_pos_2d(self) -> None:
