@@ -396,6 +396,22 @@ class Process_Flow:
         detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
         return detector_df
 
+    def create_source_detector_df(self) -> pd.DataFrame:
+        """
+        Create a DataFrame with the source and detector information for the inter-module channels.
+
+        Returns:
+            pd.DataFrame: Source and detector information for inter-module channels.
+        """
+        measurement_list_df = self.create_measurement_list_df()
+        source_df = self.create_source_df("3D")
+        detector_df = self.create_detector_df("3D")
+        source_merge = pd.merge(measurement_list_df, source_df, on="source_index")
+        merged_source_detector_df = pd.merge(
+            source_merge, detector_df, on=["detector_index", "source_index"]
+        )
+        return merged_source_detector_df
+
     def plot_pos_2d(self) -> None:
         """
         Plot the detector/source 2D positions.
