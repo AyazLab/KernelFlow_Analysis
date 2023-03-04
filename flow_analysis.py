@@ -811,6 +811,44 @@ class Participant_Flow:
         )  # drop the original "Channels" column
         return stim_resp_df
 
+    def create_inter_module_exp_results_df(
+        self, exp_name: str, fmt: str = None
+    ) -> pd.DataFrame:
+        """
+        Create a DataFrame with the inter-module channels for an experiment.
+        This DataFrame can include both HbO and HbR channels in alternating columns
+        or just "HbO" or "HbR" channels.
+
+        Args:
+            fmt (str, optional): "HbO" or "HbR" channels. Defaults to None (all inter-module channels).
+
+        Returns:
+            pd.DataFrame: Inter-module channels for an experiment.
+        """
+        exp_results = load_results(self.flow_processed_data_dir, exp_name)
+        session = self.par_behav.get_key_from_value(
+            self.par_behav.session_dict, exp_name
+        )
+        measurement_list_df = self.flow_session_dict[
+            session
+        ].create_source_detector_df()
+        channels = (measurement_list_df["measurement_list_index"] - 1).tolist()
+        cols_to_select = ["Participant", "Block"] + [str(chan) for chan in channels]
+        inter_module_df = exp_results.loc[:, cols_to_select]
+        if fmt:
+            if fmt.lower() == "hbo":  # HbO
+                HbO_df = inter_module_df.iloc[
+                    :, np.r_[0, 1, 2 : len(inter_module_df.columns) : 2]
+                ]
+                return HbO_df
+            elif fmt.lower() == "hbr":  # HbR
+                HbR_df = inter_module_df.iloc[
+                    :, np.r_[0, 1, 3 : len(inter_module_df.columns) : 2]
+                ]
+                return HbR_df
+        else:
+            return inter_module_df
+
     def lowpass_filter(
         self, data: list[np.ndarray | pd.DataFrame]
     ) -> Union[np.ndarray, pd.DataFrame]:
