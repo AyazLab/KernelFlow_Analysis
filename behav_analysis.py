@@ -4,7 +4,7 @@ import datetime
 import pandas as pd
 import numpy as np
 from statistics import mean
-from typing import Tuple, Union
+from typing import Tuple
 from data_functions import Data_Functions
 
 
