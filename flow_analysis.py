@@ -709,8 +709,10 @@ class Participant_Flow:
         """
         Create a dictionary that contains the processed Kernel Flow data in response
         to a stimulus. It is organized by block (keys) and for each block, the value is
-        a list of Pandas series.  Each series is normalized, averaged, Kernel Flow data
-        during a presented stimulus duration for each channel.
+        a list of Pandas series. Each series is normalized, averaged, Kernel Flow data
+        during a presented stimulus duration for each channel. Each block is baselined
+        to the first 5 seconds, and the stim response is averaged over the stimulus
+        presentation duration.
 
         Args:
             exp_name (str): Name of the experiment.
@@ -736,10 +738,35 @@ class Participant_Flow:
         )
         ts_list = self.flow_session_dict[session].get_time_abs("timestamp")
         exp_time_offset = self.time_offset_dict[exp_name]
+        exp_by_block = self.par_behav.by_block_ts_dict[exp_name]
         blocks = list(exp_results["block"].unique())
         exp_stim_resp_dict = {
             block: {} for block in blocks
         }  # initialize with unique blocks
+        processed_blocks = []
+        for (
+            block_start_ts,
+            block_end_ts,
+        ), exp_info in exp_by_block.items():  # for each block in the experiment
+            block_start_ts_offset = block_start_ts + exp_time_offset
+            start_idx, _ = self.data_fun.find_closest_ts(block_start_ts_offset, ts_list)
+            block_end_ts_offset = block_end_ts + exp_time_offset
+            end_idx, _ = self.data_fun.find_closest_ts(block_end_ts_offset, ts_list)
+
+            baseline_rows = flow_exp.loc[
+                start_idx : start_idx + 35, 0:
+            ]  # first 5 seconds of a block
+            baseline = baseline_rows.mean()
+            block_rows = flow_exp.loc[
+                start_idx:end_idx, 0:
+            ]  # rows from block start to end
+            block_rows_norm = block_rows - baseline  # normalize the block rows
+            processed_blocks.append(block_rows_norm)
+
+        processed_block_df = pd.concat(
+            processed_blocks
+        )  # all processed blocks for an experiment
+
         for _, row in exp_results.iterrows():
             stim_start_ts = row["stim_start"]
             stim_start_ts_offset = stim_start_ts + exp_time_offset
@@ -748,17 +775,18 @@ class Participant_Flow:
             stim_end_ts_offset = stim_end_ts + exp_time_offset
             end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts_offset, ts_list)
 
-            baseline_row = flow_exp.loc[start_idx, 0:]
-            stim_rows = flow_exp.loc[start_idx:end_idx, 0:]
-            avg_norm_rows = (stim_rows - baseline_row).mean()  # all channels for a stim
+            stim_rows = processed_block_df.loc[start_idx:end_idx, 0:]
+            avg_stim_rows = stim_rows.mean()  # all channels for a stim
 
             block = row["block"]
             trial = row["trial"]
+
             if trial not in exp_stim_resp_dict[block].keys():
                 exp_stim_resp_dict[block][trial] = []
             exp_stim_resp_dict[block][trial].append(
-                avg_norm_rows
+                avg_stim_rows
             )  # add to a block in dict
+
         return exp_stim_resp_dict
 
     def create_exp_stim_response_df(self, exp_name: str) -> pd.DataFrame:
