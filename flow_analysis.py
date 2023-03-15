@@ -820,7 +820,7 @@ class Participant_Flow:
             pd.DataFrame: Processed Kernel Flow data.
         """
 
-        def split_col(row: pd.Series) -> pd.Series:
+        def _split_col(row: pd.Series) -> pd.Series:
             """
             Split a column containing an array into separate columns for each
             element in the array.
@@ -849,7 +849,7 @@ class Participant_Flow:
                 rows.append(row)
 
         stim_resp_df = pd.DataFrame(rows)
-        channel_cols = stim_resp_df.apply(split_col, axis=1)
+        channel_cols = stim_resp_df.apply(_split_col, axis=1)
         stim_resp_df = pd.concat(
             [stim_resp_df, channel_cols], axis=1
         )  # merge with original DataFrame
@@ -867,13 +867,14 @@ class Participant_Flow:
         or just "HbO", "HbR", "HbTot", or "HbDiff" channels.
 
         Args:
-            fmt (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels. Defaults to None (all inter-module channels).
+            fmt (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels.
+                                 Defaults to None (all inter-module channels).
 
         Returns:
             pd.DataFrame: Inter-module channels for an experiment.
         """
 
-        def compute_df(fmt: str) -> pd.DataFrame:
+        def _compute_df(fmt: str) -> pd.DataFrame:
             """
             Create the HbTot and HbDiff DataFrames.
 
@@ -886,10 +887,10 @@ class Participant_Flow:
             HbO_df = inter_module_df.iloc[
                 :, np.r_[0, 1, 2 : len(inter_module_df.columns) : 2]
             ]
+            HbO_data_cols = HbO_df.iloc[:, 2:]
             HbR_df = inter_module_df.iloc[
                 :, np.r_[0, 1, 3 : len(inter_module_df.columns) : 2]
             ]
-            HbO_data_cols = HbO_df.iloc[:, 2:]
             HbR_data_cols = HbR_df.iloc[:, 2:]
             cols_dict = {}
             for i, col_name in enumerate(HbO_data_cols.columns):
@@ -928,10 +929,10 @@ class Participant_Flow:
                 ]
                 return HbR_df
             elif fmt.lower() == "hbtot":  # HbTot
-                HbTot_df = compute_df(fmt)
+                HbTot_df = _compute_df(fmt)
                 return HbTot_df
             elif fmt.lower() == "hbdiff":  # HbDiff
-                HbDiff_df = compute_df(fmt)
+                HbDiff_df = _compute_df(fmt)
                 return HbDiff_df
         else:
             return inter_module_df
@@ -1073,7 +1074,8 @@ class Participant_Flow:
             data_type_label = self.flow_session_dict[session].get_data_type_label(
                 channel_num
             )
-            legend_label = f"Ch {channel_num} ({data_type_label})"
+            # legend_label = f"Ch {channel_num} ({data_type_label})"
+            legend_label = f"{data_type_label}"
             if data_type_label == "HbO":
                 color = "red"
             elif data_type_label == "HbR":
@@ -1130,7 +1132,7 @@ class Participant_Flow:
             bbox_to_anchor=(1.0, 1.0),
             facecolor="white",
             framealpha=1,
-            title="Kernel Flow Data",
+            title="fNIRS data",
         )
         handles, labels = plt.gca().get_legend_handles_labels()
         uni_labels = dict(zip(labels, handles))
@@ -1149,15 +1151,18 @@ class Participant_Flow:
         datetime_fmt = mdates.DateFormatter("%H:%M:%S")
         ax.xaxis.set_major_formatter(datetime_fmt)
         ax.set_xlabel("Time", fontsize=16, color="k")
+        ax.set_ylabel("Concentration (\u03bcM)", fontsize=16, color="k")
+        # plt.savefig(r"C:\Users\zackg\Downloads\output.png", bbox_inches="tight")
 
 
-def create_flow_results_tables(num_pars: int) -> None:
+def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
     """
-    Generate an Excel file that contains the Kernel Flow stimulus response data
+    Generate a CSV file that contains the Kernel Flow stimulus response data
     for all experiments and participants.
 
     Args:
         num_pars (int): Number of participants in the study.
+        inter_module_only (bool): Select only inter module channels. Defaults to False.
     """
     exp_order = [
         "audio_narrative",
