@@ -845,14 +845,48 @@ class Participant_Flow:
         """
         Create a DataFrame with the inter-module channels for an experiment.
         This DataFrame can include both HbO and HbR channels in alternating columns
-        or just "HbO" or "HbR" channels.
+        or just "HbO", "HbR", "HbTot", or "HbDiff" channels.
 
         Args:
-            fmt (str, optional): "HbO" or "HbR" channels. Defaults to None (all inter-module channels).
+            fmt (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels. Defaults to None (all inter-module channels).
 
         Returns:
             pd.DataFrame: Inter-module channels for an experiment.
         """
+
+        def compute_df(fmt: str) -> pd.DataFrame:
+            """
+            Create the HbTot and HbDiff DataFrames.
+
+            Args:
+                fmt (str): "HbTot" or "HbDiff".
+
+            Returns:
+                pd.DataFrame: HbTot or HbDiff DataFrame.
+            """
+            HbO_df = inter_module_df.iloc[
+                :, np.r_[0, 1, 2 : len(inter_module_df.columns) : 2]
+            ]
+            HbR_df = inter_module_df.iloc[
+                :, np.r_[0, 1, 3 : len(inter_module_df.columns) : 2]
+            ]
+            HbO_data_cols = HbO_df.iloc[:, 2:]
+            HbR_data_cols = HbR_df.iloc[:, 2:]
+            cols_dict = {}
+            for i, col_name in enumerate(HbO_data_cols.columns):
+                if fmt.lower() == "hbtot":
+                    cols_dict[col_name] = (
+                        HbO_data_cols.iloc[:, i] + HbR_data_cols.iloc[:, i]
+                    )
+                elif fmt.lower() == "hbdiff":
+                    cols_dict[col_name] = (
+                        HbO_data_cols.iloc[:, i] - HbR_data_cols.iloc[:, i]
+                    )
+            df = pd.DataFrame(cols_dict)
+            df.insert(0, "Block", HbO_df["Block"])
+            df.insert(0, "Participant", HbO_df["Participant"])
+            return df
+
         exp_results = load_results(self.flow_processed_data_dir, exp_name)
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
@@ -874,6 +908,12 @@ class Participant_Flow:
                     :, np.r_[0, 1, 3 : len(inter_module_df.columns) : 2]
                 ]
                 return HbR_df
+            elif fmt.lower() == "hbtot":  # HbTot
+                HbTot_df = compute_df(fmt)
+                return HbTot_df
+            elif fmt.lower() == "hbdiff":  # HbDiff
+                HbDiff_df = compute_df(fmt)
+                return HbDiff_df
         else:
             return inter_module_df
 
@@ -1130,3 +1170,8 @@ def create_flow_results_tables(num_pars: int) -> None:
         exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
         filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
         exp_df.to_csv(filepath, index=False)
+                exp_results_list[i] for exp_results_list in all_exp_results_list
+            ]
+            exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
+            filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
+            exp_df.to_csv(filepath, index=False)
