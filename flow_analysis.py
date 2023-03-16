@@ -1166,7 +1166,7 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
 
     Args:
         num_pars (int): Number of participants in the study.
-        inter_module_only (bool): Select only inter module channels. Defaults to False.
+        inter_module_only (bool): Select only inter-module channels. Defaults to False.
     """
     exp_order = [
         "audio_narrative",
@@ -1179,25 +1179,51 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
         "video_narrative_cmiyc",
         "video_narrative_sherlock",
     ]
-    all_exp_results_list = []
-    for par_num in range(1, num_pars + 1):
-        print(f"Processing participant {par_num} ...")
-        par = Participant_Flow(par_num)
-        exp_results_list = []
-        for exp_name in exp_order:
-            stim_resp_df = par.create_exp_stim_response_df(exp_name)
-            exp_results_list.append(stim_resp_df)
-        all_exp_results_list.append(exp_results_list)
+    hemo_types = ["HbO", "HbR", "HbTot", "HbDiff"]
+    if inter_module_only:
+        print(f"Processing participants ...")
+        par = Participant_Flow(1)  # TODO: inter-module DataFrame is computed for all participants
+        for hemo_type in hemo_types:
+            all_exp_results_list = []
+            exp_results_list = []
+            for exp_name in exp_order:
+                stim_resp_df = par.create_inter_module_exp_results_df(
+                    exp_name, hemo_type
+                )
+                exp_results_list.append(stim_resp_df)
+            all_exp_results_list.append(exp_results_list)
 
-    filedir = par.flow_processed_data_dir
-    if not os.path.exists(os.path.dirname(filedir)):
-        os.mkdir(os.path.dirname(filedir))
+            filedir = os.path.join(
+                par.flow_processed_data_dir, "inter_module_channels", hemo_type
+            )
+            if not os.path.exists(filedir):
+                os.makedirs(filedir)
 
-    for i, exp_name in enumerate(exp_order):
-        exp_rows = [exp_results_list[i] for exp_results_list in all_exp_results_list]
-        exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
-        filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
-        exp_df.to_csv(filepath, index=False)
+            print(f"Creating {hemo_type} CSV files ...")
+            for i, exp_name in enumerate(exp_order):
+                exp_rows = [
+                    exp_results_list[i] for exp_results_list in all_exp_results_list
+                ]
+                exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
+                filepath = os.path.join(filedir, f"{exp_name}_flow_{hemo_type}.csv")
+                exp_df.to_csv(filepath, index=False)
+    else:
+        for par_num in range(1, num_pars + 1):
+            print(f"Processing participant {par_num} ...")
+            par = Participant_Flow(par_num)
+            exp_results_list = []
+            for exp_name in exp_order:
+                stim_resp_df = par.create_exp_stim_response_df(exp_name)
+                exp_results_list.append(stim_resp_df)
+            all_exp_results_list.append(exp_results_list)
+
+        filedir = os.path.join(par.flow_processed_data_dir, "all_channels")
+        if not os.path.exists(filedir):
+            os.makedirs(filedir)
+
+        print("Creating CSV files ...")
+        for i, exp_name in enumerate(exp_order):
+            exp_rows = [
                 exp_results_list[i] for exp_results_list in all_exp_results_list
             ]
             exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
