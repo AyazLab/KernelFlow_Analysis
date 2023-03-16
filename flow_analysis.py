@@ -744,14 +744,57 @@ class Participant_Flow:
         exp_time_offset = self.time_offset_dict[exp_name]
         exp_by_block = self.par_behav.by_block_ts_dict[exp_name]
 
-        if exp_name == "king_devick":  # TODO
-            pass
-        else:
-            blocks = list(exp_results["block"].unique())
-            exp_stim_resp_dict = {
-                block: {} for block in blocks
-            }  # initialize with unique blocks
-            processed_blocks = []
+        blocks = list(exp_results["block"].unique())
+        exp_stim_resp_dict = {
+            block: {} for block in blocks
+        }  # initialize with unique blocks
+        processed_blocks = []
+
+        if exp_name == "king_devick":  # normalize all blocks to the first block
+            (first_block_start_ts, first_block_end_ts) = next(
+                iter(exp_by_block.keys())
+            )  # start/end of first block
+            first_block_start_ts_offset = first_block_start_ts + exp_time_offset
+            first_block_start_idx, _ = self.data_fun.find_closest_ts(
+                first_block_start_ts_offset, ts_list
+            )
+            first_block_end_ts_offset = first_block_end_ts + exp_time_offset
+            first_block_end_idx, _ = self.data_fun.find_closest_ts(
+                first_block_end_ts_offset, ts_list
+            )
+            baseline_rows = flow_exp.loc[
+                first_block_start_idx : first_block_start_idx + 35, 0:
+            ]  # first 5 seconds of a block
+            baseline = pd.DataFrame(baseline_rows.mean()).T
+
+            for (
+                block_start_ts,
+                block_end_ts,
+            ) in exp_by_block.keys():  # for each block in the experiment
+                block_start_ts_offset = block_start_ts + exp_time_offset
+                block_start_idx, _ = self.data_fun.find_closest_ts(
+                    block_start_ts_offset, ts_list
+                )
+                block_end_ts_offset = block_end_ts + exp_time_offset
+                block_end_idx, _ = self.data_fun.find_closest_ts(
+                    block_end_ts_offset, ts_list
+                )
+                block_rows = flow_exp.loc[
+                    block_start_idx:block_end_idx, 0:
+                ]  # rows from block start to end
+
+                baseline_df = pd.concat(
+                    [baseline] * block_rows.shape[0], ignore_index=True
+                )
+                baseline_df = baseline_df.set_index(
+                    pd.Index(range(block_start_idx, block_start_idx + len(baseline_df)))
+                )
+
+                block_rows_norm = block_rows.subtract(
+                    baseline_df, fill_value=0
+                )  # normalize the block rows
+                processed_blocks.append(block_rows_norm)
+        else:  # normalize each block to the start of the block
             for (
                 block_start_ts,
                 block_end_ts,
@@ -784,31 +827,29 @@ class Participant_Flow:
                 )  # normalize the block rows
                 processed_blocks.append(block_rows_norm)
 
-            processed_block_df = pd.concat(
-                processed_blocks
-            )  # all processed blocks for an experiment
+        processed_block_df = pd.concat(
+            processed_blocks
+        )  # all processed blocks for an experiment
 
-            for _, row in exp_results.iterrows():
-                stim_start_ts = row["stim_start"]
-                stim_start_ts_offset = stim_start_ts + exp_time_offset
-                start_idx, _ = self.data_fun.find_closest_ts(
-                    stim_start_ts_offset, ts_list
-                )
-                stim_end_ts = row["stim_end"]
-                stim_end_ts_offset = stim_end_ts + exp_time_offset
-                end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts_offset, ts_list)
+        for _, row in exp_results.iterrows():
+            stim_start_ts = row["stim_start"]
+            stim_start_ts_offset = stim_start_ts + exp_time_offset
+            start_idx, _ = self.data_fun.find_closest_ts(stim_start_ts_offset, ts_list)
+            stim_end_ts = row["stim_end"]
+            stim_end_ts_offset = stim_end_ts + exp_time_offset
+            end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts_offset, ts_list)
 
-                stim_rows = processed_block_df.loc[start_idx:end_idx, 0:]
-                avg_stim_rows = stim_rows.mean()  # all channels for a stim
+            stim_rows = processed_block_df.loc[start_idx:end_idx, 0:]
+            avg_stim_rows = stim_rows.mean()  # all channels for a stim
 
-                block = row["block"]
-                trial = row["trial"]
+            block = row["block"]
+            trial = row["trial"]
 
-                if trial not in exp_stim_resp_dict[block].keys():
-                    exp_stim_resp_dict[block][trial] = []
-                exp_stim_resp_dict[block][trial].append(
-                    avg_stim_rows
-                )  # add to a block in dict
+            if trial not in exp_stim_resp_dict[block].keys():
+                exp_stim_resp_dict[block][trial] = []
+            exp_stim_resp_dict[block][trial].append(
+                avg_stim_rows
+            )  # add to a block in dict
 
         return exp_stim_resp_dict
 
