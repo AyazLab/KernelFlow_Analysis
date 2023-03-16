@@ -356,8 +356,12 @@ class Process_Flow:
                     "source_pos_z",
                 ],
             )
-        f = lambda x: int(x.lstrip("S"))
-        source_df.insert(1, "source_index", source_df["source_label"].apply(f))
+        try:
+            f = lambda x: int(x.lstrip("S"))
+            source_df.insert(1, "source_index", source_df["source_label"].apply(f))
+        except ValueError:  # Format changed for participants 12+
+            f = lambda x: int(x[1:4].lstrip("0"))
+            source_df.insert(1, "source_index", source_df["source_label"].apply(f))
         return source_df
 
     def create_detector_df(self, dim: str) -> pd.DataFrame:
