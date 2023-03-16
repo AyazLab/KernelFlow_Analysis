@@ -1223,7 +1223,9 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
     hemo_types = ["HbO", "HbR", "HbTot", "HbDiff"]
     if inter_module_only:
         print(f"Processing participants ...")
-        par = Participant_Flow(1)  # TODO: inter-module DataFrame is computed for all participants
+        par = Participant_Flow(
+            1
+        )  # NOTE: inter-module DataFrame is computed for all participants
         for hemo_type in hemo_types:
             all_exp_results_list = []
             exp_results_list = []
@@ -1241,6 +1243,11 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
                 os.makedirs(filedir)
 
             print(f"Creating {hemo_type} CSV files ...")
+            all_exp_filepath = os.path.join(
+                filedir, f"all_experiments_flow_{hemo_type}.csv"
+            )
+            if os.path.exists(all_exp_filepath):
+                os.remove(all_exp_filepath)
             for i, exp_name in enumerate(exp_order):
                 exp_rows = [
                     exp_results_list[i] for exp_results_list in all_exp_results_list
@@ -1248,6 +1255,17 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
                 exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
                 filepath = os.path.join(filedir, f"{exp_name}_flow_{hemo_type}.csv")
                 exp_df.to_csv(filepath, index=False)
+                all_exp_df = exp_df.copy(deep=True)
+                exp_name_col = [exp_name] * len(all_exp_df.index)
+                all_exp_df.insert(0, "Experiment", exp_name_col)
+                if i == 0:
+                    all_exp_df.to_csv(
+                        all_exp_filepath, mode="a", header=True, index=False
+                    )
+                else:
+                    all_exp_df.to_csv(
+                        all_exp_filepath, mode="a", header=False, index=False
+                    )
     else:
         for par_num in range(1, num_pars + 1):
             print(f"Processing participant {par_num} ...")
@@ -1263,6 +1281,9 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
             os.makedirs(filedir)
 
         print("Creating CSV files ...")
+        all_exp_filepath = os.path.join(filedir, f"all_experiments_flow.csv")
+        if os.path.exists(all_exp_filepath):
+            os.remove(all_exp_filepath)
         for i, exp_name in enumerate(exp_order):
             exp_rows = [
                 exp_results_list[i] for exp_results_list in all_exp_results_list
@@ -1270,3 +1291,10 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
             exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
             filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
             exp_df.to_csv(filepath, index=False)
+            all_exp_df = exp_df.copy(deep=True)
+            exp_name_col = [exp_name] * len(all_exp_df.index)
+            all_exp_df.insert(0, "Experiment", exp_name_col)
+            if i == 0:
+                all_exp_df.to_csv(all_exp_filepath, mode="a", header=True, index=False)
+            else:
+                all_exp_df.to_csv(all_exp_filepath, mode="a", header=False, index=False)
