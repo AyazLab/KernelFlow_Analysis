@@ -1219,7 +1219,7 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
         num_pars (int): Number of participants in the study.
         inter_module_only (bool): Select only inter-module channels. Defaults to False.
     """
-    exp_order = [
+    exp_names = [
         "audio_narrative",
         "go_no_go",
         "king_devick",
@@ -1239,7 +1239,7 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
         for hemo_type in hemo_types:
             all_exp_results_list = []
             exp_results_list = []
-            for exp_name in exp_order:
+            for exp_name in exp_names:
                 stim_resp_df = par.create_inter_module_exp_results_df(
                     exp_name, hemo_type
                 )
@@ -1258,7 +1258,7 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
             )
             if os.path.exists(all_exp_filepath):
                 os.remove(all_exp_filepath)
-            for i, exp_name in enumerate(exp_order):
+            for i, exp_name in enumerate(exp_names):
                 exp_rows = [
                     exp_results_list[i] for exp_results_list in all_exp_results_list
                 ]
@@ -1281,7 +1281,7 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
             print(f"Processing participant {par_num} ...")
             par = Participant_Flow(par_num)
             exp_results_list = []
-            for exp_name in exp_order:
+            for exp_name in exp_names:
                 stim_resp_df = par.create_exp_stim_response_df(exp_name)
                 exp_results_list.append(stim_resp_df)
             all_exp_results_list.append(exp_results_list)
@@ -1294,7 +1294,7 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
         all_exp_filepath = os.path.join(filedir, f"all_experiments_flow.csv")
         if os.path.exists(all_exp_filepath):
             os.remove(all_exp_filepath)
-        for i, exp_name in enumerate(exp_order):
+        for i, exp_name in enumerate(exp_names):
             exp_rows = [
                 exp_results_list[i] for exp_results_list in all_exp_results_list
             ]
