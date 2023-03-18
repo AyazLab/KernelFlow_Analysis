@@ -306,7 +306,6 @@ class Process_Flow:
         """
         Create a DataFrame with all the data measurement list information.
 
-
         Returns:
             pd.DataFrame: Data measurement list DataFrame.
         """
@@ -329,6 +328,9 @@ class Process_Flow:
     def create_source_df(self, dim: str) -> pd.DataFrame:
         """
         Create a DataFrame with the source labels and 2D or 3D source positions.
+
+        Args:
+            dim (str): Position data dimension "2D" or "3D".
 
         Returns:
             pd.DataFrame: Source labels and positions.
@@ -367,6 +369,9 @@ class Process_Flow:
     def create_detector_df(self, dim: str) -> pd.DataFrame:
         """
         Create a DataFrame with the detector labels and 2D or 3D detector positions.
+
+        Args:
+            dim (str): Position data dimension "2D" or "3D".
 
         Returns:
             pd.DataFrame: Detector labels and positions.
@@ -420,50 +425,51 @@ class Process_Flow:
         )
         return source_detector_df
 
-    def plot_pos_2d(self) -> None:
+    def plot_pos(self, dim: str) -> None:
         """
-        Plot the detector/source 2D positions.
+        Plot the detector/source 2D or 3D positions.
+
+        Args:
+            dim (str): Position data dimension "2D" or "3D".
         """
-        detector_pos_2d = self.get_detector_pos_2d()
-        x_detector = detector_pos_2d[:, 0]
-        y_detector = detector_pos_2d[:, 1]
+        if dim.lower() == "2d":
+            detector_pos_2d = self.get_detector_pos_2d()
+            x_detector = detector_pos_2d[:, 0]
+            y_detector = detector_pos_2d[:, 1]
 
-        source_pos_2d = self.get_source_pos_2d()
-        x_source = source_pos_2d[:, 0]
-        y_source = source_pos_2d[:, 1]
+            source_pos_2d = self.get_source_pos_2d()
+            x_source = source_pos_2d[:, 0]
+            y_source = source_pos_2d[:, 1]
 
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.scatter(x_detector, y_detector)
-        ax.scatter(x_source, y_source)
-        ax.set_title("Detector/Source 2D Plot")
-        ax.set_xlabel("X-Position (mm)")
-        ax.set_ylabel("Y-Position (mm)")
-        ax.legend(["Detector", "Source"])
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.scatter(x_detector, y_detector)
+            ax.scatter(x_source, y_source)
+            ax.set_title("Detector/Source 2D Plot")
+            ax.set_xlabel("X-Position (mm)")
+            ax.set_ylabel("Y-Position (mm)")
+            ax.legend(["Detector", "Source"])
 
-    def plot_pos_3d(self) -> None:
-        """
-        Plot the detector/source 3D positions.
-        """
-        detector_pos_3d = self.get_detector_pos_3d()
-        x_detector = detector_pos_3d[:, 0]
-        y_detector = detector_pos_3d[:, 1]
-        z_detector = detector_pos_3d[:, 2]
+        elif dim.lower() == "3d":
+            detector_pos_3d = self.get_detector_pos_3d()
+            x_detector = detector_pos_3d[:, 0]
+            y_detector = detector_pos_3d[:, 1]
+            z_detector = detector_pos_3d[:, 2]
 
-        source_pos_3d = self.get_source_pos_3d()
-        x_source = source_pos_3d[:, 0]
-        y_source = source_pos_3d[:, 1]
-        z_source = source_pos_3d[:, 2]
+            source_pos_3d = self.get_source_pos_3d()
+            x_source = source_pos_3d[:, 0]
+            y_source = source_pos_3d[:, 1]
+            z_source = source_pos_3d[:, 2]
 
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection="3d")
-        ax.scatter(x_detector, y_detector, z_detector)
-        ax.scatter(x_source, y_source, z_source)
-        ax.set_title("Detector/Source 3D Plot")
-        ax.set_xlabel("X-Position (mm)")
-        ax.set_ylabel("Y-Position (mm)")
-        ax.set_zlabel("Z-Position (mm)")
-        ax.legend(["Detector", "Source"])
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection="3d")
+            ax.scatter(x_detector, y_detector, z_detector)
+            ax.scatter(x_source, y_source, z_source)
+            ax.set_title("Detector/Source 3D Plot")
+            ax.set_xlabel("X-Position (mm)")
+            ax.set_ylabel("Y-Position (mm)")
+            ax.set_zlabel("Z-Position (mm)")
+            ax.legend(["Detector", "Source"])
 
 
 class Participant_Flow:
