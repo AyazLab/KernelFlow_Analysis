@@ -358,6 +358,7 @@ class Process_Flow:
                     "source_pos_z",
                 ],
             )
+        # NOTE: Kernel changed source and detector label formats after a certain date
         try:
             f = lambda x: int(x.lstrip("S"))
             source_df.insert(1, "source_index", source_df["source_label"].apply(f))
@@ -400,7 +401,13 @@ class Process_Flow:
                     "detector_pos_z",
                 ],
             )
-        f = lambda x: int(x[1:3])
+        # NOTE: Kernel changed source and detector label formats after a certain date
+        if len(detector_df["detector_label"][0]) == 5:
+            f = lambda x: int(x[1:3])
+        elif (
+            len(detector_df["detector_label"][0]) == 7
+        ):  # Format changed for participants 12+
+            f = lambda x: int(x[2:4])
         detector_df.insert(1, "source_index", detector_df["detector_label"].apply(f))
         detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
         return detector_df
