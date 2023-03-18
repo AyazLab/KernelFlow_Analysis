@@ -414,7 +414,11 @@ class Process_Flow:
         merged_source_detector_df = pd.merge(
             source_merge, detector_df, on=["detector_index", "source_index"]
         )
-        return merged_source_detector_df
+        source_detector_df = merged_source_detector_df.copy()
+        source_detector_df.insert(
+            0, "channel_num", source_detector_df["measurement_list_index"] - 1
+        )
+        return source_detector_df
 
     def plot_pos_2d(self) -> None:
         """
