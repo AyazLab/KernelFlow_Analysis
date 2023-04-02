@@ -1297,60 +1297,104 @@ class Participant_Flow:
         # plt.savefig(r"C:\Users\zackg\Downloads\output.png", bbox_inches="tight")
 
 
-def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
-    """
-    Generate a CSV file that contains the Kernel Flow stimulus response data
-    for all experiments and participants.
+class Flow_Results:
+    def __init__(self):
+        self.results_dir = (
+            r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Analysis\results"
+        )
+        self.exp_names = [
+            "audio_narrative",
+            "go_no_go",
+            "king_devick",
+            "n_back",
+            "resting_state",
+            "tower_of_london",
+            "vSAT",
+            "video_narrative_cmiyc",
+            "video_narrative_sherlock",
+        ]
+        self.hemo_types = ["HbO", "HbR", "HbTot", "HbDiff"]
+        self.par = Participant_Flow(1)
+        self.flow_session = self.par.flow_session_dict["session_1001"]
 
-    Args:
-        num_pars (int): Number of participants in the study.
-        inter_module_only (bool): Select only inter-module channels. Defaults to False.
-    """
-    exp_names = [
-        "audio_narrative",
-        "go_no_go",
-        "king_devick",
-        "n_back",
-        "resting_state",
-        "tower_of_london",
-        "vSAT",
-        "video_narrative_cmiyc",
-        "video_narrative_sherlock",
-    ]
-    hemo_types = ["HbO", "HbR", "HbTot", "HbDiff"]
-    if inter_module_only:
-        print(f"Processing participants ...")
-        par = Participant_Flow(
-            1
-        )  # NOTE: inter-module DataFrame is computed for all participants
-        for hemo_type in hemo_types:
-            all_exp_results_list = []
-            exp_results_list = []
-            for exp_name in exp_names:
-                stim_resp_df = par.create_inter_module_exp_results_df(
-                    exp_name, hemo_type
+    def create_flow_results_tables(
+        self, num_pars: int, inter_module_only=False
+    ) -> None:
+        """
+        Generate a CSV file that contains the Kernel Flow stimulus response data
+        for all experiments and participants.
+
+        Args:
+            num_pars (int): Number of participants in the study.
+            inter_module_only (bool): Select only inter-module channels. Defaults to False.
+        """
+
+        if inter_module_only:
+            print(f"Processing participants ...")
+            for hemo_type in self.hemo_types:
+                all_exp_results_list = []
+                exp_results_list = []
+                for exp_name in self.exp_names:
+                    stim_resp_df = self.par.create_inter_module_exp_results_df(
+                        exp_name, hemo_type
+                    )
+                    exp_results_list.append(stim_resp_df)
+                all_exp_results_list.append(exp_results_list)
+
+                filedir = os.path.join(
+                    self.par.flow_processed_data_dir, "inter_module_channels", hemo_type
                 )
-                exp_results_list.append(stim_resp_df)
-            all_exp_results_list.append(exp_results_list)
+                if not os.path.exists(filedir):
+                    os.makedirs(filedir)
 
-            filedir = os.path.join(
-                par.flow_processed_data_dir, "inter_module_channels", hemo_type
-            )
+                print(f"Creating {hemo_type} CSV files ...")
+                all_exp_filepath = os.path.join(
+                    filedir, f"all_experiments_flow_{hemo_type}.csv"
+                )
+                if os.path.exists(all_exp_filepath):
+                    os.remove(all_exp_filepath)
+                for i, exp_name in enumerate(self.exp_names):
+                    exp_rows = [
+                        exp_results_list[i] for exp_results_list in all_exp_results_list
+                    ]
+                    exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
+                    filepath = os.path.join(filedir, f"{exp_name}_flow_{hemo_type}.csv")
+                    exp_df.to_csv(filepath, index=False)
+                    all_exp_df = exp_df.copy(deep=True)
+                    exp_name_col = [exp_name] * len(all_exp_df.index)
+                    all_exp_df.insert(0, "Experiment", exp_name_col)
+                    if i == 0:
+                        all_exp_df.to_csv(
+                            all_exp_filepath, mode="a", header=True, index=False
+                        )
+                    else:
+                        all_exp_df.to_csv(
+                            all_exp_filepath, mode="a", header=False, index=False
+                        )
+        else:
+            for par_num in range(1, num_pars + 1):
+                print(f"Processing participant {par_num} ...")
+                par = Participant_Flow(par_num)
+                exp_results_list = []
+                for exp_name in self.exp_names:
+                    stim_resp_df = self.par.create_exp_stim_response_df(exp_name)
+                    exp_results_list.append(stim_resp_df)
+                all_exp_results_list.append(exp_results_list)
+
+            filedir = os.path.join(self.par.flow_processed_data_dir, "all_channels")
             if not os.path.exists(filedir):
                 os.makedirs(filedir)
 
-            print(f"Creating {hemo_type} CSV files ...")
-            all_exp_filepath = os.path.join(
-                filedir, f"all_experiments_flow_{hemo_type}.csv"
-            )
+            print("Creating CSV files ...")
+            all_exp_filepath = os.path.join(filedir, f"all_experiments_flow.csv")
             if os.path.exists(all_exp_filepath):
                 os.remove(all_exp_filepath)
-            for i, exp_name in enumerate(exp_names):
+            for i, exp_name in enumerate(self.exp_names):
                 exp_rows = [
                     exp_results_list[i] for exp_results_list in all_exp_results_list
                 ]
                 exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
-                filepath = os.path.join(filedir, f"{exp_name}_flow_{hemo_type}.csv")
+                filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
                 exp_df.to_csv(filepath, index=False)
                 all_exp_df = exp_df.copy(deep=True)
                 exp_name_col = [exp_name] * len(all_exp_df.index)
@@ -1363,27 +1407,6 @@ def create_flow_results_tables(num_pars: int, inter_module_only=False) -> None:
                     all_exp_df.to_csv(
                         all_exp_filepath, mode="a", header=False, index=False
                     )
-    else:
-        for par_num in range(1, num_pars + 1):
-            print(f"Processing participant {par_num} ...")
-            par = Participant_Flow(par_num)
-            exp_results_list = []
-            for exp_name in exp_names:
-                stim_resp_df = par.create_exp_stim_response_df(exp_name)
-                exp_results_list.append(stim_resp_df)
-            all_exp_results_list.append(exp_results_list)
-
-        filedir = os.path.join(par.flow_processed_data_dir, "all_channels")
-        if not os.path.exists(filedir):
-            os.makedirs(filedir)
-
-        print("Creating CSV files ...")
-        all_exp_filepath = os.path.join(filedir, f"all_experiments_flow.csv")
-        if os.path.exists(all_exp_filepath):
-            os.remove(all_exp_filepath)
-        for i, exp_name in enumerate(exp_names):
-            exp_rows = [
-                exp_results_list[i] for exp_results_list in all_exp_results_list
             ]
             exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
             filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
