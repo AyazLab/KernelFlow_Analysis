@@ -3,8 +3,6 @@ import snirf
 import datetime
 import numpy as np
 import pandas as pd
-
-# %matplotlib widget
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from scipy.signal import firwin, lfilter
@@ -471,7 +469,7 @@ class Process_Flow:
                     "detector_label",
                     "detector_x_pos",
                     "detector_y_pos",
-                    "detector_pos_z",
+                    "detector_z_pos",
                 ],
             )
         # NOTE: Kernel changed source and detector label formats after a certain date
@@ -704,7 +702,7 @@ class Participant_Flow:
         Args:
             session list[str | int]: Experiment session.
             wrapper (bool, optional) Option to return Process_Flow-wrapped SNIRF file.
-                                     Defaults to false.
+                                     Defaults to False.
 
         Raises:
             Exception: Invalid session number argument.
@@ -762,6 +760,7 @@ class Participant_Flow:
         Create a dictionary of Kernel Flow data for all experiment sessions.
 
         wrapper (bool, optional) Option to return Process_Flow-wrapped SNIRF file.
+                                 Default to False.
 
         Returns:
             dict: Kernel Flow data for all experiment sessions.
