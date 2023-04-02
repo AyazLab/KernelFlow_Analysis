@@ -1407,6 +1407,23 @@ class Flow_Results:
                     all_exp_df.to_csv(
                         all_exp_filepath, mode="a", header=False, index=False
                     )
+
+    def load_flow_stats(self, exp_name: str, hemo_type: str) -> pd.DataFrame:
+        """
+        Load Kernel Flow statistical results.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+
+        Returns:
+            pd.DataFrame: Statistical results for an experiment and hemodynamic type.
+        """
+        filename = f"{exp_name}_stats_{hemo_type}.csv"
+        filepath = os.path.join(self.results_dir, filename)
+        flow_stats = pd.read_csv(filepath)
+        return flow_stats[["channel_num", "F_ratio", "p_value"]]
+
             ]
             exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
             filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
