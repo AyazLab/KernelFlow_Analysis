@@ -1424,14 +1424,235 @@ class Flow_Results:
         flow_stats = pd.read_csv(filepath)
         return flow_stats[["channel_num", "F_ratio", "p_value"]]
 
+    def plot_stat_results(self, exp_name: str, hemo_type: str, dim: str) -> None:
+        """
+        Plot Kernel Flow statistical results.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            dim (str): Position data dimension "2D" or "3D".
+        """
+
+        def _add_missing_pos(dim: str) -> pd.DataFrame:
+            """
+            Add missing detector/source positions to the plot DataFrame.
+
+            Args:
+                dim (str): Position data dimension "2D" or "3D".
+
+            Returns:
+                pd.DataFrame: Plot DataFrame with missing positions added.
+            """
+            nan_columns = [
+                "channel_num",
+                "F_ratio",
+                "p_value",
+                "measurement_list_index",
+                "data_type",
+                "data_type_index",
+                "detector_index",
+                "source_index",
+                "source_label",
+                "detector_label",
             ]
-            exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
-            filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
-            exp_df.to_csv(filepath, index=False)
-            all_exp_df = exp_df.copy(deep=True)
-            exp_name_col = [exp_name] * len(all_exp_df.index)
-            all_exp_df.insert(0, "Experiment", exp_name_col)
-            if i == 0:
-                all_exp_df.to_csv(all_exp_filepath, mode="a", header=True, index=False)
-            else:
-                all_exp_df.to_csv(all_exp_filepath, mode="a", header=False, index=False)
+            plot_df_temp = pd.merge(flow_stats, source_detector_df, on="channel_num")
+            row_list = []
+            if dim.lower() == "2d":
+                for detector_pos in self.flow_session.missing_detector_pos_2d:
+                    new_row = pd.Series(
+                        {
+                            "source_x_pos": self.flow_session.missing_source_pos_2d[0],
+                            "source_y_pos": self.flow_session.missing_source_pos_2d[1],
+                            "detector_x_pos": detector_pos[0],
+                            "detector_y_pos": detector_pos[1],
+                        }
+                    )
+                    row_list.append(new_row)
+                missing_pos_df = pd.DataFrame(row_list)
+                plot_df = pd.concat(
+                    [plot_df_temp, missing_pos_df], axis=0, ignore_index=True
+                )
+                plot_df.loc[
+                    plot_df.shape[0] - len(self.flow_session.missing_detector_pos_2d) :,
+                    nan_columns,
+                ] = float("NaN")
+            elif dim.lower() == "3d":
+                for detector_pos in self.flow_session.missing_detector_pos_3d:
+                    new_row = pd.Series(
+                        {
+                            "source_x_pos": self.flow_session.missing_source_pos_3d[0],
+                            "source_y_pos": self.flow_session.missing_source_pos_3d[1],
+                            "source_z_pos": self.flow_session.missing_source_pos_3d[2],
+                            "detector_x_pos": detector_pos[0],
+                            "detector_y_pos": detector_pos[1],
+                            "detector_z_pos": detector_pos[2],
+                        }
+                    )
+                    row_list.append(new_row)
+                missing_pos_df = pd.DataFrame(row_list)
+                plot_df = pd.concat(
+                    [plot_df_temp, missing_pos_df], axis=0, ignore_index=True
+                )
+                plot_df.loc[
+                    plot_df.shape[0] - len(self.flow_session.missing_detector_pos_3d) :,
+                    nan_columns,
+                ] = float("NaN")
+            return plot_df
+
+        flow_stats = self.load_flow_stats(exp_name, hemo_type)
+        if dim.lower() == "2d":
+            source_detector_df = self.flow_session.create_source_detector_df("2D")
+            plot_df = _add_missing_pos(dim)
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            sig_detector_plot_df = plot_df[plot_df["p_value"] <= 0.05]
+            not_sig_detector_plot_df = plot_df.loc[
+                (plot_df["p_value"] > 0.05) | (pd.isna(plot_df["p_value"]))
+            ]
+            scatter = ax.scatter(
+                sig_detector_plot_df["detector_x_pos"],
+                sig_detector_plot_df["detector_y_pos"],
+                s=70,
+                c=sig_detector_plot_df["p_value"],
+                cmap="autumn_r",
+                edgecolors="black",
+                alpha=1,
+                zorder=3,
+            )
+            ax.scatter(
+                not_sig_detector_plot_df["detector_x_pos"],
+                not_sig_detector_plot_df["detector_y_pos"],
+                s=20,
+                c="dodgerblue",
+                edgecolors="black",
+                alpha=1,
+                zorder=2,
+            )
+            ax.scatter(
+                plot_df["source_x_pos"],
+                plot_df["source_y_pos"],
+                s=30,
+                c="black",
+                zorder=1,
+            )
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+            ax.spines["bottom"].set_visible(False)
+            ax.spines["left"].set_visible(False)
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.set_title("Anterior", fontweight="bold", fontsize=14, y=1)
+            ax.text(
+                0.5,
+                -0.06,
+                "Posterior",
+                fontweight="bold",
+                fontsize=14,
+                ha="center",
+                va="bottom",
+                transform=ax.transAxes,
+            )
+            scatter.set_clim([0, 0.05])
+            colorbar = plt.colorbar(
+                scatter, ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05], shrink=0.8
+            )
+            font_props = FontProperties(size=12)
+            colorbar.set_label("p-value", fontproperties=font_props)
+            plt.show()
+        elif dim.lower() == "3d":
+            source_detector_df = self.flow_session.create_source_detector_df("3D")
+            plot_df = _add_missing_pos(dim)
+            fig = plt.figure(figsize=[8, 8])
+            views = {
+                "right": {"idx": 1, "azim": 0},
+                "left": {"idx": 2, "azim": 180},
+                "anterior": {"idx": 3, "azim": 90},
+                "posterior": {"idx": 4, "azim": 270},
+            }
+            for view_name, view_info in views.items():
+                ax = fig.add_subplot(
+                    2, 2, view_info["idx"], projection="3d", computed_zorder=False
+                )
+                ax.view_init(elev=0, azim=view_info["azim"])
+                if view_name == "right":
+                    source_plot_df = plot_df[plot_df["source_x_pos"] >= 0]
+                    detector_plot_df = plot_df[plot_df["detector_x_pos"] >= 0]
+                    ax.set_title("Right View", fontweight="bold", fontsize=14, y=0.85)
+                elif view_name == "left":
+                    source_plot_df = plot_df[plot_df["source_x_pos"] <= 0]
+                    detector_plot_df = plot_df[plot_df["detector_x_pos"] <= 0]
+                    ax.set_title("Left View", fontweight="bold", fontsize=14, y=0.85)
+                elif view_name == "anterior":
+                    source_plot_df = plot_df[plot_df["source_y_pos"] > 0]
+                    detector_plot_df = plot_df[plot_df["detector_y_pos"] > 0]
+                    ax.set_title(
+                        "Anterior View", fontweight="bold", fontsize=14, y=0.85
+                    )
+                elif view_name == "posterior":
+                    source_plot_df = plot_df[plot_df["source_y_pos"] <= 0]
+                    detector_plot_df = plot_df[plot_df["detector_y_pos"] <= 0]
+                    ax.set_title(
+                        "Posterior View", fontweight="bold", fontsize=14, y=0.85
+                    )
+                sig_detector_plot_df = detector_plot_df[
+                    detector_plot_df["p_value"] <= 0.05
+                ]
+                not_sig_detector_plot_df = detector_plot_df.loc[
+                    (detector_plot_df["p_value"] > 0.05)
+                    | (pd.isna(detector_plot_df["p_value"]))
+                ]
+                scatter = ax.scatter(
+                    sig_detector_plot_df["detector_x_pos"],
+                    sig_detector_plot_df["detector_y_pos"],
+                    sig_detector_plot_df["detector_z_pos"],
+                    s=70,
+                    c=sig_detector_plot_df["p_value"],
+                    cmap="autumn_r",
+                    edgecolors="black",
+                    alpha=1,
+                    zorder=3,
+                )
+                ax.scatter(
+                    not_sig_detector_plot_df["detector_x_pos"],
+                    not_sig_detector_plot_df["detector_y_pos"],
+                    not_sig_detector_plot_df["detector_z_pos"],
+                    s=20,
+                    c="dodgerblue",
+                    edgecolors="black",
+                    alpha=1,
+                    zorder=2,
+                )
+                ax.scatter(
+                    source_plot_df["source_x_pos"],
+                    source_plot_df["source_y_pos"],
+                    source_plot_df["source_z_pos"],
+                    s=30,
+                    c="black",
+                    zorder=1,
+                )
+                ax.patch.set_alpha(0.0)
+                ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+                ax.xaxis.line.set_color("none")
+                ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+                ax.yaxis.line.set_color("none")
+                ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+                ax.zaxis.line.set_color("none")
+                ax.grid(False)
+                ax.set_xticklabels([])
+                ax.set_yticklabels([])
+                ax.set_zticklabels([])
+                ax.set_xticks([])
+                ax.set_yticks([])
+                ax.set_zticks([])
+            sm = plt.cm.ScalarMappable(
+                cmap="autumn_r", norm=plt.Normalize(vmin=0, vmax=0.05)
+            )
+            sm.set_array([])
+            colorbar_ax = fig.add_axes([0.87, 0.32, 0.017, 0.4])
+            colorbar = fig.colorbar(sm, cax=colorbar_ax)
+            colorbar.set_label("p-value", fontsize=12)
+            plt.subplots_adjust(wspace=-0.3, hspace=-0.4)
+            plt.show()
