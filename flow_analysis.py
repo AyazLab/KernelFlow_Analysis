@@ -30,6 +30,29 @@ class Process_Flow:
         self.data_fun = Data_Functions()
         self.snirf_file = self.load_snirf(filepath)
 
+        self.missing_detector_pos_2d = [
+            [0.2700519522879849, 0.92534462173171],
+            [0.2100404073350992, 0.9599923033647436],
+            [0.1500288623822143, 0.92534462173171],
+            [0.1500288623822143, 0.856049258465643],
+            [0.2100404073350992, 0.8214015768326095],
+            [0.2700519522879849, 0.856049258465643],
+        ]
+        self.missing_source_pos_2d = [0.2100404073350983, 0.8906969400986755]
+        self.missing_detector_pos_3d = [
+            [34.18373257128052, 83.84749436111261, -3.421772079425661],
+            [24.89193921324638, 87.59280827807989, -3.877662542873584],
+            [19.49960518952535, 88.52633022589306, 4.53462776618961],
+            [23.69484819349888, 86.5963118571706, 13.38774165295894],
+            [32.93421777049451, 82.87888296072012, 13.83928277924401],
+            [37.86338484008788, 80.87503761567585, 5.394829563438814],
+        ]
+        self.missing_source_pos_3d = [
+            28.65886271209007,
+            84.52123706248807,
+            4.746746612880643,
+        ]
+
     def load_snirf(self, filepath: str) -> snirf.Snirf:
         """
         Load SNIRF file.
@@ -156,41 +179,66 @@ class Process_Flow:
         else:
             raise Exception("Invalid fmt argument. Must be 'array' or 'dataframe'.")
 
-    def get_source_pos_2d(self) -> np.ndarray:
+    def get_source_pos(self, dim: str, add_missing: bool = False) -> np.ndarray:
         """
-        Get the 2D source position array.
+        Get the 2D or 3D source position array.
+
+        Args:
+            dim (str): Position data dimension "2D" or "3D".
+            add_missing (bool): Add missing source data. Defaults to False.
 
         Returns:
-            np.ndarray: 2D source position array.
+            np.ndarray: 2D or 3D source position array.
         """
-        return self.snirf_file.nirs[0].probe.sourcePos2D
+        if dim.lower() == "2d":
+            source_pos_array_og = self.snirf_file.nirs[0].probe.sourcePos2D
+            if add_missing:
+                source_pos_array = np.vstack(
+                    [np.array(self.missing_source_pos_2d), source_pos_array_og]
+                )
+                return source_pos_array
+            else:
+                return source_pos_array_og
+        elif dim.lower() == "3d":
+            source_pos_array_og = self.snirf_file.nirs[0].probe.sourcePos3D
+            if add_missing:
+                source_pos_array = np.vstack(
+                    [np.array(self.missing_source_pos_3d), source_pos_array_og]
+                )
+                return source_pos_array
+            else:
+                return source_pos_array_og
 
-    def get_source_pos_3d(self) -> np.ndarray:
+    def get_detector_pos(self, dim: str, add_missing: bool = False) -> np.ndarray:
         """
-        Get the 3D source position array.
+        Get the 2D or 3D detector position array.
+
+        Args:
+            dim (str): Position data dimension "2D" or "3D".
+            add_missing (bool): Add missing detector data. Defaults to False.
 
         Returns:
-            np.ndarray: 3D source position array.
+            np.ndarray: 2D or 3D detector position array.
         """
-        return self.snirf_file.nirs[0].probe.sourcePos3D
-
-    def get_detector_pos_2d(self) -> np.ndarray:
-        """
-        Get the 2D detector position array.
-
-        Returns:
-            np.ndarray: 2D detector position array.
-        """
-        return self.snirf_file.nirs[0].probe.detectorPos2D
-
-    def get_detector_pos_3d(self) -> np.ndarray:
-        """
-        Get the 3D detector position array.
-
-        Returns:
-            np.ndarray: 3D detector position array.
-        """
-        return self.snirf_file.nirs[0].probe.detectorPos3D
+        if dim.lower() == "2d":
+            detector_pos_array_og = self.snirf_file.nirs[0].probe.detectorPos2D
+            if add_missing:
+                detector_pos_array = np.vstack(
+                    [np.array(self.missing_detector_pos_2d), detector_pos_array_og]
+                )
+                return detector_pos_array
+            else:
+                return detector_pos_array_og
+        elif dim.lower() == "3d":
+            detector_pos_array_og = self.snirf_file.nirs[0].probe.detectorPos3D
+            if add_missing:
+                detector_pos_array_og = self.snirf_file.nirs[0].probe.detectorPos3D
+                detector_pos_array = np.vstack(
+                    [np.array(self.missing_detector_pos_3d), detector_pos_array_og]
+                )
+                return detector_pos_array
+            else:
+                return detector_pos_array_og
 
     def get_measurement_list(self) -> np.array:
         """
@@ -201,23 +249,48 @@ class Process_Flow:
         """
         return self.snirf_file.nirs[0].data[0].measurementList
 
-    def get_source_labels(self) -> np.array:
+    def get_source_labels(self, add_missing: bool = False) -> np.array:
         """
         Get the source labels.
+
+        Args:
+            add_missing (bool): Add missing source label. Defaults to False.
 
         Returns:
             np.array: Source label array.
         """
-        return self.snirf_file.nirs[0].probe.sourceLabels
+        source_labels_og = self.snirf_file.nirs[0].probe.sourceLabels
+        if add_missing:
+            missing_source_label = "S00"
+            source_labels = np.insert(source_labels_og, 0, missing_source_label)
+            return source_labels
+        else:
+            return source_labels_og
 
-    def get_detector_labels(self) -> np.array:
+    def get_detector_labels(self, add_missing: bool = False) -> np.array:
         """
         Get the detector labels.
+
+        Args:
+            add_missing (bool): Add missing detector labels. Defaults to False.
 
         Returns:
             np.array: Detector label array.
         """
-        return self.snirf_file.nirs[0].probe.detectorLabels
+        detector_labels_og = self.snirf_file.nirs[0].probe.detectorLabels
+        if add_missing:
+            missing_detector_labels = [
+                "D00d0",
+                "D00d1",
+                "D00d2",
+                "D00d3",
+                "D00d4",
+                "D00d5",
+            ]
+            detector_labels = np.insert(detector_labels_og, 0, missing_detector_labels)
+            return detector_labels
+        else:
+            return detector_labels_og
 
     def get_marker_df(self) -> pd.DataFrame:
         """
@@ -337,7 +410,7 @@ class Process_Flow:
         """
         source_labels = self.get_source_labels()
         if dim.lower() == "2d":
-            source_pos_2d = self.get_source_pos_2d()
+            source_pos_2d = self.get_source_pos(dim)
             source_data = [
                 (label, *lst) for label, lst in zip(source_labels, source_pos_2d)
             ]
@@ -345,7 +418,7 @@ class Process_Flow:
                 source_data, columns=["source_label", "source_x_pos", "source_y_pos"]
             )
         elif dim.lower() == "3d":
-            source_pos_3d = self.get_source_pos_3d()
+            source_pos_3d = self.get_source_pos(dim)
             source_data = [
                 (label, *lst) for label, lst in zip(source_labels, source_pos_3d)
             ]
@@ -355,7 +428,7 @@ class Process_Flow:
                     "source_label",
                     "source_x_pos",
                     "source_y_pos",
-                    "source_pos_z",
+                    "source_z_pos",
                 ],
             )
         # NOTE: Kernel changed source and detector label formats after a certain date
@@ -379,7 +452,7 @@ class Process_Flow:
         """
         detector_labels = self.get_detector_labels()
         if dim.lower() == "2d":
-            detector_pos_2d = self.get_detector_pos_2d()
+            detector_pos_2d = self.get_detector_pos(dim)
             detector_data = [
                 (label, *lst) for label, lst in zip(detector_labels, detector_pos_2d)
             ]
@@ -388,7 +461,7 @@ class Process_Flow:
                 columns=["detector_label", "detector_x_pos", "detector_y_pos"],
             )
         elif dim.lower() == "3d":
-            detector_pos_3d = self.get_detector_pos_3d()
+            detector_pos_3d = self.get_detector_pos(dim)
             detector_data = [
                 (label, *lst) for label, lst in zip(detector_labels, detector_pos_3d)
             ]
@@ -412,16 +485,23 @@ class Process_Flow:
         detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
         return detector_df
 
-    def create_source_detector_df(self) -> pd.DataFrame:
+    def create_source_detector_df(self, dim: str) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
+
+        Args:
+            dim (str): Position data dimension "2D" or "3D".
 
         Returns:
             pd.DataFrame: Source and detector information for inter-module channels.
         """
         measurement_list_df = self.create_measurement_list_df()
-        source_df = self.create_source_df("3D")
-        detector_df = self.create_detector_df("3D")
+        if dim.lower() == "2d":
+            source_df = self.create_source_df("2D")
+            detector_df = self.create_detector_df("2D")
+        elif dim.lower() == "3d":
+            source_df = self.create_source_df("3D")
+            detector_df = self.create_detector_df("3D")
         source_merge = pd.merge(measurement_list_df, source_df, on="source_index")
         merged_source_detector_df = pd.merge(
             source_merge, detector_df, on=["detector_index", "source_index"]
@@ -432,19 +512,20 @@ class Process_Flow:
         )
         return source_detector_df
 
-    def plot_pos(self, dim: str) -> None:
+    def plot_pos(self, dim: str, add_missing: bool = True) -> None:
         """
         Plot the detector/source 2D or 3D positions.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
+            add_missing (bool): Add missing detector/source positions. Defaults to True.
         """
         if dim.lower() == "2d":
-            detector_pos_2d = self.get_detector_pos_2d()
+            detector_pos_2d = self.get_detector_pos(dim, add_missing)
             x_detector = detector_pos_2d[:, 0]
             y_detector = detector_pos_2d[:, 1]
 
-            source_pos_2d = self.get_source_pos_2d()
+            source_pos_2d = self.get_source_pos(dim, add_missing)
             x_source = source_pos_2d[:, 0]
             y_source = source_pos_2d[:, 1]
 
@@ -458,12 +539,12 @@ class Process_Flow:
             ax.legend(["Detector", "Source"])
 
         elif dim.lower() == "3d":
-            detector_pos_3d = self.get_detector_pos_3d()
+            detector_pos_3d = self.get_detector_pos(dim, add_missing)
             x_detector = detector_pos_3d[:, 0]
             y_detector = detector_pos_3d[:, 1]
             z_detector = detector_pos_3d[:, 2]
 
-            source_pos_3d = self.get_source_pos_3d()
+            source_pos_3d = self.get_source_pos(dim, add_missing)
             x_source = source_pos_3d[:, 0]
             y_source = source_pos_3d[:, 1]
             z_source = source_pos_3d[:, 2]
@@ -681,7 +762,6 @@ class Participant_Flow:
         Create a dictionary of Kernel Flow data for all experiment sessions.
 
         wrapper (bool, optional) Option to return Process_Flow-wrapped SNIRF file.
-                                 Default to false.
 
         Returns:
             dict: Kernel Flow data for all experiment sessions.
@@ -973,9 +1053,9 @@ class Participant_Flow:
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
         )
-        measurement_list_df = self.flow_session_dict[
-            session
-        ].create_source_detector_df()
+        measurement_list_df = self.flow_session_dict[session].create_source_detector_df(
+            "3D"
+        )
         channels = (measurement_list_df["measurement_list_index"] - 1).tolist()
         cols_to_select = ["Participant", "Block"] + [str(chan) for chan in channels]
         inter_module_df = exp_results.loc[:, cols_to_select]
