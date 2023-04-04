@@ -1494,9 +1494,20 @@ def create_behav_results_tables(num_pars: int) -> None:
     vsat_df_list = []
 
     form_info_cols = {
+        "date": pd.StringDtype(),
+        "time": pd.StringDtype(),
         "sex": pd.StringDtype(),
         "age": int,
+        "native_language": pd.StringDtype(),
+        "verbal_english_proficiency": int,
+        "written_english_proficiency": int,
+        "educational_history": pd.StringDtype(),
         "hours_of_sleep": float,
+        "num_cigarettes": int,
+        "num_caffeinated_beverages": int,
+        "handedness_LQ": float,
+        "handedness_decile": float,
+        "mental_wellbeing_score": float,
     }  # columns to select from the form info
 
     for i in range(num_pars):
