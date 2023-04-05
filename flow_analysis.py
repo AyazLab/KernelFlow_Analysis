@@ -1317,16 +1317,14 @@ class Flow_Results:
         self.par = Participant_Flow(1)
         self.flow_session = self.par.flow_session_dict["session_1001"]
 
-    def create_flow_results_tables(
-        self, num_pars: int, inter_module_only=False
-    ) -> None:
+    def create_flow_results_tables(self, num_pars: int, inter_module_only=True) -> None:
         """
         Generate a CSV file that contains the Kernel Flow stimulus response data
         for all experiments and participants.
 
         Args:
             num_pars (int): Number of participants in the study.
-            inter_module_only (bool): Select only inter-module channels. Defaults to False.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
         """
 
         if inter_module_only:
@@ -1373,12 +1371,13 @@ class Flow_Results:
                             all_exp_filepath, mode="a", header=False, index=False
                         )
         else:
+            all_exp_results_list = []
             for par_num in range(1, num_pars + 1):
                 print(f"Processing participant {par_num} ...")
                 par = Participant_Flow(par_num)
                 exp_results_list = []
                 for exp_name in self.exp_names:
-                    stim_resp_df = self.par.create_exp_stim_response_df(exp_name)
+                    stim_resp_df = par.create_exp_stim_response_df(exp_name)
                     exp_results_list.append(stim_resp_df)
                 all_exp_results_list.append(exp_results_list)
 
