@@ -973,7 +973,7 @@ class Participant_Flow:
             Returns:
                 pd.Series: DataFrame row with split column.
             """
-            arr = row["Channels"]
+            arr = row["channels"]
             num_elements = len(arr)
             col_names = [i for i in range(num_elements)]
             return pd.Series(arr, index=col_names)
@@ -984,9 +984,9 @@ class Participant_Flow:
             for trial, stim_resp_data in block_data.items():
                 trial_avg = np.mean(stim_resp_data, axis=0)
                 row = {
-                    "Participant": self.par_num,
-                    "Block": block,
-                    "Channels": trial_avg,
+                    "participant": self.par_num,
+                    "block": block,
+                    "channels": trial_avg,
                 }
                 rows.append(row)
 
@@ -996,7 +996,7 @@ class Participant_Flow:
             [stim_resp_df, channel_cols], axis=1
         )  # merge with original DataFrame
         stim_resp_df = stim_resp_df.drop(
-            "Channels", axis=1
+            "channels", axis=1
         )  # drop the original "Channels" column
         return stim_resp_df
 
@@ -1045,8 +1045,8 @@ class Participant_Flow:
                         HbO_data_cols.iloc[:, i] - HbR_data_cols.iloc[:, i]
                     )
             df = pd.DataFrame(cols_dict)
-            df.insert(0, "Block", HbO_df["Block"])
-            df.insert(0, "Participant", HbO_df["Participant"])
+            df.insert(0, "block", HbO_df["block"])
+            df.insert(0, "participant", HbO_df["participant"])
             return df
 
         exp_results = load_results(self.flow_processed_data_dir, exp_name)
@@ -1057,7 +1057,7 @@ class Participant_Flow:
             "3D"
         )
         channels = (measurement_list_df["measurement_list_index"] - 1).tolist()
-        cols_to_select = ["Participant", "Block"] + [str(chan) for chan in channels]
+        cols_to_select = ["participant", "block"] + [str(chan) for chan in channels]
         inter_module_df = exp_results.loc[:, cols_to_select]
         if fmt:
             if fmt.lower() == "hbo":  # HbO
@@ -1362,7 +1362,8 @@ class Flow_Results:
                     exp_df.to_csv(filepath, index=False)
                     all_exp_df = exp_df.copy(deep=True)
                     exp_name_col = [exp_name] * len(all_exp_df.index)
-                    all_exp_df.insert(0, "Experiment", exp_name_col)
+                    all_exp_df.insert(0, "experiment", exp_name_col)
+                    # TODO: add demographic data
                     if i == 0:
                         all_exp_df.to_csv(
                             all_exp_filepath, mode="a", header=True, index=False
@@ -1398,7 +1399,7 @@ class Flow_Results:
                 exp_df.to_csv(filepath, index=False)
                 all_exp_df = exp_df.copy(deep=True)
                 exp_name_col = [exp_name] * len(all_exp_df.index)
-                all_exp_df.insert(0, "Experiment", exp_name_col)
+                all_exp_df.insert(0, "experiment", exp_name_col)
                 if i == 0:
                     all_exp_df.to_csv(
                         all_exp_filepath, mode="a", header=True, index=False
