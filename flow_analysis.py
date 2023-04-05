@@ -1049,7 +1049,9 @@ class Participant_Flow:
             df.insert(0, "participant", HbO_df["participant"])
             return df
 
-        exp_results = load_results(self.flow_processed_data_dir, exp_name)
+        exp_results = load_results(
+            os.path.join(self.flow_processed_data_dir, "all_channels"), exp_name
+        )
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
         )
@@ -1299,9 +1301,7 @@ class Participant_Flow:
 
 class Flow_Results:
     def __init__(self):
-        self.results_dir = (
-            r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Analysis\results"
-        )
+        self.results_dir = os.path.join(os.getcwd(), "results")
         self.exp_names = [
             "audio_narrative",
             "go_no_go",
@@ -1421,7 +1421,9 @@ class Flow_Results:
             pd.DataFrame: Statistical results for an experiment and hemodynamic type.
         """
         filename = f"{exp_name}_stats_{hemo_type}.csv"
-        filepath = os.path.join(self.results_dir, filename)
+        filepath = os.path.join(
+            self.results_dir, "inter_module_channels", hemo_type, filename
+        )
         flow_stats = pd.read_csv(filepath)
         return flow_stats[["channel_num", "F_ratio", "p_value"]]
 
