@@ -3,6 +3,7 @@ import snirf
 import datetime
 import numpy as np
 import pandas as pd
+import pingouin as pg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.font_manager import FontProperties
@@ -1408,6 +1409,72 @@ class Flow_Results:
                         all_exp_filepath, mode="a", header=False, index=False
                     )
 
+    def run_anova_rm(self) -> pd.DataFrame:
+        """
+        Run a repeated measures ANOVA on the processed inter-module channels.
+
+        Returns:
+            pd.DataFrame: repeated measures ANOVA results for all experiments.
+        """
+        for hemo_type in self.hemo_types:
+            read_filedir = os.path.join(
+                self.par.flow_processed_data_dir, "inter_module_channels", hemo_type
+            )
+            write_filedir = os.path.join(
+                self.results_dir, "inter_module_channels", hemo_type
+            )
+            if not os.path.exists(write_filedir):
+                os.makedirs(write_filedir)
+            all_exp_aov_results = []
+            # for exp_name in ["go_no_go", "king_devick" "n_back", "tower_of_london", "vSAT"]:  # TODO go/no-go task
+            for exp_name in ["king_devick", "n_back", "tower_of_london", "vSAT"]:
+                read_filename = f"{exp_name}_flow_{hemo_type}.csv"
+                read_filepath = os.path.join(read_filedir, read_filename)
+                write_filename = f"{exp_name}_flow_stats_{hemo_type}.csv"
+                write_filepath = os.path.join(write_filedir, write_filename)
+                flow_df = pd.read_csv(read_filepath)
+                if exp_name == "king_devick":
+                    flow_df = flow_df.drop(
+                        flow_df[
+                            (flow_df["participant"] == 15)
+                            & (flow_df["block"] == "card_1")
+                        ].index
+                    )
+                    flow_df.loc[flow_df["participant"] == 15, "block"] = flow_df.loc[
+                        flow_df["participant"] == 15, "block"
+                    ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
+                channels = list(flow_df.columns[2:])
+                aov_list = []
+                for channel in channels:
+                    aov = pg.rm_anova(
+                        data=flow_df,
+                        dv=channel,
+                        within="block",
+                        subject="participant",
+                        effsize="np2",
+                    )
+                    aov_final = aov[["p-unc", "F", "ddof1", "ddof2"]].copy()
+                    aov_final.rename(
+                        columns={
+                            "p-unc": "p_value",
+                            "F": "F_value",
+                            "ddof1": "df1",
+                            "ddof2": "df2",
+                        },
+                        inplace=True,
+                    )
+                    aov_final.insert(0, "channel", channel)
+                    aov_list.append(aov_final)
+                exp_aov_results = pd.concat(aov_list)
+                exp_aov_results.to_csv(write_filepath, index=False)
+                exp_aov_results.insert(0, "experiment", [exp_name] * len(channels))
+                all_exp_aov_results.append(exp_aov_results)
+            all_exp_filename = f"all_experiments_flow_stats_{hemo_type}.csv"
+            all_exp_filepath = os.path.join(write_filedir, all_exp_filename)
+            all_exp_aov_results = pd.concat(all_exp_aov_results)
+            all_exp_aov_results.to_csv(all_exp_filepath, index=False)
+            return all_exp_aov_results
+
     def load_flow_stats(self, exp_name: str, hemo_type: str) -> pd.DataFrame:
         """
         Load Kernel Flow statistical results.
@@ -1424,7 +1491,7 @@ class Flow_Results:
             self.results_dir, "inter_module_channels", hemo_type, filename
         )
         flow_stats = pd.read_csv(filepath)
-        return flow_stats[["channel_num", "F_ratio", "p_value"]]
+        return flow_stats[["channel", "p_value", "F_value", "df1", "df2"]]
 
     def plot_stat_results(self, exp_name: str, hemo_type: str, dim: str) -> None:
         """
