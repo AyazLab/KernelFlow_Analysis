@@ -6,6 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from statistics import mean
 from scipy.stats import sem
+from scipy.stats import f_oneway
+from scipy.stats import ttest_ind
+from statsmodels.stats.multicomp import MultiComparison
 from typing import Tuple
 from data_functions import Data_Functions, load_results
 
@@ -1954,6 +1957,93 @@ class Behav_Results:
         ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
         return behav_data
 
+    def run_stats(self, exp_name: str) -> None:
+        """
+        Run a statistical test (t-test or ANOVA) to determine significant
+        task condition differences for an experiment.
+
+        Args:
+            exp_name (str): Experiment name.
+        """
+        exp_results = load_results(self.par.processed_data_dir, exp_name)
+
+        if exp_name == "king_devick":
+            conditions = ["response_time", "num_incorrect"]
+            exp_results = self.process_king_devick_df(exp_results)
+        elif (
+            exp_name == "go_no_go"
+            or exp_name == "n_back"
+            or exp_name == "tower_of_london"
+            or exp_name == "vSAT"
+        ):
+            conditions = ["correct_response", "response_time"]
+
+        blocks = list(exp_results["block"].unique())
+        if len(blocks) > 2:
+            stat_test = "ANOVA"
+        else:
+            stat_test = "t-test"
+
+        conditions_dict = {}
+        for condition in conditions:
+            condition_results = exp_results.copy()
+            condition_results = condition_results.dropna(subset=[condition])
+            block_list = []
+            for block in blocks:
+                block_condition_row = condition_results[
+                    condition_results["block"] == block
+                ][condition]
+                block_list.append(block_condition_row)
+            conditions_dict[condition] = block_list
+
+            if condition == "correct_response":
+                condition_name_fmt = "Response Accuracy"
+            else:
+                condition_name_fmt = condition.replace("_", " ").title()
+            if stat_test == "ANOVA":
+                if exp_name == "n_back":
+                    print(
+                        f"----- {exp_name.replace('_', '-').title()} {condition_name_fmt} t-test -----"
+                    )
+                elif exp_name == "king_devick" and condition == "num_incorrect":
+                    print(
+                        f"----- {exp_name.replace('_', '-').title()} {condition_name_fmt} t-test -----"
+                    )
+                else:
+                    print(
+                        f"----- {exp_name.replace('_', ' ').title()} {condition_name_fmt} ANOVA -----"
+                    )
+                condition_rows = conditions_dict[condition]
+                # run one-way ANOVA
+                f_stat, p_value = f_oneway(*condition_rows)
+                # run Tukey HSD post hoc test
+                mc = MultiComparison(
+                    condition_results[condition], condition_results["block"]
+                )
+                result = mc.tukeyhsd()
+                print("F-statistic:", round(f_stat, 4))
+                print("P-value:", round(p_value, 4))
+                print("")
+                print(result)
+                print("\n")
+            elif stat_test == "t-test":
+                condition_rows = conditions_dict[condition]
+                # run t-test
+                t_stat, p_value = ttest_ind(*condition_rows)
+                if condition == "correct_response":
+                    condition_name_fmt = "Response Accuracy"
+                else:
+                    condition_name_fmt = condition.replace("_", " ").title()
+                if exp_name == "tower_of_london":
+                    print(f"----- Tower of London {condition_name_fmt} t-test -----")
+                else:
+                    print(
+                        f"----- {exp_name.replace('_', ' ').title()} {condition_name_fmt} t-test -----"
+                    )
+                print("T-statistic:", round(t_stat, 4))
+                print("P-value:", round(p_value, 4))
+                print("\n")
+
     def get_bar_plot_data(self, exp_name: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Group experiment data and calculate the mean response time and response accuracy.
@@ -2141,3 +2231,5 @@ class Behav_Results:
 
         plt.tight_layout()
         plt.show()
+
+        self.run_stats(exp_name)
