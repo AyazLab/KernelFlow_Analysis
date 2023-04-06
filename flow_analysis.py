@@ -398,19 +398,20 @@ class Process_Flow:
         measurement_list_df = pd.DataFrame(dict_list)
         return measurement_list_df
 
-    def create_source_df(self, dim: str) -> pd.DataFrame:
+    def create_source_df(self, dim: str, add_missing: bool = False) -> pd.DataFrame:
         """
         Create a DataFrame with the source labels and 2D or 3D source positions.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
+            add_missing (bool): Add missing detector data. Defaults to False.
 
         Returns:
             pd.DataFrame: Source labels and positions.
         """
         source_labels = self.get_source_labels()
         if dim.lower() == "2d":
-            source_pos_2d = self.get_source_pos(dim)
+            source_pos_2d = self.get_source_pos(dim, add_missing)
             source_data = [
                 (label, *lst) for label, lst in zip(source_labels, source_pos_2d)
             ]
@@ -418,7 +419,7 @@ class Process_Flow:
                 source_data, columns=["source_label", "source_x_pos", "source_y_pos"]
             )
         elif dim.lower() == "3d":
-            source_pos_3d = self.get_source_pos(dim)
+            source_pos_3d = self.get_source_pos(dim, add_missing)
             source_data = [
                 (label, *lst) for label, lst in zip(source_labels, source_pos_3d)
             ]
@@ -440,19 +441,20 @@ class Process_Flow:
             source_df.insert(1, "source_index", source_df["source_label"].apply(f))
         return source_df
 
-    def create_detector_df(self, dim: str) -> pd.DataFrame:
+    def create_detector_df(self, dim: str, add_missing: bool = False) -> pd.DataFrame:
         """
         Create a DataFrame with the detector labels and 2D or 3D detector positions.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
+            add_missing (bool): Add missing detector data. Defaults to False.
 
         Returns:
             pd.DataFrame: Detector labels and positions.
         """
         detector_labels = self.get_detector_labels()
         if dim.lower() == "2d":
-            detector_pos_2d = self.get_detector_pos(dim)
+            detector_pos_2d = self.get_detector_pos(dim, add_missing)
             detector_data = [
                 (label, *lst) for label, lst in zip(detector_labels, detector_pos_2d)
             ]
@@ -461,7 +463,7 @@ class Process_Flow:
                 columns=["detector_label", "detector_x_pos", "detector_y_pos"],
             )
         elif dim.lower() == "3d":
-            detector_pos_3d = self.get_detector_pos(dim)
+            detector_pos_3d = self.get_detector_pos(dim, add_missing)
             detector_data = [
                 (label, *lst) for label, lst in zip(detector_labels, detector_pos_3d)
             ]
@@ -485,23 +487,24 @@ class Process_Flow:
         detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
         return detector_df
 
-    def create_source_detector_df(self, dim: str) -> pd.DataFrame:
+    def create_source_detector_df(self, dim: str, add_missing: bool = False) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
+            add_missing (bool): Add missing detector data. Defaults to False.
 
         Returns:
             pd.DataFrame: Source and detector information for inter-module channels.
         """
         measurement_list_df = self.create_measurement_list_df()
         if dim.lower() == "2d":
-            source_df = self.create_source_df("2D")
-            detector_df = self.create_detector_df("2D")
+            source_df = self.create_source_df("2D", add_missing)
+            detector_df = self.create_detector_df("2D", add_missing)
         elif dim.lower() == "3d":
-            source_df = self.create_source_df("3D")
-            detector_df = self.create_detector_df("3D")
+            source_df = self.create_source_df("3D", add_missing)
+            detector_df = self.create_detector_df("3D", add_missing)
         source_merge = pd.merge(measurement_list_df, source_df, on="source_index")
         merged_source_detector_df = pd.merge(
             source_merge, detector_df, on=["detector_index", "source_index"]
@@ -520,14 +523,12 @@ class Process_Flow:
             dim (str): Position data dimension "2D" or "3D".
             add_missing (bool): Add missing detector/source positions. Defaults to True.
         """
+        source_detector_df = self.create_source_detector_df(dim, add_missing)
         if dim.lower() == "2d":
-            detector_pos_2d = self.get_detector_pos(dim, add_missing)
-            x_detector = detector_pos_2d[:, 0]
-            y_detector = detector_pos_2d[:, 1]
-
-            source_pos_2d = self.get_source_pos(dim, add_missing)
-            x_source = source_pos_2d[:, 0]
-            y_source = source_pos_2d[:, 1]
+            x_detector = source_detector_df["detector_x_pos"]
+            y_detector = source_detector_df["detector_y_pos"]
+            x_source = source_detector_df["source_x_pos"]
+            y_source = source_detector_df["source_y_pos"]
 
             fig = plt.figure()
             ax = fig.add_subplot(111)
@@ -539,15 +540,12 @@ class Process_Flow:
             ax.legend(["Detector", "Source"])
 
         elif dim.lower() == "3d":
-            detector_pos_3d = self.get_detector_pos(dim, add_missing)
-            x_detector = detector_pos_3d[:, 0]
-            y_detector = detector_pos_3d[:, 1]
-            z_detector = detector_pos_3d[:, 2]
-
-            source_pos_3d = self.get_source_pos(dim, add_missing)
-            x_source = source_pos_3d[:, 0]
-            y_source = source_pos_3d[:, 1]
-            z_source = source_pos_3d[:, 2]
+            x_detector = source_detector_df["detector_x_pos"]
+            y_detector = source_detector_df["detector_y_pos"]
+            z_detector = source_detector_df["detector_z_pos"]
+            x_source = source_detector_df["source_x_pos"]
+            y_source = source_detector_df["source_y_pos"]
+            z_source = source_detector_df["source_z_pos"]
 
             fig = plt.figure()
             ax = fig.add_subplot(111, projection="3d")
@@ -1426,8 +1424,7 @@ class Flow_Results:
             if not os.path.exists(write_filedir):
                 os.makedirs(write_filedir)
             all_exp_aov_results = []
-            # for exp_name in ["go_no_go", "king_devick" "n_back", "tower_of_london", "vSAT"]:  # TODO go/no-go task
-            for exp_name in ["king_devick", "n_back", "tower_of_london", "vSAT"]:
+            for exp_name in ["go_no_go", "king_devick", "n_back", "tower_of_london", "vSAT"]: 
                 read_filename = f"{exp_name}_flow_{hemo_type}.csv"
                 read_filepath = os.path.join(read_filedir, read_filename)
                 write_filename = f"{exp_name}_flow_stats_{hemo_type}.csv"
