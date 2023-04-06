@@ -848,7 +848,7 @@ class Participant_Behav(Data_Functions):
         """
         Args:
             par_num (int): Participant number.
-            adj_ts_markers (bool, optional): Adjust the experiment end timestamp relative to 
+            adj_ts_markers (bool, optional): Adjust the experiment end timestamp relative to
                                              the end of the final stimulus. Defaults to True.
         """
         super().__init__()
@@ -1929,7 +1929,7 @@ def create_behav_results_tables(num_pars: int) -> None:
 
 class Behav_Results:
     """
-    This class contains attributes and functions for deriving and 
+    This class contains attributes and functions for deriving and
     plotting statistical results from processed behavioral data.
     """
 
@@ -1942,6 +1942,18 @@ class Behav_Results:
         self.font = "Arial"
         self.par = Participant_Behav(1)
 
+    def process_king_devick_df(self, behav_data: pd.DataFrame) -> pd.DataFrame:  # TODO
+        behav_data = behav_data.drop(
+            behav_data[
+                (behav_data["participant"] == 15) & (behav_data["trial"] == 1)
+            ].index
+        )
+        behav_data.loc[behav_data["participant"] == 15, ["trial"]] -= 1
+        behav_data.loc[behav_data["participant"] == 15, "block"] = behav_data.loc[
+            behav_data["participant"] == 15, "block"
+        ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
+        return behav_data
+
     def get_bar_plot_data(self, exp_name: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Group experiment data and calculate the mean response time and response accuracy.
@@ -1950,22 +1962,14 @@ class Behav_Results:
             exp_name (str): Experiment name.
 
         Returns:
-            Tuple[pd.DataFrame, pd.DataFrame, str]: Bar plot block data and SEM data.
+            Tuple[pd.DataFrame, pd.DataFrame]: Bar plot block data and SEM data.
         """
         behav_data = load_results(self.par.processed_data_dir, exp_name)
 
         if exp_name == "king_devick":
             self.group_var = "num_incorrect"
             self.group_label = "Mean incorrect responses"
-            behav_data = behav_data.drop(
-                behav_data[
-                    (behav_data["participant"] == 15) & (behav_data["trial"] == 1)
-                ].index
-            )
-            behav_data.loc[behav_data["participant"] == 15, ["trial"]] -= 1
-            behav_data.loc[behav_data["participant"] == 15, "block"] = behav_data.loc[
-                behav_data["participant"] == 15, "block"
-            ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
+            behav_data = self.process_king_devick_df(behav_data)
 
             block_data = behav_data.groupby("block").mean()[
                 ["response_time", "num_incorrect"]
@@ -1973,7 +1977,9 @@ class Behav_Results:
             block_sem = behav_data.groupby("block").agg(
                 lambda x: sem(x, nan_policy="omit")
             )[["response_time", "num_incorrect"]]
-            self.xtick_labels = list(block_data.index)
+            self.xtick_labels = [
+                block.replace("_", " ").title() for block in list(block_data.index)
+            ]
 
         elif (
             exp_name == "go_no_go"
@@ -2118,17 +2124,17 @@ class Behav_Results:
         ax2.set_ylim(resp_ylim)
 
         try:  # if ticks and tick labels are not specified, use defaults
-            ax1.set_yticks(_format_ticks(acc_yticks))
+            ax1.set_yticks(acc_yticks)
             ax1.set_yticklabels(
-                acc_ytick_labels,
+                _format_ticks(acc_ytick_labels),
                 fontsize=self.tick_fontsize,
                 fontname=self.font,
             )
-            ax2.set_yticks(_format_ticks(resp_yticks))
+            ax2.set_yticks(resp_yticks)
             ax2.set_yticklabels(
-                resp_ytick_labels,
+                _format_ticks(resp_ytick_labels),
                 fontsize=self.tick_fontsize,
-                fontname="Arial",
+                fontname=self.font,
             )
         except:
             pass
