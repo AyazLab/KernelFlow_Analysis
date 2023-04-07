@@ -52,6 +52,26 @@ class Process_Flow:
             84.52123706248807,
             4.746746612880643,
         ]
+        self.missing_measurement_list_data = {
+            "measurement_list_index": [float("NaN")] * 12,
+            "data_type": [99999] * 12,
+            "data_type_index": ["HbO", "HbR"] * 6,
+            "detector_index": [
+                307,
+                307,
+                308,
+                308,
+                309,
+                309,
+                310,
+                310,
+                311,
+                311,
+                312,
+                312,
+            ],
+            "source_index": [0] * 12,
+        }
 
     def load_snirf(self, filepath: str) -> snirf.Snirf:
         """
@@ -375,9 +395,12 @@ class Process_Flow:
         detector_dict = self.data_fun.sort_dict(detector_dict, "keys")
         return detector_dict
 
-    def create_measurement_list_df(self) -> pd.DataFrame:
+    def create_measurement_list_df(self, add_missing: bool = False) -> pd.DataFrame:
         """
         Create a DataFrame with all the data measurement list information.
+
+        Args:
+            add_missing (bool): Add missing detector data. Defaults to False.
 
         Returns:
             pd.DataFrame: Data measurement list DataFrame.
@@ -388,7 +411,9 @@ class Process_Flow:
         for i in range(len(measurement_list)):
             measurement_list_i = measurement_list[i]
             measurement_dict = {}
-            measurement_dict["measurement_list_index"] = i + 1
+            measurement_dict["measurement_list_index"] = (
+                i + 1
+            )  # TODO if missing, start at detector_index 7
             measurement_dict["data_type"] = measurement_list_i.dataType
             measurement_dict["data_type_index"] = measurement_list_i.dataTypeLabel
             measurement_dict["detector_index"] = measurement_list_i.detectorIndex
@@ -396,6 +421,15 @@ class Process_Flow:
             dict_list.append(measurement_dict)
 
         measurement_list_df = pd.DataFrame(dict_list)
+
+        if add_missing:
+            missing_data_df = pd.DataFrame(self.missing_measurement_list_data)
+            measurement_list_df = pd.concat(
+                [missing_data_df, measurement_list_df], ignore_index=True
+            )
+            measurement_list_df["measurement_list_index"] = measurement_list_df[
+                "measurement_list_index"
+            ].astype(pd.Int64Dtype())
         return measurement_list_df
 
     def create_source_df(self, dim: str, add_missing: bool = False) -> pd.DataFrame:
@@ -409,7 +443,7 @@ class Process_Flow:
         Returns:
             pd.DataFrame: Source labels and positions.
         """
-        source_labels = self.get_source_labels()
+        source_labels = self.get_source_labels(add_missing)
         if dim.lower() == "2d":
             source_pos_2d = self.get_source_pos(dim, add_missing)
             source_data = [
@@ -452,7 +486,7 @@ class Process_Flow:
         Returns:
             pd.DataFrame: Detector labels and positions.
         """
-        detector_labels = self.get_detector_labels()
+        detector_labels = self.get_detector_labels(add_missing)
         if dim.lower() == "2d":
             detector_pos_2d = self.get_detector_pos(dim, add_missing)
             detector_data = [
@@ -477,17 +511,28 @@ class Process_Flow:
                 ],
             )
         # NOTE: Kernel changed source and detector label formats after a certain date
-        if len(detector_df["detector_label"][0]) == 5:
+        if len(detector_df["detector_label"][7]) == 5:
             f = lambda x: int(x[1:3])
         elif (
-            len(detector_df["detector_label"][0]) == 7
+            len(detector_df["detector_label"][7]) == 7
         ):  # Format changed for participants 12+
             f = lambda x: int(x[2:4])
+
         detector_df.insert(1, "source_index", detector_df["detector_label"].apply(f))
-        detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
+        if add_missing:
+            detector_index_col = []
+            for i in range(307, 313):
+                detector_index_col.append(i)
+            for i in range(1, detector_df.shape[0] - 5):
+                detector_index_col.append(i)
+            detector_df.insert(1, "detector_index", detector_index_col)
+        else:
+            detector_df.insert(1, "detector_index", range(1, detector_df.shape[0] + 1))
         return detector_df
 
-    def create_source_detector_df(self, dim: str, add_missing: bool = False) -> pd.DataFrame:
+    def create_source_detector_df(
+        self, dim: str, add_missing: bool = False
+    ) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
 
@@ -498,7 +543,7 @@ class Process_Flow:
         Returns:
             pd.DataFrame: Source and detector information for inter-module channels.
         """
-        measurement_list_df = self.create_measurement_list_df()
+        measurement_list_df = self.create_measurement_list_df(add_missing)
         if dim.lower() == "2d":
             source_df = self.create_source_df("2D", add_missing)
             detector_df = self.create_detector_df("2D", add_missing)
@@ -1424,7 +1469,13 @@ class Flow_Results:
             if not os.path.exists(write_filedir):
                 os.makedirs(write_filedir)
             all_exp_aov_results = []
-            for exp_name in ["go_no_go", "king_devick", "n_back", "tower_of_london", "vSAT"]: 
+            for exp_name in [
+                "go_no_go",
+                "king_devick",
+                "n_back",
+                "tower_of_london",
+                "vSAT",
+            ]:
                 read_filename = f"{exp_name}_flow_{hemo_type}.csv"
                 read_filepath = os.path.join(read_filedir, read_filename)
                 write_filename = f"{exp_name}_flow_stats_{hemo_type}.csv"
