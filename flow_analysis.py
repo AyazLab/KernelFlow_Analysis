@@ -560,29 +560,92 @@ class Process_Flow:
         )
         return source_detector_df
 
-    def plot_pos(self, dim: str, add_missing: bool = True) -> None:
+    def plot_pos(
+        self,
+        dim: str,
+        add_labels: bool = False,
+        minimal: bool = True,
+        hemo_type: str = "HbO",
+        add_missing: bool = True,
+    ) -> None:
         """
         Plot the detector/source 2D or 3D positions.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
+            add_labels (bool): Add a channel number label at each source position. Defaults to False.
+            minimal (bool): Show minimal plot elements. Defaults to False.
+            hemo_type (str): Hemodynamic type. "HbO" or "HbR". Defaults to "HbO".
             add_missing (bool): Add missing detector/source positions. Defaults to True.
         """
         source_detector_df = self.create_source_detector_df(dim, add_missing)
-        if dim.lower() == "2d":
-            x_detector = source_detector_df["detector_x_pos"]
-            y_detector = source_detector_df["detector_y_pos"]
-            x_source = source_detector_df["source_x_pos"]
-            y_source = source_detector_df["source_y_pos"]
+        source_detector_hemo = source_detector_df[
+            source_detector_df["data_type_index"] == hemo_type
+        ]
+        uni_source_label_df = source_detector_hemo.drop_duplicates(
+            subset="source_index"
+        )
 
+        if dim.lower() == "2d":
+            x_detector = list(source_detector_hemo["detector_x_pos"])
+            y_detector = list(source_detector_hemo["detector_y_pos"])
+            x_source = list(uni_source_label_df["source_x_pos"])
+            y_source = list(uni_source_label_df["source_y_pos"])
             fig = plt.figure()
             ax = fig.add_subplot(111)
             ax.scatter(x_detector, y_detector)
             ax.scatter(x_source, y_source)
-            ax.set_title("Detector/Source 2D Plot")
-            ax.set_xlabel("X-Position (mm)")
-            ax.set_ylabel("Y-Position (mm)")
-            ax.legend(["Detector", "Source"])
+            if add_labels:
+                x_offset = 0.03
+                y_offset = 0.01
+                for i, label in enumerate(uni_source_label_df["channel_num"]):
+                    try:
+                        ax.annotate(
+                            label,
+                            (x_source[i] + x_offset, y_source[i] + y_offset),
+                            fontsize=8,
+                            bbox=dict(
+                                boxstyle="round,pad=0.15",
+                                edgecolor="black",
+                                facecolor="white",
+                                alpha=1,
+                            ),
+                        )
+                    except TypeError:
+                        ax.annotate(
+                            "NaN",
+                            (x_source[i] + x_offset, y_source[i] + y_offset),
+                            fontsize=8,
+                            bbox=dict(
+                                boxstyle="round,pad=0.15",
+                                edgecolor="black",
+                                facecolor="white",
+                                alpha=1,
+                            ),
+                        )
+            if minimal:
+                ax.set_title("Anterior", fontweight="bold", fontsize=14)
+                ax.set_xticklabels([])
+                ax.set_yticklabels([])
+                ax.set_xticks([])
+                ax.set_yticks([])
+                for spine in ax.spines.values():
+                    spine.set_visible(False)
+                ax.text(
+                    0.5,
+                    -0.06,
+                    "Posterior",
+                    fontweight="bold",
+                    fontsize=14,
+                    ha="center",
+                    va="bottom",
+                    transform=ax.transAxes,
+                )
+            else:
+                ax.set_title("Detector/Source 2D Plot")
+                ax.set_xlabel("X-Position (mm)")
+                ax.set_ylabel("Y-Position (mm)")
+                ax.legend(["Detector", "Source"])
 
         elif dim.lower() == "3d":
             x_detector = source_detector_df["detector_x_pos"]
@@ -591,7 +654,6 @@ class Process_Flow:
             x_source = source_detector_df["source_x_pos"]
             y_source = source_detector_df["source_y_pos"]
             z_source = source_detector_df["source_z_pos"]
-
             fig = plt.figure()
             ax = fig.add_subplot(111, projection="3d")
             ax.scatter(x_detector, y_detector, z_detector)
