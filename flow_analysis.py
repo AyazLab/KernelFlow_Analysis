@@ -569,7 +569,8 @@ class Process_Flow:
         add_missing: bool = True,
         azim: int = 120,
         view: str = None,
-    ) -> None:
+        highlight: list = None,
+    ) -> None:  # TODO: arrows for 3D labels 
         """
         Plot the detector and source 2D or 3D positions.
 
@@ -581,61 +582,85 @@ class Process_Flow:
             add_missing (bool): Add missing detector/source positions. Defaults to True.
             azim (int): 3D plot azimuth. Defaults to 120 degrees.
             view: 3D plot view. "Anterior", "Posterior", "Left" or "Right". Defaults to None.
+            highlight: List of channels to highlight. Defaults to None.
         """
+
+        def _get_highlight_channels(
+            plot_df: pd.DataFrame, highlight: list
+        ) -> pd.DataFrame:
+            return plot_df[plot_df["channel_num"].isin(highlight)]
 
         def _add_labels(
             plot_df: pd.DataFrame,
             dim: int,
+            opt_type: str = "source",
             label_x_offset: int = 0,
             label_y_offset: int = 0,
             label_z_offset: int = 0,
         ):
             if dim.lower() == "2d":
                 labels = plot_df["channel_num"]
-                x_source = list(plot_df["source_x_pos"])
-                y_source = list(plot_df["source_y_pos"])
+                if opt_type == "source":
+                    x_pos = list(plot_df["source_x_pos"])
+                    y_pos = list(plot_df["source_y_pos"])
+                elif opt_type == "detector":
+                    x_pos = list(plot_df["detector_x_pos"])
+                    y_pos = list(plot_df["detector_y_pos"])
                 for i, label in enumerate(labels):
                     try:
                         ax.annotate(
                             label,
-                            (
-                                x_source[i] + label_x_offset,
-                                y_source[i] + label_y_offset,
-                            ),
+                            (x_pos[i], y_pos[i]),
+                            xytext=(label_x_offset, label_y_offset),
+                            textcoords="offset points",
                             fontsize=8,
+                            ha="left",
+                            va="center",
                             bbox=dict(
                                 boxstyle="round,pad=0.15",
                                 edgecolor="black",
                                 facecolor="white",
                                 alpha=1,
+                            ),
+                            arrowprops=dict(
+                                arrowstyle="->", facecolor="black", linewidth=2
                             ),
                         )
                     except TypeError:
                         ax.annotate(
                             "NaN",
-                            (
-                                x_source[i] + label_x_offset,
-                                y_source[i] + label_y_offset,
-                            ),
+                            (x_pos[i], y_pos[i]),
+                            xytext=(label_x_offset, label_y_offset),
+                            textcoords="offset points",
                             fontsize=8,
+                            ha="left",
+                            va="center",
                             bbox=dict(
                                 boxstyle="round,pad=0.15",
                                 edgecolor="black",
                                 facecolor="white",
                                 alpha=1,
                             ),
+                            arrowprops=dict(
+                                arrowstyle="->", facecolor="black", linewidth=2
+                            ),
                         )
             elif dim.lower() == "3d":
                 labels = plot_df["channel_num"]
-                x_source = list(plot_df["source_x_pos"])
-                y_source = list(plot_df["source_y_pos"])
-                z_source = list(plot_df["source_z_pos"])
+                if opt_type == "source":
+                    x_pos = list(plot_df["source_x_pos"])
+                    y_pos = list(plot_df["source_y_pos"])
+                    z_pos = list(plot_df["source_z_pos"])
+                elif opt_type == "detector":
+                    x_pos = list(plot_df["detector_x_pos"])
+                    y_pos = list(plot_df["detector_y_pos"])
+                    z_pos = list(plot_df["detector_z_pos"])
                 for i, label in enumerate(labels):
                     try:
                         ax.text(
-                            x_source[i] + label_x_offset,
-                            y_source[i] + label_y_offset,
-                            z_source[i] + label_z_offset,
+                            x_pos[i] + label_x_offset,
+                            y_pos[i] + label_y_offset,
+                            z_pos[i] + label_z_offset,
                             label,
                             fontsize=8,
                             bbox=dict(
@@ -647,9 +672,9 @@ class Process_Flow:
                         )
                     except TypeError:
                         ax.text(
-                            x_source[i] + label_x_offset,
-                            y_source[i] + label_y_offset,
-                            z_source[i] + label_z_offset,
+                            x_pos[i] + label_x_offset,
+                            y_pos[i] + label_y_offset,
+                            z_pos[i] + label_z_offset,
                             "NaN",
                             fontsize=8,
                             bbox=dict(
@@ -677,10 +702,12 @@ class Process_Flow:
             ax = fig.add_subplot(111)
             ax.scatter(x_detector, y_detector, s=40)
             ax.scatter(x_source, y_source, s=70)
-            if add_labels:
+            if add_labels and not highlight:
                 label_x_offset = 0.03
                 label_y_offset = 0.01
-                _add_labels(uni_source_label_df, dim, label_x_offset, label_y_offset)
+                _add_labels(
+                    uni_source_label_df, dim, "source", label_x_offset, label_y_offset
+                )
             if minimal:
                 ax.set_title("Anterior", fontweight="bold", fontsize=14)
                 ax.set_xticklabels([])
@@ -704,6 +731,15 @@ class Process_Flow:
                 ax.set_xlabel("X-Position (mm)")
                 ax.set_ylabel("Y-Position (mm)")
                 ax.legend(["Detector", "Source"])
+            if highlight:
+                label_x_offset = 12
+                label_y_offset = 12
+                highlight_rows = _get_highlight_channels(
+                    source_detector_hemo, highlight
+                )
+                _add_labels(
+                    highlight_rows, dim, "detector", label_x_offset, label_y_offset
+                )
 
         elif dim.lower() == "3d":
             fig = plt.figure(figsize=(8, 8))
@@ -718,8 +754,23 @@ class Process_Flow:
                 ax.scatter(x_detector, y_detector, z_detector, s=30)
                 ax.scatter(x_source, y_source, z_source, s=55)
                 ax.view_init(azim=azim)
-                if add_missing:
-                    _add_labels(uni_source_label_df, dim)
+                if add_labels and not highlight:
+                    _add_labels(uni_source_label_df, dim, "source")
+                if highlight:
+                    label_x_offset = 0
+                    label_y_offset = 0
+                    label_z_offset = 0
+                    highlight_rows = _get_highlight_channels(
+                        source_detector_hemo, highlight
+                    )
+                    _add_labels(
+                        highlight_rows,
+                        dim,
+                        "detector",
+                        label_x_offset,
+                        label_y_offset,
+                        label_z_offset,
+                    )
             else:
                 views = {
                     "right": 0,
@@ -766,11 +817,11 @@ class Process_Flow:
                         "Posterior View", fontweight="bold", fontsize=14, y=0.85
                     )
                     x_off, y_off, z_off = 2, 0, 2
-                if add_labels:
+                if add_labels and not highlight:
                     try:
-                        _add_labels(source_plot_df, dim, x_off, y_off, z_off)
+                        _add_labels(source_plot_df, dim, "source", x_off, y_off, z_off)
                     except NameError:
-                        _add_labels(source_plot_df, dim)
+                        _add_labels(source_plot_df, dim, "source")
                 ax.scatter(
                     detector_plot_df["detector_x_pos"],
                     detector_plot_df["detector_y_pos"],
@@ -787,6 +838,22 @@ class Process_Flow:
                     alpha=1,
                     zorder=1,
                 )
+                if highlight:
+                    label_x_offset = 0
+                    label_y_offset = 0
+                    label_z_offset = 0
+                    highlight_rows = _get_highlight_channels(
+                        detector_plot_df, highlight
+                    )
+                    _add_labels(
+                        highlight_rows,
+                        dim,
+                        "detector",
+                        label_x_offset,
+                        label_y_offset,
+                        label_z_offset,
+                    )
+
             if minimal:
                 ax.patch.set_alpha(0.0)
                 ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
