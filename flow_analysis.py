@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.font_manager import FontProperties
 from scipy.signal import firwin, lfilter
-from typing import Union
+from typing import Union, Tuple
 from statistics import mean
 from behav_analysis import Participant_Behav
 from data_functions import Data_Functions, load_results
@@ -559,6 +559,44 @@ class Process_Flow:
             0, "channel_num", source_detector_df["measurement_list_index"] - 1
         )
         return source_detector_df
+
+    def xyz_to_mni(self, x: float, y: float, z: float) -> Tuple[float, float, float]:
+        """
+        Convert x, y, z coordinates to the MNI coordinate system.
+        Adapted from https://www.nitrc.org/projects/mni2orfromxyz.
+
+        Args:
+            x (float): x position.
+            y (float): y position.
+            z (float): z position.
+
+        Returns:
+            Tuple[float, float, float]: x, y, z MNI coordinates.
+        """
+        origin = [45, 63, 36]  # MNI origin in voxel coordinates (anterior commissure)
+        voxel_size = 2  # mm
+        mni_x = (origin[0] - x) * voxel_size
+        mni_y = (y - origin[1]) * voxel_size
+        mni_z = (z - origin[2]) * voxel_size
+        return mni_x, mni_y, mni_z
+
+    def get_midpoint(
+        self, point1: Tuple[float, float, float], point2: Tuple[float, float, float]
+    ) -> Tuple[float, float, float]:
+        """
+        Get the midpoint between two x, y, z coordinate points (source and detector).
+
+        Args:
+            point1 (Tuple[float, float, float]): x, y, z coordinates of the source.
+            point2 (Tuple[float, float, float]): x, y, z coordinates of the detector.
+
+        Returns:
+            Tuple[float, float, float]: x, y, z coordinates of the source/detector midpoint.
+        """
+        x_mid = (point1[0] + point2[0]) / 2
+        y_mid = (point1[1] + point2[1]) / 2
+        z_mid = (point1[2] + point2[2]) / 2
+        return x_mid, y_mid, z_mid
 
     def plot_pos(
         self,
