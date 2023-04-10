@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.font_manager import FontProperties
 from scipy.signal import firwin, lfilter
-from typing import Union, Tuple
+from typing import Union, Tuple, List
 from statistics import mean
 from behav_analysis import Participant_Behav
 from data_functions import Data_Functions, load_results
@@ -536,7 +536,7 @@ class Process_Flow:
         return detector_df
 
     def create_source_detector_df(
-        self, dim: str, add_missing: bool = False, MNI: bool = False
+        self, dim: str, add_missing: bool = False, MNI: bool = False, channel: Union[List[int], int] = None 
     ) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
@@ -545,6 +545,7 @@ class Process_Flow:
             dim (str): Position data dimension "2D" or "3D".
             add_missing (bool): Add missing detector data. Defaults to False.
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
+            channel (Union[List[int], int]): Return only specific channel(s). Defaults to None.
 
         Returns:
             pd.DataFrame: Source and detector information for inter-module channels.
@@ -613,7 +614,30 @@ class Process_Flow:
                     axis=1,
                     result_type="expand",
                 )
-        return source_detector_df
+        if isinstance(channel, int):
+            return source_detector_df[source_detector_df["channel_num"] == channel]
+        elif isinstance(channel, list):
+            return source_detector_df[source_detector_df["channel_num"].isin(channel)]
+        else:
+            return source_detector_df
+
+    def get_midpoint(
+        self, point1: Tuple[float, float, float], point2: Tuple[float, float, float]
+    ) -> Tuple[float, float, float]:
+        """
+        Get the midpoint between two x, y, z coordinate points (source and detector).
+
+        Args:
+            point1 (Tuple[float, float, float]): x, y, z coordinates of the source.
+            point2 (Tuple[float, float, float]): x, y, z coordinates of the detector.
+
+        Returns:
+            Tuple[float, float, float]: x, y, z coordinates of the source/detector midpoint.
+        """
+        x_mid = (point1[0] + point2[0]) / 2
+        y_mid = (point1[1] + point2[1]) / 2
+        z_mid = (point1[2] + point2[2]) / 2
+        return x_mid, y_mid, z_mid
 
     def xyz_to_MNI(self, x: float, y: float, z: float) -> Tuple[float, float, float]:
         """
@@ -690,8 +714,8 @@ class Process_Flow:
         add_missing: bool = True,
         azim: int = 120,
         view: str = None,
-        highlight: list = None,
-    ) -> None:  # TODO: arrows for 3D labels 
+        channel: Union[List[int], int] = None
+    ) -> None:
         """
         Plot the detector and source 2D or 3D positions.
 
@@ -703,13 +727,16 @@ class Process_Flow:
             add_missing (bool): Add missing detector/source positions. Defaults to True.
             azim (int): 3D plot azimuth. Defaults to 120 degrees.
             view: 3D plot view. "Anterior", "Posterior", "Left" or "Right". Defaults to None.
-            highlight: List of channels to highlight. Defaults to None.
+            channel (Union[List[int], int]): Highlight specific channel(s). Defaults to None.
         """
 
         def _get_highlight_channels(
-            plot_df: pd.DataFrame, highlight: list
+            plot_df: pd.DataFrame, channel: Union[List[int], int]
         ) -> pd.DataFrame:
-            return plot_df[plot_df["channel_num"].isin(highlight)]
+            if isinstance(channel, int):
+                return plot_df[plot_df["channel_num"] == channel]
+            elif isinstance(channel, list):
+                return plot_df[plot_df["channel_num"].isin(channel)]
 
         def _add_labels(
             plot_df: pd.DataFrame,
@@ -823,7 +850,7 @@ class Process_Flow:
             ax = fig.add_subplot(111)
             ax.scatter(x_detector, y_detector, s=40)
             ax.scatter(x_source, y_source, s=70)
-            if add_labels and not highlight:
+            if add_labels and not channel:
                 label_x_offset = 0.03
                 label_y_offset = 0.01
                 _add_labels(
@@ -852,11 +879,11 @@ class Process_Flow:
                 ax.set_xlabel("X-Position (mm)")
                 ax.set_ylabel("Y-Position (mm)")
                 ax.legend(["Detector", "Source"])
-            if highlight:
+            if channel:
                 label_x_offset = 12
                 label_y_offset = 12
                 highlight_rows = _get_highlight_channels(
-                    source_detector_hemo, highlight
+                    source_detector_hemo, channel
                 )
                 _add_labels(
                     highlight_rows, dim, "detector", label_x_offset, label_y_offset
@@ -875,14 +902,14 @@ class Process_Flow:
                 ax.scatter(x_detector, y_detector, z_detector, s=30)
                 ax.scatter(x_source, y_source, z_source, s=55)
                 ax.view_init(azim=azim)
-                if add_labels and not highlight:
+                if add_labels and not channel:
                     _add_labels(uni_source_label_df, dim, "source")
-                if highlight:
+                if channel:
                     label_x_offset = 0
                     label_y_offset = 0
                     label_z_offset = 0
                     highlight_rows = _get_highlight_channels(
-                        source_detector_hemo, highlight
+                        source_detector_hemo, channel
                     )
                     _add_labels(
                         highlight_rows,
@@ -938,7 +965,7 @@ class Process_Flow:
                         "Posterior View", fontweight="bold", fontsize=14, y=0.85
                     )
                     x_off, y_off, z_off = 2, 0, 2
-                if add_labels and not highlight:
+                if add_labels and not channel:
                     try:
                         _add_labels(source_plot_df, dim, "source", x_off, y_off, z_off)
                     except NameError:
@@ -959,12 +986,12 @@ class Process_Flow:
                     alpha=1,
                     zorder=1,
                 )
-                if highlight:
+                if channel:
                     label_x_offset = 0
                     label_y_offset = 0
                     label_z_offset = 0
                     highlight_rows = _get_highlight_channels(
-                        detector_plot_df, highlight
+                        detector_plot_df, channel
                     )
                     _add_labels(
                         highlight_rows,
