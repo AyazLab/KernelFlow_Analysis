@@ -630,7 +630,7 @@ class Process_Flow:
         """
         origin = [45, 63, 36]  # MNI origin in voxel coordinates (anterior commissure)
         voxel_size = 2  # mm
-        mni_x = (origin[0] - x) * voxel_size
+        mni_x = (x - origin[0]) * voxel_size
         mni_y = (y - origin[1]) * voxel_size
         mni_z = (z - origin[2]) * voxel_size
         return mni_x, mni_y, mni_z
