@@ -1,5 +1,6 @@
 import os
 import snirf
+import ctypes
 import datetime
 import numpy as np
 import pandas as pd
@@ -531,7 +532,7 @@ class Process_Flow:
         return detector_df
 
     def create_source_detector_df(
-        self, dim: str, add_missing: bool = False
+        self, dim: str, add_missing: bool = False, MNI: bool = False
     ) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
@@ -558,6 +559,55 @@ class Process_Flow:
         source_detector_df.insert(
             0, "channel_num", source_detector_df["measurement_list_index"] - 1
         )
+        if dim.lower() == "3d":
+            # add source/detector midpoints
+            source_detector_df[
+                ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
+            ] = source_detector_df.apply(
+                lambda row: self.get_midpoint(
+                    (row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]),
+                    (
+                        row["detector_x_pos"],
+                        row["detector_y_pos"],
+                        row["detector_z_pos"],
+                    ),
+                ),
+                axis=1,
+                result_type="expand",
+            )
+            # add source/detector MNI coordinates
+            if MNI:
+                source_detector_df[
+                    ["source_x_MNI", "source_y_MNI", "source_z_MNI"]
+                ] = source_detector_df.apply(
+                    lambda row: self.xyz_to_mni(
+                        row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]
+                    ),
+                    axis=1,
+                    result_type="expand",
+                )
+                source_detector_df[
+                    ["detector_x_MNI", "detector_y_MNI", "detector_z_MNI"]
+                ] = source_detector_df.apply(
+                    lambda row: self.xyz_to_mni(
+                        row["detector_x_pos"],
+                        row["detector_y_pos"],
+                        row["detector_z_pos"],
+                    ),
+                    axis=1,
+                    result_type="expand",
+                )
+                source_detector_df[
+                    ["midpoint_x_MNI", "midpoint_z_MNI", "midpoint_y_MNI"]
+                ] = source_detector_df.apply(
+                    lambda row: self.xyz_to_mni(
+                        row["midpoint_x_pos"],
+                        row["midpoint_y_pos"],
+                        row["midpoint_z_pos"],
+                    ),
+                    axis=1,
+                    result_type="expand",
+                )
         return source_detector_df
 
     def xyz_to_mni(self, x: float, y: float, z: float) -> Tuple[float, float, float]:
