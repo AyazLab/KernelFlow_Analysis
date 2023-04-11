@@ -815,13 +815,32 @@ class Process_Flow:
                     y_pos = list(plot_df["detector_y_pos"])
                     z_pos = list(plot_df["detector_z_pos"])
                 for i, label in enumerate(labels):
+                    label_x = x_pos[i] + label_x_offset
+                    label_y = y_pos[i] + label_y_offset
+                    label_z = z_pos[i] + label_z_offset
+                    arrow_length = np.array(
+                        [label_x_offset, label_y_offset, label_z_offset]
+                    )
+                    ax.quiver(
+                        x_pos[i] + arrow_length[0],
+                        y_pos[i] + arrow_length[1],
+                        z_pos[i] + arrow_length[2],
+                        -arrow_length[0],
+                        -arrow_length[1],
+                        -arrow_length[2],
+                        color="black",
+                        linewidth=1,
+                        arrow_length_ratio=0.3,
+                    )
                     try:
                         ax.text(
-                            x_pos[i] + label_x_offset,
-                            y_pos[i] + label_y_offset,
-                            z_pos[i] + label_z_offset,
+                            label_x,
+                            label_y,
+                            label_z,
                             label,
                             fontsize=8,
+                            ha="left",
+                            va="center",
                             bbox=dict(
                                 boxstyle="round,pad=0.15",
                                 edgecolor="black",
@@ -831,11 +850,13 @@ class Process_Flow:
                         )
                     except TypeError:
                         ax.text(
-                            x_pos[i] + label_x_offset,
-                            y_pos[i] + label_y_offset,
-                            z_pos[i] + label_z_offset,
+                            label_x,
+                            label_y,
+                            label_z,
                             "NaN",
                             fontsize=8,
+                            ha="left",
+                            va="center",
                             bbox=dict(
                                 boxstyle="round,pad=0.15",
                                 edgecolor="black",
@@ -893,9 +914,7 @@ class Process_Flow:
             if channel:
                 label_x_offset = 12
                 label_y_offset = 12
-                highlight_rows = _get_highlight_channels(
-                    source_detector_hemo, channel
-                )
+                highlight_rows = _get_highlight_channels(source_detector_hemo, channel)
                 _add_labels(
                     highlight_rows, dim, "detector", label_x_offset, label_y_offset
                 )
@@ -903,6 +922,9 @@ class Process_Flow:
         elif dim.lower() == "3d":
             fig = plt.figure(figsize=(8, 8))
             ax = fig.add_subplot(111, projection="3d", computed_zorder=False)
+            label_x_offset = 10
+            label_y_offset = 10
+            label_z_offset = 10
             if not view:
                 x_detector = list(source_detector_hemo["detector_x_pos"])
                 y_detector = list(source_detector_hemo["detector_y_pos"])
@@ -914,11 +936,15 @@ class Process_Flow:
                 ax.scatter(x_source, y_source, z_source, s=55)
                 ax.view_init(azim=azim)
                 if add_labels and not channel:
-                    _add_labels(uni_source_label_df, dim, "source")
+                    _add_labels(
+                        uni_source_label_df,
+                        dim,
+                        "source",
+                        label_x_offset,
+                        label_y_offset,
+                        label_z_offset,
+                    )
                 if channel:
-                    label_x_offset = 0
-                    label_y_offset = 0
-                    label_z_offset = 0
                     highlight_rows = _get_highlight_channels(
                         source_detector_hemo, channel
                     )
@@ -964,7 +990,6 @@ class Process_Flow:
                     ax.set_title(
                         "Anterior View", fontweight="bold", fontsize=14, y=0.85
                     )
-                    x_off, y_off, z_off = -2, 0, 2
                 elif view == "posterior":
                     source_plot_df = uni_source_label_df[
                         uni_source_label_df["source_y_pos"] <= 0
@@ -975,12 +1000,25 @@ class Process_Flow:
                     ax.set_title(
                         "Posterior View", fontweight="bold", fontsize=14, y=0.85
                     )
-                    x_off, y_off, z_off = 2, 0, 2
                 if add_labels and not channel:
                     try:
-                        _add_labels(source_plot_df, dim, "source", x_off, y_off, z_off)
+                        _add_labels(
+                            source_plot_df,
+                            dim,
+                            "source",
+                            label_x_offset,
+                            label_y_offset,
+                            label_z_offset,
+                        )
                     except NameError:
-                        _add_labels(source_plot_df, dim, "source")
+                        _add_labels(
+                            source_plot_df,
+                            dim,
+                            "source",
+                            label_x_offset,
+                            label_y_offset,
+                            label_z_offset,
+                        )
                 ax.scatter(
                     detector_plot_df["detector_x_pos"],
                     detector_plot_df["detector_y_pos"],
@@ -998,12 +1036,7 @@ class Process_Flow:
                     zorder=1,
                 )
                 if channel:
-                    label_x_offset = 0
-                    label_y_offset = 0
-                    label_z_offset = 0
-                    highlight_rows = _get_highlight_channels(
-                        detector_plot_df, channel
-                    )
+                    highlight_rows = _get_highlight_channels(detector_plot_df, channel)
                     _add_labels(
                         highlight_rows,
                         dim,
