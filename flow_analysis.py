@@ -13,6 +13,7 @@ from typing import Union, Tuple, List
 from statistics import mean
 from behav_analysis import Participant_Behav
 from data_functions import Data_Functions, load_results
+
 hllDll = ctypes.WinDLL(
     r"C:\Program Files\R\R-4.2.3\bin\x64\R.dll"
 )  # path to R DLL file
@@ -536,7 +537,11 @@ class Process_Flow:
         return detector_df
 
     def create_source_detector_df(
-        self, dim: str, add_missing: bool = False, MNI: bool = False, channel: Union[List[int], int] = None 
+        self,
+        dim: str,
+        add_missing: bool = False,
+        MNI: bool = False,
+        channel: Union[List[int], int] = None,
     ) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
@@ -658,10 +663,12 @@ class Process_Flow:
         mni_y = (y - origin[1]) * voxel_size
         mni_z = (z - origin[2]) * voxel_size
         return mni_x, mni_y, mni_z
-    
-    def MNI_to_region(self, mni_x: float, mni_y: float, mni_z: float) -> Tuple[float, str, float, str]:
+
+    def MNI_to_region(
+        self, mni_x: float, mni_y: float, mni_z: float
+    ) -> Tuple[float, str, float, str]:
         """
-        Convert MNI coordinates to the corresponding Automated Anatomical Labeling (AAL) and 
+        Convert MNI coordinates to the corresponding Automated Anatomical Labeling (AAL) and
         Brodmann area (BA) including the distance from the nearest brain region.
         Adapted from https://github.com/yunshiuan/label4MRI.
 
@@ -671,18 +678,22 @@ class Process_Flow:
             mni_z (float): z MNI coordinate.
 
         Returns:
-            Tuple[float, str, float, str]: Distance from AAL brain region, AAL brain region, 
+            Tuple[float, str, float, str]: Distance from AAL brain region, AAL brain region,
                                            distance from BA brain region, and BA region.
         """
         # load R script files
-        with open(os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r") as file:
+        with open(
+            os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r"
+        ) as file:
             mni_to_region_index_code = "".join(file.readlines())
-        with open(os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"), "r") as file:
+        with open(
+            os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"), "r"
+        ) as file:
             mni_to_region_name_code = "".join(file.readlines())
 
         # evaluate R code
         metadata_path = os.path.join(os.getcwd(), "label4MRI", "data", "metadata.RData")
-        load_rdata = robjects.r['load']
+        load_rdata = robjects.r["load"]
         load_rdata(metadata_path)
 
         robjects.r(mni_to_region_index_code)
@@ -714,7 +725,7 @@ class Process_Flow:
         add_missing: bool = True,
         azim: int = 120,
         view: str = None,
-        channel: Union[List[int], int] = None
+        channel: Union[List[int], int] = None,
     ) -> None:
         """
         Plot the detector and source 2D or 3D positions.
@@ -1572,14 +1583,14 @@ class Participant_Flow:
         return data_out
 
     def plot_flow_session(
-        self, session: str, channels: list[int | list | tuple], filter_type: str = None
+        self, session: str, channels: Union[int, list, tuple], filter_type: str = None
     ) -> None:
         """
         Plot Kernel flow session data.
 
         Args:
             session (str): Session number.
-            channels (list[int | list | tuple]): Kernel Flow channels to plot.
+            channels (Union[int, list, tuple]): Kernel Flow channels to plot.
             filter_type (str, optional): Filter type to apply. Defaults to None.
         """
         flow_session = self.flow_session_dict[session]
@@ -1696,7 +1707,7 @@ class Participant_Flow:
         exp_end_dt = self.par_behav.get_end_dt(exp_name, self.adj_ts_markers)
         ax.axvline(exp_start_dt, linestyle="dashed", color="k", alpha=0.75)
         ax.axvline(exp_end_dt, linestyle="dashed", color="k", alpha=0.75)
-        results_dir = r"C:\Users\zackg\OneDrive\Ayaz Lab\KernelFlow_Analysis\processed_data\behavioral"  # NOTE: temporary
+        results_dir = os.path.join(os.getcwd(), "processed_data", "behavioral")
         exp_results = load_results(results_dir, exp_name, self.par_num)
         exp_title = self.par_behav.format_exp_name(exp_name)
 
