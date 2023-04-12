@@ -8,7 +8,7 @@ import pingouin as pg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.font_manager import FontProperties
-from scipy.signal import firwin, lfilter
+from scipy.signal import butter, filtfilt
 from typing import Union, Tuple, List
 from statistics import mean
 from behav_analysis import Participant_Behav
@@ -1236,12 +1236,13 @@ class Participant_Flow:
             print("Invalid session number.")
             raise
 
-    def load_flow_exp(self, exp_name: str) -> pd.DataFrame:
+    def load_flow_exp(self, exp_name: str, filter_type: str = None) -> pd.DataFrame:
         """
         Load Kernel Flow data for the time frame of a specified experiment.
 
         Args:
             exp_name (str): Name of the experiment.
+            filter_type (str): Filter to apply to the data. Default to None.
 
         Returns:
             pd.DataFrame: Kernel Flow data for an experiment.
@@ -1259,6 +1260,8 @@ class Participant_Flow:
         end_idx = self.par_behav.get_end_index_dt(time_abs_dt_offset, end_dt)
 
         flow_data = flow_session.get_data("dataframe")
+        if filter_type == "lowpass":
+            flow_data = flow_data.apply(lambda x: self.lowpass_filter(x), axis=0)
         flow_data.insert(0, "datetime", time_abs_dt_offset)
         return flow_data.iloc[start_idx:end_idx, :]
 
@@ -1312,7 +1315,9 @@ class Participant_Flow:
         ]
         return marker_df
 
-    def create_exp_stim_response_dict(self, exp_name: str) -> dict:
+    def create_exp_stim_response_dict(
+        self, exp_name: str, filter_type: str = None
+    ) -> dict:
         """
         Create a dictionary that contains the processed Kernel Flow data in response
         to a stimulus. It is organized by block (keys) and for each block, the value is
@@ -1323,6 +1328,7 @@ class Participant_Flow:
 
         Args:
             exp_name (str): Name of the experiment.
+            filter_type (str): Filter to apply to the data. Default to None.
 
         Returns:
             dict:
@@ -1339,7 +1345,7 @@ class Participant_Flow:
         exp_results = load_results(
             self.par_behav.processed_data_dir, exp_name, self.par_behav.par_num
         )
-        flow_exp = self.load_flow_exp(exp_name)
+        flow_exp = self.load_flow_exp(exp_name, filter_type)
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
         )
@@ -1456,13 +1462,16 @@ class Participant_Flow:
 
         return exp_stim_resp_dict
 
-    def create_exp_stim_response_df(self, exp_name: str) -> pd.DataFrame:
+    def create_exp_stim_response_df(
+        self, exp_name: str, filter_type: str = None
+    ) -> pd.DataFrame:
         """
         Create a DataFrame that contains the processed Kernel Flow data in response
         to each stimulus in an experiment. Each channel is normalized and averaged.
 
         Args:
             exp_name (str): Name of the experiment.
+            filter_type (str): Filter to apply to the data. Default to None.
 
         Returns:
             pd.DataFrame: Processed Kernel Flow data.
@@ -1484,7 +1493,9 @@ class Participant_Flow:
             col_names = [i for i in range(num_elements)]
             return pd.Series(arr, index=col_names)
 
-        exp_baseline_avg_dict = self.create_exp_stim_response_dict(exp_name)
+        exp_baseline_avg_dict = self.create_exp_stim_response_dict(
+            exp_name, filter_type
+        )
         rows = []
         for block, block_data in sorted(exp_baseline_avg_dict.items()):
             for trial, stim_resp_data in block_data.items():
@@ -1503,11 +1514,11 @@ class Participant_Flow:
         )  # merge with original DataFrame
         stim_resp_df = stim_resp_df.drop(
             "channels", axis=1
-        )  # drop the original "Channels" column
+        )  # drop the original "channels" column
         return stim_resp_df
 
     def create_inter_module_exp_results_df(
-        self, exp_name: str, fmt: str = None
+        self, exp_name: str, hemo_type: str = None, filter_type: str = None
     ) -> pd.DataFrame:
         """
         Create a DataFrame with the inter-module channels for an experiment.
@@ -1515,19 +1526,20 @@ class Participant_Flow:
         or just "HbO", "HbR", "HbTot", or "HbDiff" channels.
 
         Args:
-            fmt (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels.
+            hemo_type (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels.
                                  Defaults to None (all inter-module channels).
+            filter_type (str): Filter to apply to the data. Default to None.
 
         Returns:
             pd.DataFrame: Inter-module channels for an experiment.
         """
 
-        def _compute_df(fmt: str) -> pd.DataFrame:
+        def _compute_df(hemo_type: str) -> pd.DataFrame:
             """
             Create the HbTot and HbDiff DataFrames.
 
             Args:
-                fmt (str): "HbTot" or "HbDiff".
+                hemo_type (str): "HbTot" or "HbDiff".
 
             Returns:
                 pd.DataFrame: HbTot or HbDiff DataFrame.
@@ -1542,11 +1554,11 @@ class Participant_Flow:
             HbR_data_cols = HbR_df.iloc[:, 2:]
             cols_dict = {}
             for i, col_name in enumerate(HbO_data_cols.columns):
-                if fmt.lower() == "hbtot":
+                if hemo_type.lower() == "hbtot":
                     cols_dict[col_name] = (
                         HbO_data_cols.iloc[:, i] + HbR_data_cols.iloc[:, i]
                     )
-                elif fmt.lower() == "hbdiff":
+                elif hemo_type.lower() == "hbdiff":
                     cols_dict[col_name] = (
                         HbO_data_cols.iloc[:, i] - HbR_data_cols.iloc[:, i]
                     )
@@ -1555,9 +1567,18 @@ class Participant_Flow:
             df.insert(0, "participant", HbO_df["participant"])
             return df
 
-        exp_results = load_results(
-            os.path.join(self.flow_processed_data_dir, "all_channels"), exp_name
-        )
+        if filter_type:
+            exp_results = load_results(
+                os.path.join(self.flow_processed_data_dir, "all_channels", filter_type),
+                exp_name,
+            )
+        else:
+            exp_results = load_results(
+                os.path.join(
+                    self.flow_processed_data_dir, "all_channels", "unfiltered"
+                ),
+                exp_name,
+            )
         session = self.par_behav.get_key_from_value(
             self.par_behav.session_dict, exp_name
         )
@@ -1567,52 +1588,53 @@ class Participant_Flow:
         channels = (measurement_list_df["measurement_list_index"] - 1).tolist()
         cols_to_select = ["participant", "block"] + [str(chan) for chan in channels]
         inter_module_df = exp_results.loc[:, cols_to_select]
-        if fmt:
-            if fmt.lower() == "hbo":  # HbO
+        if hemo_type:
+            if hemo_type.lower() == "hbo":  # HbO
                 HbO_df = inter_module_df.iloc[
                     :, np.r_[0, 1, 2 : len(inter_module_df.columns) : 2]
                 ]
                 return HbO_df
-            elif fmt.lower() == "hbr":  # HbR
+            elif hemo_type.lower() == "hbr":  # HbR
                 HbR_df = inter_module_df.iloc[
                     :, np.r_[0, 1, 3 : len(inter_module_df.columns) : 2]
                 ]
                 return HbR_df
-            elif fmt.lower() == "hbtot":  # HbTot
-                HbTot_df = _compute_df(fmt)
+            elif hemo_type.lower() == "hbtot":  # HbTot
+                HbTot_df = _compute_df(hemo_type)
                 return HbTot_df
-            elif fmt.lower() == "hbdiff":  # HbDiff
-                HbDiff_df = _compute_df(fmt)
+            elif hemo_type.lower() == "hbdiff":  # HbDiff
+                HbDiff_df = _compute_df(hemo_type)
                 return HbDiff_df
         else:
             return inter_module_df
 
     def lowpass_filter(
-        self, data: list[np.ndarray | pd.DataFrame]
-    ) -> Union[np.ndarray, pd.DataFrame]:
+        self,
+        data: Union[np.ndarray, pd.Series, pd.DataFrame],
+        cutoff: float = 0.1,
+        fs: float = 7.1,
+        order: int = 10,
+    ) -> Union[np.ndarray, pd.Series, pd.DataFrame]:
         """
-        Lowpass filter input data.
+        Apply an IIR lowpass Butterworth filter.
 
         Args:
-            data list([np.ndarray | pd.DataFrame]): Data to filter.
+            data (Union[np.ndarray, pd.DataFrame]): Data to filter. Array, Series, or DataFrame.
+            cutoff (float): Cutoff frequency (Hz). Defaults to 0.1.
+            fs (float): System sampling frequency (Hz). Defaults to 7.1.
+            order (int): Filter order. Defaults to 10. NOTE: filtfilt order is 2x this value.
 
         Returns:
-            np.ndarray: Lowpass filtered data.
-            -or-
-            pd.DataFrame: Lowpass filtered data.
+            Union[np.ndarray, pd.DataFrame]: Filtered data. Array, Series, or DataFrame.
         """
-        order = 20  # filter order
-        fs = 1.0  # sampling frequency (Hz)
-        cutoff = 0.1  # cut-off frequency (Hz)
-        nyq = 0.5 * fs  # nyquist
-        taps = firwin(order + 1, cutoff / nyq)
-
+        b, a = butter(N=order, Wn=cutoff, fs=fs, btype="lowpass", analog=False)
+        pad = 3 * (max(len(b), len(a)) - 1)
         if type(data) == pd.DataFrame:
             data_out = data.apply(
-                lambda x: lfilter(taps, 1.0, x)
+                lambda x: filtfilt(b, a, data, padlen=pad), axis=0
             )  # apply lowpass filter
-        else:
-            data_out = lfilter(taps, 1.0, data)  # apply lowpass filter
+        elif type(data) == np.ndarray or type(data) == pd.Series:
+            data_out = filtfilt(b, a, data, padlen=pad)  # apply lowpass filter
         return data_out
 
     def plot_flow_session(
@@ -1823,7 +1845,9 @@ class Flow_Results:
         self.par = Participant_Flow(1)
         self.flow_session = self.par.flow_session_dict["session_1001"]
 
-    def create_flow_results_tables(self, num_pars: int, inter_module_only=True) -> None:
+    def create_flow_results_tables(
+        self, num_pars: int, inter_module_only=True, filter_type: str = None
+    ) -> None:
         """
         Generate a CSV file that contains the Kernel Flow stimulus response data
         for all experiments and participants.
@@ -1831,8 +1855,8 @@ class Flow_Results:
         Args:
             num_pars (int): Number of participants in the study.
             inter_module_only (bool): Select only inter-module channels. Defaults to True.
+            filter_type (str): Filter to apply to the data. Default to None.
         """
-
         if inter_module_only:
             print(f"Processing participants ...")
             for hemo_type in self.hemo_types:
@@ -1840,14 +1864,25 @@ class Flow_Results:
                 exp_results_list = []
                 for exp_name in self.exp_names:
                     stim_resp_df = self.par.create_inter_module_exp_results_df(
-                        exp_name, hemo_type
+                        exp_name, hemo_type, filter_type
                     )
                     exp_results_list.append(stim_resp_df)
                 all_exp_results_list.append(exp_results_list)
 
-                filedir = os.path.join(
-                    self.par.flow_processed_data_dir, "inter_module_channels", hemo_type
-                )
+                if filter_type:
+                    filedir = os.path.join(
+                        self.par.flow_processed_data_dir,
+                        "inter_module_channels",
+                        filter_type,
+                        hemo_type,
+                    )
+                else:
+                    filedir = os.path.join(
+                        self.par.flow_processed_data_dir,
+                        "inter_module_channels",
+                        "unfiltered",
+                        hemo_type,
+                    )
                 if not os.path.exists(filedir):
                     os.makedirs(filedir)
 
@@ -1883,11 +1918,20 @@ class Flow_Results:
                 par = Participant_Flow(par_num)
                 exp_results_list = []
                 for exp_name in self.exp_names:
-                    stim_resp_df = par.create_exp_stim_response_df(exp_name)
+                    stim_resp_df = par.create_exp_stim_response_df(
+                        exp_name, filter_type
+                    )
                     exp_results_list.append(stim_resp_df)
                 all_exp_results_list.append(exp_results_list)
 
-            filedir = os.path.join(self.par.flow_processed_data_dir, "all_channels")
+            if filter_type:
+                filedir = os.path.join(
+                    self.par.flow_processed_data_dir, "all_channels", filter_type
+                )
+            else:
+                filedir = os.path.join(
+                    self.par.flow_processed_data_dir, "all_channels", "unfiltered"
+                )
             if not os.path.exists(filedir):
                 os.makedirs(filedir)
 
@@ -1914,20 +1958,38 @@ class Flow_Results:
                         all_exp_filepath, mode="a", header=False, index=False
                     )
 
-    def run_anova_rm(self) -> pd.DataFrame:
+    def run_anova_rm(self, filter_type: str = None) -> dict:
         """
         Run a repeated measures ANOVA on the processed inter-module channels.
 
+        Args:
+            filter_type (str): Filter to apply to the data. Default to None.
+
         Returns:
-            pd.DataFrame: repeated measures ANOVA results for all experiments.
+            dict: repeated measures ANOVA results for all experiments and hemo types.
         """
+        all_exp_aov_results_dict = {}
         for hemo_type in self.hemo_types:
-            read_filedir = os.path.join(
-                self.par.flow_processed_data_dir, "inter_module_channels", hemo_type
-            )
-            write_filedir = os.path.join(
-                self.results_dir, "inter_module_channels", hemo_type
-            )
+            if filter_type:
+                read_filedir = os.path.join(
+                    self.par.flow_processed_data_dir,
+                    "inter_module_channels",
+                    filter_type,
+                    hemo_type,
+                )
+                write_filedir = os.path.join(
+                    self.results_dir, "inter_module_channels", filter_type, hemo_type
+                )
+            else:
+                read_filedir = os.path.join(
+                    self.par.flow_processed_data_dir,
+                    "inter_module_channels",
+                    "unfiltered",
+                    hemo_type,
+                )
+                write_filedir = os.path.join(
+                    self.results_dir, "inter_module_channels", "unfiltered", hemo_type
+                )
             if not os.path.exists(write_filedir):
                 os.makedirs(write_filedir)
             all_exp_aov_results = []
@@ -1983,7 +2045,8 @@ class Flow_Results:
             all_exp_filepath = os.path.join(write_filedir, all_exp_filename)
             all_exp_aov_results = pd.concat(all_exp_aov_results)
             all_exp_aov_results.to_csv(all_exp_filepath, index=False)
-            return all_exp_aov_results
+            all_exp_aov_results_dict[hemo_type] = all_exp_aov_results
+        return all_exp_aov_results_dict
 
     def load_flow_stats(self, exp_name: str, hemo_type: str) -> pd.DataFrame:
         """
