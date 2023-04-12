@@ -2035,7 +2035,7 @@ class Flow_Results:
                         },
                         inplace=True,
                     )
-                    aov_final.insert(0, "channel", channel)
+                    aov_final.insert(0, "channel_num", channel)
                     aov_list.append(aov_final)
                 exp_aov_results = pd.concat(aov_list)
                 exp_aov_results.to_csv(write_filepath, index=False)
@@ -2062,12 +2062,25 @@ class Flow_Results:
         Returns:
             pd.DataFrame: Statistical results for an experiment and hemodynamic type.
         """
-        filename = f"{exp_name}_stats_{hemo_type}.csv"
-        filepath = os.path.join(
-            self.results_dir, "inter_module_channels", hemo_type, filename
-        )
+        filename = f"{exp_name}_flow_stats_{hemo_type}.csv"
+        if filter_type:
+            filepath = os.path.join(
+                self.results_dir,
+                "inter_module_channels",
+                filter_type,
+                hemo_type,
+                filename,
+            )
+        else:
+            filepath = os.path.join(
+                self.results_dir,
+                "inter_module_channels",
+                "unfiltered",
+                hemo_type,
+                filename,
+            )
         flow_stats = pd.read_csv(filepath)
-        return flow_stats[["channel", "p_value", "F_value", "df1", "df2"]]
+        return flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
 
     def plot_stat_results(
         self, exp_name: str, dim: str, hemo_type: str, filter_type: str = None
