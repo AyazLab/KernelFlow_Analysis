@@ -781,9 +781,7 @@ class Process_Flow:
                                 facecolor="white",
                                 alpha=1,
                             ),
-                            arrowprops=dict(
-                                arrowstyle="->", facecolor="black", linewidth=2
-                            ),
+                            arrowprops=dict(arrowstyle="-|>", facecolor="black", linewidth=2, shrinkA=0, shrinkB=0)
                         )
                     except TypeError:
                         ax.annotate(
@@ -800,9 +798,7 @@ class Process_Flow:
                                 facecolor="white",
                                 alpha=1,
                             ),
-                            arrowprops=dict(
-                                arrowstyle="->", facecolor="black", linewidth=2
-                            ),
+                            arrowprops=dict(arrowstyle="-|>", facecolor="black", linewidth=2, shrinkA=0, shrinkB=0)
                         )
             elif dim.lower() == "3d":
                 labels = plot_df["channel_num"]
@@ -818,9 +814,7 @@ class Process_Flow:
                     label_x = x_pos[i] + label_x_offset
                     label_y = y_pos[i] + label_y_offset
                     label_z = z_pos[i] + label_z_offset
-                    arrow_length = np.array(
-                        [label_x_offset, label_y_offset, label_z_offset]
-                    )
+                    arrow_length = np.array([label_x_offset, label_y_offset, label_z_offset])
                     ax.quiver(
                         x_pos[i] + arrow_length[0],
                         y_pos[i] + arrow_length[1],
@@ -865,13 +859,13 @@ class Process_Flow:
                             ),
                         )
 
-        source_detector_df = self.create_source_detector_df(dim, add_missing)
+        source_detector_df = self.create_source_detector_df(
+            dim, add_missing
+        )
         source_detector_hemo = source_detector_df[
             source_detector_df["data_type_index"] == hemo_type
         ]
-        uni_source_label_df = source_detector_hemo.drop_duplicates(
-            subset="source_index"
-        )
+        uni_source_label_df = source_detector_hemo.drop_duplicates(subset="source_index")
 
         if dim.lower() == "2d":
             x_detector = list(source_detector_hemo["detector_x_pos"])
@@ -883,11 +877,9 @@ class Process_Flow:
             ax.scatter(x_detector, y_detector, s=40)
             ax.scatter(x_source, y_source, s=70)
             if add_labels and not channel:
-                label_x_offset = 0.03
-                label_y_offset = 0.01
-                _add_labels(
-                    uni_source_label_df, dim, "source", label_x_offset, label_y_offset
-                )
+                label_x_offset = 10
+                label_y_offset = 15
+                _add_labels(uni_source_label_df, dim, "source", label_x_offset, label_y_offset)
             if minimal:
                 ax.set_title("Anterior", fontweight="bold", fontsize=14)
                 ax.set_xticklabels([])
@@ -915,9 +907,7 @@ class Process_Flow:
                 label_x_offset = 12
                 label_y_offset = 12
                 highlight_rows = _get_highlight_channels(source_detector_hemo, channel)
-                _add_labels(
-                    highlight_rows, dim, "detector", label_x_offset, label_y_offset
-                )
+                _add_labels(highlight_rows, dim, "detector", label_x_offset, label_y_offset)
 
         elif dim.lower() == "3d":
             fig = plt.figure(figsize=(8, 8))
@@ -945,9 +935,7 @@ class Process_Flow:
                         label_z_offset,
                     )
                 if channel:
-                    highlight_rows = _get_highlight_channels(
-                        source_detector_hemo, channel
-                    )
+                    highlight_rows = _get_highlight_channels(source_detector_hemo, channel)
                     _add_labels(
                         highlight_rows,
                         dim,
@@ -987,9 +975,7 @@ class Process_Flow:
                     detector_plot_df = source_detector_hemo[
                         source_detector_hemo["detector_y_pos"] > 0
                     ]
-                    ax.set_title(
-                        "Anterior View", fontweight="bold", fontsize=14, y=0.85
-                    )
+                    ax.set_title("Anterior View", fontweight="bold", fontsize=14, y=0.85)
                 elif view == "posterior":
                     source_plot_df = uni_source_label_df[
                         uni_source_label_df["source_y_pos"] <= 0
@@ -997,9 +983,7 @@ class Process_Flow:
                     detector_plot_df = source_detector_hemo[
                         source_detector_hemo["detector_y_pos"] <= 0
                     ]
-                    ax.set_title(
-                        "Posterior View", fontweight="bold", fontsize=14, y=0.85
-                    )
+                    ax.set_title("Posterior View", fontweight="bold", fontsize=14, y=0.85)
                 if add_labels and not channel:
                     try:
                         _add_labels(
@@ -1057,6 +1041,15 @@ class Process_Flow:
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
                 ax.set_zticklabels([])
+                if not view:
+                    if azim > 180:
+                        ax.set_xlabel("Posterior", fontweight="bold", fontsize=14)
+                    else:
+                        ax.set_xlabel("Anterior", fontweight="bold", fontsize=14)
+                    if azim >= 270 or (azim >= 0 and azim <=90):
+                        ax.set_ylabel("Right", fontweight="bold", fontsize=14)
+                    else:
+                        ax.set_ylabel("Left", fontweight="bold", fontsize=14)
             else:
                 ax.set_title("Detector/Source 3D Plot")
                 ax.set_xlabel("X-Position (mm)")
