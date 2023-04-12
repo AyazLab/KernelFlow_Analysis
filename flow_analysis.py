@@ -541,6 +541,7 @@ class Process_Flow:
         dim: str,
         add_missing: bool = False,
         MNI: bool = False,
+        brain_region: bool = False,
         channel: Union[List[int], int] = None,
     ) -> pd.DataFrame:
         """
@@ -550,6 +551,7 @@ class Process_Flow:
             dim (str): Position data dimension "2D" or "3D".
             add_missing (bool): Add missing detector data. Defaults to False.
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
+            brain_region (bool): Include AAL and BA brain region columns. Defaults to False.
             channel (Union[List[int], int]): Return only specific channel(s). Defaults to None.
 
         Returns:
@@ -570,6 +572,12 @@ class Process_Flow:
         source_detector_df.insert(
             0, "channel_num", source_detector_df["measurement_list_index"] - 1
         )
+        
+        if isinstance(channel, int):
+            source_detector_df = source_detector_df[source_detector_df["channel_num"] == channel].copy()
+        elif isinstance(channel, list):
+            source_detector_df = source_detector_df[source_detector_df["channel_num"].isin(channel)].copy()
+
         if dim.lower() == "3d":
             # add source/detector midpoints
             source_detector_df[
@@ -619,12 +627,38 @@ class Process_Flow:
                     axis=1,
                     result_type="expand",
                 )
-        if isinstance(channel, int):
-            return source_detector_df[source_detector_df["channel_num"] == channel]
-        elif isinstance(channel, list):
-            return source_detector_df[source_detector_df["channel_num"].isin(channel)]
-        else:
-            return source_detector_df
+            if brain_region:
+                # load R script files here to improve performance 
+                with open(
+                    os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r"
+                ) as file:
+                    mni_to_region_index_code = "".join(file.readlines())
+                with open(
+                    os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"), "r"
+                ) as file:
+                    mni_to_region_name_code = "".join(file.readlines())
+                # evaluate R code
+                metadata_path = os.path.join(os.getcwd(), "label4MRI", "data", "metadata.RData")
+                load_rdata = robjects.r["load"]
+                load_rdata(metadata_path)
+                robjects.r(mni_to_region_index_code)
+                robjects.r(mni_to_region_name_code)
+                # R function as Python callable
+                self.mni_to_region_name = robjects.globalenv["mni_to_region_name"]
+
+                source_detector_df[
+                    ["AAL_distance", "AAL_region", "BA_distance", "BA_region"]
+                ] = source_detector_df.apply(
+                    lambda row: self.MNI_to_region(
+                        row["midpoint_x_MNI"],
+                        row["midpoint_y_MNI"],
+                        row["midpoint_z_MNI"],
+                    ),
+                    axis=1,
+                    result_type="expand",
+                )
+
+        return source_detector_df
 
     def get_midpoint(
         self, point1: Tuple[float, float, float], point2: Tuple[float, float, float]
@@ -665,7 +699,7 @@ class Process_Flow:
         return mni_x, mni_y, mni_z
 
     def MNI_to_region(
-        self, mni_x: float, mni_y: float, mni_z: float
+        self, mni_x: float, mni_y: float, mni_z: float, print_results: bool=False
     ) -> Tuple[float, str, float, str]:
         """
         Convert MNI coordinates to the corresponding Automated Anatomical Labeling (AAL) and
@@ -676,31 +710,33 @@ class Process_Flow:
             mni_x (float): x MNI coordinate.
             mni_y (float): y MNI coordinate.
             mni_z (float): z MNI coordinate.
+            print_results (bool): Print the results. Defaults to False.
 
         Returns:
             Tuple[float, str, float, str]: Distance from AAL brain region, AAL brain region,
                                            distance from BA brain region, and BA region.
         """
-        # load R script files
-        with open(
-            os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r"
-        ) as file:
-            mni_to_region_index_code = "".join(file.readlines())
-        with open(
-            os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"), "r"
-        ) as file:
-            mni_to_region_name_code = "".join(file.readlines())
+        if hasattr(self.__class__, "mni_to_region_name"):
+            mni_to_region_name = self.mni_to_region_name
+        else:
+            # load R script files
+            with open(
+                os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r"
+            ) as file:
+                mni_to_region_index_code = "".join(file.readlines())
+            with open(
+                os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"), "r"
+            ) as file:
+                mni_to_region_name_code = "".join(file.readlines())
+            # evaluate R code
+            metadata_path = os.path.join(os.getcwd(), "label4MRI", "data", "metadata.RData")
+            load_rdata = robjects.r["load"]
+            load_rdata(metadata_path)
+            robjects.r(mni_to_region_index_code)
+            robjects.r(mni_to_region_name_code)
+            # R function as Python callable
+            mni_to_region_name = robjects.globalenv["mni_to_region_name"]
 
-        # evaluate R code
-        metadata_path = os.path.join(os.getcwd(), "label4MRI", "data", "metadata.RData")
-        load_rdata = robjects.r["load"]
-        load_rdata(metadata_path)
-
-        robjects.r(mni_to_region_index_code)
-        robjects.r(mni_to_region_name_code)
-
-        # R function as Python callable
-        mni_to_region_name = robjects.globalenv["mni_to_region_name"]
         result = mni_to_region_name(float(mni_x), float(mni_y), float(mni_z))
 
         aal_distance = result.rx2("aal.distance")
@@ -709,10 +745,16 @@ class Process_Flow:
         ba_label = result.rx2("ba.label")
 
         # convert R vector objects
-        aal_distance = list(aal_distance)[0]
+        aal_distance = round(list(aal_distance)[0], 2)
         aal_label = list(aal_label)[0]
-        ba_distance = list(ba_distance)[0]
+        ba_distance = round(list(ba_distance)[0], 2)
         ba_label = list(ba_label)[0]
+
+        if print_results:
+            print(f"AAL distance: {aal_distance}")
+            print(f"AAL region: {aal_label}")
+            print(f"BA distance: {ba_distance}")
+            print(f"BA region: {ba_label}")
 
         return aal_distance, aal_label, ba_distance, ba_label
 
