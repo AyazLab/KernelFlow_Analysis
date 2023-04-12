@@ -2048,13 +2048,16 @@ class Flow_Results:
             all_exp_aov_results_dict[hemo_type] = all_exp_aov_results
         return all_exp_aov_results_dict
 
-    def load_flow_stats(self, exp_name: str, hemo_type: str) -> pd.DataFrame:
+    def load_flow_stats(
+        self, exp_name: str, hemo_type: str, filter_type: str = None
+    ) -> pd.DataFrame:
         """
         Load Kernel Flow statistical results.
 
         Args:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            filter_type (str): Filter to apply to the data. Default to None.
 
         Returns:
             pd.DataFrame: Statistical results for an experiment and hemodynamic type.
@@ -2066,14 +2069,17 @@ class Flow_Results:
         flow_stats = pd.read_csv(filepath)
         return flow_stats[["channel", "p_value", "F_value", "df1", "df2"]]
 
-    def plot_stat_results(self, exp_name: str, hemo_type: str, dim: str) -> None:
+    def plot_stat_results(
+        self, exp_name: str, dim: str, hemo_type: str, filter_type: str = None
+    ) -> None:
         """
         Plot Kernel Flow statistical results.
 
         Args:
             exp_name (str): Name of the experiment.
-            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             dim (str): Position data dimension "2D" or "3D".
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            filter_type (str): Filter to apply to the data. Default to None.
         """
 
         def _add_missing_pos(dim: str) -> pd.DataFrame:
@@ -2142,7 +2148,7 @@ class Flow_Results:
                 ] = float("NaN")
             return plot_df
 
-        flow_stats = self.load_flow_stats(exp_name, hemo_type)
+        flow_stats = self.load_flow_stats(exp_name, hemo_type, filter_type)
         if dim.lower() == "2d":
             source_detector_df = self.flow_session.create_source_detector_df("2D")
             plot_df = _add_missing_pos(dim)
