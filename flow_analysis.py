@@ -572,11 +572,15 @@ class Process_Flow:
         source_detector_df.insert(
             0, "channel_num", source_detector_df["measurement_list_index"] - 1
         )
-        
+
         if isinstance(channel, int):
-            source_detector_df = source_detector_df[source_detector_df["channel_num"] == channel].copy()
+            source_detector_df = source_detector_df[
+                source_detector_df["channel_num"] == channel
+            ].copy()
         elif isinstance(channel, list):
-            source_detector_df = source_detector_df[source_detector_df["channel_num"].isin(channel)].copy()
+            source_detector_df = source_detector_df[
+                source_detector_df["channel_num"].isin(channel)
+            ].copy()
 
         if dim.lower() == "3d":
             # add source/detector midpoints
@@ -628,17 +632,23 @@ class Process_Flow:
                     result_type="expand",
                 )
             if brain_region:
-                # load R script files here to improve performance 
+                # load R script files here to improve performance
                 with open(
-                    os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r"
+                    os.path.join(
+                        os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"
+                    ),
+                    "r",
                 ) as file:
                     mni_to_region_index_code = "".join(file.readlines())
                 with open(
-                    os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"), "r"
+                    os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_name.R"),
+                    "r",
                 ) as file:
                     mni_to_region_name_code = "".join(file.readlines())
                 # evaluate R code
-                metadata_path = os.path.join(os.getcwd(), "label4MRI", "data", "metadata.RData")
+                metadata_path = os.path.join(
+                    os.getcwd(), "label4MRI", "data", "metadata.RData"
+                )
                 load_rdata = robjects.r["load"]
                 load_rdata(metadata_path)
                 robjects.r(mni_to_region_index_code)
@@ -699,7 +709,7 @@ class Process_Flow:
         return mni_x, mni_y, mni_z
 
     def MNI_to_region(
-        self, mni_x: float, mni_y: float, mni_z: float, print_results: bool=False
+        self, mni_x: float, mni_y: float, mni_z: float, print_results: bool = False
     ) -> Tuple[float, str, float, str]:
         """
         Convert MNI coordinates to the corresponding Automated Anatomical Labeling (AAL) and
@@ -721,7 +731,8 @@ class Process_Flow:
         else:
             # load R script files
             with open(
-                os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"), "r"
+                os.path.join(os.getcwd(), "label4MRI", "R", "mni_to_region_index.R"),
+                "r",
             ) as file:
                 mni_to_region_index_code = "".join(file.readlines())
             with open(
@@ -729,7 +740,9 @@ class Process_Flow:
             ) as file:
                 mni_to_region_name_code = "".join(file.readlines())
             # evaluate R code
-            metadata_path = os.path.join(os.getcwd(), "label4MRI", "data", "metadata.RData")
+            metadata_path = os.path.join(
+                os.getcwd(), "label4MRI", "data", "metadata.RData"
+            )
             load_rdata = robjects.r["load"]
             load_rdata(metadata_path)
             robjects.r(mni_to_region_index_code)
