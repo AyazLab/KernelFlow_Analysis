@@ -1154,6 +1154,7 @@ class Participant_Flow:
         self.flow_processed_data_dir = os.path.join(
             os.getcwd(), "processed_data", "flow"
         )
+        self.flow = self.load_flow_session("1001", wrapper=True)
         self.flow_session_dict = self.create_flow_session_dict(wrapper=True)
         self.time_offset_dict = self.create_time_offset_dict()
         self.plot_color_dict = {
