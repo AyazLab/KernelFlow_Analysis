@@ -8,6 +8,7 @@ import pingouin as pg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.font_manager import FontProperties
+from adjustText import adjust_text
 from scipy.signal import butter, filtfilt
 from typing import Union, Tuple, List
 from statistics import mean
@@ -2155,7 +2156,12 @@ class Flow_Results:
         return flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
 
     def plot_stat_results(
-        self, exp_name: str, dim: str, hemo_type: str, filter_type: str = None
+        self,
+        exp_name: str,
+        dim: str,
+        hemo_type: str,
+        add_labels: bool = False,
+        filter_type: str = None,
     ) -> None:
         """
         Plot Kernel Flow statistical results.
@@ -2164,6 +2170,7 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             dim (str): Position data dimension "2D" or "3D".
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            add_labels (bool): Add a channel number label at each detector position. Defaults to False.
             filter_type (str): Filter to apply to the data. Default to None.
         """
 
@@ -2269,6 +2276,37 @@ class Flow_Results:
                 c="black",
                 zorder=1,
             )
+            if add_labels:
+                labels = [
+                    plt.text(
+                        sig_detector_plot_df["detector_x_pos"].iloc[i],
+                        sig_detector_plot_df["detector_y_pos"].iloc[i],
+                        int(sig_detector_plot_df["channel_num"].iloc[i]),
+                        fontsize=8,
+                        ha="center",
+                        va="center",
+                        bbox=dict(
+                            boxstyle="round,pad=0.15",
+                            edgecolor="black",
+                            facecolor="white",
+                            alpha=1,
+                        ),
+                    )
+                    for i in range(sig_detector_plot_df.shape[0])
+                ]
+                adjust_text(
+                    labels,
+                    arrowprops=dict(
+                        arrowstyle="-|>",
+                        facecolor="black",
+                        linewidth=2,
+                        shrinkA=0,
+                        shrinkB=0,
+                    ),
+                    expand_points=(4, 4),
+                    expand_text=(2, 2),
+                    force_points=(0.2, 0.2),
+                )
             ax.spines["top"].set_visible(False)
             ax.spines["right"].set_visible(False)
             ax.spines["bottom"].set_visible(False)
