@@ -542,8 +542,8 @@ class Process_Flow:
         dim: str,
         add_missing: bool = False,
         MNI: bool = False,
-        brain_region: bool = False,
-        channel: Union[List[int], int] = None,
+        brain_regions: bool = False,
+        channels: Union[List[int], int] = None,
     ) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
@@ -552,8 +552,8 @@ class Process_Flow:
             dim (str): Position data dimension "2D" or "3D".
             add_missing (bool): Add missing detector data. Defaults to False.
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
-            brain_region (bool): Include AAL and BA brain region columns. Defaults to False.
-            channel (Union[List[int], int]): Return only specific channel(s). Defaults to None.
+            brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
+            channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
 
         Returns:
             pd.DataFrame: Source and detector information for inter-module channels.
@@ -574,13 +574,13 @@ class Process_Flow:
             0, "channel_num", source_detector_df["measurement_list_index"] - 1
         )
 
-        if isinstance(channel, int):
+        if isinstance(channels, int):
             source_detector_df = source_detector_df[
-                source_detector_df["channel_num"] == channel
+                source_detector_df["channel_num"] == channels
             ].copy()
-        elif isinstance(channel, list):
+        elif isinstance(channels, list):
             source_detector_df = source_detector_df[
-                source_detector_df["channel_num"].isin(channel)
+                source_detector_df["channel_num"].isin(channels)
             ].copy()
 
         if dim.lower() == "3d":
@@ -600,7 +600,7 @@ class Process_Flow:
                 result_type="expand",
             )
             # add source/detector MNI coordinates
-            if MNI:
+            if MNI or brain_regions:
                 source_detector_df[
                     ["source_x_MNI", "source_y_MNI", "source_z_MNI"]
                 ] = source_detector_df.apply(
@@ -632,7 +632,7 @@ class Process_Flow:
                     axis=1,
                     result_type="expand",
                 )
-            if brain_region:
+            if brain_regions:
                 # load R script files here to improve performance
                 with open(
                     os.path.join(
@@ -781,7 +781,7 @@ class Process_Flow:
         add_missing: bool = True,
         azim: int = 120,
         view: str = None,
-        channel: Union[List[int], int] = None,
+        channels: Union[List[int], int] = None,
     ) -> None:
         """
         Plot the detector and source 2D or 3D positions.
@@ -794,16 +794,16 @@ class Process_Flow:
             add_missing (bool): Add missing detector/source positions. Defaults to True.
             azim (int): 3D plot azimuth. Defaults to 120 degrees.
             view: 3D plot view. "Anterior", "Posterior", "Left" or "Right". Defaults to None.
-            channel (Union[List[int], int]): Highlight specific channel(s). Defaults to None.
+            channels (Union[List[int], int]): Highlight specific channel(s). Defaults to None.
         """
 
         def _get_highlight_channels(
-            plot_df: pd.DataFrame, channel: Union[List[int], int]
+            plot_df: pd.DataFrame, channels: Union[List[int], int]
         ) -> pd.DataFrame:
-            if isinstance(channel, int):
-                return plot_df[plot_df["channel_num"] == channel]
-            elif isinstance(channel, list):
-                return plot_df[plot_df["channel_num"].isin(channel)]
+            if isinstance(channels, int):
+                return plot_df[plot_df["channel_num"] == channels]
+            elif isinstance(channels, list):
+                return plot_df[plot_df["channel_num"].isin(channels)]
 
         def _add_labels(
             plot_df: pd.DataFrame,
@@ -946,7 +946,7 @@ class Process_Flow:
             ax = fig.add_subplot(111)
             ax.scatter(x_detector, y_detector, s=40)
             ax.scatter(x_source, y_source, s=70)
-            if add_labels and not channel:
+            if add_labels and not channels:
                 label_x_offset = 10
                 label_y_offset = 15
                 _add_labels(
@@ -975,10 +975,10 @@ class Process_Flow:
                 ax.set_xlabel("X-Position (mm)")
                 ax.set_ylabel("Y-Position (mm)")
                 ax.legend(["Detector", "Source"])
-            if channel:
+            if channels:
                 label_x_offset = 12
                 label_y_offset = 12
-                highlight_rows = _get_highlight_channels(source_detector_hemo, channel)
+                highlight_rows = _get_highlight_channels(source_detector_hemo, channels)
                 _add_labels(
                     highlight_rows, dim, "detector", label_x_offset, label_y_offset
                 )
@@ -999,7 +999,7 @@ class Process_Flow:
                 ax.scatter(x_detector, y_detector, z_detector, s=30)
                 ax.scatter(x_source, y_source, z_source, s=55)
                 ax.view_init(azim=azim)
-                if add_labels and not channel:
+                if add_labels and not channels:
                     _add_labels(
                         uni_source_label_df,
                         dim,
@@ -1008,9 +1008,9 @@ class Process_Flow:
                         label_y_offset,
                         label_z_offset,
                     )
-                if channel:
+                if channels:
                     highlight_rows = _get_highlight_channels(
-                        source_detector_hemo, channel
+                        source_detector_hemo, channels
                     )
                     _add_labels(
                         highlight_rows,
@@ -1064,7 +1064,7 @@ class Process_Flow:
                     ax.set_title(
                         "Posterior View", fontweight="bold", fontsize=14, y=0.85
                     )
-                if add_labels and not channel:
+                if add_labels and not channels:
                     try:
                         _add_labels(
                             source_plot_df,
@@ -1099,8 +1099,8 @@ class Process_Flow:
                     alpha=1,
                     zorder=1,
                 )
-                if channel:
-                    highlight_rows = _get_highlight_channels(detector_plot_df, channel)
+                if channels:
+                    highlight_rows = _get_highlight_channels(detector_plot_df, channels)
                     _add_labels(
                         highlight_rows,
                         dim,
@@ -1316,7 +1316,7 @@ class Participant_Flow:
 
         Args:
             exp_name (str): Name of the experiment.
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
 
         Returns:
             pd.DataFrame: Kernel Flow data for an experiment.
@@ -1344,7 +1344,7 @@ class Participant_Flow:
         Create a dictionary of Kernel Flow data for all experiment sessions.
 
         wrapper (bool, optional) Option to return Process_Flow-wrapped SNIRF file.
-                                 Default to False.
+                                 Defaults to False.
 
         Returns:
             dict: Kernel Flow data for all experiment sessions.
@@ -1402,7 +1402,7 @@ class Participant_Flow:
 
         Args:
             exp_name (str): Name of the experiment.
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
 
         Returns:
             dict:
@@ -1545,7 +1545,7 @@ class Participant_Flow:
 
         Args:
             exp_name (str): Name of the experiment.
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
 
         Returns:
             pd.DataFrame: Processed Kernel Flow data.
@@ -1602,7 +1602,7 @@ class Participant_Flow:
         Args:
             hemo_type (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels.
                                  Defaults to None (all inter-module channels).
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
 
         Returns:
             pd.DataFrame: Inter-module channels for an experiment.
@@ -1928,7 +1928,7 @@ class Flow_Results:
         Args:
             num_pars (int): Number of participants in the study.
             inter_module_only (bool): Select only inter-module channels. Defaults to True.
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
         """
         if inter_module_only:
             print(f"Processing participants ...")
@@ -2036,7 +2036,7 @@ class Flow_Results:
         Run a repeated measures ANOVA on the processed inter-module channels.
 
         Args:
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
 
         Returns:
             dict: repeated measures ANOVA results for all experiments and hemo types.
@@ -2135,7 +2135,7 @@ class Flow_Results:
         Args:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
             sig_only (bool): Return only significant results (p < 0.05). Defaults to False.
             print_sig_results (bool): Print significant results. Defaults to False.
 
@@ -2185,7 +2185,7 @@ class Flow_Results:
             dim (str): Position data dimension "2D" or "3D".
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             add_labels (bool): Add a channel number label at each detector position. Defaults to False.
-            filter_type (str): Filter to apply to the data. Default to None.
+            filter_type (str): Filter to apply to the data. Defaults to None.
         """
 
         def _add_missing_pos(dim: str) -> pd.DataFrame:
