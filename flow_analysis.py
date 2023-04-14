@@ -2122,7 +2122,12 @@ class Flow_Results:
         return all_exp_aov_results_dict
 
     def load_flow_stats(
-        self, exp_name: str, hemo_type: str, filter_type: str = None
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        sig_only: bool = False,
+        print_sig_results: bool = False,
     ) -> pd.DataFrame:
         """
         Load Kernel Flow statistical results.
@@ -2131,6 +2136,8 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Default to None.
+            sig_only (bool): Return only significant results (p < 0.05). Defaults to False.
+            print_sig_results (bool): Print significant results. Defaults to False.
 
         Returns:
             pd.DataFrame: Statistical results for an experiment and hemodynamic type.
@@ -2153,8 +2160,15 @@ class Flow_Results:
                 filename,
             )
         flow_stats = pd.read_csv(filepath)
-        return flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
-
+        flow_stats_out =  flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
+        sig_stats = flow_stats_out[flow_stats_out["p_value"] < 0.05].sort_values(by="p_value", ascending=True)
+        if print_sig_results:
+            print(sig_stats.to_string(index=False))
+        if sig_only:
+            return sig_stats
+        else:
+            return flow_stats_out
+    
     def plot_stat_results(
         self,
         exp_name: str,
