@@ -2160,15 +2160,55 @@ class Flow_Results:
                 filename,
             )
         flow_stats = pd.read_csv(filepath)
-        flow_stats_out =  flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
-        sig_stats = flow_stats_out[flow_stats_out["p_value"] < 0.05].sort_values(by="p_value", ascending=True)
+        flow_stats_out = flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
+        sig_stats = flow_stats_out[flow_stats_out["p_value"] < 0.05].sort_values(
+            by="p_value", ascending=True
+        )
         if print_sig_results:
             print(sig_stats.to_string(index=False))
         if sig_only:
             return sig_stats
         else:
             return flow_stats_out
-    
+
+    def create_flow_stats_df(
+        self, exp_name: str, hemo_type: str, filter_type: str = None
+    ) -> pd.DataFrame:
+        """
+        Create a DataFrame with significant channels and corresponding brain regions.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            filter_type (str): Filter to apply to the data. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Significant stats DataFrame with brain regions.
+        """
+        sig_stats = self.load_flow_stats(
+            exp_name, hemo_type, filter_type, sig_only=True
+        )
+        sig_channels = list(sig_stats["channel_num"])
+        source_detector_df = self.flow_session.create_source_detector_df(
+            "3D", brain_regions=True, channels=sig_channels
+        )
+        merged_df = pd.merge(
+            sig_stats, source_detector_df, on="channel_num", how="left"
+        )
+        flow_stats_df = merged_df.loc[
+            :,
+            [
+                "channel_num",
+                "p_value",
+                "F_value",
+                "AAL_distance",
+                "AAL_region",
+                "BA_distance",
+                "BA_region",
+            ],
+        ]
+        return flow_stats_df
+
     def plot_stat_results(
         self,
         exp_name: str,
