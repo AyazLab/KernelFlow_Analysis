@@ -1336,6 +1336,8 @@ class Participant_Flow:
         flow_data = flow_session.get_data("dataframe")
         if filter_type == "lowpass":
             flow_data = flow_data.apply(lambda x: self.lowpass_filter(x), axis=0)
+        elif filter_type == "bandpass":
+            flow_data = flow_data.apply(lambda x: self.bandpass_filter(x), axis=0)
         flow_data.insert(0, "datetime", time_abs_dt_offset)
         return flow_data.iloc[start_idx:end_idx, :]
 
@@ -1699,7 +1701,7 @@ class Participant_Flow:
             order (int): Filter order. Defaults to 10. NOTE: filtfilt order is 2x this value.
 
         Returns:
-            Union[np.ndarray, pd.DataFrame]: Filtered data. Array, Series, or DataFrame.
+            Union[np.ndarray, pd.Series, pd.DataFrame]: Filtered data. Array, Series, or DataFrame.
         """
         b, a = butter(N=order, Wn=cutoff, fs=fs, btype="lowpass", analog=False)
         pad = 3 * (max(len(b), len(a)) - 1)
@@ -1709,6 +1711,39 @@ class Participant_Flow:
             )  # apply lowpass filter
         elif type(data) == np.ndarray or type(data) == pd.Series:
             data_out = filtfilt(b, a, data, padlen=pad)  # apply lowpass filter
+        return data_out
+
+    def bandpass_filter(
+        self,
+        data: Union[np.ndarray, pd.Series, pd.DataFrame],
+        cutoff_low: float = 0.01,
+        cutoff_high: float = 0.1,
+        fs: float = 7.1,
+        order: int = 3,
+    ) -> Union[np.ndarray, pd.Series, pd.DataFrame]:
+        """
+        Apply an IIR bandpass Butterworth filter.
+
+        Args:
+            data (Union[np.ndarray, pd.DataFrame]): Data to filter. Array, Series, or DataFrame.
+            cutoff_low (float): Low cutoff frequency (Hz). Defaults to 0.01.
+            cutoff_high (float): High cutoff frequency (Hz). Defaults to 0.1.
+            fs (float): System sampling frequency (Hz). Defaults to 7.1.
+            order (int): Filter order. Defaults to 10. NOTE: filtfilt order is 2x this value.
+
+        Returns:
+            Union[np.ndarray, pd.Series, pd.DataFrame]: Filtered data. Array, Series, or DataFrame.
+        """
+        b, a = butter(
+            N=order, Wn=[cutoff_low, cutoff_high], fs=fs, btype="bandpass", analog=False
+        )
+        pad = 3 * (max(len(b), len(a)) - 1)
+        if type(data) == pd.DataFrame:
+            data_out = data.apply(
+                lambda x: filtfilt(b, a, data, padlen=pad), axis=0
+            )  # apply bandpass filter
+        elif type(data) == np.ndarray or type(data) == pd.Series:
+            data_out = filtfilt(b, a, data, padlen=pad)  # apply bandpass filter
         return data_out
 
     def plot_flow_session(
@@ -1726,6 +1761,8 @@ class Participant_Flow:
         sel_flow_data = flow_session.get_data("dataframe", channels)  # TODO
         if filter_type == "lowpass":
             sel_flow_data = self.lowpass_filter(sel_flow_data)
+        elif filter_type == "bandpass":
+            flow_data = flow_data.apply(lambda x: self.bandpass_filter(x), axis=0)
         session_time_offset = self.time_offset_dict[session]
         time_abs_dt = flow_session.get_time_abs("datetime")
         time_abs_dt_offset = time_abs_dt - datetime.timedelta(
@@ -1817,6 +1854,8 @@ class Participant_Flow:
             flow_data = flow_exp.iloc[:, channel_num + 1]
             if filter_type == "lowpass":
                 flow_data = self.lowpass_filter(flow_data)
+            elif filter_type == "bandpass":
+                flow_data = self.bandpass_filter(flow_data)
             data_type_label = self.flow_session_dict[session].get_data_type_label(
                 channel_num
             )
@@ -2240,7 +2279,7 @@ class Flow_Results:
             """
             nan_columns = [
                 "channel_num",
-                "F_ratio",
+                "F_value",
                 "p_value",
                 "measurement_list_index",
                 "data_type",
