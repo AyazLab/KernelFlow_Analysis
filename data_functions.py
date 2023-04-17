@@ -790,3 +790,27 @@ def load_results(
                 pass
             exp_dict[exp_name] = df
         return exp_dict
+    
+def exp_name_to_title(exp_name: str) -> str:
+    """
+    Convert experiment name into a title format.
+
+    Args:
+        exp_name (str): Experiment name.
+
+    Returns:
+        str: Experiment name in title format.
+    """
+    if exp_name == "go_no_go":
+        exp_name_title = "Go/No-go"
+    elif exp_name == "n_back":
+        exp_name_title = exp_name.replace("_", "-").title() 
+    elif exp_name == "tower_of_london":
+        exp_name_title = "Tower of London"
+    elif exp_name == "video_narrative_cmiyc":
+        exp_name_title = "Video Narrative CMIYC"
+    elif exp_name == "vSAT":
+        exp_name_title = exp_name
+    else:
+        exp_name_title = exp_name.replace("_", " ").title()
+    return exp_name_title
