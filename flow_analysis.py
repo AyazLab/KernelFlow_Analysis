@@ -1334,9 +1334,9 @@ class Participant_Flow:
         end_idx = self.par_behav.get_end_index_dt(time_abs_dt_offset, end_dt)
 
         flow_data = flow_session.get_data("dataframe")
-        if filter_type == "lowpass":
+        if filter_type.lower() == "lowpass":
             flow_data = flow_data.apply(lambda x: self.lowpass_filter(x), axis=0)
-        elif filter_type == "bandpass":
+        elif filter_type.lower() == "bandpass":
             flow_data = flow_data.apply(lambda x: self.bandpass_filter(x), axis=0)
         flow_data.insert(0, "datetime", time_abs_dt_offset)
         return flow_data.iloc[start_idx:end_idx, :]
@@ -1873,7 +1873,11 @@ class Participant_Flow:
         ax.set_xlabel("Time", fontsize=16, color="k")
 
     def plot_flow_exp(
-        self, exp_name: str, channels: list, filter_type: str = None, filter_order: int = None
+        self,
+        exp_name: str,
+        channels: list,
+        filter_type: str = None,
+        filter_order: int = None,
     ) -> None:
         """
         Plot Kernel Flow experiment data.
@@ -1895,12 +1899,12 @@ class Participant_Flow:
         for channel_num in channels:
             timeseries = flow_exp["datetime"]
             flow_data = flow_exp.iloc[:, channel_num + 1]
-            if filter_type == "lowpass":
+            if filter_type.lower() == "lowpass":
                 if filter_order:
                     flow_data = self.lowpass_filter(flow_data, order=filter_order)
-                else:                 
+                else:
                     flow_data = self.lowpass_filter(flow_data)
-            elif filter_type == "bandpass":
+            elif filter_type.lower() == "bandpass":
                 if filter_order:
                     flow_data = self.bandpass_filter(flow_data, order=filter_order)
                 else:
@@ -2006,7 +2010,7 @@ class Flow_Results:
         self.par = Participant_Flow(1)
         self.flow_session = self.par.flow_session_dict["session_1001"]
 
-    def create_flow_results_tables(
+    def process_flow_data(
         self, num_pars: int, inter_module_only=True, filter_type: str = None
     ) -> None:
         """
