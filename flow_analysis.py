@@ -2123,19 +2123,24 @@ class Flow_Results:
                         all_exp_filepath, mode="a", header=False, index=False
                     )
 
-    def run_anova_rm(self, filter_type: str = None) -> dict:
+    def run_anova_rm(self, filter_type: str = None) -> None:
         """
         Run a repeated measures ANOVA on the processed inter-module channels.
 
         Args:
             filter_type (str): Filter to apply to the data. Defaults to None.
-
-        Returns:
-            dict: repeated measures ANOVA results for all experiments and hemo types.
         """
-        all_exp_aov_results_dict = {}
-        for hemo_type in self.hemo_types:
-            if filter_type:
+        for exp_name in [
+            "go_no_go",
+            "king_devick",
+            "n_back",
+            "tower_of_london",
+            "vSAT",
+        ]:
+            for hemo_type in self.hemo_types:
+                if not filter_type:
+                    filter_type = "unfiltered"
+
                 read_filedir = os.path.join(
                     self.par.flow_processed_data_dir,
                     "inter_module_channels",
@@ -2143,33 +2148,19 @@ class Flow_Results:
                     hemo_type,
                 )
                 write_filedir = os.path.join(
-                    self.results_dir, "inter_module_channels", filter_type, hemo_type
-                )
-            else:
-                read_filedir = os.path.join(
-                    self.par.flow_processed_data_dir,
+                    self.results_dir,
                     "inter_module_channels",
-                    "unfiltered",
+                    exp_name,
                     hemo_type,
                 )
-                write_filedir = os.path.join(
-                    self.results_dir, "inter_module_channels", "unfiltered", hemo_type
-                )
-            if not os.path.exists(write_filedir):
-                os.makedirs(write_filedir)
-            all_exp_aov_results = []
-            for exp_name in [
-                "go_no_go",
-                "king_devick",
-                "n_back",
-                "tower_of_london",
-                "vSAT",
-            ]:
+                if not os.path.exists(write_filedir):
+                    os.makedirs(write_filedir)
                 read_filename = f"{exp_name}_flow_{hemo_type}.csv"
                 read_filepath = os.path.join(read_filedir, read_filename)
-                write_filename = f"{exp_name}_flow_stats_{hemo_type}.csv"
+                write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
                 write_filepath = os.path.join(write_filedir, write_filename)
                 flow_df = pd.read_csv(read_filepath)
+
                 if exp_name == "king_devick":
                     flow_df = flow_df.drop(
                         flow_df[
@@ -2204,14 +2195,6 @@ class Flow_Results:
                     aov_list.append(aov_final)
                 exp_aov_results = pd.concat(aov_list)
                 exp_aov_results.to_csv(write_filepath, index=False)
-                exp_aov_results.insert(0, "experiment", [exp_name] * len(channels))
-                all_exp_aov_results.append(exp_aov_results)
-            all_exp_filename = f"all_experiments_flow_stats_{hemo_type}.csv"
-            all_exp_filepath = os.path.join(write_filedir, all_exp_filename)
-            all_exp_aov_results = pd.concat(all_exp_aov_results)
-            all_exp_aov_results.to_csv(all_exp_filepath, index=False)
-            all_exp_aov_results_dict[hemo_type] = all_exp_aov_results
-        return all_exp_aov_results_dict
 
     def load_flow_stats(
         self,
@@ -2234,23 +2217,16 @@ class Flow_Results:
         Returns:
             pd.DataFrame: Statistical results for an experiment and hemodynamic type.
         """
-        filename = f"{exp_name}_flow_stats_{hemo_type}.csv"
-        if filter_type:
-            filepath = os.path.join(
-                self.results_dir,
-                "inter_module_channels",
-                filter_type,
-                hemo_type,
-                filename,
-            )
-        else:
-            filepath = os.path.join(
-                self.results_dir,
-                "inter_module_channels",
-                "unfiltered",
-                hemo_type,
-                filename,
-            )
+        if not filter_type:
+            filter_type = "unfiltered"
+        filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
+        filepath = os.path.join(
+            self.results_dir,
+            "inter_module_channels",
+            exp_name,
+            hemo_type,
+            filename,
+        )
         flow_stats = pd.read_csv(filepath)
         flow_stats_out = flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
         sig_stats = flow_stats_out[flow_stats_out["p_value"] < 0.05].sort_values(
