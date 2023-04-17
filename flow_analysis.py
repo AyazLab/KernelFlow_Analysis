@@ -13,7 +13,7 @@ from scipy.signal import butter, filtfilt, sosfiltfilt
 from typing import Union, Tuple, List
 from statistics import mean
 from behav_analysis import Participant_Behav
-from data_functions import Data_Functions, load_results
+from data_functions import Data_Functions, load_results, exp_name_to_title
 
 hllDll = ctypes.WinDLL(
     r"C:\Program Files\R\R-4.2.3\bin\x64\R.dll"
@@ -2284,6 +2284,8 @@ class Flow_Results:
         hemo_type: str,
         add_labels: bool = False,
         filter_type: str = None,
+        filepath: str = None,
+        show: bool = True,
     ) -> None:
         """
         Plot Kernel Flow statistical results.
@@ -2294,6 +2296,8 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             add_labels (bool): Add a channel number label at each detector position. Defaults to False.
             filter_type (str): Filter to apply to the data. Defaults to None.
+            filepath (str): Filepath to save figure. Default to None (no output).
+            show (bool): Display the figure. Defaults to True.
         """
 
         def _add_missing_pos(dim: str) -> pd.DataFrame:
@@ -2366,7 +2370,7 @@ class Flow_Results:
         if dim.lower() == "2d":
             source_detector_df = self.flow_session.create_source_detector_df("2D")
             plot_df = _add_missing_pos(dim)
-            fig = plt.figure()
+            fig = plt.figure(figsize=(6, 5))
             ax = fig.add_subplot(111)
             sig_detector_plot_df = plot_df[plot_df["p_value"] <= 0.05]
             not_sig_detector_plot_df = plot_df.loc[
@@ -2418,6 +2422,7 @@ class Flow_Results:
                 ]
                 adjust_text(
                     labels,
+                    ax=ax,
                     arrowprops=dict(
                         arrowstyle="-|>",
                         facecolor="black",
@@ -2428,7 +2433,7 @@ class Flow_Results:
                     expand_points=(4, 4),
                     expand_text=(2, 2),
                     force_points=(0.2, 0.2),
-                )
+                )  # TODO: arrows behind labels (zorder)
             ax.spines["top"].set_visible(False)
             ax.spines["right"].set_visible(False)
             ax.spines["bottom"].set_visible(False)
@@ -2454,7 +2459,23 @@ class Flow_Results:
             )
             font_props = FontProperties(size=12)
             colorbar.set_label("p-value", fontproperties=font_props)
-            plt.show()
+            try:
+                title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - {filter_type.title()}"
+            except AttributeError:
+                title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - Unfiltered"
+            ax.text(
+                0.5,
+                1.12,
+                title_text,
+                fontweight="bold",
+                fontsize=14,
+                ha="center",
+                va="bottom",
+                transform=ax.transAxes,
+            )
+            if show:  # TODO
+                plt.show()
+            fig.savefig(filepath, dpi=300, bbox_inches="tight")
         elif dim.lower() == "3d":
             source_detector_df = self.flow_session.create_source_detector_df("3D")
             plot_df = _add_missing_pos(dim)
@@ -2548,4 +2569,6 @@ class Flow_Results:
             colorbar = fig.colorbar(sm, cax=colorbar_ax)
             colorbar.set_label("p-value", fontsize=12)
             plt.subplots_adjust(wspace=-0.3, hspace=-0.4)
-            plt.show()
+            if show:  # TODO
+                plt.show()
+            fig.savefig(filepath, dpi=300, bbox_inches="tight")
