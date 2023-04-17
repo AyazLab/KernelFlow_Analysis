@@ -7,6 +7,7 @@ import pandas as pd
 import pingouin as pg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from PIL import Image
 from matplotlib.font_manager import FontProperties
 from adjustText import adjust_text
 from scipy.signal import butter, filtfilt, sosfiltfilt
@@ -2475,7 +2476,8 @@ class Flow_Results:
             )
             if show:  # TODO
                 plt.show()
-            fig.savefig(filepath, dpi=300, bbox_inches="tight")
+            if filepath:
+                fig.savefig(filepath, dpi=300, bbox_inches="tight")
         elif dim.lower() == "3d":
             source_detector_df = self.flow_session.create_source_detector_df("3D")
             plot_df = _add_missing_pos(dim)
@@ -2571,4 +2573,75 @@ class Flow_Results:
             plt.subplots_adjust(wspace=-0.3, hspace=-0.4)
             if show:  # TODO
                 plt.show()
-            fig.savefig(filepath, dpi=300, bbox_inches="tight")
+            if filepath:
+                fig.savefig(filepath, dpi=300, bbox_inches="tight")
+
+    def create_stat_results_figs(self, overwrite: bool = True) -> None:
+        """
+        Create figures (.png images) for each experiment, hemodynamic type, and filter type.
+        There are individual figures for each filter type and a combined figure that has all filter types.
+        These figures are saved in the corresponding results directory.
+
+        Args:
+            overwrite (bool): Overwrite existing filter figures. Significant performance increase when False.
+                              Defaults to True.
+        """
+
+        def _combine_figs(filedir: str) -> None:
+            """
+            Combine three individual filter figures into one figure.
+
+            Args:
+                filedir (str): Directory of an experiment hemodynamic type.
+            """
+            all_filenames = os.listdir(filedir)
+            all_fig_filenames = [f for f in all_filenames if not f.endswith(".csv")]
+            order = ["unfiltered", "lowpass", "bandpass"]
+            fig_filenames = sorted(
+                [f for f in all_fig_filenames if any(o in f for o in order)],
+                key=lambda f: next(i for i, o in enumerate(order) if o in f),
+            )
+            figs = [
+                Image.open(os.path.join(filedir, fig_name))
+                for fig_name in fig_filenames
+            ]
+            widths, heights = zip(*(fig.size for fig in figs))
+            total_width = sum(widths)
+            max_height = max(heights)
+            fig_out = Image.new("RGB", (total_width, max_height))
+            x_offset = 0
+            for fig in figs:
+                fig_out.paste(fig, (x_offset, 0))
+                x_offset += fig.size[0]
+            filename = fig_filenames[0].rpartition("_")[0] + "_all.png"
+            fig_out.save(os.path.join(filedir, filename))
+
+        filter_types = ["unfiltered", "lowpass", "bandpass"]
+        for exp_name in [
+            "go_no_go",
+            "king_devick",
+            "n_back",
+            "tower_of_london",
+            "vSAT",
+        ]:
+            for hemo_type in self.hemo_types:
+                for filter_type in filter_types:
+                    filedir = os.path.join(
+                        self.results_dir, "inter_module_channels", exp_name, hemo_type
+                    )
+                    filename = f"{exp_name}_{hemo_type}_{filter_type}.png"
+                    filepath = os.path.join(filedir, filename)
+                    if not os.path.exists(filepath) or overwrite:
+                        out = self.plot_stat_results(
+                            exp_name,
+                            dim="2D",
+                            hemo_type=hemo_type,
+                            filter_type=filter_type,
+                            add_labels=True,
+                            filepath=filepath,
+                            show=False,
+                        )
+                filedir = os.path.join(
+                    self.results_dir, "inter_module_channels", exp_name, hemo_type
+                )
+                _combine_figs(filedir)
