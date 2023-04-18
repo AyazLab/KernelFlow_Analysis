@@ -2124,6 +2124,41 @@ class Flow_Results:
                         all_exp_filepath, mode="a", header=False, index=False
                     )
 
+    def load_processed_flow_data(
+        self, exp_name: str, hemo_type: str, filter_type: str = None
+    ) -> pd.DataFrame:
+        """
+        Load processes Kernel Flow data into a DataFrame.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            filter_type (str, optional): Filter to apply to the data. Defaults to None.
+
+        Returns:
+            pd.DataFrame: Processed DataFrame.
+        """
+        read_filedir = os.path.join(
+            self.par.flow_processed_data_dir,
+            "inter_module_channels",
+            filter_type,
+            hemo_type,
+        )
+        read_filename = f"{exp_name}_flow_{hemo_type}.csv"
+        read_filepath = os.path.join(read_filedir, read_filename)
+        flow_df = pd.read_csv(read_filepath)
+
+        if exp_name == "king_devick":
+            flow_df = flow_df.drop(
+                flow_df[
+                    (flow_df["participant"] == 15) & (flow_df["block"] == "card_1")
+                ].index
+            )
+            flow_df.loc[flow_df["participant"] == 15, "block"] = flow_df.loc[
+                flow_df["participant"] == 15, "block"
+            ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
+        return flow_df
+
     def run_anova_rm(self, filter_type: str = None) -> None:
         """
         Run a repeated measures ANOVA on the processed inter-module channels.
@@ -2141,13 +2176,6 @@ class Flow_Results:
             for hemo_type in self.hemo_types:
                 if not filter_type:
                     filter_type = "unfiltered"
-
-                read_filedir = os.path.join(
-                    self.par.flow_processed_data_dir,
-                    "inter_module_channels",
-                    filter_type,
-                    hemo_type,
-                )
                 write_filedir = os.path.join(
                     self.results_dir,
                     "inter_module_channels",
@@ -2156,22 +2184,11 @@ class Flow_Results:
                 )
                 if not os.path.exists(write_filedir):
                     os.makedirs(write_filedir)
-                read_filename = f"{exp_name}_flow_{hemo_type}.csv"
-                read_filepath = os.path.join(read_filedir, read_filename)
                 write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
                 write_filepath = os.path.join(write_filedir, write_filename)
-                flow_df = pd.read_csv(read_filepath)
-
-                if exp_name == "king_devick":
-                    flow_df = flow_df.drop(
-                        flow_df[
-                            (flow_df["participant"] == 15)
-                            & (flow_df["block"] == "card_1")
-                        ].index
-                    )
-                    flow_df.loc[flow_df["participant"] == 15, "block"] = flow_df.loc[
-                        flow_df["participant"] == 15, "block"
-                    ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
+                flow_df = self.load_processed_flow_data(
+                    exp_name, hemo_type, filter_type
+                )
                 channels = list(flow_df.columns[2:])
                 aov_list = []
                 for channel in channels:
