@@ -2326,6 +2326,41 @@ class Flow_Results:
         else:
             return flow_stats_out
 
+    def load_post_hoc_stats(
+        self, exp_name: str, hemo_type: str, filter_type: str = None, drop: bool = False
+    ) -> pd.DataFrame:
+        """
+        Load Kernel Flow ANOVA post-hoc statistical results.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            filter_type (str): Filter to apply to the data. Defaults to None.
+            drop (bool): Drop columns with extra post-hoc info. Defaults to False.
+
+        Returns:
+            pd.DataFrame: Post-hoc statistical results for an experiment and hemodynamic type.
+        """
+        if not filter_type:
+            filter_type = "unfiltered"
+        filename = f"{exp_name}_post_hoc_{hemo_type}_{filter_type}.csv"
+        filepath = os.path.join(
+            self.results_dir,
+            "inter_module_channels",
+            exp_name,
+            hemo_type,
+            filename,
+        )
+        post_hoc_stats = pd.read_csv(filepath)
+        if drop:
+            try:
+                post_hoc_stats = post_hoc_stats.drop(
+                    columns=["Paired", "Parametric", "alternative", "BF10", "hedges"]
+                )
+            except KeyError:
+                pass
+        return post_hoc_stats
+
     def create_flow_stats_df(
         self, exp_name: str, hemo_type: str, filter_type: str = None
     ) -> pd.DataFrame:
