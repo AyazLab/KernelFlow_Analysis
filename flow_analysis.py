@@ -2214,6 +2214,50 @@ class Flow_Results:
                 exp_aov_results = pd.concat(aov_list)
                 exp_aov_results.to_csv(write_filepath, index=False)
 
+    def run_pos_hoc_tests(self, filter_type: str = None) -> None:
+        """
+        Run pairwise t-tests for post-hoc ANOVA analysis. 
+
+        Args:
+            filter_type (str): Filter to apply to the data. Defaults to None.
+        """
+        for exp_name in [
+            "go_no_go",
+            "king_devick",
+            "n_back",
+            "tower_of_london",
+            "vSAT",
+        ]:
+            for hemo_type in self.hemo_types:
+                if not filter_type:
+                    filter_type = "unfiltered"
+                write_filedir = os.path.join(
+                    self.results_dir,
+                    "inter_module_channels",
+                    exp_name,
+                    hemo_type,
+                )
+                write_filename = f"{exp_name}_pos_hoc_{hemo_type}_{filter_type}.csv"
+                write_filepath = os.path.join(write_filedir, write_filename)
+                sig_df = self.load_flow_stats(
+                    exp_name, hemo_type, filter_type, sig_only=True
+                )
+                sig_channels = list(sig_df["channel_num"].astype(str))
+                flow_df = self.load_processed_flow_data(
+                    exp_name, hemo_type, filter_type
+                )
+                sig_flow_df = flow_df.loc[:, flow_df.columns.isin(sig_channels)]
+
+                pos_hoc_list = []
+                for channel in sig_flow_df.columns:
+                    results = pg.pairwise_tests(
+                        data=flow_df, dv=channel, within="block", subject="participant"
+                    )
+                    results.insert(0, "channel_num", channel)
+                    pos_hoc_list.append(results)
+                post_hoc_results = pd.concat(pos_hoc_list, ignore_index=True)
+                post_hoc_results.to_csv(write_filepath, index=False)
+
     def load_flow_stats(
         self,
         exp_name: str,
