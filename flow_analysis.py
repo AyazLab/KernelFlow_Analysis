@@ -2214,12 +2214,13 @@ class Flow_Results:
                 exp_aov_results = pd.concat(aov_list)
                 exp_aov_results.to_csv(write_filepath, index=False)
 
-    def run_pos_hoc_tests(self, filter_type: str = None) -> None:
+    def run_pos_hoc_tests(self, filter_type: str = None, drop: bool = False) -> None:
         """
         Run pairwise t-tests for post-hoc ANOVA analysis.
 
         Args:
             filter_type (str): Filter to apply to the data. Defaults to None.
+            drop (bool): Drop columns with extra post-hoc info. Defaults to False.
         """
         for exp_name in [
             "go_no_go",
@@ -2237,7 +2238,7 @@ class Flow_Results:
                     exp_name,
                     hemo_type,
                 )
-                write_filename = f"{exp_name}_pos_hoc_{hemo_type}_{filter_type}.csv"
+                write_filename = f"{exp_name}_post_hoc_{hemo_type}_{filter_type}.csv"
                 write_filepath = os.path.join(write_filedir, write_filename)
                 sig_df = self.load_flow_stats(
                     exp_name, hemo_type, filter_type, sig_only=True
@@ -2260,6 +2261,26 @@ class Flow_Results:
                     results.insert(0, "channel_num", channel)
                     pos_hoc_list.append(results)
                 post_hoc_results = pd.concat(pos_hoc_list, ignore_index=True)
+                post_hoc_results = post_hoc_results.rename(
+                    columns={
+                        "Contrast": "within",
+                        "A": "condition_A",
+                        "B": "condition_B",
+                        "T": "t_stat",
+                        "dof": "df",
+                        "p-unc": "p_value",
+                    }
+                )
+                if drop:
+                    post_hoc_results = post_hoc_results.drop(
+                        columns=[
+                            "Paired",
+                            "Parametric",
+                            "alternative",
+                            "BF10",
+                            "hedges",
+                        ]
+                    )
                 post_hoc_results.to_csv(write_filepath, index=False)
 
     def load_flow_stats(
