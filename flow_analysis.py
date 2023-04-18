@@ -2216,7 +2216,7 @@ class Flow_Results:
 
     def run_pos_hoc_tests(self, filter_type: str = None) -> None:
         """
-        Run pairwise t-tests for post-hoc ANOVA analysis. 
+        Run pairwise t-tests for post-hoc ANOVA analysis.
 
         Args:
             filter_type (str): Filter to apply to the data. Defaults to None.
@@ -2253,6 +2253,10 @@ class Flow_Results:
                     results = pg.pairwise_tests(
                         data=flow_df, dv=channel, within="block", subject="participant"
                     )
+                    aov_p_value = float(
+                        sig_df[sig_df["channel_num"] == int(channel)]["p_value"]
+                    )
+                    results.insert(0, "aov_p_value", aov_p_value)
                     results.insert(0, "channel_num", channel)
                     pos_hoc_list.append(results)
                 post_hoc_results = pd.concat(pos_hoc_list, ignore_index=True)
