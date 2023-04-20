@@ -34,11 +34,12 @@ class XYZ_to_MNI:
         z-neg = inferior
     """
 
-    def __init__(self) -> None:
-        self.par = Participant_Flow()
-        self.sd_df = self.par.flow.create_source_detector_df(
-            dim="3D", add_missing=True, midpoint=True, midpoint_only=True
-        )
+    def __init__(self, source_detector_df: pd.DataFrame) -> None:
+        """
+        Args:
+            source_detector_df (pd.DataFrame): DataFrame with inter-module source and detector information.
+        """
+        self.sd_df = source_detector_df
 
         # measurements from: https://doi.org/10.1002/jbio.201900175
         self.SCALP_THICKNESS = 3
@@ -365,7 +366,6 @@ class XYZ_to_MNI:
         assert (
             kernel_MNI["midpoint_z_MNI"].max() - self.MNI_Z_MAX_ADJ == 0
         ), "Test failed. Flow DataFrame MNI z-pos max did not convert correctly."
-        print("All checks passed.")
 
 
 class Process_Flow:
@@ -888,7 +888,6 @@ class Process_Flow:
         self,
         dim: str,
         add_missing: bool = False,
-        midpoint: bool = False,
         midpoint_only: bool = False,
         MNI: bool = False,
         brain_regions: bool = False,
@@ -900,7 +899,7 @@ class Process_Flow:
         Args:
             dim (str): Position data dimension "2D" or "3D".
             add_missing (bool): Add missing detector data. Defaults to False.
-            midpoints (bool): Add source/detector midpoints. Defaults to False.
+            midpoint_only (bool): Include only source/detector midpoint coordinate dimensions. Default to False.
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
@@ -934,22 +933,20 @@ class Process_Flow:
             ].copy()
 
         if dim.lower() == "3d":
-            if midpoint or midpoint_only or MNI or brain_regions:
-                # add source/detector midpoints
-                source_detector_df[
-                    ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
-                ] = source_detector_df.apply(
-                    lambda row: self.get_midpoint(
-                        (row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]),
-                        (
-                            row["detector_x_pos"],
-                            row["detector_y_pos"],
-                            row["detector_z_pos"],
-                        ),
+            source_detector_df[
+                ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
+            ] = source_detector_df.apply(
+                lambda row: self.get_midpoint(
+                    (row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]),
+                    (
+                        row["detector_x_pos"],
+                        row["detector_y_pos"],
+                        row["detector_z_pos"],
                     ),
-                    axis=1,
-                    result_type="expand",
-                )
+                ),
+                axis=1,
+                result_type="expand",
+            )
             # add source/detector MNI coordinates
             if MNI or brain_regions:
                 source_detector_df[
@@ -1019,17 +1016,18 @@ class Process_Flow:
                     axis=1,
                     result_type="expand",
                 )
-        if midpoint_only:
-            source_detector_df = source_detector_df.drop(
-                columns=[
-                    "source_x_pos",
-                    "source_y_pos",
-                    "source_z_pos",
-                    "detector_x_pos",
-                    "detector_y_pos",
-                    "detector_z_pos",
-                ]
-            )
+            if midpoint_only:
+                source_detector_df = source_detector_df.drop(
+                    columns=[
+                        "source_x_pos",
+                        "source_y_pos",
+                        "source_z_pos",
+                        "detector_x_pos",
+                        "detector_y_pos",
+                        "detector_z_pos",
+                    ]
+                )
+            self.xyz_to_mni = XYZ_to_MNI(source_detector_df)
         return source_detector_df
 
     def get_midpoint(
