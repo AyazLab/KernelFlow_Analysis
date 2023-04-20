@@ -542,8 +542,6 @@ class Process_Flow:
         self,
         dim: str,
         add_missing: bool = False,
-        midpoint: bool = False,
-        midpoint_only: bool = False,
         MNI: bool = False,
         brain_regions: bool = False,
         channels: Union[List[int], int] = None,
@@ -554,7 +552,6 @@ class Process_Flow:
         Args:
             dim (str): Position data dimension "2D" or "3D".
             add_missing (bool): Add missing detector data. Defaults to False.
-            midpoints (bool): Add source/detector midpoints. Defaults to False.
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
@@ -588,22 +585,21 @@ class Process_Flow:
             ].copy()
 
         if dim.lower() == "3d":
-            if midpoint or midpoint_only or MNI or brain_regions:
-                # add source/detector midpoints
-                source_detector_df[
-                    ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
-                ] = source_detector_df.apply(
-                    lambda row: self.get_midpoint(
-                        (row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]),
-                        (
-                            row["detector_x_pos"],
-                            row["detector_y_pos"],
-                            row["detector_z_pos"],
-                        ),
+            # add source/detector midpoints
+            source_detector_df[
+                ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
+            ] = source_detector_df.apply(
+                lambda row: self.get_midpoint(
+                    (row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]),
+                    (
+                        row["detector_x_pos"],
+                        row["detector_y_pos"],
+                        row["detector_z_pos"],
                     ),
-                    axis=1,
-                    result_type="expand",
-                )
+                ),
+                axis=1,
+                result_type="expand",
+            )
             # add source/detector MNI coordinates
             if MNI or brain_regions:
                 source_detector_df[
@@ -673,17 +669,7 @@ class Process_Flow:
                     axis=1,
                     result_type="expand",
                 )
-        if midpoint_only:
-            source_detector_df = source_detector_df.drop(
-                columns=[
-                    "source_x_pos",
-                    "source_y_pos",
-                    "source_z_pos",
-                    "detector_x_pos",
-                    "detector_y_pos",
-                    "detector_z_pos",
-                ]
-            )
+
         return source_detector_df
 
     def get_midpoint(
@@ -1159,9 +1145,7 @@ class Participant_Flow:
     processing Kernel Flow data from the experiments.
     """
 
-    def __init__(self, par_num: int = None):
-        if not par_num:
-            par_num = 1
+    def __init__(self, par_num):
         self.data_fun = Data_Functions()
         self.adj_ts_markers = True
         self.par_behav = Participant_Behav(par_num, self.adj_ts_markers)
