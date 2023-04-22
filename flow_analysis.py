@@ -24,9 +24,9 @@ hllDll = ctypes.WinDLL(
 import rpy2.robjects as robjects
 
 
-class XYZ_to_MNI:
+class Flow_Coordinates:
     """
-    Convert Kernel XYZ coordinates into the MRIcron AAL template XYZ and MNI coordinates. All units in mm.
+    Convert Kernel Flow XYZ coordinates into the MRIcron AAL template XYZ and MNI coordinates. All units in mm.
     Brain anatomical directions:
         x-pos = right
         x-neg = left
@@ -1181,10 +1181,10 @@ class Process_Flow:
                 axis=1,
                 result_type="expand",
             )
-            xyz_to_mni = XYZ_to_MNI(source_detector_df)
+            FC = Flow_Coordinates(source_detector_df)
             # add source/detector MNI coordinates
             if MNI or brain_regions:
-                source_detector_df = xyz_to_mni.create_source_detector_adj()
+                source_detector_df = FC.create_source_detector_adj()
             if brain_regions:
                 # load R script files here to improve performance
                 with open(
