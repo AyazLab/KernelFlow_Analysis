@@ -249,8 +249,7 @@ class Flow_Coordinates:
         Get the Kernel Flow coordinate translation depth (in mm).
 
         Args:
-            depth (Union[int, float], optional): Depth into the brain
-                                                 Defaults to None (brain surface).
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
 
         Returns:
             depth (Union[int, float], optional): Depth into the brain.
@@ -266,8 +265,7 @@ class Flow_Coordinates:
         Translate Kernel Flow XYZ coordinate dimensions to the brain surface or to a specified depth.
 
         Args:
-            depth (Union[int, float], optional): Depth into the brain
-                                                 Defaults to None (brain surface).
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
 
         Returns:
             pd.DataFrame: Translated Kernel Flow DataFrame.
@@ -294,8 +292,7 @@ class Flow_Coordinates:
         Get a DataFrame with Kernel Flow XYZ coordinates scaled and aligned with the AAL template XYZ coordinates.
 
         Args:
-            depth (Union[int, float], optional): Depth into the brain
-                                                 Defaults to None (brain surface).
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
 
         Returns:
             pd.DataFrame: Kernel Flow XYZ coordinate dimensions.
@@ -308,8 +305,7 @@ class Flow_Coordinates:
         Get a DataFrame with Kernel Flow MNI coordinates scaled and aligned with the AAL template MNI coordinates.
 
         Args:
-            depth (Union[int, float], optional): Depth into the brain
-                                                 Defaults to None (brain surface).
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
 
         Returns:
             pd.DataFrame: Kernel Flow MNI coordinate dimensions.
@@ -321,15 +317,20 @@ class Flow_Coordinates:
         kernel_MNI["midpoint_z_MNI"] = kernel_XYZ["midpoint_z_XYZ"] - self.XYZ_ORIGIN[2]
         return kernel_MNI
 
-    def create_source_detector_adj(self) -> pd.DataFrame:
+    def create_source_detector_adj(
+        self, depth: Union[int, float] = None
+    ) -> pd.DataFrame:
         """
         Add the new Kernel Flow XYZ and MNI coordinates to the source/detector DataFrame.
+
+        Args:
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
 
         Returns:
             pd.DataFrame: Adjusted source/detector DataFrame.
         """
-        kernel_XYZ = self.get_kernel_XYZ()
-        kernel_MNI = self.get_kernel_MNI()
+        kernel_XYZ = self.get_kernel_XYZ(depth)
+        kernel_MNI = self.get_kernel_MNI(depth)
         sd_df_adj = self.sd_df
         sd_df_adj["midpoint_x_XYZ"] = kernel_XYZ["midpoint_x_XYZ"]
         sd_df_adj["midpoint_y_XYZ"] = kernel_XYZ["midpoint_y_XYZ"]
@@ -1126,6 +1127,7 @@ class Process_Flow:
         MNI: bool = False,
         brain_regions: bool = False,
         channels: Union[List[int], int] = None,
+        depth: Union[int, float] = None,
     ) -> pd.DataFrame:
         """
         Create a DataFrame with the source and detector information for the inter-module channels.
@@ -1137,6 +1139,7 @@ class Process_Flow:
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
 
         Returns:
             pd.DataFrame: Source and detector information for inter-module channels.
@@ -1184,7 +1187,7 @@ class Process_Flow:
             FC = Flow_Coordinates(source_detector_df)
             # add source/detector MNI coordinates
             if MNI or brain_regions:
-                source_detector_df = FC.create_source_detector_adj()
+                source_detector_df = FC.create_source_detector_adj(depth)
             if brain_regions:
                 # load R script files here to improve performance
                 with open(
