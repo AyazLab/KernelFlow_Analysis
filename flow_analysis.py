@@ -37,7 +37,7 @@ class XYZ_to_MNI:
     def __init__(self, source_detector_df: pd.DataFrame) -> None:
         """
         Args:
-            source_detector_df (pd.DataFrame): DataFrame with inter-module source and detector information.
+            source_detector_df (pd.DataFrame): DataFrame with inter-module source and detector XYZ coordinates.
         """
         self.sd_df = source_detector_df
 
@@ -45,7 +45,7 @@ class XYZ_to_MNI:
         self.SCALP_THICKNESS = 3
         self.SKULL_THICKNESS = 7
         self.CSF_THICKNESS = 2
-        self.EXTRA_THICKNESS = (
+        self.BRAIN_SURFACE_DEPTH = (
             self.SCALP_THICKNESS + self.SKULL_THICKNESS + self.CSF_THICKNESS
         )
 
@@ -53,53 +53,51 @@ class XYZ_to_MNI:
         self.XYZ_ORIGIN = (91, 126, 72)
         self.MNI_ORIGIN = (0, 0, 0)
 
-        self.X_MAX = 163
-        self.Y_MAX = 200
-        self.Z_MAX = 156
-
         self.X_MIN = 18
         self.Y_MIN = 21
         self.Z_MIN = 11
 
-        self.MNI_X_MAX = 72
-        self.MNI_Y_MAX = 74
-        self.MNI_Z_MAX = 84
+        self.X_MAX = 163
+        self.Y_MAX = 200
+        self.Z_MAX = 156
 
         self.MNI_X_MIN = -73
         self.MNI_Y_MIN = -105
         self.MNI_Z_MIN = -61
 
-        self.X_MAX_ADJ = self.X_MAX + self.EXTRA_THICKNESS
-        self.X_MIN_ADJ = self.X_MIN - self.EXTRA_THICKNESS
-        self.Y_MAX_ADJ = self.Y_MAX + self.EXTRA_THICKNESS
-        self.Y_MIN_ADJ = self.Y_MIN - self.EXTRA_THICKNESS
-        self.Z_MAX_ADJ = self.Z_MAX + self.EXTRA_THICKNESS
-        self.Z_MIN_ADJ = self.Z_MIN  # no extra thickness needed for inferior brain
+        self.MNI_X_MAX = 72
+        self.MNI_Y_MAX = 74
+        self.MNI_Z_MAX = 84
 
-        self.MNI_X_MAX_ADJ = self.MNI_X_MAX + self.EXTRA_THICKNESS
-        self.MNI_X_MIN_ADJ = self.MNI_X_MIN - self.EXTRA_THICKNESS
-        self.MNI_Y_MAX_ADJ = self.MNI_Y_MAX + self.EXTRA_THICKNESS
-        self.MNI_Y_MIN_ADJ = self.MNI_Y_MIN - self.EXTRA_THICKNESS
-        self.MNI_Z_MAX_ADJ = self.MNI_Z_MAX + self.EXTRA_THICKNESS
-        self.MNI_Z_MIN_ADJ = (
-            self.MNI_Z_MIN
-        )  # no extra thickness needed for inferior brain
+        self.X_MIN_ADJ = self.X_MIN - self.BRAIN_SURFACE_DEPTH
+        self.Y_MIN_ADJ = self.Y_MIN - self.BRAIN_SURFACE_DEPTH
+        self.Z_MIN_ADJ = self.Z_MIN - self.BRAIN_SURFACE_DEPTH
+        self.X_MAX_ADJ = self.X_MAX + self.BRAIN_SURFACE_DEPTH
+        self.Y_MAX_ADJ = self.Y_MAX + self.BRAIN_SURFACE_DEPTH
+        self.Z_MAX_ADJ = self.Z_MAX + self.BRAIN_SURFACE_DEPTH
 
-        # Kernel Flow midpoints between source and detector pairs
-        self.FLOW_X_MAX = self._get_flow_pos("x", "max")
-        self.FLOW_Y_MAX = self._get_flow_pos("y", "max")
-        self.FLOW_Z_MAX = self._get_flow_pos("z", "max")
+        self.MNI_X_MIN_ADJ = self.MNI_X_MIN - self.BRAIN_SURFACE_DEPTH
+        self.MNI_Y_MIN_ADJ = self.MNI_Y_MIN - self.BRAIN_SURFACE_DEPTH
+        self.MNI_Z_MIN_ADJ = self.MNI_Z_MIN - self.BRAIN_SURFACE_DEPTH
+        self.MNI_X_MAX_ADJ = self.MNI_X_MAX + self.BRAIN_SURFACE_DEPTH
+        self.MNI_Y_MAX_ADJ = self.MNI_Y_MAX + self.BRAIN_SURFACE_DEPTH
+        self.MNI_Z_MAX_ADJ = self.MNI_Z_MAX + self.BRAIN_SURFACE_DEPTH
+
+        # Kernel Flow source/detector midpoint min and max for each coordinate dimension
         self.FLOW_X_MIN = self._get_flow_pos("x", "min")
         self.FLOW_Y_MIN = self._get_flow_pos("y", "min")
         self.FLOW_Z_MIN = self._get_flow_pos("z", "min")
+        self.FLOW_X_MAX = self._get_flow_pos("x", "max")
+        self.FLOW_Y_MAX = self._get_flow_pos("y", "max")
+        self.FLOW_Z_MAX = self._get_flow_pos("z", "max")
 
-        self._run_assert_tests()
+        self._run_basic_checks()
 
     def _get_flow_pos(
         self, dim: Literal["x", "y", "z"], pos_type: Literal["min", "max"]
     ) -> float:
         """
-        Get the min or max Kernel Flow XYZ coordinate.
+        Get the min or max Kernel Flow XYZ dimension coordinate.
 
         Args:
             dim (Literal["x", "y", "z"]): Coordinate dimension.
@@ -227,31 +225,94 @@ class XYZ_to_MNI:
         ] * self._get_scaling_factor("z")
         return sd_df_scaled
 
-    def get_kernel_XYZ(self) -> pd.DataFrame:
+    def _align_kernel_XYZ(self) -> pd.DataFrame:
         """
-        Get a DataFrame with Kernel Flow XYZ coordinates scaled and aligned with the AAL template XYZ coordinates.
+        Align Kernel Flow XYZ coordinates with the AAL template XYZ coordinates.
 
         Returns:
             pd.DataFrame: Kernel Flow XYZ coordinate dimensions.
         """
         sd_df_scaled = self._scale_kernel_XYZ()
-        kernel_XYZ = pd.DataFrame()
-        x_translation = sd_df_scaled["midpoint_x_pos"].min() - self.X_MIN_ADJ
-        y_translation = sd_df_scaled["midpoint_y_pos"].min() - self.Y_MIN_ADJ
-        z_translation = sd_df_scaled["midpoint_z_pos"].min() - self.Z_MIN_ADJ
-        kernel_XYZ["midpoint_x_XYZ"] = sd_df_scaled["midpoint_x_pos"] - x_translation
-        kernel_XYZ["midpoint_y_XYZ"] = sd_df_scaled["midpoint_y_pos"] - y_translation
-        kernel_XYZ["midpoint_z_XYZ"] = sd_df_scaled["midpoint_z_pos"] - z_translation
+        sd_df_aligned = pd.DataFrame()
+        x_align = sd_df_scaled["midpoint_x_pos"].max() - self.X_MAX_ADJ
+        y_align = sd_df_scaled["midpoint_y_pos"].max() - self.Y_MAX_ADJ
+        z_align = sd_df_scaled["midpoint_z_pos"].max() - self.Z_MAX_ADJ
+        sd_df_aligned["midpoint_x_XYZ"] = sd_df_scaled["midpoint_x_pos"] - x_align
+        sd_df_aligned["midpoint_y_XYZ"] = sd_df_scaled["midpoint_y_pos"] - y_align
+        sd_df_aligned["midpoint_z_XYZ"] = sd_df_scaled["midpoint_z_pos"] - z_align
+        return sd_df_aligned
+
+    def _get_depth(self, depth: Union[int, float] = None) -> Union[int, float]:
+        """
+        Get the Kernel Flow coordinate translation depth (in mm).
+
+        Args:
+            depth (Union[int, float], optional): Depth into the brain
+                                                 Defaults to None (brain surface).
+
+        Returns:
+            depth (Union[int, float], optional): Depth into the brain.
+        """
+        if depth is None:
+            depth_out = self.BRAIN_SURFACE_DEPTH
+        else:
+            depth_out = self.BRAIN_SURFACE_DEPTH + depth
+        return depth_out
+
+    def _translate_kernel_XYZ(self, depth: Union[int, float] = None) -> pd.DataFrame:
+        """
+        Translate Kernel Flow XYZ coordinate dimensions to the brain surface or to a specified depth.
+
+        Args:
+            depth (Union[int, float], optional): Depth into the brain
+                                                 Defaults to None (brain surface).
+
+        Returns:
+            pd.DataFrame: Translated Kernel Flow DataFrame.
+        """
+        depth = self._get_depth(depth)
+        sd_df_aligned = self._align_kernel_XYZ()
+        sd_df_translated = pd.DataFrame()
+        if depth:
+            for col in sd_df_aligned.columns:
+                min_val = sd_df_aligned[col].min()
+                max_val = sd_df_aligned[col].max()
+                new_min = min_val + depth
+                new_max = max_val - depth
+                sd_df_translated[col] = (sd_df_aligned[col] - min_val) * (
+                    new_max - new_min
+                ) / (max_val - min_val) + new_min
+            self._run_translation_check(sd_df_translated, depth)
+        else:
+            sd_df_translated = sd_df_aligned
+        return sd_df_translated
+
+    def get_kernel_XYZ(self, depth: Union[int, float] = None) -> pd.DataFrame:
+        """
+        Get a DataFrame with Kernel Flow XYZ coordinates scaled and aligned with the AAL template XYZ coordinates.
+        
+        Args:
+            depth (Union[int, float], optional): Depth into the brain
+                                                 Defaults to None (brain surface).
+
+        Returns:
+            pd.DataFrame: Kernel Flow XYZ coordinate dimensions.
+        """
+        kernel_XYZ = self._translate_kernel_XYZ(depth)
         return kernel_XYZ
 
-    def get_kernel_MNI(self) -> pd.DataFrame:
+    def get_kernel_MNI(self, depth: Union[int, float] = None) -> pd.DataFrame:
         """
         Get a DataFrame with Kernel Flow MNI coordinates scaled and aligned with the AAL template MNI coordinates.
-
+        
+        Args:
+            depth (Union[int, float], optional): Depth into the brain
+                                                 Defaults to None (brain surface).
+                                                 
         Returns:
             pd.DataFrame: Kernel Flow MNI coordinate dimensions.
         """
-        kernel_XYZ = self.get_kernel_XYZ()
+        kernel_XYZ = self.get_kernel_XYZ(depth)
         kernel_MNI = pd.DataFrame()
         kernel_MNI["midpoint_x_MNI"] = kernel_XYZ["midpoint_x_XYZ"] - self.XYZ_ORIGIN[0]
         kernel_MNI["midpoint_y_MNI"] = kernel_XYZ["midpoint_y_XYZ"] - self.XYZ_ORIGIN[1]
@@ -276,24 +337,30 @@ class XYZ_to_MNI:
         sd_df_adj["midpoint_z_MNI"] = kernel_MNI["midpoint_z_MNI"]
         return sd_df_adj
 
-    def _run_assert_tests(self):
+    def _run_basic_checks(self) -> None:
         """
         Run assertion tests to ensure all steps were successful.
         Tolerance = 0.00001 mm (round 5).
         """
         # kernel position scaling
-        assert (self.FLOW_X_MAX - self.FLOW_X_MIN) * self._get_scaling_factor(
-            "x"
+        assert (
+            round(
+                (self.FLOW_X_MAX - self.FLOW_X_MIN) * self._get_scaling_factor("x"), 5
+            )
         ) == self.X_MAX_ADJ - self.X_MIN_ADJ, (
             "Test failed: FLOW_X did not scale correctly."
         )
-        assert (self.FLOW_Y_MAX - self.FLOW_Y_MIN) * self._get_scaling_factor(
-            "y"
+        assert (
+            round(
+                (self.FLOW_Y_MAX - self.FLOW_Y_MIN) * self._get_scaling_factor("y"), 5
+            )
         ) == self.Y_MAX_ADJ - self.Y_MIN_ADJ, (
             "Test failed: FLOW_Y did not scale correctly."
         )
-        assert (self.FLOW_Z_MAX - self.FLOW_Z_MIN) * self._get_scaling_factor(
-            "z"
+        assert (
+            round(
+                (self.FLOW_Z_MAX - self.FLOW_Z_MIN) * self._get_scaling_factor("z"), 5
+            )
         ) == self.Z_MAX_ADJ - self.Z_MIN_ADJ, (
             "Test failed: FLOW_Z did not scale correctly."
         )
@@ -325,47 +392,51 @@ class XYZ_to_MNI:
             == self.Z_MAX_ADJ - self.Z_MIN_ADJ
         ), "Test failed. Flow DataFrame z-pos did not scale correctly."
 
-        # kernel DataFrame translation
-        kernel_XYZ = self.get_kernel_XYZ()
+        # kernel DataFrame alignment
+        sd_df_aligned = self._align_kernel_XYZ()
         assert (
-            round(kernel_XYZ["midpoint_x_XYZ"].min() - self.X_MIN_ADJ, 5) == 0
+            round(sd_df_aligned["midpoint_x_XYZ"].min(), 5) == self.X_MIN_ADJ
+        ), "Test failed. Flow DataFrame x-pos min did not align correctly."
+        assert (
+            round(sd_df_aligned["midpoint_y_XYZ"].min(), 5) == self.Y_MIN_ADJ
+        ), "Test failed. Flow DataFrame y-pos min did not align correctly."
+        assert (
+            round(sd_df_aligned["midpoint_z_XYZ"].min(), 5) == self.Z_MIN_ADJ
+        ), "Test failed. Flow DataFrame z-pos min did not align correctly."
+        assert (
+            round(sd_df_aligned["midpoint_x_XYZ"].max(), 5) == self.X_MAX_ADJ
+        ), "Test failed. Flow DataFrame x-pos max did not align correctly."
+        assert (
+            round(sd_df_aligned["midpoint_y_XYZ"].max(), 5) == self.Y_MAX_ADJ
+        ), "Test failed. Flow DataFrame y-pos max did not align correctly."
+        assert (
+            round(sd_df_aligned["midpoint_z_XYZ"].max(), 5) == self.Z_MAX_ADJ
+        ), "Test failed. Flow DataFrame z-pos max did not align correctly."
+
+    def _run_translation_check(
+        self, df: pd.DataFrame, depth: Tuple[int, float] = None
+    ) -> None:
+        """
+        Run an assertion test to check Kernel XYZ translation.
+        """
+        assert (
+            round(df["midpoint_x_XYZ"].min(), 5) == self.X_MIN_ADJ + depth
         ), "Test failed. Flow DataFrame x-pos min did not translate correctly."
         assert (
-            round(kernel_XYZ["midpoint_y_XYZ"].min() - self.Y_MIN_ADJ, 5) == 0
+            round(df["midpoint_y_XYZ"].min(), 5) == self.Y_MIN_ADJ + depth
         ), "Test failed. Flow DataFrame y-pos min did not translate correctly."
         assert (
-            round(kernel_XYZ["midpoint_z_XYZ"].min() - self.Z_MIN_ADJ, 5) == 0
+            round(df["midpoint_z_XYZ"].min(), 5) == self.Z_MIN_ADJ + depth
         ), "Test failed. Flow DataFrame z-pos min did not translate correctly."
         assert (
-            round(kernel_XYZ["midpoint_x_XYZ"].max() - self.X_MAX_ADJ, 5) == 0
+            round(df["midpoint_x_XYZ"].max(), 5) == self.X_MAX_ADJ - depth
         ), "Test failed. Flow DataFrame x-pos max did not translate correctly."
         assert (
-            round(kernel_XYZ["midpoint_y_XYZ"].max() - self.Y_MAX_ADJ, 5) == 0
+            round(df["midpoint_y_XYZ"].max(), 5) == self.Y_MAX_ADJ - depth
         ), "Test failed. Flow DataFrame y-pos max did not translate correctly."
         assert (
-            round(kernel_XYZ["midpoint_z_XYZ"].max() - self.Z_MAX_ADJ, 5) == 0
+            round(df["midpoint_z_XYZ"].max(), 5) == self.Z_MAX_ADJ - depth
         ), "Test failed. Flow DataFrame z-pos max did not translate correctly."
-
-        # kernel MNI conversion
-        kernel_MNI = self.get_kernel_MNI()
-        assert (
-            kernel_MNI["midpoint_x_MNI"].min() - self.MNI_X_MIN_ADJ == 0
-        ), "Test failed. Flow DataFrame MNI x-pos min did not convert correctly."
-        assert (
-            kernel_MNI["midpoint_y_MNI"].min() - self.MNI_Y_MIN_ADJ == 0
-        ), "Test failed. Flow DataFrame MNI y-pos min did not convert correctly."
-        assert (
-            kernel_MNI["midpoint_z_MNI"].min() - self.MNI_Z_MIN_ADJ == 0
-        ), "Test failed. Flow DataFrame MNI z-pos min did not convert correctly."
-        assert (
-            kernel_MNI["midpoint_x_MNI"].max() - self.MNI_X_MAX_ADJ == 0
-        ), "Test failed. Flow DataFrame MNI x-pos max did not convert correctly."
-        assert (
-            kernel_MNI["midpoint_y_MNI"].max() - self.MNI_Y_MAX_ADJ == 0
-        ), "Test failed. Flow DataFrame MNI y-pos max did not convert correctly."
-        assert (
-            kernel_MNI["midpoint_z_MNI"].max() - self.MNI_Z_MAX_ADJ == 0
-        ), "Test failed. Flow DataFrame MNI z-pos max did not convert correctly."
 
 
 class Process_Flow:
@@ -947,39 +1018,10 @@ class Process_Flow:
                 axis=1,
                 result_type="expand",
             )
+            xyz_to_mni = XYZ_to_MNI(source_detector_df)
             # add source/detector MNI coordinates
             if MNI or brain_regions:
-                source_detector_df[
-                    ["source_x_MNI", "source_y_MNI", "source_z_MNI"]
-                ] = source_detector_df.apply(
-                    lambda row: self.xyz_to_MNI(
-                        row["source_x_pos"], row["source_y_pos"], row["source_z_pos"]
-                    ),
-                    axis=1,
-                    result_type="expand",
-                )
-                source_detector_df[
-                    ["detector_x_MNI", "detector_y_MNI", "detector_z_MNI"]
-                ] = source_detector_df.apply(
-                    lambda row: self.xyz_to_MNI(
-                        row["detector_x_pos"],
-                        row["detector_y_pos"],
-                        row["detector_z_pos"],
-                    ),
-                    axis=1,
-                    result_type="expand",
-                )
-                source_detector_df[
-                    ["midpoint_x_MNI", "midpoint_y_MNI", "midpoint_z_MNI"]
-                ] = source_detector_df.apply(
-                    lambda row: self.xyz_to_MNI(
-                        row["midpoint_x_pos"],
-                        row["midpoint_y_pos"],
-                        row["midpoint_z_pos"],
-                    ),
-                    axis=1,
-                    result_type="expand",
-                )
+                source_detector_df = xyz_to_mni.create_source_detector_adj()
             if brain_regions:
                 # load R script files here to improve performance
                 with open(
@@ -1027,7 +1069,6 @@ class Process_Flow:
                         "detector_z_pos",
                     ]
                 )
-            self.xyz_to_mni = XYZ_to_MNI(source_detector_df)
         return source_detector_df
 
     def get_midpoint(
