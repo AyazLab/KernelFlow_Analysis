@@ -7,12 +7,14 @@ import pandas as pd
 import pingouin as pg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from PIL import Image
+import matplotlib.gridspec as gridspec
+from matplotlib.axes import Axes
 from matplotlib.font_manager import FontProperties
 from adjustText import adjust_text
+from PIL import Image
+from statistics import mean
 from scipy.signal import butter, filtfilt, sosfiltfilt
 from typing import Union, Tuple, List, Literal
-from statistics import mean
 from behav_analysis import Participant_Behav
 from data_functions import Data_Functions, load_results, exp_name_to_title
 
@@ -290,7 +292,7 @@ class XYZ_to_MNI:
     def get_kernel_XYZ(self, depth: Union[int, float] = None) -> pd.DataFrame:
         """
         Get a DataFrame with Kernel Flow XYZ coordinates scaled and aligned with the AAL template XYZ coordinates.
-        
+
         Args:
             depth (Union[int, float], optional): Depth into the brain
                                                  Defaults to None (brain surface).
@@ -304,11 +306,11 @@ class XYZ_to_MNI:
     def get_kernel_MNI(self, depth: Union[int, float] = None) -> pd.DataFrame:
         """
         Get a DataFrame with Kernel Flow MNI coordinates scaled and aligned with the AAL template MNI coordinates.
-        
+
         Args:
             depth (Union[int, float], optional): Depth into the brain
                                                  Defaults to None (brain surface).
-                                                 
+
         Returns:
             pd.DataFrame: Kernel Flow MNI coordinate dimensions.
         """
@@ -336,6 +338,167 @@ class XYZ_to_MNI:
         sd_df_adj["midpoint_y_MNI"] = kernel_MNI["midpoint_y_MNI"]
         sd_df_adj["midpoint_z_MNI"] = kernel_MNI["midpoint_z_MNI"]
         return sd_df_adj
+
+    def plot_coordinates(
+        self, coord_sys: Literal["XYZ", "MNI"], depth: Union[int, float] = None
+    ) -> None:
+        """
+        Plot the Kernel Flow XYZ or MNI coordinate system scaled to and aligned with the AAL template.
+        The bounding surfaces indicate the min and max x, y, and z values of the respective AAL template coordinate system.
+        A "depth" argument is accepted which projects the Kernel Flow coordinates that number of mm into the cortex.
+
+        Args:
+            coord_sys (Literal["XYZ", "MNI"]): Coordinate system. "XYZ" or "MNI".
+            depth (Union[int, float], optional): Depth into the brain
+                                                Defaults to None (brain surface).
+        """
+
+        def _create_surface(
+            ax: Axes, val: Union[int, float], dim: Literal["x", "y", "z"], color: str
+        ) -> None:
+            """
+            Create a surface at the specified dimension value.
+
+            Args:
+                ax (pd.Axes): Plot axis.
+                val (Union[int, float]): Surface value.
+                dim (Literal["x", "y", "z"]): Coordinate dimension.
+                color (str): Surface color.
+
+            Raises:
+                ValueError: Invalid coordinate dimension.
+            """
+            if coord_sys.lower() == "xyz":
+                x_vals = np.linspace(self.X_MIN - 10, self.X_MAX + 10, 110)
+                y_vals = np.linspace(self.Y_MIN - 10, self.Y_MAX + 10, 110)
+                z_vals = np.linspace(self.Z_MIN - 10, self.Z_MAX + 10, 110)
+            elif coord_sys.lower() == "mni":
+                x_vals = np.linspace(self.MNI_X_MIN - 10, self.MNI_X_MAX + 10, 110)
+                y_vals = np.linspace(self.MNI_Y_MIN - 10, self.MNI_Y_MAX + 10, 110)
+                z_vals = np.linspace(self.MNI_Z_MIN - 10, self.MNI_Z_MAX + 10, 110)
+
+            if dim == "x":
+                y_grid, z_grid = np.meshgrid(y_vals, z_vals)
+                x_grid = np.ones_like(y_grid) * val
+            elif dim == "y":
+                x_grid, z_grid = np.meshgrid(x_vals, z_vals)
+                y_grid = np.ones_like(x_grid) * val
+            elif dim == "z":
+                x_grid, y_grid = np.meshgrid(x_vals, y_vals)
+                z_grid = np.ones_like(x_grid) * val
+            else:
+                raise ValueError(
+                    "Invalid coordinate dimension. Choose 'x', 'y', or 'z'."
+                )
+
+            ax.plot_surface(x_grid, y_grid, z_grid, alpha=0.4, color=color)
+
+        gs = gridspec.GridSpec(1, 2, width_ratios=[1, 1.3])
+        fig = plt.figure(figsize=(18, 12))
+        ax1 = fig.add_subplot(gs[0], projection="3d")
+        ax1.view_init(azim=0, elev=270)
+        ax2 = fig.add_subplot(gs[1], projection="3d")
+        ax2.view_init(azim=0, elev=0)
+
+        if coord_sys.lower() == "xyz":
+            plot_df = self.get_kernel_XYZ(depth)
+            _create_surface(ax1, self.X_MIN, "x", "r")
+            _create_surface(ax1, self.X_MAX, "x", "r")
+            _create_surface(ax1, self.Y_MIN, "y", "g")
+            _create_surface(ax1, self.Y_MAX, "y", "g")
+            _create_surface(ax2, self.Y_MIN, "y", "g")
+            _create_surface(ax2, self.Y_MAX, "y", "g")
+            _create_surface(ax2, self.Z_MIN, "z", "b")
+            _create_surface(ax2, self.Z_MAX, "z", "b")
+        elif coord_sys.lower() == "mni":
+            plot_df = self.get_kernel_MNI(depth)
+            _create_surface(ax1, self.MNI_X_MIN, "x", "r")
+            _create_surface(ax1, self.MNI_X_MAX, "x", "r")
+            _create_surface(ax1, self.MNI_Y_MIN, "y", "g")
+            _create_surface(ax1, self.MNI_Y_MAX, "y", "g")
+            _create_surface(ax2, self.MNI_Y_MIN, "y", "g")
+            _create_surface(ax2, self.MNI_Y_MAX, "y", "g")
+            _create_surface(ax2, self.MNI_Z_MIN, "z", "b")
+            _create_surface(ax2, self.MNI_Z_MAX, "z", "b")
+            ax1.set_xticks([-100, -50, 0, 50, 100])
+            ax1.set_xticklabels([-100, -50, 0, 50, 100])
+            ax2.set_zticks([-100, -50, 0, 50, 100])
+            ax2.set_zticklabels([-100, -50, 0, 50, 100])
+        else:
+            raise ValueError("Invalid coordinate system type. Must be 'XYZ' or 'MNI'.")
+
+        ax1.scatter(
+            list(plot_df[f"midpoint_x_{coord_sys.upper()}"].iloc[::2]),
+            list(plot_df[f"midpoint_y_{coord_sys.upper()}"].iloc[::2]),
+            list(plot_df[f"midpoint_z_{coord_sys.upper()}"].iloc[::2]),
+            color="blue",
+            s=20,
+            alpha=1,
+        )
+        ax2.scatter(
+            list(plot_df[f"midpoint_x_{coord_sys.upper()}"].iloc[::2]),
+            list(plot_df[f"midpoint_y_{coord_sys.upper()}"].iloc[::2]),
+            list(plot_df[f"midpoint_z_{coord_sys.upper()}"].iloc[::2]),
+            color="blue",
+            s=20,
+        )
+        ax1.set_xlabel(
+            f"{coord_sys.upper()} x-axis (mm)",
+            fontweight="bold",
+            fontsize=14,
+            labelpad=10,
+        )
+        ax1.set_ylabel(
+            f"{coord_sys.upper()} y-axis (mm)",
+            fontweight="bold",
+            fontsize=14,
+            labelpad=15,
+        )
+        ax2.set_ylabel(
+            f"{coord_sys.upper()} y-axis (mm)",
+            fontweight="bold",
+            fontsize=14,
+            labelpad=15,
+        )
+        ax2.set_zlabel(
+            f"{coord_sys.upper()} z-axis (mm)",
+            fontweight="bold",
+            fontsize=14,
+            labelpad=5,
+        )
+        ax1.set_zticks([])
+        ax1.set_zticklabels([])
+        ax2.set_xticks([])
+        ax2.set_xticklabels([])
+        ax1.set_title("Top View", fontweight="bold", fontsize=18, y=0.96)
+        ax2.set_title("Right View", fontweight="bold", fontsize=18, y=0.85)
+        fig.text(
+            0.43,
+            0.5,
+            "Anterior",
+            fontweight="bold",
+            fontsize=14,
+            rotation=90,
+            va="center",
+        )
+        fig.text(
+            0.84,
+            0.5,
+            "Anterior",
+            fontweight="bold",
+            fontsize=14,
+            rotation=90,
+            va="center",
+        )
+        fig.suptitle(
+            f"Kernel Flow {coord_sys.upper()} Coordinates (cortical depth: {depth} mm)",
+            fontweight="bold",
+            fontsize=20,
+            x=0.465,
+            y=0.78,
+        )
+        fig.subplots_adjust(wspace=0)
+        plt.show()
 
     def _run_basic_checks(self) -> None:
         """
