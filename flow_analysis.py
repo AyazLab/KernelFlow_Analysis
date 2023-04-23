@@ -1327,6 +1327,27 @@ class Process_Flow:
 
         return aal_distance, aal_label, ba_distance, ba_label
 
+    def create_kernel_flow_atlas(self, depth: Union[int, float] = None) -> pd.DataFrame:
+        """
+        Create an atlas of source/detector locations with corresponding brain regions.
+
+        Args:
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
+
+        Returns:
+            pd.DataFrame: DataFrame with brain regions for all sources and detectors
+        """
+        atlas_df = self.create_source_detector_df(
+            "3D", add_missing=True, brain_regions=True
+        )
+        if depth is None:
+            depth = 0
+        filename = f"kernel_flow_atlas_depth_{depth}.csv"
+        filedir = os.path.join(os.getcwd(), "processed_data")
+        filepath = os.path.join(filedir, filename)
+        atlas_df.to_csv(filepath, index=False)
+        return atlas_df
+
     def plot_pos(
         self,
         dim: str,
