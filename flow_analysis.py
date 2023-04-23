@@ -86,12 +86,12 @@ class Flow_Coordinates:
         self.MNI_Z_MAX_ADJ = self.MNI_Z_MAX + self.BRAIN_SURFACE_DEPTH
 
         # Kernel Flow source/detector midpoint min and max for each coordinate dimension
-        self.FLOW_X_MIN = self._get_flow_pos("x", "min")
-        self.FLOW_Y_MIN = self._get_flow_pos("y", "min")
-        self.FLOW_Z_MIN = self._get_flow_pos("z", "min")
-        self.FLOW_X_MAX = self._get_flow_pos("x", "max")
-        self.FLOW_Y_MAX = self._get_flow_pos("y", "max")
-        self.FLOW_Z_MAX = self._get_flow_pos("z", "max")
+        self.FLOW_X_MIN = self._get_flow_pos("x", "min")  # -87.26267567763952
+        self.FLOW_Y_MIN = self._get_flow_pos("y", "min")  # -121.1857849385022
+        self.FLOW_Z_MIN = self._get_flow_pos("z", "min")  # -18.382019226737423
+        self.FLOW_X_MAX = self._get_flow_pos("x", "max")  # 87.32753031777712
+        self.FLOW_Y_MAX = self._get_flow_pos("y", "max")  # 86.61967154031478
+        self.FLOW_Z_MAX = self._get_flow_pos("z", "max")  # 104.75086014260755
 
         self._run_basic_checks()
 
@@ -1160,16 +1160,16 @@ class Process_Flow:
             0, "channel_num", source_detector_df["measurement_list_index"] - 1
         )
 
-        if isinstance(channels, int):
-            source_detector_df = source_detector_df[
-                source_detector_df["channel_num"] == channels
-            ].copy()
-        elif isinstance(channels, list):
-            source_detector_df = source_detector_df[
-                source_detector_df["channel_num"].isin(channels)
-            ].copy()
-
-        if dim.lower() == "3d":
+        if dim.lower() == "2d":
+            if isinstance(channels, int):
+                source_detector_df = source_detector_df[
+                    source_detector_df["channel_num"] == channels
+                ].copy()
+            elif isinstance(channels, list):
+                source_detector_df = source_detector_df[
+                    source_detector_df["channel_num"].isin(channels)
+                ].copy()
+        elif dim.lower() == "3d":
             source_detector_df[
                 ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
             ] = source_detector_df.apply(
@@ -1184,10 +1184,19 @@ class Process_Flow:
                 axis=1,
                 result_type="expand",
             )
-            FC = Flow_Coordinates(source_detector_df)
-            # add source/detector MNI coordinates
+
             if MNI or brain_regions:
+                # add source/detector MNI coordinates
+                FC = Flow_Coordinates(source_detector_df)
                 source_detector_df = FC.create_source_detector_adj(depth)
+            if isinstance(channels, int):
+                source_detector_df = source_detector_df[
+                    source_detector_df["channel_num"] == channels
+                ].copy()
+            elif isinstance(channels, list):
+                source_detector_df = source_detector_df[
+                    source_detector_df["channel_num"].isin(channels)
+                ].copy()
             if brain_regions:
                 # load R script files here to improve performance
                 with open(
