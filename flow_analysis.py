@@ -421,10 +421,6 @@ class Flow_Coordinates:
             _create_surface(ax2, self.MNI_Y_MAX, "y", "g")
             _create_surface(ax2, self.MNI_Z_MIN, "z", "b")
             _create_surface(ax2, self.MNI_Z_MAX, "z", "b")
-            ax1.set_xticks([-100, -50, 0, 50, 100])
-            ax1.set_xticklabels([-100, -50, 0, 50, 100])
-            ax2.set_zticks([-100, -50, 0, 50, 100])
-            ax2.set_zticklabels([-100, -50, 0, 50, 100])
         else:
             raise ValueError("Invalid coordinate system type. Must be 'XYZ' or 'MNI'.")
 
@@ -1343,9 +1339,40 @@ class Process_Flow:
         if depth is None:
             depth = 0
         filename = f"kernel_flow_atlas_depth_{depth}.csv"
-        filedir = os.path.join(os.getcwd(), "processed_data")
+        filedir = os.path.join(os.getcwd(), "processed_data", "flow")
         filepath = os.path.join(filedir, filename)
         atlas_df.to_csv(filepath, index=False)
+        return atlas_df
+
+    def load_kernel_flow_atlas(
+        self, depth: Union[int, float] = None, minimal: bool = False
+    ) -> pd.DataFrame:
+        """
+        Load an atlas of source/detector locations with corresponding brain regions.
+
+        Args:
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
+            minimal (bool): Load a minimal version with just channels and brain regions. Defaults to False (load all data).
+
+        Returns:
+            pd.DataFrame: DataFrame with brain regions for all sources and detectors
+        """
+        if depth is None:
+            depth = 0
+        filename = f"kernel_flow_atlas_depth_{depth}.csv"
+        filedir = os.path.join(os.getcwd(), "processed_data", "flow")
+        filepath = os.path.join(filedir, filename)
+        atlas_df = pd.read_csv(filepath, dtype={"channel_num": "Int64"})
+        if minimal:
+            atlas_df = atlas_df[
+                [
+                    "channel_num",
+                    "AAL_distance",
+                    "AAL_region",
+                    "BA_distance",
+                    "BA_region",
+                ]
+            ]
         return atlas_df
 
     def plot_pos(
