@@ -1573,6 +1573,28 @@ class Process_Flow:
                     va="bottom",
                     transform=ax.transAxes,
                 )
+                ax.text(
+                    -0.02,
+                    0.5,
+                    "Left",
+                    fontsize=14,
+                    fontweight="bold",
+                    rotation=90,
+                    va="center",
+                    ha="center",
+                    transform=ax.transAxes,
+                )
+                ax.text(
+                    1.02,
+                    0.5,
+                    "Right",
+                    fontsize=14,
+                    fontweight="bold",
+                    rotation=90,
+                    va="center",
+                    ha="center",
+                    transform=ax.transAxes,
+                )
             else:
                 ax.set_title("Detector/Source 2D Plot")
                 ax.set_xlabel("X-Position (mm)")
@@ -3179,9 +3201,31 @@ class Flow_Results:
                 va="bottom",
                 transform=ax.transAxes,
             )
+            ax.text(
+                -0.02,
+                0.5,
+                "Left",
+                fontsize=14,
+                fontweight="bold",
+                rotation=90,
+                va="center",
+                ha="center",
+                transform=ax.transAxes,
+            )
+            ax.text(
+                1.02,
+                0.5,
+                "Right",
+                fontsize=14,
+                fontweight="bold",
+                rotation=90,
+                va="center",
+                ha="center",
+                transform=ax.transAxes,
+            )
             scatter.set_clim([0, 0.05])
             colorbar = plt.colorbar(
-                scatter, ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05], shrink=0.8
+                scatter, ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05], shrink=0.7, pad=0.1
             )
             font_props = FontProperties(size=12)
             colorbar.set_label("p-value", fontproperties=font_props)
