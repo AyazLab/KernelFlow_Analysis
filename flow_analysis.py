@@ -3165,6 +3165,7 @@ class Flow_Results:
                             facecolor="white",
                             alpha=1,
                         ),
+                        zorder=4,
                     )
                     for i in range(sig_detector_plot_df.shape[0])
                 ]
@@ -3177,11 +3178,12 @@ class Flow_Results:
                         linewidth=2,
                         shrinkA=0,
                         shrinkB=0,
+                        zorder=0,
                     ),
                     expand_points=(4, 4),
-                    expand_text=(2, 2),
-                    force_points=(0.2, 0.2),
-                )  # TODO: arrows behind labels (zorder)
+                    expand_text=(1.5, 1.5),
+                    force_points=(0.8, 0.8),
+                )
             ax.spines["top"].set_visible(False)
             ax.spines["right"].set_visible(False)
             ax.spines["bottom"].set_visible(False)
