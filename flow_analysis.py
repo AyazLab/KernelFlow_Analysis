@@ -2915,6 +2915,8 @@ class Flow_Results:
         hemo_type: str,
         filter_type: str = None,
         sig_only: bool = False,
+        brain_regions: bool = False,
+        depth: Union[int, float] = None,
         print_sig_results: bool = False,
     ) -> pd.DataFrame:
         """
@@ -2925,6 +2927,8 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
             sig_only (bool): Return only significant results (p < 0.05). Defaults to False.
+            brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
+            depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
             print_sig_results (bool): Print significant results. Defaults to False.
 
         Returns:
@@ -2942,6 +2946,14 @@ class Flow_Results:
         )
         flow_stats = pd.read_csv(filepath)
         flow_stats_out = flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
+        if brain_regions:
+            if depth is None:
+                depth = 0
+            flow_atlas = self.par.flow.load_kernel_flow_atlas(depth, minimal=True)
+            flow_atlas.dropna(subset=["channel_num"], inplace=True)
+            flow_stats_out = pd.merge(
+                flow_stats_out, flow_atlas, on="channel_num", how="left"
+            )
         sig_stats = flow_stats_out[flow_stats_out["p_value"] < 0.05].sort_values(
             by="p_value", ascending=True
         )
