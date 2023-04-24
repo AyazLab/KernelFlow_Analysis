@@ -1333,11 +1333,11 @@ class Process_Flow:
         Returns:
             pd.DataFrame: DataFrame with brain regions for all sources and detectors
         """
-        atlas_df = self.create_source_detector_df(
-            "3D", add_missing=True, brain_regions=True
-        )
         if depth is None:
             depth = 0
+        atlas_df = self.create_source_detector_df(
+            "3D", add_missing=True, brain_regions=True, depth=depth
+        )
         filename = f"kernel_flow_atlas_depth_{depth}.csv"
         filedir = os.path.join(os.getcwd(), "processed_data", "flow")
         filepath = os.path.join(filedir, filename)
