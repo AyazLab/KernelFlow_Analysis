@@ -1323,9 +1323,9 @@ class Process_Flow:
 
         return aal_distance, aal_label, ba_distance, ba_label
 
-    def create_kernel_flow_atlas(self, depth: Union[int, float] = None) -> pd.DataFrame:
+    def create_flow_atlas(self, depth: Union[int, float] = None) -> pd.DataFrame:
         """
-        Create an atlas of source/detector locations with corresponding brain regions.
+        Create an atlas of Kernel Flow source/detector locations with corresponding brain regions.
 
         Args:
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
@@ -1344,11 +1344,11 @@ class Process_Flow:
         atlas_df.to_csv(filepath, index=False)
         return atlas_df
 
-    def load_kernel_flow_atlas(
+    def load_flow_atlas(
         self, depth: Union[int, float] = None, minimal: bool = False
     ) -> pd.DataFrame:
         """
-        Load an atlas of source/detector locations with corresponding brain regions.
+        Load an atlas of Kernel Flow source/detector locations with corresponding brain regions.
 
         Args:
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
@@ -2949,7 +2949,7 @@ class Flow_Results:
         if brain_regions:
             if depth is None:
                 depth = 0
-            flow_atlas = self.par.flow.load_kernel_flow_atlas(depth, minimal=True)
+            flow_atlas = self.par.flow.load_flow_atlas(depth, minimal=True)
             flow_atlas.dropna(subset=["channel_num"], inplace=True)
             flow_stats_out = pd.merge(
                 flow_stats_out, flow_atlas, on="channel_num", how="left"
