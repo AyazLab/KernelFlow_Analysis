@@ -1937,7 +1937,9 @@ class Behav_Results:
     """
 
     def __init__(self):
-        self.dark_blue = (12 / 255, 37 / 255, 72 / 255)
+        self.blue = "mediumblue"
+        self.purple = "rebeccapurple"
+        self.green = "seagreen"
         self.bar_width = 0.6
         self.capsize = 4
         self.label_fontsize = 16
@@ -1945,7 +1947,7 @@ class Behav_Results:
         self.font = "Arial"
         self.par = Participant_Behav(1)
 
-    def process_king_devick_df(self, behav_data: pd.DataFrame) -> pd.DataFrame:  # TODO
+    def process_king_devick_df(self, behav_data: pd.DataFrame) -> pd.DataFrame:
         behav_data = behav_data.drop(
             behav_data[
                 (behav_data["participant"] == 15) & (behav_data["trial"] == 1)
@@ -1955,6 +1957,7 @@ class Behav_Results:
         behav_data.loc[behav_data["participant"] == 15, "block"] = behav_data.loc[
             behav_data["participant"] == 15, "block"
         ].apply(lambda x: x[:-1] + str(int(x[-1]) - 1))
+        behav_data["correct_response"] = (40 - behav_data["num_incorrect"]) / 40
         return behav_data
 
     def run_stats(self, exp_name: str) -> None:
@@ -2057,16 +2060,16 @@ class Behav_Results:
         behav_data = load_results(self.par.processed_data_dir, exp_name)
 
         if exp_name == "king_devick":
-            self.group_var = "num_incorrect"
-            self.group_label = "Mean incorrect responses"
+            self.group_var = "correct_response"
+            self.group_label = "Mean response accuracy"
             behav_data = self.process_king_devick_df(behav_data)
 
             block_data = behav_data.groupby("block").mean()[
-                ["response_time", "num_incorrect"]
+                ["response_time", "correct_response"]
             ]
             block_sem = behav_data.groupby("block").agg(
                 lambda x: sem(x, nan_policy="omit")
-            )[["response_time", "num_incorrect"]]
+            )[["response_time", "correct_response"]]
             self.xtick_labels = [
                 block.replace("_", " ").title() for block in list(block_data.index)
             ]
@@ -2085,90 +2088,132 @@ class Behav_Results:
             block_sem = behav_data.groupby("block").agg(
                 lambda x: sem(x, nan_policy="omit")
             )[["response_time", "correct_response"]]
+            if exp_name == "go_no_go" or exp_name == "tower_of_london":
+                block_data = block_data.copy()
+                block_data.iloc[[1, 0]] = block_data.iloc[
+                    [0, 1]
+                ].values  # swap order for bar plot
+                block_sem = block_sem.copy()
+                block_sem.iloc[[1, 0]] = block_sem.iloc[
+                    [0, 1]
+                ].values  # swap order for bar plot
             if exp_name == "tower_of_london":
-                self.xtick_labels = ["Multi-move", "Zero-move"]
+                self.xtick_labels = ["Zero-move", "Multi-move"]
             elif exp_name == "go_no_go":
-                self.xtick_labels = ["Go/no-go", "Go"]
+                self.xtick_labels = ["Go", "Go/No-go"]
+            elif exp_name == "vSAT":
+                self.xtick_labels = ["SAT", "vSAT"]
             else:
                 self.xtick_labels = [
                     block.replace("_", " ").title() for block in block_data.index
                 ]
         return block_data, block_sem
 
-    def create_bar_plot(self, exp_name: str) -> None:
+    def create_bar_plot(self, exp_name: str, save_fig: bool = False) -> None:
         """
         Create a bar plot for a specified experiment.
 
         Args:
             exp_name (str): Experiment name.
+            save_fig (bool, optional): Save the figure output png. Defaults to False.
         """
 
-        def _format_ticks(ticks: list) -> list:
+        def _format_ticks(
+            ticks: list, exp_name: str = None, fmt_type: str = None
+        ) -> list:
             """
             Format ticks to have 2 decimal places.
 
             Args:
                 ticks (list): List of ticks.
+                exp_name (str, optional): Experiment name for specific tick formatting. Defaults to None.
+                fmt_type (str, optional): Format type for specific tick formatting. Defaults to None.
 
             Returns:
                 list: List of formatted ticks.
             """
-            return [f"{tick:.2f}" for tick in ticks]
+            if exp_name == "king_devick":
+                if fmt_type == "resp_acc":
+                    return [f"{tick:.3f}" for tick in ticks]
+                elif fmt_type == "resp_time":
+                    return [f"{tick:.1f}" for tick in ticks]
+            else:
+                return [f"{tick:.2f}" for tick in ticks]
 
         block_data, block_sem = self.get_bar_plot_data(exp_name)
+        num_bars = len(block_data)
+        if num_bars == 2:
+            colors = [self.blue, self.purple]
+        elif num_bars == 3:
+            colors = [self.blue, self.purple, self.green]
+        else:
+            colors = self.blue
         fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(8, 4))
         fig.subplots_adjust(wspace=-0.5)
 
         # response accuracy
         ax1.bar(
-            np.arange(len(block_data)),
+            np.arange(num_bars),
             block_data[self.group_var],
-            color=self.dark_blue,
+            color=colors,
             width=self.bar_width,
-            yerr=block_sem[self.group_var],
-            capsize=self.capsize,
-            zorder=0,
-            ecolor=self.dark_blue,
         )
-        ax1.set_ylabel(
-            self.group_label,
-            color="black",
-            fontsize=self.label_fontsize,
-            fontname=self.font,
-        )
-        ax1.yaxis.set_label_coords(-0.2, 0.5)
+        for bar_pos, y, sem, color in zip(
+            np.arange(num_bars),
+            block_data[self.group_var],
+            block_sem[self.group_var],
+            colors,
+        ):
+            ax1.errorbar(bar_pos, y, sem, capsize=self.capsize, color=color)
+            ax1.set_ylabel(
+                self.group_label,
+                color="black",
+                fontsize=self.label_fontsize,
+                fontweight="bold",
+                fontname=self.font,
+            )
+        if exp_name == "king_devick":
+            ax1.yaxis.set_label_coords(-0.25, 0.5)
+        else:
+            ax1.yaxis.set_label_coords(-0.2, 0.5)
         ax1.tick_params(axis="y", labelcolor="black")
-        ax1.set_xticks(np.arange(len(block_data)))
+        ax1.set_xticks(np.arange(num_bars))
         ax1.set_xticklabels(
             self.xtick_labels,
             fontsize=self.label_fontsize,
+            fontweight="bold",
             fontname=self.font,
         )
         ax1.spines[["top"]].set_visible(False)
 
         # response time
         ax2.bar(
-            np.arange(len(block_data)),
+            np.arange(num_bars),
             block_data["response_time"],
-            color=self.dark_blue,
+            color=colors,
             width=self.bar_width,
-            yerr=block_sem["response_time"],
-            capsize=self.capsize,
-            zorder=0,
-            ecolor=self.dark_blue,
         )
+        for bar_pos, y, sem, color in zip(
+            np.arange(num_bars),
+            block_data["response_time"],
+            block_sem["response_time"],
+            colors,
+        ):
+            ax2.errorbar(bar_pos, y, sem, capsize=self.capsize, color=color)
         ax2.set_ylabel(
             "Mean response time (sec)",
             color="black",
             fontsize=self.label_fontsize,
+            fontweight="bold",
             fontname=self.font,
         )
         ax2.yaxis.set_label_coords(-0.2, 0.5)
         ax2.tick_params(axis="y", labelcolor="black")
-        ax2.set_xticks(np.arange(len(block_data)))
+        ax2.set_xticks(np.arange(num_bars))
         ax2.set_xticklabels(
             self.xtick_labels,
             fontsize=self.label_fontsize,
+            fontweight="bold",
             fontname=self.font,
         )
         ax2.spines[["top"]].set_visible(False)
@@ -2182,9 +2227,9 @@ class Behav_Results:
             resp_yticks = [0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52, 0.54]
             resp_ytick_labels = [0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52, 0.54]
         elif exp_name == "king_devick":
-            acc_ylim = [0, 0.4]
-            acc_yticks = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
-            acc_ytick_labels = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
+            acc_ylim = [0.99, 1.0]
+            acc_yticks = [0.99, 0.992, 0.994, 0.996, 0.998, 1]
+            acc_ytick_labels = [0.99, 0.992, 0.994, 0.996, 0.998, 1]
             resp_ylim = [14, 17]
             resp_yticks = [14, 14.5, 15, 15.5, 16, 16.5, 17]
             resp_ytick_labels = [14, 14.5, 15, 15.5, 16, 16.5, 17]
@@ -2216,13 +2261,13 @@ class Behav_Results:
         try:  # if ticks and tick labels are not specified, use defaults
             ax1.set_yticks(acc_yticks)
             ax1.set_yticklabels(
-                _format_ticks(acc_ytick_labels),
+                _format_ticks(acc_ytick_labels, exp_name, fmt_type="resp_acc"),
                 fontsize=self.tick_fontsize,
                 fontname=self.font,
             )
             ax2.set_yticks(resp_yticks)
             ax2.set_yticklabels(
-                _format_ticks(resp_ytick_labels),
+                _format_ticks(resp_ytick_labels, exp_name, fmt_type="resp_time"),
                 fontsize=self.tick_fontsize,
                 fontname=self.font,
             )
@@ -2233,3 +2278,11 @@ class Behav_Results:
         plt.show()
 
         self.run_stats(exp_name)
+
+        if save_fig:
+            filedir = os.path.join(os.getcwd(), "results", "behavioral")
+            if not os.path.exists(filedir):
+                os.makedirs(filedir)
+            filename = f"{exp_name}_behav_results.png"
+            filepath = os.path.join(filedir, filename)
+            fig.savefig(filepath, dpi=300, bbox_inches="tight")
