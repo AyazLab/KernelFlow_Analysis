@@ -2024,7 +2024,7 @@ class Participant_Flow:
         """
         Create a dictionary that contains the processed Kernel Flow data in response
         to a stimulus. It is organized by block (keys) and for each block, the value is
-        a list of Pandas series. Each series is normalized, averaged, Kernel Flow data
+        a list of Pandas Series. Each Series is normalized, averaged, Kernel Flow data
         during a presented stimulus duration for each channel. Each block is baselined
         to the first 5 seconds, and the stim response is averaged over the stimulus
         presentation duration.
@@ -2042,7 +2042,7 @@ class Participant_Flow:
                         keys:
                             "trial 1", "trial 2", ... "trial N"
                         values:
-                            lists of averaged, normalized Kernel Flow data series for each
+                            lists of averaged, normalized Kernel Flow data Series for each
                             channel during the stimulus duration
         """
         exp_results = load_results(
@@ -2786,7 +2786,7 @@ class Flow_Results:
         return flow_df
 
     def run_rm_anova(
-        self, exp_name: str, hemo_type: str, filter_type: str = None
+        self, exp_name: str, hemo_type: str, filter_type: str = None, corr: bool = True
     ) -> pd.DataFrame:
         """
         Run a repeated measures ANOVA on processed inter-module channels.
@@ -2795,12 +2795,14 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
 
         Returns:
             pd.DataFrame: ANOVA results.
         """
         flow_df = self.load_processed_flow_data(exp_name, hemo_type, filter_type)
         channels = list(flow_df.columns[2:])
+        num_channels = len(channels)
         aov_list = []
         for channel in channels:
             aov = pg.rm_anova(
@@ -2820,6 +2822,11 @@ class Flow_Results:
                 },
                 inplace=True,
             )
+            aov_final["is_sig"] = aov_final["p_value"] < 0.05
+            if corr:  # apply Bonferroni correction
+                alpha_corr = 0.05 / num_channels
+                aov_final.insert(0, "alpha_corr", alpha_corr)
+                aov_final["is_sig_corr"] = aov_final["p_value"] < alpha_corr
             aov_final.insert(0, "channel_num", channel)
             aov_final["channel_num"] = aov_final["channel_num"].astype(int)
             aov_list.append(aov_final)
@@ -2829,6 +2836,7 @@ class Flow_Results:
     def run_all_rm_anovas(
         self,
         filter_type: str = None,
+        corr: bool = True,
         brain_regions: bool = False,
         depth: Union[int, float] = None,
     ) -> None:
@@ -2838,6 +2846,7 @@ class Flow_Results:
 
         Args:
             filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
         """
@@ -2867,7 +2876,9 @@ class Flow_Results:
                         f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
                     )
                 write_filepath = os.path.join(write_filedir, write_filename)
-                exp_aov_results = self.run_rm_anova(exp_name, hemo_type, filter_type)
+                exp_aov_results = self.run_rm_anova(
+                    exp_name, hemo_type, filter_type, corr
+                )
                 exp_aov_results_final = pd.merge(
                     exp_aov_results, flow_atlas, on="channel_num", how="left"
                 )
@@ -2966,6 +2977,7 @@ class Flow_Results:
         exp_name: str,
         hemo_type: str,
         filter_type: str = None,
+        corr: bool = True,
         sig_only: bool = False,
         brain_regions: bool = False,
         depth: Union[int, float] = None,
@@ -2978,6 +2990,7 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
             sig_only (bool): Return only significant results (p < 0.05). Defaults to False.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
@@ -2999,14 +3012,31 @@ class Flow_Results:
             filename,
         )
         flow_stats = pd.read_csv(filepath)
-        flow_stats_out = flow_stats[["channel_num", "p_value", "F_value", "df1", "df2"]]
+        if corr:
+            sig_col_name = "is_sig_corr"
+            flow_stats_out = flow_stats[
+                [
+                    "channel_num",
+                    "alpha_corr",
+                    "p_value",
+                    "F_value",
+                    "df1",
+                    "df2",
+                    sig_col_name,
+                ]
+            ]
+        else:
+            sig_col_name = "is_sig"
+            flow_stats_out = flow_stats[
+                ["channel_num", "p_value", "F_value", "df1", "df2", sig_col_name]
+            ]
         if brain_regions:
             flow_atlas = self.par.flow.load_flow_atlas(depth, minimal=True)
             flow_atlas.dropna(subset=["channel_num"], inplace=True)
             flow_stats_out = pd.merge(
                 flow_stats_out, flow_atlas, on="channel_num", how="left"
             )
-        sig_stats = flow_stats_out[flow_stats_out["p_value"] < 0.05].sort_values(
+        sig_stats = flow_stats_out[flow_stats_out[sig_col_name] == True].sort_values(
             by="p_value", ascending=True
         )
         if print_sig_results:
