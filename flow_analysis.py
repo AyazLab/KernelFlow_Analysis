@@ -3082,8 +3082,8 @@ class Flow_Results:
         return post_hoc_stats
 
     def create_flow_stats_df(
-        self, exp_name: str, hemo_type: str, filter_type: str = None
-    ) -> pd.DataFrame:
+        self, exp_name: str, hemo_type: str, filter_type: str = None, corr: bool = False
+    ) -> pd.DataFrame:  # TODO needs a fix
         """
         Create a DataFrame with significant channels and corresponding brain regions.
 
@@ -3091,6 +3091,7 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
 
         Returns:
             pd.DataFrame: Significant stats DataFrame with brain regions.
@@ -3105,27 +3106,42 @@ class Flow_Results:
         merged_df = pd.merge(
             sig_stats, source_detector_df, on="channel_num", how="left"
         )
-        flow_stats_df = merged_df.loc[
-            :,
-            [
-                "channel_num",
-                "p_value",
-                "F_value",
-                "AAL_distance",
-                "AAL_region",
-                "BA_distance",
-                "BA_region",
-            ],
-        ]
+        if corr:
+            flow_stats_df = merged_df.loc[
+                :,
+                [
+                    "channel_num",
+                    "p_value",
+                    "F_value",
+                    "AAL_distance",
+                    "AAL_region",
+                    "BA_distance",
+                    "BA_region",
+                ],
+            ]
+        else:
+            flow_stats_df = merged_df.loc[
+                :,
+                [
+                    "channel_num",
+                    "p_value",
+                    "F_value",
+                    "AAL_distance",
+                    "AAL_region",
+                    "BA_distance",
+                    "BA_region",
+                ],
+            ]
         return flow_stats_df
 
     def plot_stat_results(
         self,
-        exp_name: str,
         dim: str,
+        exp_name: str,
         hemo_type: str,
-        add_labels: bool = False,
         filter_type: str = None,
+        corr: bool = False,
+        add_labels: bool = False,
         filepath: str = None,
         show: bool = True,
     ) -> None:
@@ -3133,11 +3149,12 @@ class Flow_Results:
         Plot Kernel Flow statistical results.
 
         Args:
-            exp_name (str): Name of the experiment.
             dim (str): Position data dimension "2D" or "3D".
+            exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
-            add_labels (bool): Add a channel number label at each detector position. Defaults to False.
             filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
+            add_labels (bool): Add a channel number label at each detector position. Defaults to False.
             filepath (str): Filepath to save figure. Default to None (no output).
             show (bool): Display the figure. Defaults to True.
         """
@@ -3208,16 +3225,18 @@ class Flow_Results:
                 ] = float("NaN")
             return plot_df
 
-        flow_stats = self.load_flow_stats(exp_name, hemo_type, filter_type)
+        flow_stats = self.load_flow_stats(exp_name, hemo_type, filter_type, corr)
         if dim.lower() == "2d":
             source_detector_df = self.flow_session.create_source_detector_df("2D")
             plot_df = _add_missing_pos(dim)
             fig = plt.figure(figsize=(6, 5))
             ax = fig.add_subplot(111)
-            sig_detector_plot_df = plot_df[plot_df["p_value"] <= 0.05]
-            not_sig_detector_plot_df = plot_df.loc[
-                (plot_df["p_value"] > 0.05) | (pd.isna(plot_df["p_value"]))
-            ]
+            if corr:
+                sig_detector_plot_df = plot_df[plot_df["is_sig_corr"] == True]
+                not_sig_detector_plot_df = plot_df[(plot_df["is_sig_corr"] == False) | (pd.isna(plot_df["p_value"]))]
+            else:
+                sig_detector_plot_df = plot_df[plot_df["is_sig"] == True]
+                not_sig_detector_plot_df = plot_df[(plot_df["is_sig"] == False) | (pd.isna(plot_df["p_value"]))]
             scatter = ax.scatter(
                 sig_detector_plot_df["detector_x_pos"],
                 sig_detector_plot_df["detector_y_pos"],
@@ -3245,39 +3264,42 @@ class Flow_Results:
                 zorder=1,
             )
             if add_labels:
-                labels = [
-                    plt.text(
-                        sig_detector_plot_df["detector_x_pos"].iloc[i],
-                        sig_detector_plot_df["detector_y_pos"].iloc[i],
-                        int(sig_detector_plot_df["channel_num"].iloc[i]),
-                        fontsize=8,
-                        ha="center",
-                        va="center",
-                        bbox=dict(
-                            boxstyle="round,pad=0.15",
-                            edgecolor="black",
-                            facecolor="white",
-                            alpha=1,
+                try:
+                    labels = [
+                        plt.text(
+                            sig_detector_plot_df["detector_x_pos"].iloc[i],
+                            sig_detector_plot_df["detector_y_pos"].iloc[i],
+                            int(sig_detector_plot_df["channel_num"].iloc[i]),
+                            fontsize=8,
+                            ha="center",
+                            va="center",
+                            bbox=dict(
+                                boxstyle="round,pad=0.15",
+                                edgecolor="black",
+                                facecolor="white",
+                                alpha=1,
+                            ),
+                            zorder=4,
+                        )
+                        for i in range(sig_detector_plot_df.shape[0])
+                    ]
+                    adjust_text(
+                        labels,
+                        ax=ax,
+                        arrowprops=dict(
+                            arrowstyle="-|>",
+                            facecolor="black",
+                            linewidth=2,
+                            shrinkA=0,
+                            shrinkB=0,
+                            zorder=0,
                         ),
-                        zorder=4,
+                        expand_points=(4, 4),
+                        expand_text=(1.5, 1.5),
+                        force_points=(0.8, 0.8),
                     )
-                    for i in range(sig_detector_plot_df.shape[0])
-                ]
-                adjust_text(
-                    labels,
-                    ax=ax,
-                    arrowprops=dict(
-                        arrowstyle="-|>",
-                        facecolor="black",
-                        linewidth=2,
-                        shrinkA=0,
-                        shrinkB=0,
-                        zorder=0,
-                    ),
-                    expand_points=(4, 4),
-                    expand_text=(1.5, 1.5),
-                    force_points=(0.8, 0.8),
-                )
+                except IndexError:  # no significant channels to label
+                    pass
             ax.spines["top"].set_visible(False)
             ax.spines["right"].set_visible(False)
             ax.spines["bottom"].set_visible(False)
@@ -3319,12 +3341,23 @@ class Flow_Results:
                 ha="center",
                 transform=ax.transAxes,
             )
-            scatter.set_clim([0, 0.05])
-            colorbar = plt.colorbar(
-                scatter, ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05], shrink=0.7, pad=0.1
-            )
             font_props = FontProperties(size=12)
-            colorbar.set_label("p-value", fontproperties=font_props)
+            if corr:  
+                alpha = round(plot_df["alpha_corr"].iloc[0], 5)
+                scatter.set_clim([0, alpha])
+                colorbar = plt.colorbar(
+                    scatter, ticks=np.linspace(0, alpha, 6), shrink=0.7, pad=0.1
+                )
+                tick_labels = colorbar.get_ticks()
+                formatted_tick_labels = [format(tick, ".2e") for tick in tick_labels]
+                colorbar.ax.set_yticklabels(formatted_tick_labels)
+                colorbar.set_label("Bonferroni-corrected p-value", fontproperties=font_props)
+            else:
+                scatter.set_clim([0, 0.05])
+                colorbar = plt.colorbar(
+                    scatter, ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05], shrink=0.7, pad=0.1
+                )
+                colorbar.set_label("p-value", fontproperties=font_props)
             try:
                 title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - {filter_type.title()}"
             except AttributeError:
@@ -3381,10 +3414,12 @@ class Flow_Results:
                 sig_detector_plot_df = detector_plot_df[
                     detector_plot_df["p_value"] <= 0.05
                 ]
-                not_sig_detector_plot_df = detector_plot_df.loc[
-                    (detector_plot_df["p_value"] > 0.05)
-                    | (pd.isna(detector_plot_df["p_value"]))
-                ]
+                if corr:
+                    sig_detector_plot_df = detector_plot_df[detector_plot_df["is_sig_corr"] == True]
+                    not_sig_detector_plot_df = detector_plot_df[(detector_plot_df["is_sig_corr"] == False) | (pd.isna(detector_plot_df["p_value"]))]
+                else:
+                    sig_detector_plot_df = detector_plot_df[detector_plot_df["is_sig"] == True]
+                    not_sig_detector_plot_df = detector_plot_df[(detector_plot_df["is_sig"] == False) | (pd.isna(detector_plot_df["p_value"]))]
                 scatter = ax.scatter(
                     sig_detector_plot_df["detector_x_pos"],
                     sig_detector_plot_df["detector_y_pos"],
@@ -3441,7 +3476,7 @@ class Flow_Results:
             if filepath:
                 fig.savefig(filepath, dpi=300, bbox_inches="tight")
 
-    def create_stat_results_figs(self, overwrite: bool = True) -> None:
+    def create_stat_results_figs(self, overwrite: bool = True, corr: bool = False) -> None:
         """
         Create figures (.png images) for each experiment, hemodynamic type, and filter type.
         There are individual figures for each filter type and a combined figure that has all filter types.
@@ -3450,6 +3485,7 @@ class Flow_Results:
         Args:
             overwrite (bool): Overwrite existing filter figures. Significant performance increase when False.
                               Defaults to True.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
         """
 
         def _combine_figs(filedir: str) -> None:
@@ -3461,6 +3497,10 @@ class Flow_Results:
             """
             all_filenames = os.listdir(filedir)
             all_fig_filenames = [f for f in all_filenames if not f.endswith(".csv")]
+            if corr:
+                all_fig_filenames = [f for f in all_fig_filenames if "corr" in f]
+            else:
+                all_fig_filenames = [f for f in all_fig_filenames if "corr" not in f]
             order = ["unfiltered", "lowpass", "bandpass"]
             fig_filenames = sorted(
                 [f for f in all_fig_filenames if any(o in f for o in order)],
@@ -3478,7 +3518,10 @@ class Flow_Results:
             for fig in figs:
                 fig_out.paste(fig, (x_offset, 0))
                 x_offset += fig.size[0]
-            filename = fig_filenames[0].rpartition("_")[0] + "_all.png"
+            if corr:
+                filename = fig_filenames[0].rpartition("_")[0] + "_all_corr.png"
+            else:
+                filename = fig_filenames[0].rpartition("_")[0] + "_all.png"
             fig_out.save(os.path.join(filedir, filename))
 
         filter_types = ["unfiltered", "lowpass", "bandpass"]
@@ -3492,21 +3535,24 @@ class Flow_Results:
             for hemo_type in self.hemo_types:
                 for filter_type in filter_types:
                     filedir = os.path.join(
-                        self.results_dir, "inter_module_channels", exp_name, hemo_type
+                        self.results_dir, "inter_module_channels", exp_name, hemo_type, "figures"
                     )
-                    filename = f"{exp_name}_{hemo_type}_{filter_type}.png"
+                    if not os.path.exists(filedir):
+                        os.makedirs(filedir)
+                    if corr:
+                        filename = f"{exp_name}_{hemo_type}_{filter_type}_corr.png"
+                    else:
+                        filename = f"{exp_name}_{hemo_type}_{filter_type}.png"
                     filepath = os.path.join(filedir, filename)
                     if not os.path.exists(filepath) or overwrite:
                         out = self.plot_stat_results(
-                            exp_name,
                             dim="2D",
+                            exp_name=exp_name,
                             hemo_type=hemo_type,
                             filter_type=filter_type,
+                            corr=corr,
                             add_labels=True,
                             filepath=filepath,
                             show=False,
                         )
-                filedir = os.path.join(
-                    self.results_dir, "inter_module_channels", exp_name, hemo_type
-                )
                 _combine_figs(filedir)
