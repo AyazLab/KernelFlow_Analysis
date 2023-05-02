@@ -3233,10 +3233,14 @@ class Flow_Results:
             ax = fig.add_subplot(111)
             if corr:
                 sig_detector_plot_df = plot_df[plot_df["is_sig_corr"] == True]
-                not_sig_detector_plot_df = plot_df[(plot_df["is_sig_corr"] == False) | (pd.isna(plot_df["p_value"]))]
+                not_sig_detector_plot_df = plot_df[
+                    (plot_df["is_sig_corr"] == False) | (pd.isna(plot_df["p_value"]))
+                ]
             else:
                 sig_detector_plot_df = plot_df[plot_df["is_sig"] == True]
-                not_sig_detector_plot_df = plot_df[(plot_df["is_sig"] == False) | (pd.isna(plot_df["p_value"]))]
+                not_sig_detector_plot_df = plot_df[
+                    (plot_df["is_sig"] == False) | (pd.isna(plot_df["p_value"]))
+                ]
             scatter = ax.scatter(
                 sig_detector_plot_df["detector_x_pos"],
                 sig_detector_plot_df["detector_y_pos"],
@@ -3342,7 +3346,7 @@ class Flow_Results:
                 transform=ax.transAxes,
             )
             font_props = FontProperties(size=12)
-            if corr:  
+            if corr:
                 alpha = round(plot_df["alpha_corr"].iloc[0], 5)
                 scatter.set_clim([0, alpha])
                 colorbar = plt.colorbar(
@@ -3351,11 +3355,16 @@ class Flow_Results:
                 tick_labels = colorbar.get_ticks()
                 formatted_tick_labels = [format(tick, ".2e") for tick in tick_labels]
                 colorbar.ax.set_yticklabels(formatted_tick_labels)
-                colorbar.set_label("Bonferroni-corrected p-value", fontproperties=font_props)
+                colorbar.set_label(
+                    "Bonferroni-corrected p-value", fontproperties=font_props
+                )
             else:
                 scatter.set_clim([0, 0.05])
                 colorbar = plt.colorbar(
-                    scatter, ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05], shrink=0.7, pad=0.1
+                    scatter,
+                    ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                    shrink=0.7,
+                    pad=0.1,
                 )
                 colorbar.set_label("p-value", fontproperties=font_props)
             try:
@@ -3415,11 +3424,21 @@ class Flow_Results:
                     detector_plot_df["p_value"] <= 0.05
                 ]
                 if corr:
-                    sig_detector_plot_df = detector_plot_df[detector_plot_df["is_sig_corr"] == True]
-                    not_sig_detector_plot_df = detector_plot_df[(detector_plot_df["is_sig_corr"] == False) | (pd.isna(detector_plot_df["p_value"]))]
+                    sig_detector_plot_df = detector_plot_df[
+                        detector_plot_df["is_sig_corr"] == True
+                    ]
+                    not_sig_detector_plot_df = detector_plot_df[
+                        (detector_plot_df["is_sig_corr"] == False)
+                        | (pd.isna(detector_plot_df["p_value"]))
+                    ]
                 else:
-                    sig_detector_plot_df = detector_plot_df[detector_plot_df["is_sig"] == True]
-                    not_sig_detector_plot_df = detector_plot_df[(detector_plot_df["is_sig"] == False) | (pd.isna(detector_plot_df["p_value"]))]
+                    sig_detector_plot_df = detector_plot_df[
+                        detector_plot_df["is_sig"] == True
+                    ]
+                    not_sig_detector_plot_df = detector_plot_df[
+                        (detector_plot_df["is_sig"] == False)
+                        | (pd.isna(detector_plot_df["p_value"]))
+                    ]
                 scatter = ax.scatter(
                     sig_detector_plot_df["detector_x_pos"],
                     sig_detector_plot_df["detector_y_pos"],
@@ -3468,8 +3487,33 @@ class Flow_Results:
             )
             sm.set_array([])
             colorbar_ax = fig.add_axes([0.87, 0.32, 0.017, 0.4])
-            colorbar = fig.colorbar(sm, cax=colorbar_ax)
-            colorbar.set_label("p-value", fontsize=12)
+            font_props = FontProperties(size=12)
+            if corr:
+                alpha = round(plot_df["alpha_corr"].iloc[0], 5)
+                scatter.set_clim([0, alpha])
+                colorbar = fig.colorbar(
+                    scatter,
+                    cax=colorbar_ax,
+                    ticks=np.linspace(0, alpha, 6),
+                    shrink=0.7,
+                    pad=0.1,
+                )
+                tick_labels = colorbar.get_ticks()
+                formatted_tick_labels = [format(tick, ".2e") for tick in tick_labels]
+                colorbar.ax.set_yticklabels(formatted_tick_labels)
+                colorbar.set_label(
+                    "Bonferroni-corrected p-value", fontproperties=font_props
+                )
+            else:
+                scatter.set_clim([0, 0.05])
+                colorbar = fig.colorbar(
+                    scatter,
+                    cax=colorbar_ax,
+                    ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                    shrink=0.7,
+                    pad=0.1,
+                )
+                colorbar.set_label("p-value", fontproperties=font_props)
             plt.subplots_adjust(wspace=-0.3, hspace=-0.4)
             if show:  # TODO
                 plt.show()
