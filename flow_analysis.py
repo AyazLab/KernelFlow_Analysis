@@ -1660,7 +1660,17 @@ class Process_Flow:
                     detector_plot_df = source_detector_hemo[
                         source_detector_hemo["detector_x_pos"] >= 0
                     ]
-                    ax.set_title("Right View", fontweight="bold", fontsize=14, y=0.85)
+                    ax.set_title("Right View", fontweight="bold", fontsize=18, y=0.85)
+                    fig.text(
+                        0.8,
+                        0.5,
+                        "Anterior",
+                        fontweight="bold",
+                        fontsize=14,
+                        rotation=90,
+                        va="center",
+                        ha="center",
+                    )
                 elif view == "left":
                     source_plot_df = uni_source_label_df[
                         uni_source_label_df["source_x_pos"] <= 0
@@ -1668,7 +1678,17 @@ class Process_Flow:
                     detector_plot_df = source_detector_hemo[
                         source_detector_hemo["detector_x_pos"] <= 0
                     ]
-                    ax.set_title("Left View", fontweight="bold", fontsize=14, y=0.85)
+                    ax.set_title("Left View", fontweight="bold", fontsize=18, y=0.85)
+                    fig.text(
+                        0.25,
+                        0.5,
+                        "Anterior",
+                        fontweight="bold",
+                        fontsize=14,
+                        rotation=90,
+                        va="center",
+                        ha="center",
+                    )
                 elif view == "anterior":
                     source_plot_df = uni_source_label_df[
                         uni_source_label_df["source_y_pos"] > 0
@@ -1677,7 +1697,17 @@ class Process_Flow:
                         source_detector_hemo["detector_y_pos"] > 0
                     ]
                     ax.set_title(
-                        "Anterior View", fontweight="bold", fontsize=14, y=0.85
+                        "Anterior View", fontweight="bold", fontsize=18, y=0.85
+                    )
+                    fig.text(
+                        0.8,
+                        0.5,
+                        "Left",
+                        fontweight="bold",
+                        fontsize=14,
+                        rotation=90,
+                        va="center",
+                        ha="center",
                     )
                 elif view == "posterior":
                     source_plot_df = uni_source_label_df[
@@ -1687,8 +1717,19 @@ class Process_Flow:
                         source_detector_hemo["detector_y_pos"] <= 0
                     ]
                     ax.set_title(
-                        "Posterior View", fontweight="bold", fontsize=14, y=0.85
+                        "Posterior View", fontweight="bold", fontsize=18, y=0.85
                     )
+                    fig.text(
+                        0.25,
+                        0.5,
+                        "Left",
+                        fontweight="bold",
+                        fontsize=14,
+                        rotation=90,
+                        va="center",
+                        ha="center",
+                    )
+
                 if add_labels and not channels:
                     try:
                         _add_labels(
