@@ -3520,7 +3520,9 @@ class Flow_Results:
             if filepath:
                 fig.savefig(filepath, dpi=300, bbox_inches="tight")
 
-    def create_stat_results_figs(self, overwrite: bool = True, corr: bool = False) -> None:
+    def create_stat_results_figs(
+        self, overwrite: bool = True, corr: bool = False
+    ) -> None:
         """
         Create figures (.png images) for each experiment, hemodynamic type, and filter type.
         There are individual figures for each filter type and a combined figure that has all filter types.
@@ -3579,7 +3581,11 @@ class Flow_Results:
             for hemo_type in self.hemo_types:
                 for filter_type in filter_types:
                     filedir = os.path.join(
-                        self.results_dir, "inter_module_channels", exp_name, hemo_type, "figures"
+                        self.results_dir,
+                        "inter_module_channels",
+                        exp_name,
+                        hemo_type,
+                        "figures",
                     )
                     if not os.path.exists(filedir):
                         os.makedirs(filedir)
