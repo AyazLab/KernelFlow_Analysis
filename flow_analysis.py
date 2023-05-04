@@ -1345,7 +1345,10 @@ class Process_Flow:
         return atlas_df
 
     def load_flow_atlas(
-        self, depth: Union[int, float] = None, minimal: bool = False
+        self,
+        depth: Union[int, float] = None,
+        minimal: bool = False,
+        channels: Union[List[int], int] = None,
     ) -> pd.DataFrame:
         """
         Load an atlas of Kernel Flow source/detector locations with corresponding brain regions.
@@ -1353,6 +1356,7 @@ class Process_Flow:
         Args:
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
             minimal (bool): Load a minimal version with just channels and brain regions. Defaults to False (load all data).
+            channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
 
         Returns:
             pd.DataFrame: DataFrame with brain regions for all sources and detectors
@@ -1373,6 +1377,10 @@ class Process_Flow:
                     "BA_region",
                 ]
             ]
+        if isinstance(channels, int):
+            atlas_df = atlas_df[atlas_df["channel_num"] == channels].copy()
+        elif isinstance(channels, list):
+            atlas_df = atlas_df[atlas_df["channel_num"].isin(channels)].copy()
         return atlas_df
 
     def plot_pos(
