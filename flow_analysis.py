@@ -2,6 +2,7 @@ import os
 import snirf
 import ctypes
 import datetime
+import warnings
 import numpy as np
 import pandas as pd
 import pingouin as pg
@@ -2782,7 +2783,7 @@ class Flow_Results:
         self.flow_session = self.par.flow_session_dict["session_1001"]
 
     def process_flow_data(
-        self, num_pars: int, inter_module_only=True, filter_type: str = None
+        self, num_pars: int, filter_type: str = None, inter_module_only=True
     ) -> None:
         """
         Generate a CSV file that contains the Kernel Flow stimulus response data
@@ -2790,8 +2791,8 @@ class Flow_Results:
 
         Args:
             num_pars (int): Number of participants in the study.
-            inter_module_only (bool): Select only inter-module channels. Defaults to True.
             filter_type (str): Filter to apply to the data. Defaults to None.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
         """
         if inter_module_only:
             print(f"Processing participants ...")
@@ -2848,54 +2849,67 @@ class Flow_Results:
                             all_exp_filepath, mode="a", header=False, index=False
                         )
         else:
-            all_exp_results_list = []
-            for par_num in range(1, num_pars + 1):
-                print(f"Processing participant {par_num} ...")
-                par = Participant_Flow(par_num)
-                exp_results_list = []
-                for exp_name in self.exp_names:
-                    stim_resp_df = par.create_exp_stim_response_df(
-                        exp_name, filter_type
-                    )
-                    exp_results_list.append(stim_resp_df)
-                all_exp_results_list.append(exp_results_list)
+            for hemo_type in self.hemo_types:
+                print(f"Processing {hemo_type} data ...")
+                all_exp_results_list = []
+                for par_num in range(1, num_pars + 1):
+                    par = Participant_Flow(par_num)
+                    exp_results_list = []
+                    for exp_name in self.exp_names:
+                        stim_resp_df = par.create_exp_stim_response_df(
+                            exp_name, hemo_type, filter_type
+                        )
+                        exp_results_list.append(stim_resp_df)
+                    all_exp_results_list.append(exp_results_list)
 
-            if filter_type:
-                filedir = os.path.join(
-                    self.par.flow_processed_data_dir, "all_channels", filter_type
-                )
-            else:
-                filedir = os.path.join(
-                    self.par.flow_processed_data_dir, "all_channels", "unfiltered"
-                )
-            if not os.path.exists(filedir):
-                os.makedirs(filedir)
-
-            print("Creating CSV files ...")
-            all_exp_filepath = os.path.join(filedir, f"all_experiments_flow.csv")
-            if os.path.exists(all_exp_filepath):
-                os.remove(all_exp_filepath)
-            for i, exp_name in enumerate(self.exp_names):
-                exp_rows = [
-                    exp_results_list[i] for exp_results_list in all_exp_results_list
-                ]
-                exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
-                filepath = os.path.join(filedir, f"{exp_name}_flow.csv")
-                exp_df.to_csv(filepath, index=False)
-                all_exp_df = exp_df.copy(deep=True)
-                exp_name_col = [exp_name] * len(all_exp_df.index)
-                all_exp_df.insert(0, "experiment", exp_name_col)
-                if i == 0:
-                    all_exp_df.to_csv(
-                        all_exp_filepath, mode="a", header=True, index=False
+                if filter_type:
+                    filedir = os.path.join(
+                        self.par.flow_processed_data_dir,
+                        "all_channels",
+                        filter_type,
+                        hemo_type,
                     )
                 else:
-                    all_exp_df.to_csv(
-                        all_exp_filepath, mode="a", header=False, index=False
+                    filedir = os.path.join(
+                        self.par.flow_processed_data_dir,
+                        "all_channels",
+                        "unfiltered",
+                        hemo_type,
                     )
+                if not os.path.exists(filedir):
+                    os.makedirs(filedir)
+
+                print("Creating CSV files ...")
+                all_exp_filepath = os.path.join(
+                    filedir, f"all_experiments_flow_{hemo_type}.csv"
+                )
+                if os.path.exists(all_exp_filepath):
+                    os.remove(all_exp_filepath)
+                for i, exp_name in enumerate(self.exp_names):
+                    exp_rows = [
+                        exp_results_list[i] for exp_results_list in all_exp_results_list
+                    ]
+                    exp_df = pd.concat(exp_rows, axis=0, ignore_index=True)
+                    filepath = os.path.join(filedir, f"{exp_name}_flow_{hemo_type}.csv")
+                    exp_df.to_csv(filepath, index=False)
+                    all_exp_df = exp_df.copy(deep=True)
+                    exp_name_col = [exp_name] * len(all_exp_df.index)
+                    all_exp_df.insert(0, "experiment", exp_name_col)
+                    if i == 0:
+                        all_exp_df.to_csv(
+                            all_exp_filepath, mode="a", header=True, index=False
+                        )
+                    else:
+                        all_exp_df.to_csv(
+                            all_exp_filepath, mode="a", header=False, index=False
+                        )
 
     def load_processed_flow_data(
-        self, exp_name: str, hemo_type: str, filter_type: str = None
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        inter_module_only=True,
     ) -> pd.DataFrame:
         """
         Load processes Kernel Flow data into a DataFrame.
@@ -2904,16 +2918,25 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str, optional): Filter to apply to the data. Defaults to None.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
         Returns:
             pd.DataFrame: Processed DataFrame.
         """
-        read_filedir = os.path.join(
-            self.par.flow_processed_data_dir,
-            "inter_module_channels",
-            filter_type,
-            hemo_type,
-        )
+        if inter_module_only:
+            read_filedir = os.path.join(
+                self.par.flow_processed_data_dir,
+                "inter_module_channels",
+                filter_type,
+                hemo_type,
+            )
+        else:
+            read_filedir = os.path.join(
+                self.par.flow_processed_data_dir,
+                "all_channels",
+                filter_type,
+                hemo_type,
+            )
         read_filename = f"{exp_name}_flow_{hemo_type}.csv"
         read_filepath = os.path.join(read_filedir, read_filename)
         flow_df = pd.read_csv(read_filepath)
@@ -2930,7 +2953,12 @@ class Flow_Results:
         return flow_df
 
     def run_rm_anova(
-        self, exp_name: str, hemo_type: str, filter_type: str = None, corr: bool = True
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        corr: bool = True,
+        inter_module_only=True,
     ) -> pd.DataFrame:
         """
         Run a repeated measures ANOVA on processed inter-module channels.
@@ -2940,32 +2968,54 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
         Returns:
             pd.DataFrame: ANOVA results.
         """
-        flow_df = self.load_processed_flow_data(exp_name, hemo_type, filter_type)
+        flow_df = self.load_processed_flow_data(
+            exp_name, hemo_type, filter_type, inter_module_only
+        )
         channels = list(flow_df.columns[2:])
         num_channels = len(channels)
         aov_list = []
         for channel in channels:
-            aov = pg.rm_anova(
-                data=flow_df,
-                dv=channel,
-                within="block",
-                subject="participant",
-                effsize="np2",
-            )
-            aov_final = aov[["p-unc", "F", "ddof1", "ddof2"]].copy()
-            aov_final.rename(
-                columns={
-                    "p-unc": "p_value",
-                    "F": "F_value",
-                    "ddof1": "df1",
-                    "ddof2": "df2",
-                },
-                inplace=True,
-            )
+            with warnings.catch_warnings():
+                warnings.simplefilter(
+                    "ignore", category=RuntimeWarning
+                )  # suppress RuntimeWarning warnings
+                try:
+                    aov = pg.rm_anova(
+                        data=flow_df,
+                        dv=channel,
+                        within="block",
+                        subject="participant",
+                        effsize="np2",
+                    )
+                    aov_final = aov[["p-unc", "F", "ddof1", "ddof2"]].copy()
+                    aov_final.rename(
+                        columns={
+                            "p-unc": "p_value",
+                            "F": "F_value",
+                            "ddof1": "df1",
+                            "ddof2": "df2",
+                        },
+                        inplace=True,
+                    )
+                except (
+                    KeyError,
+                    ValueError,
+                    ZeroDivisionError,
+                    np.linalg.LinAlgError,
+                ):  # handle columns with all NaN values
+                    aov_final = pd.DataFrame(
+                        {
+                            "p_value": [float("NaN")],
+                            "F_value": [float("NaN")],
+                            "df1": [float("NaN")],
+                            "df2": [float("NaN")],
+                        }
+                    )
             aov_final["is_sig"] = aov_final["p_value"] < 0.05
             if corr:  # apply Bonferroni correction
                 alpha_corr = 0.05 / num_channels
@@ -2981,6 +3031,7 @@ class Flow_Results:
         self,
         filter_type: str = None,
         corr: bool = True,
+        inter_module_only=True,
         brain_regions: bool = False,
         depth: Union[int, float] = None,
     ) -> None:
@@ -2991,6 +3042,7 @@ class Flow_Results:
         Args:
             filter_type (str): Filter to apply to the data. Defaults to None.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
         """
@@ -3004,32 +3056,42 @@ class Flow_Results:
             for hemo_type in self.hemo_types:
                 if not filter_type:
                     filter_type = "unfiltered"
-                write_filedir = os.path.join(
-                    self.results_dir, "inter_module_channels", exp_name, hemo_type
-                )
+                if inter_module_only:
+                    write_filedir = os.path.join(
+                        self.results_dir, "inter_module_channels", exp_name, hemo_type
+                    )
+                else:
+                    write_filedir = os.path.join(
+                        self.results_dir, "all_channels", exp_name, hemo_type
+                    )
                 if not os.path.exists(write_filedir):
                     os.makedirs(write_filedir)
+                exp_aov_results = self.run_rm_anova(
+                    exp_name, hemo_type, filter_type, corr, inter_module_only
+                )
                 if brain_regions:
                     if depth is None:
                         depth = 0
                     flow_atlas = self.par.flow.load_flow_atlas(depth, minimal=True)
                     flow_atlas.dropna(subset=["channel_num"], inplace=True)
                     write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
+                    exp_aov_results = pd.merge(
+                        exp_aov_results, flow_atlas, on="channel_num", how="left"
+                    )
                 else:
                     write_filename = (
                         f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
                     )
                 write_filepath = os.path.join(write_filedir, write_filename)
-                exp_aov_results = self.run_rm_anova(
-                    exp_name, hemo_type, filter_type, corr
-                )
-                exp_aov_results_final = pd.merge(
-                    exp_aov_results, flow_atlas, on="channel_num", how="left"
-                )
-                exp_aov_results_final.to_csv(write_filepath, index=False)
+                exp_aov_results.to_csv(write_filepath, index=False)
 
     def run_pos_hoc_test(
-        self, exp_name: str, hemo_type: str, filter_type: str = None, drop: bool = False
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        drop: bool = False,
+        inter_module_only: bool = True,
     ) -> pd.DataFrame:
         """
         Run pairwise t-tests for post-hoc ANOVA analysis.
@@ -3039,12 +3101,21 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
             drop (bool): Drop columns with extra post-hoc info. Defaults to False.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
         Returns:
             pd.DataFrame: Post-hoc test results.
         """
-        flow_df = self.load_processed_flow_data(exp_name, hemo_type, filter_type)
-        sig_df = self.load_flow_stats(exp_name, hemo_type, filter_type, sig_only=True)
+        flow_df = self.load_processed_flow_data(
+            exp_name, hemo_type, filter_type, inter_module_only
+        )
+        sig_df = self.load_flow_stats(
+            exp_name,
+            hemo_type,
+            filter_type,
+            inter_module_only=inter_module_only,
+            sig_only=True,
+        )
         sig_channels = list(sig_df["channel_num"].astype(str))
         sig_flow_df = flow_df.loc[:, flow_df.columns.isin(sig_channels)]
 
@@ -3083,7 +3154,10 @@ class Flow_Results:
         return post_hoc_results
 
     def run_all_pos_hoc_tests(
-        self, filter_type: str = None, drop: bool = False
+        self,
+        filter_type: str = None,
+        drop: bool = False,
+        inter_module_only: bool = True,
     ) -> None:
         """
         Run pairwise t-tests for post-hoc ANOVA analysis for all experiments and hemodynamic types.
@@ -3092,6 +3166,7 @@ class Flow_Results:
         Args:
             filter_type (str): Filter to apply to the data. Defaults to None.
             drop (bool): Drop columns with extra post-hoc info. Defaults to False.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
         """
         for exp_name in [
             "go_no_go",
@@ -3103,12 +3178,20 @@ class Flow_Results:
             for hemo_type in self.hemo_types:
                 if not filter_type:
                     filter_type = "unfiltered"
-                write_filedir = os.path.join(
-                    self.results_dir,
-                    "inter_module_channels",
-                    exp_name,
-                    hemo_type,
-                )
+                if inter_module_only:
+                    write_filedir = os.path.join(
+                        self.results_dir,
+                        "inter_module_channels",
+                        exp_name,
+                        hemo_type,
+                    )
+                else:
+                    write_filedir = os.path.join(
+                        self.results_dir,
+                        "all_channels",
+                        exp_name,
+                        hemo_type,
+                    )
                 write_filename = f"{exp_name}_post_hoc_{hemo_type}_{filter_type}.csv"
                 write_filepath = os.path.join(write_filedir, write_filename)
                 post_hoc_results = self.run_pos_hoc_test(
@@ -3122,6 +3205,7 @@ class Flow_Results:
         hemo_type: str,
         filter_type: str = None,
         corr: bool = True,
+        inter_module_only: bool = True,
         sig_only: bool = False,
         brain_regions: bool = False,
         depth: Union[int, float] = None,
@@ -3135,6 +3219,7 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
             sig_only (bool): Return only significant results (p < 0.05). Defaults to False.
             brain_regions (bool): Include AAL and BA brain region columns. Defaults to False.
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
@@ -3147,14 +3232,26 @@ class Flow_Results:
             filter_type = "unfiltered"
         if depth is None:
             depth = 0
-        filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
-        filepath = os.path.join(
-            self.results_dir,
-            "inter_module_channels",
-            exp_name,
-            hemo_type,
-            filename,
-        )
+        if inter_module_only:
+            filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
+        else:   
+            filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
+        if inter_module_only:
+            filepath = os.path.join(
+                self.results_dir,
+                "inter_module_channels",
+                exp_name,
+                hemo_type,
+                filename,
+            )
+        else:
+            filepath = os.path.join(
+                self.results_dir,
+                "all_channels",
+                exp_name,
+                hemo_type,
+                filename,
+            )
         flow_stats = pd.read_csv(filepath)
         if corr:
             sig_col_name = "is_sig_corr"
@@ -3191,7 +3288,12 @@ class Flow_Results:
             return flow_stats_out
 
     def load_post_hoc_stats(
-        self, exp_name: str, hemo_type: str, filter_type: str = None, drop: bool = False
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        drop: bool = False,
+        inter_module_only=True,
     ) -> pd.DataFrame:
         """
         Load Kernel Flow ANOVA post-hoc statistical results.
@@ -3201,6 +3303,7 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
             drop (bool): Drop columns with extra post-hoc info. Defaults to False.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
         Returns:
             pd.DataFrame: Post-hoc statistical results for an experiment and hemodynamic type.
@@ -3208,13 +3311,22 @@ class Flow_Results:
         if not filter_type:
             filter_type = "unfiltered"
         filename = f"{exp_name}_post_hoc_{hemo_type}_{filter_type}.csv"
-        filepath = os.path.join(
-            self.results_dir,
-            "inter_module_channels",
-            exp_name,
-            hemo_type,
-            filename,
-        )
+        if inter_module_only:
+            filepath = os.path.join(
+                self.results_dir,
+                "inter_module_channels",
+                exp_name,
+                hemo_type,
+                filename,
+            )
+        else:
+            filepath = os.path.join(
+                self.results_dir,
+                "all_channels",
+                exp_name,
+                hemo_type,
+                filename,
+            )
         post_hoc_stats = pd.read_csv(filepath)
         if drop:
             try:
@@ -3226,7 +3338,12 @@ class Flow_Results:
         return post_hoc_stats
 
     def create_flow_stats_df(
-        self, exp_name: str, hemo_type: str, filter_type: str = None, corr: bool = False
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        corr: bool = False,
+        inter_module_only=True,
     ) -> pd.DataFrame:  # TODO needs a fix
         """
         Create a DataFrame with significant channels and corresponding brain regions.
@@ -3236,12 +3353,17 @@ class Flow_Results:
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
         Returns:
             pd.DataFrame: Significant stats DataFrame with brain regions.
         """
         sig_stats = self.load_flow_stats(
-            exp_name, hemo_type, filter_type, sig_only=True
+            exp_name,
+            hemo_type,
+            filter_type,
+            inter_module_only=inter_module_only,
+            sig_only=True,
         )
         sig_channels = list(sig_stats["channel_num"])
         source_detector_df = self.flow_session.create_source_detector_df(
