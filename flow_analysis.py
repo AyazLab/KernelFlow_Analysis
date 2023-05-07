@@ -3233,8 +3233,10 @@ class Flow_Results:
         if depth is None:
             depth = 0
         if inter_module_only:
-            filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
-        else:   
+            filename = (
+                f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
+            )
+        else:
             filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
         if inter_module_only:
             filepath = os.path.join(
