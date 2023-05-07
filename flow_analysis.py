@@ -1242,6 +1242,75 @@ class Process_Flow:
                 )
         return source_detector_df
 
+    def create_source_detector_df_all(
+        self,
+        midpoint_only: bool = False,
+        channels: Union[List[int], int] = None,
+    ) -> pd.DataFrame:
+        """
+        Create a DataFrame with the source and detector information for all channels.
+        NOTE: Currently only functional for 2D positions and without brain regions.
+
+        Args:
+            midpoint_only (bool): Include only source/detector midpoint coordinate dimensions. Default to False.
+            channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
+
+        Returns:
+            pd.DataFrame: Source and detector information for all channels.
+        """
+        dim = "2D"
+        measurement_list_df = self.create_measurement_list_df()
+        source_df = self.create_source_df(dim)
+        detector_df = self.create_detector_df(dim)
+        source_merge = pd.merge(measurement_list_df, source_df, on="source_index")
+        merged_source_detector_df = pd.merge(
+            source_merge, detector_df, on="detector_index"
+        )
+        source_detector_df = merged_source_detector_df.copy()
+        source_detector_df.insert(
+            0, "channel_num", source_detector_df["measurement_list_index"] - 1
+        )
+        source_detector_df.drop("source_index_y", axis=1, inplace=True)
+        source_detector_df.rename(
+            columns={"source_index_x": "source_index"}, inplace=True
+        )
+        source_detector_df.sort_values("channel_num", inplace=True)
+
+        if isinstance(channels, int):
+            source_detector_df = source_detector_df[
+                source_detector_df["channel_num"] == channels
+            ].copy()
+        elif isinstance(channels, list):
+            source_detector_df = source_detector_df[
+                source_detector_df["channel_num"].isin(channels)
+            ].copy()
+
+        source_detector_df[
+            ["midpoint_x_pos", "midpoint_y_pos"]
+        ] = source_detector_df.apply(
+            lambda row: self.get_midpoint(
+                (row["source_x_pos"], row["source_y_pos"]),
+                (
+                    row["detector_x_pos"],
+                    row["detector_y_pos"],
+                ),
+            ),
+            axis=1,
+            result_type="expand",
+        )
+
+        if midpoint_only:
+            source_detector_df = source_detector_df.drop(
+                columns=[
+                    "source_x_pos",
+                    "source_y_pos",
+                    "detector_x_pos",
+                    "detector_y_pos",
+                ]
+            )
+
+        return source_detector_df
+
     def get_midpoint(
         self, point1: Tuple[float, float, float], point2: Tuple[float, float, float]
     ) -> Tuple[float, float, float]:
