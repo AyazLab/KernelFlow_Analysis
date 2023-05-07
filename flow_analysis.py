@@ -3266,7 +3266,7 @@ class Flow_Results:
                     "df1",
                     "df2",
                     "is_sig",
-                    "is_sig_corr"
+                    "is_sig_corr",
                 ]
             ]
         else:
@@ -3415,7 +3415,7 @@ class Flow_Results:
         show: bool = True,
     ) -> None:
         """
-        Plot Kernel Flow statistical results.
+        Plot Kernel Flow statistical results for inter-module channels.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
@@ -3788,6 +3788,194 @@ class Flow_Results:
                 plt.show()
             if filepath:
                 fig.savefig(filepath, dpi=300, bbox_inches="tight")
+
+    def plot_stat_results_all(
+        self,
+        exp_name: str,
+        hemo_type: str,
+        filter_type: str = None,
+        corr: bool = False,
+        add_labels: bool = False,
+        filepath: str = None,
+        show: bool = True,
+    ) -> None:
+        """
+        Plot Kernel Flow statistical results for all channels.
+
+        Args:
+            exp_name (str): Name of the experiment.
+            hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
+            filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
+            add_labels (bool): Add a channel number label at each detector position. Defaults to False.
+            filepath (str): Filepath to save figure. Default to None (no output).
+            show (bool): Display the figure. Defaults to True.
+        """
+        flow_stats = self.load_flow_stats(
+            exp_name, hemo_type, filter_type, inter_module_only=False
+        )
+        source_detector_df = self.flow_session.create_source_detector_df_all()
+        plot_df = pd.merge(flow_stats, source_detector_df, on="channel_num")
+
+        fig = plt.figure(figsize=(8, 6.5))
+        ax = fig.add_subplot(111)
+        if corr:
+            sig_detector_plot_df = plot_df[plot_df["is_sig_corr"] == True]
+            not_sig_detector_plot_df = plot_df[
+                (plot_df["is_sig_corr"] == False) | (pd.isna(plot_df["p_value"]))
+            ]
+        else:
+            sig_detector_plot_df = plot_df[plot_df["is_sig"] == True]
+            not_sig_detector_plot_df = plot_df[
+                (plot_df["is_sig"] == False) | (pd.isna(plot_df["p_value"]))
+            ]
+        scatter = ax.scatter(
+            sig_detector_plot_df["midpoint_x_pos"],
+            sig_detector_plot_df["midpoint_y_pos"],
+            s=70,
+            c=sig_detector_plot_df["p_value"],
+            cmap="autumn_r",
+            edgecolors="black",
+            alpha=1,
+            zorder=3,
+        )
+        ax.scatter(
+            not_sig_detector_plot_df["midpoint_x_pos"],
+            not_sig_detector_plot_df["midpoint_y_pos"],
+            s=20,
+            c="dodgerblue",
+            edgecolors="black",
+            alpha=1,
+            zorder=1,
+        )
+        ax.scatter(
+            plot_df["source_x_pos"],
+            plot_df["source_y_pos"],
+            s=30,
+            c="black",
+            zorder=2,
+        )
+        if add_labels:
+            try:
+                labels = [
+                    plt.text(
+                        sig_detector_plot_df["midpoint_x_pos"].iloc[i],
+                        sig_detector_plot_df["midpoint_y_pos"].iloc[i],
+                        int(sig_detector_plot_df["channel_num"].iloc[i]),
+                        fontsize=8,
+                        ha="center",
+                        va="center",
+                        bbox=dict(
+                            boxstyle="round,pad=0.15",
+                            edgecolor="black",
+                            facecolor="white",
+                            alpha=1,
+                        ),
+                        zorder=4,
+                    )
+                    for i in range(sig_detector_plot_df.shape[0])
+                ]
+                adjust_text(
+                    labels,
+                    ax=ax,
+                    arrowprops=dict(
+                        arrowstyle="-|>",
+                        facecolor="black",
+                        linewidth=2,
+                        shrinkA=0,
+                        shrinkB=0,
+                        zorder=0,
+                    ),
+                    expand_points=(3, 3),
+                    expand_text=(2, 2),
+                    force_points=(0.8, 0.8),
+                    autoalign=True,
+                )
+            except IndexError:  # no significant channels to label
+                pass
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title("Anterior", fontweight="bold", fontsize=14, y=1)
+        ax.text(
+            0.5,
+            -0.06,
+            "Posterior",
+            fontweight="bold",
+            fontsize=14,
+            ha="center",
+            va="bottom",
+            transform=ax.transAxes,
+        )
+        ax.text(
+            -0.02,
+            0.5,
+            "Left",
+            fontsize=14,
+            fontweight="bold",
+            rotation=90,
+            va="center",
+            ha="center",
+            transform=ax.transAxes,
+        )
+        ax.text(
+            1.02,
+            0.5,
+            "Right",
+            fontsize=14,
+            fontweight="bold",
+            rotation=90,
+            va="center",
+            ha="center",
+            transform=ax.transAxes,
+        )
+        font_props = FontProperties(size=12)
+        if corr:
+            alpha = round(plot_df["alpha_corr"].iloc[0], 5)
+            scatter.set_clim([0, alpha])
+            colorbar = plt.colorbar(
+                scatter, ticks=np.linspace(0, alpha, 6), shrink=0.7, pad=0.1
+            )
+            tick_labels = colorbar.get_ticks()
+            formatted_tick_labels = [format(tick, ".2e") for tick in tick_labels]
+            colorbar.ax.set_yticklabels(formatted_tick_labels)
+            colorbar.set_label(
+                "Bonferroni-corrected p-value", fontproperties=font_props
+            )
+        else:
+            scatter.set_clim([0, 0.05])
+            colorbar = plt.colorbar(
+                scatter,
+                ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                shrink=0.7,
+                pad=0.1,
+            )
+            colorbar.set_label("p-value", fontproperties=font_props)
+        try:
+            title_text = (
+                f"{exp_name_to_title(exp_name)} - {hemo_type} - {filter_type.title()}"
+            )
+        except AttributeError:
+            title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - Unfiltered"
+        ax.text(
+            0.5,
+            1.12,
+            title_text,
+            fontweight="bold",
+            fontsize=14,
+            ha="center",
+            va="bottom",
+            transform=ax.transAxes,
+        )
+        if show:  # TODO
+            plt.show()
+        if filepath:
+            fig.savefig(filepath, dpi=300, bbox_inches="tight")
 
     def create_stat_results_figs(
         self, overwrite: bool = True, corr: bool = False
