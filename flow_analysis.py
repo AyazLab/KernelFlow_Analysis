@@ -1312,22 +1312,31 @@ class Process_Flow:
         return source_detector_df
 
     def get_midpoint(
-        self, point1: Tuple[float, float, float], point2: Tuple[float, float, float]
-    ) -> Tuple[float, float, float]:
+        self,
+        point1: Union[Tuple[float, float], Tuple[float, float, float]],
+        point2: Union[Tuple[float, float], Tuple[float, float, float]],
+    ) -> Union[Tuple[float, float], Tuple[float, float, float]]:
         """
-        Get the midpoint between two x, y, z coordinate points (source and detector).
+        Get the midpoint between two coordinate points (source and detector) in 2D or 3D.
 
         Args:
-            point1 (Tuple[float, float, float]): x, y, z coordinates of the source.
-            point2 (Tuple[float, float, float]): x, y, z coordinates of the detector.
+            point1 (Union[Tuple[float, float], Tuple[float, float, float]]): x, y (and optional z) coordinates of the source.
+            point2 (Union[Tuple[float, float], Tuple[float, float, float]]): x, y (and optional z) coordinates of the detector.
 
         Returns:
-            Tuple[float, float, float]: x, y, z coordinates of the source/detector midpoint.
+            Union[Tuple[float, float], Tuple[float, float, float]]: x, y (and optional z) coordinates of the source/detector midpoint.
         """
+        if len(point1) != len(point2):
+            raise ValueError("Both points must have the same number of dimensions.")
+
         x_mid = (point1[0] + point2[0]) / 2
         y_mid = (point1[1] + point2[1]) / 2
-        z_mid = (point1[2] + point2[2]) / 2
-        return x_mid, y_mid, z_mid
+
+        if len(point1) == 2:  # 2D coordinates
+            return x_mid, y_mid
+        else:  # 3D coordinates
+            z_mid = (point1[2] + point2[2]) / 2
+            return x_mid, y_mid, z_mid
 
     def MNI_to_region(
         self, mni_x: float, mni_y: float, mni_z: float, print_results: bool = False
