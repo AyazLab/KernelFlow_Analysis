@@ -3265,13 +3265,14 @@ class Flow_Results:
                     "F_value",
                     "df1",
                     "df2",
-                    sig_col_name,
+                    "is_sig",
+                    "is_sig_corr"
                 ]
             ]
         else:
             sig_col_name = "is_sig"
             flow_stats_out = flow_stats[
-                ["channel_num", "p_value", "F_value", "df1", "df2", sig_col_name]
+                ["channel_num", "p_value", "F_value", "df1", "df2", "is_sig"]
             ]
         if brain_regions:
             flow_atlas = self.par.flow.load_flow_atlas(depth, minimal=True)
