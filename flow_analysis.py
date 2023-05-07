@@ -2292,6 +2292,38 @@ class Participant_Flow:
 
         return exp_stim_resp_dict
 
+    def _compute_hemo_type_df(
+        self, hemo_type: str, df_in: pd.DataFrame
+    ) -> pd.DataFrame:
+        """
+        Create HbTot and HbDiff DataFrames.
+
+        Args:
+            hemo_type (str): "HbTot" or "HbDiff".
+            df_in (pd.DataFrame): DataFrame to create hemodynamic types for.
+
+        Returns:
+            pd.DataFrame: HbTot or HbDiff DataFrame.
+        """
+        HbO_df = df_in.iloc[:, np.r_[0, 1, 2 : len(df_in.columns) : 2]]
+        HbO_data_cols = HbO_df.iloc[:, 2:]
+        HbR_df = df_in.iloc[:, np.r_[0, 1, 3 : len(df_in.columns) : 2]]
+        HbR_data_cols = HbR_df.iloc[:, 2:]
+        cols_dict = {}
+        for i, col_name in enumerate(HbO_data_cols.columns):
+            if hemo_type.lower() == "hbtot":
+                cols_dict[col_name] = (
+                    HbO_data_cols.iloc[:, i] + HbR_data_cols.iloc[:, i]
+                )
+            elif hemo_type.lower() == "hbdiff":
+                cols_dict[col_name] = (
+                    HbO_data_cols.iloc[:, i] - HbR_data_cols.iloc[:, i]
+                )
+        df_out = pd.DataFrame(cols_dict)
+        df_out.insert(0, "block", HbO_df["block"])
+        df_out.insert(0, "participant", HbO_df["participant"])
+        return df_out
+
     def create_exp_stim_response_df(
         self, exp_name: str, filter_type: str = None
     ) -> pd.DataFrame:
