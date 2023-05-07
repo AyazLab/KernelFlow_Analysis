@@ -996,9 +996,7 @@ class Process_Flow:
         for i in range(len(measurement_list)):
             measurement_list_i = measurement_list[i]
             measurement_dict = {}
-            measurement_dict["measurement_list_index"] = (
-                i + 1
-            )  # TODO if missing, start at detector_index 7
+            measurement_dict["measurement_list_index"] = i + 1
             measurement_dict["data_type"] = measurement_list_i.dataType
             measurement_dict["data_type_index"] = measurement_list_i.dataTypeLabel
             measurement_dict["detector_index"] = measurement_list_i.detectorIndex
@@ -2325,7 +2323,7 @@ class Participant_Flow:
         return df_out
 
     def create_exp_stim_response_df(
-        self, exp_name: str, filter_type: str = None
+        self, exp_name: str, hemo_type: str = None, filter_type: str = None
     ) -> pd.DataFrame:
         """
         Create a DataFrame that contains the processed Kernel Flow data in response
@@ -2333,6 +2331,8 @@ class Participant_Flow:
 
         Args:
             exp_name (str): Name of the experiment.
+            hemo_type (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels.
+                                       Defaults to None (all channels).
             filter_type (str): Filter to apply to the data. Defaults to None.
 
         Returns:
@@ -2377,7 +2377,25 @@ class Participant_Flow:
         stim_resp_df = stim_resp_df.drop(
             "channels", axis=1
         )  # drop the original "channels" column
-        return stim_resp_df
+        if hemo_type:
+            if hemo_type.lower() == "hbo":  # HbO
+                HbO_df = stim_resp_df.iloc[
+                    :, np.r_[0, 1, 2 : len(stim_resp_df.columns) : 2]
+                ]
+                return HbO_df
+            elif hemo_type.lower() == "hbr":  # HbR
+                HbR_df = stim_resp_df.iloc[
+                    :, np.r_[0, 1, 3 : len(stim_resp_df.columns) : 2]
+                ]
+                return HbR_df
+            elif hemo_type.lower() == "hbtot":  # HbTot
+                HbTot_df = self._compute_hemo_type_df(hemo_type, df_in=stim_resp_df)
+                return HbTot_df
+            elif hemo_type.lower() == "hbdiff":  # HbDiff
+                HbDiff_df = self._compute_hemo_type_df(hemo_type, df_in=stim_resp_df)
+                return HbDiff_df
+        else:
+            return stim_resp_df
 
     def create_inter_module_exp_results_df(
         self, exp_name: str, hemo_type: str = None, filter_type: str = None
@@ -2388,6 +2406,7 @@ class Participant_Flow:
         or just "HbO", "HbR", "HbTot", or "HbDiff" channels.
 
         Args:
+            exp_name (str): Name of the experiment.
             hemo_type (str, optional): "HbO", "HbR", "HbTot", or "HbDiff" channels.
                                  Defaults to None (all inter-module channels).
             filter_type (str): Filter to apply to the data. Defaults to None.
@@ -2395,40 +2414,6 @@ class Participant_Flow:
         Returns:
             pd.DataFrame: Inter-module channels for an experiment.
         """
-
-        def _compute_df(hemo_type: str) -> pd.DataFrame:
-            """
-            Create the HbTot and HbDiff DataFrames.
-
-            Args:
-                hemo_type (str): "HbTot" or "HbDiff".
-
-            Returns:
-                pd.DataFrame: HbTot or HbDiff DataFrame.
-            """
-            HbO_df = inter_module_df.iloc[
-                :, np.r_[0, 1, 2 : len(inter_module_df.columns) : 2]
-            ]
-            HbO_data_cols = HbO_df.iloc[:, 2:]
-            HbR_df = inter_module_df.iloc[
-                :, np.r_[0, 1, 3 : len(inter_module_df.columns) : 2]
-            ]
-            HbR_data_cols = HbR_df.iloc[:, 2:]
-            cols_dict = {}
-            for i, col_name in enumerate(HbO_data_cols.columns):
-                if hemo_type.lower() == "hbtot":
-                    cols_dict[col_name] = (
-                        HbO_data_cols.iloc[:, i] + HbR_data_cols.iloc[:, i]
-                    )
-                elif hemo_type.lower() == "hbdiff":
-                    cols_dict[col_name] = (
-                        HbO_data_cols.iloc[:, i] - HbR_data_cols.iloc[:, i]
-                    )
-            df = pd.DataFrame(cols_dict)
-            df.insert(0, "block", HbO_df["block"])
-            df.insert(0, "participant", HbO_df["participant"])
-            return df
-
         if filter_type:
             exp_results = load_results(
                 os.path.join(self.flow_processed_data_dir, "all_channels", filter_type),
@@ -2462,10 +2447,10 @@ class Participant_Flow:
                 ]
                 return HbR_df
             elif hemo_type.lower() == "hbtot":  # HbTot
-                HbTot_df = _compute_df(hemo_type)
+                HbTot_df = self._compute_hemo_type_df(hemo_type, df_in=inter_module_df)
                 return HbTot_df
             elif hemo_type.lower() == "hbdiff":  # HbDiff
-                HbDiff_df = _compute_df(hemo_type)
+                HbDiff_df = self._compute_hemo_type_df(hemo_type, df_in=inter_module_df)
                 return HbDiff_df
         else:
             return inter_module_df
