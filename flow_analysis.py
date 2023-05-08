@@ -3978,7 +3978,10 @@ class Flow_Results:
             fig.savefig(filepath, dpi=300, bbox_inches="tight")
 
     def create_stat_results_figs(
-        self, overwrite: bool = True, corr: bool = False
+        self,
+        overwrite: bool = True,
+        corr: bool = False,
+        inter_module_only=True,
     ) -> None:
         """
         Create figures (.png images) for each experiment, hemodynamic type, and filter type.
@@ -3989,6 +3992,7 @@ class Flow_Results:
             overwrite (bool): Overwrite existing filter figures. Significant performance increase when False.
                               Defaults to True.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
         """
 
         def _combine_figs(filedir: str) -> None:
@@ -4037,13 +4041,22 @@ class Flow_Results:
         ]:
             for hemo_type in self.hemo_types:
                 for filter_type in filter_types:
-                    filedir = os.path.join(
-                        self.results_dir,
-                        "inter_module_channels",
-                        exp_name,
-                        hemo_type,
-                        "figures",
-                    )
+                    if inter_module_only:
+                        filedir = os.path.join(
+                            self.results_dir,
+                            "inter_module_channels",
+                            exp_name,
+                            hemo_type,
+                            "figures",
+                        )
+                    else:
+                        filedir = os.path.join(
+                            self.results_dir,
+                            "all_channels",
+                            exp_name,
+                            hemo_type,
+                            "figures",
+                        )
                     if not os.path.exists(filedir):
                         os.makedirs(filedir)
                     if corr:
@@ -4052,14 +4065,25 @@ class Flow_Results:
                         filename = f"{exp_name}_{hemo_type}_{filter_type}.png"
                     filepath = os.path.join(filedir, filename)
                     if not os.path.exists(filepath) or overwrite:
-                        out = self.plot_stat_results(
-                            dim="2D",
-                            exp_name=exp_name,
-                            hemo_type=hemo_type,
-                            filter_type=filter_type,
-                            corr=corr,
-                            add_labels=True,
-                            filepath=filepath,
-                            show=False,
-                        )
+                        if inter_module_only:
+                            out = self.plot_stat_results(
+                                dim="2D",
+                                exp_name=exp_name,
+                                hemo_type=hemo_type,
+                                filter_type=filter_type,
+                                corr=corr,
+                                add_labels=True,
+                                filepath=filepath,
+                                show=False,
+                            )
+                        else:
+                            out = self.plot_stat_results_all(
+                                exp_name=exp_name,
+                                hemo_type=hemo_type,
+                                filter_type=filter_type,
+                                corr=corr,
+                                add_labels=True,
+                                filepath=filepath,
+                                show=False,
+                            )
                 _combine_figs(filedir)
