@@ -3812,13 +3812,31 @@ class Flow_Results:
             show (bool): Display the figure. Defaults to True.
         """
 
-        def _add_missing():
+        def _add_missing() -> pd.DataFrame:
+            """
+            Add missing optical module to the plot DataFrame.
+
+            Returns:
+                pd.DataFrame: Plot DataFrame with missing optical module.
+            """
             missing_df = pd.read_csv(
                 os.path.join(
                     self.par.flow_processed_data_dir, "missing_optical_module.csv"
                 )
             )
-            plot_df = pd.concat([plot_df_temp, missing_df], axis=0, ignore_index=True)
+            temp_df = plot_df_temp.astype(
+                {
+                    col: "float"
+                    for col in plot_df_temp.select_dtypes(include=["bool"]).columns
+                }
+            )
+            missing_df = missing_df.astype(
+                {
+                    col: "float"
+                    for col in missing_df.select_dtypes(include=["bool"]).columns
+                }
+            )
+            plot_df = pd.concat([temp_df, missing_df], axis=0, ignore_index=True)
             return plot_df
 
         flow_stats = self.load_flow_stats(
