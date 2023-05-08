@@ -3811,11 +3811,22 @@ class Flow_Results:
             filepath (str): Filepath to save figure. Default to None (no output).
             show (bool): Display the figure. Defaults to True.
         """
+
+        def _add_missing():
+            missing_df = pd.read_csv(
+                os.path.join(
+                    self.par.flow_processed_data_dir, "missing_optical_module.csv"
+                )
+            )
+            plot_df = pd.concat([plot_df_temp, missing_df], axis=0, ignore_index=True)
+            return plot_df
+
         flow_stats = self.load_flow_stats(
             exp_name, hemo_type, filter_type, inter_module_only=False
         )
         source_detector_df = self.flow_session.create_source_detector_df_all()
-        plot_df = pd.merge(flow_stats, source_detector_df, on="channel_num")
+        plot_df_temp = pd.merge(flow_stats, source_detector_df, on="channel_num")
+        plot_df = _add_missing()
 
         fig = plt.figure(figsize=(8, 6.5))
         ax = fig.add_subplot(111)
