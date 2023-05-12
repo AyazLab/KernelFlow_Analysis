@@ -3515,7 +3515,7 @@ class Flow_Results:
                 sig_detector_plot_df["detector_y_pos"],
                 s=70,
                 c=sig_detector_plot_df["p_value"],
-                cmap="autumn_r",
+                cmap="autumn",
                 edgecolors="black",
                 alpha=1,
                 zorder=3,
@@ -3714,7 +3714,7 @@ class Flow_Results:
                     sig_detector_plot_df["detector_z_pos"],
                     s=70,
                     c=sig_detector_plot_df["p_value"],
-                    cmap="autumn_r",
+                    cmap="autumn",
                     edgecolors="black",
                     alpha=1,
                     zorder=3,
@@ -3752,7 +3752,7 @@ class Flow_Results:
                 ax.set_yticks([])
                 ax.set_zticks([])
             sm = plt.cm.ScalarMappable(
-                cmap="autumn_r", norm=plt.Normalize(vmin=0, vmax=0.05)
+                cmap="autumn", norm=plt.Normalize(vmin=0, vmax=0.05)
             )
             sm.set_array([])
             colorbar_ax = fig.add_axes([0.87, 0.32, 0.017, 0.4])
@@ -3863,7 +3863,7 @@ class Flow_Results:
             sig_detector_plot_df["midpoint_y_pos"],
             s=70,
             c=sig_detector_plot_df["p_value"],
-            cmap="autumn_r",
+            cmap="autumn",
             edgecolors="black",
             alpha=1,
             zorder=3,
