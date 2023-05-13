@@ -1356,12 +1356,15 @@ class Process_Flow:
 
         return aal_distance, aal_label, ba_distance, ba_label
 
-    def create_flow_atlas(self, depth: Union[int, float] = None) -> pd.DataFrame:
+    def create_flow_atlas(
+        self, depth: Union[int, float] = None, inter_module_only: bool = True
+    ) -> pd.DataFrame:
         """
         Create an atlas of Kernel Flow source/detector locations with corresponding brain regions.
 
         Args:
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
         Returns:
             pd.DataFrame: DataFrame with brain regions for all sources and detectors
@@ -1369,9 +1372,12 @@ class Process_Flow:
         if depth is None:
             depth = 0
         atlas_df = self.create_source_detector_df(
-            "3D", add_missing=True, brain_regions=True, depth=depth
+            "3D", inter_module_only, add_missing=True, brain_regions=True, depth=depth
         )
-        filename = f"kernel_flow_atlas_depth_{depth}.csv"
+        if inter_module_only:
+            filename = f"kernel_flow_atlas_depth_{depth}.csv"
+        else:
+            filename = f"kernel_flow_atlas_all_channels.csv"
         filedir = os.path.join(os.getcwd(), "processed_data", "flow")
         filepath = os.path.join(filedir, filename)
         atlas_df.to_csv(filepath, index=False)
@@ -1380,6 +1386,7 @@ class Process_Flow:
     def load_flow_atlas(
         self,
         depth: Union[int, float] = None,
+        inter_module_only: bool = True,
         minimal: bool = False,
         channels: Union[List[int], int] = None,
     ) -> pd.DataFrame:
@@ -1388,6 +1395,7 @@ class Process_Flow:
 
         Args:
             depth (Union[int, float], optional): Depth into the brain. Defaults to None (brain surface).
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
             minimal (bool): Load a minimal version with just channels and brain regions. Defaults to False (load all data).
             channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
 
@@ -1396,7 +1404,10 @@ class Process_Flow:
         """
         if depth is None:
             depth = 0
-        filename = f"kernel_flow_atlas_depth_{depth}.csv"
+        if inter_module_only:
+            filename = f"kernel_flow_atlas_depth_{depth}.csv"
+        else:
+            filename = f"kernel_flow_atlas_all_channels.csv"
         filedir = os.path.join(os.getcwd(), "processed_data", "flow")
         filepath = os.path.join(filedir, filename)
         atlas_df = pd.read_csv(filepath, dtype={"channel_num": "Int64"})
