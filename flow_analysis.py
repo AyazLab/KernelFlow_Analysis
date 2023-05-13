@@ -3039,12 +3039,16 @@ class Flow_Results:
                 if brain_regions:
                     if depth is None:
                         depth = 0
-                    flow_atlas = self.par.flow.load_flow_atlas(depth, inter_module_only=inter_module_only, minimal=True)
+                    flow_atlas = self.par.flow.load_flow_atlas(
+                        depth, inter_module_only=inter_module_only, minimal=True
+                    )
                     flow_atlas.dropna(subset=["channel_num"], inplace=True)
                     if inter_module_only:
                         write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
                     else:
-                        write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
+                        write_filename = (
+                            f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
+                        )
                     exp_aov_results = pd.merge(
                         exp_aov_results, flow_atlas, on="channel_num", how="left"
                     )
@@ -3983,6 +3987,7 @@ class Flow_Results:
         overwrite: bool = True,
         corr: bool = False,
         inter_module_only: bool = True,
+        add_labels: bool = False,
     ) -> None:
         """
         Create figures (.png images) for each experiment, hemodynamic type, and filter type.
@@ -3994,6 +3999,7 @@ class Flow_Results:
                               Defaults to True.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
             inter_module_only (bool): Select only inter-module channels. Defaults to True.
+            add_labels (bool): Add a channel number label at each detector position. Defaults to False.
         """
 
         def _combine_figs(filedir: str) -> None:
@@ -4058,6 +4064,10 @@ class Flow_Results:
                             hemo_type,
                             "figures",
                         )
+                    if add_labels:
+                        filedir = os.path.join(filedir, "labeled")
+                    else:
+                        filedir = os.path.join(filedir, "unlabeled")
                     if not os.path.exists(filedir):
                         os.makedirs(filedir)
                     if corr:
@@ -4073,7 +4083,7 @@ class Flow_Results:
                                 hemo_type=hemo_type,
                                 filter_type=filter_type,
                                 corr=corr,
-                                add_labels=True,
+                                add_labels=add_labels,
                                 filepath=filepath,
                                 show=False,
                             )
@@ -4083,7 +4093,7 @@ class Flow_Results:
                                 hemo_type=hemo_type,
                                 filter_type=filter_type,
                                 corr=corr,
-                                add_labels=True,
+                                add_labels=add_labels,
                                 filepath=filepath,
                                 show=False,
                             )
