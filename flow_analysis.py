@@ -1117,6 +1117,7 @@ class Process_Flow:
     def create_source_detector_df(
         self,
         dim: str,
+        inter_module_only: bool = True,
         add_missing: bool = False,
         midpoint_only: bool = False,
         MNI: bool = False,
@@ -1125,10 +1126,11 @@ class Process_Flow:
         depth: Union[int, float] = None,
     ) -> pd.DataFrame:
         """
-        Create a DataFrame with the source and detector information for the inter-module channels.
+        Create a DataFrame with the source and detector information for all channels or inter-module channels.
 
         Args:
             dim (str): Position data dimension "2D" or "3D".
+            inter_module_only (bool): Select only inter-module channels. Defaults to True.
             add_missing (bool): Add missing detector data. Defaults to False.
             midpoint_only (bool): Include only source/detector midpoint coordinate dimensions. Default to False.
             MNI (bool): Include MNI coordinate system columns. Defaults to False.
@@ -1140,20 +1142,30 @@ class Process_Flow:
             pd.DataFrame: Source and detector information for inter-module channels.
         """
         measurement_list_df = self.create_measurement_list_df(add_missing)
-        if dim.lower() == "2d":
-            source_df = self.create_source_df("2D", add_missing)
-            detector_df = self.create_detector_df("2D", add_missing)
-        elif dim.lower() == "3d":
-            source_df = self.create_source_df("3D", add_missing)
-            detector_df = self.create_detector_df("3D", add_missing)
+        source_df = self.create_source_df(dim, add_missing)
+        detector_df = self.create_detector_df(dim, add_missing)
         source_merge = pd.merge(measurement_list_df, source_df, on="source_index")
-        merged_source_detector_df = pd.merge(
-            source_merge, detector_df, on=["detector_index", "source_index"]
-        )
-        source_detector_df = merged_source_detector_df.copy()
-        source_detector_df.insert(
-            0, "channel_num", source_detector_df["measurement_list_index"] - 1
-        )
+        if inter_module_only:
+            merged_source_detector_df = pd.merge(
+                source_merge, detector_df, on=["detector_index", "source_index"]
+            )
+            source_detector_df = merged_source_detector_df.copy()
+            source_detector_df.insert(
+                0, "channel_num", source_detector_df["measurement_list_index"] - 1
+            )
+        else:
+            merged_source_detector_df = pd.merge(
+                source_merge, detector_df, on="detector_index"
+            )
+            source_detector_df = merged_source_detector_df.copy()
+            source_detector_df.insert(
+                0, "channel_num", source_detector_df["measurement_list_index"] - 1
+            )
+            source_detector_df.drop("source_index_y", axis=1, inplace=True)
+            source_detector_df.rename(
+                columns={"source_index_x": "source_index"}, inplace=True
+            )
+            source_detector_df.sort_values("channel_num", inplace=True)
 
         if dim.lower() == "2d":
             if isinstance(channels, int):
@@ -1164,6 +1176,19 @@ class Process_Flow:
                 source_detector_df = source_detector_df[
                     source_detector_df["channel_num"].isin(channels)
                 ].copy()
+            source_detector_df[
+                ["midpoint_x_pos", "midpoint_y_pos"]
+            ] = source_detector_df.apply(
+                lambda row: self.get_midpoint(
+                    (row["source_x_pos"], row["source_y_pos"]),
+                    (
+                        row["detector_x_pos"],
+                        row["detector_y_pos"],
+                    ),
+                ),
+                axis=1,
+                result_type="expand",
+            )
         elif dim.lower() == "3d":
             source_detector_df[
                 ["midpoint_x_pos", "midpoint_y_pos", "midpoint_z_pos"]
@@ -1239,75 +1264,6 @@ class Process_Flow:
                         "detector_z_pos",
                     ]
                 )
-        return source_detector_df
-
-    def create_source_detector_df_all(
-        self,
-        midpoint_only: bool = False,
-        channels: Union[List[int], int] = None,
-    ) -> pd.DataFrame:
-        """
-        Create a DataFrame with the source and detector information for all channels.
-        NOTE: Currently only functional for 2D positions and without brain regions.
-
-        Args:
-            midpoint_only (bool): Include only source/detector midpoint coordinate dimensions. Default to False.
-            channels (Union[List[int], int]): Return only specific channel(s). Defaults to None.
-
-        Returns:
-            pd.DataFrame: Source and detector information for all channels.
-        """
-        dim = "2D"
-        measurement_list_df = self.create_measurement_list_df()
-        source_df = self.create_source_df(dim)
-        detector_df = self.create_detector_df(dim)
-        source_merge = pd.merge(measurement_list_df, source_df, on="source_index")
-        merged_source_detector_df = pd.merge(
-            source_merge, detector_df, on="detector_index"
-        )
-        source_detector_df = merged_source_detector_df.copy()
-        source_detector_df.insert(
-            0, "channel_num", source_detector_df["measurement_list_index"] - 1
-        )
-        source_detector_df.drop("source_index_y", axis=1, inplace=True)
-        source_detector_df.rename(
-            columns={"source_index_x": "source_index"}, inplace=True
-        )
-        source_detector_df.sort_values("channel_num", inplace=True)
-
-        if isinstance(channels, int):
-            source_detector_df = source_detector_df[
-                source_detector_df["channel_num"] == channels
-            ].copy()
-        elif isinstance(channels, list):
-            source_detector_df = source_detector_df[
-                source_detector_df["channel_num"].isin(channels)
-            ].copy()
-
-        source_detector_df[
-            ["midpoint_x_pos", "midpoint_y_pos"]
-        ] = source_detector_df.apply(
-            lambda row: self.get_midpoint(
-                (row["source_x_pos"], row["source_y_pos"]),
-                (
-                    row["detector_x_pos"],
-                    row["detector_y_pos"],
-                ),
-            ),
-            axis=1,
-            result_type="expand",
-        )
-
-        if midpoint_only:
-            source_detector_df = source_detector_df.drop(
-                columns=[
-                    "source_x_pos",
-                    "source_y_pos",
-                    "detector_x_pos",
-                    "detector_y_pos",
-                ]
-            )
-
         return source_detector_df
 
     def get_midpoint(
@@ -3842,7 +3798,9 @@ class Flow_Results:
         flow_stats = self.load_flow_stats(
             exp_name, hemo_type, filter_type, inter_module_only=False
         )
-        source_detector_df = self.flow_session.create_source_detector_df_all()
+        source_detector_df = self.flow_session.create_source_detector_df(
+            "2D", inter_module_only=False
+        )
         plot_df_temp = pd.merge(flow_stats, source_detector_df, on="channel_num")
         plot_df = _add_missing()
 
@@ -4010,7 +3968,7 @@ class Flow_Results:
         self,
         overwrite: bool = True,
         corr: bool = False,
-        inter_module_only=True,
+        inter_module_only: bool = True,
     ) -> None:
         """
         Create figures (.png images) for each experiment, hemodynamic type, and filter type.
