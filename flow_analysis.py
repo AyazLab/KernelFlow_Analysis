@@ -2750,7 +2750,7 @@ class Flow_Results:
         self.flow_session = self.par.flow_session_dict["session_1001"]
 
     def process_flow_data(
-        self, num_pars: int, filter_type: str = None, inter_module_only=True
+        self, num_pars: int, filter_type: str = None, inter_module_only: bool = True
     ) -> None:
         """
         Generate a CSV file that contains the Kernel Flow stimulus response data
@@ -2876,7 +2876,7 @@ class Flow_Results:
         exp_name: str,
         hemo_type: str,
         filter_type: str = None,
-        inter_module_only=True,
+        inter_module_only: bool = True,
     ) -> pd.DataFrame:
         """
         Load processes Kernel Flow data into a DataFrame.
@@ -2925,7 +2925,7 @@ class Flow_Results:
         hemo_type: str,
         filter_type: str = None,
         corr: bool = True,
-        inter_module_only=True,
+        inter_module_only: bool = True,
     ) -> pd.DataFrame:
         """
         Run a repeated measures ANOVA on processed inter-module channels.
@@ -2998,7 +2998,7 @@ class Flow_Results:
         self,
         filter_type: str = None,
         corr: bool = True,
-        inter_module_only=True,
+        inter_module_only: bool = True,
         brain_regions: bool = False,
         depth: Union[int, float] = None,
     ) -> None:
@@ -3039,9 +3039,12 @@ class Flow_Results:
                 if brain_regions:
                     if depth is None:
                         depth = 0
-                    flow_atlas = self.par.flow.load_flow_atlas(depth, minimal=True)
+                    flow_atlas = self.par.flow.load_flow_atlas(depth, inter_module_only=inter_module_only, minimal=True)
                     flow_atlas.dropna(subset=["channel_num"], inplace=True)
-                    write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
+                    if inter_module_only:
+                        write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}_depth_{depth}.csv"
+                    else:
+                        write_filename = f"{exp_name}_flow_stats_{hemo_type}_{filter_type}.csv"
                     exp_aov_results = pd.merge(
                         exp_aov_results, flow_atlas, on="channel_num", how="left"
                     )
@@ -3263,7 +3266,7 @@ class Flow_Results:
         hemo_type: str,
         filter_type: str = None,
         drop: bool = False,
-        inter_module_only=True,
+        inter_module_only: bool = True,
     ) -> pd.DataFrame:
         """
         Load Kernel Flow ANOVA post-hoc statistical results.
@@ -3313,7 +3316,7 @@ class Flow_Results:
         hemo_type: str,
         filter_type: str = None,
         corr: bool = False,
-        inter_module_only=True,
+        inter_module_only: bool = True,
     ) -> pd.DataFrame:  # TODO needs a fix
         """
         Create a DataFrame with significant channels and corresponding brain regions.
