@@ -3606,7 +3606,7 @@ class Flow_Results:
                 colorbar = plt.colorbar(
                     scatter,
                     ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
-                    shrink=0.7,
+                    shrink=0.6,
                     pad=0.1,
                 )
                 colorbar.set_label("p-value", fontproperties=font_props)
@@ -3616,10 +3616,10 @@ class Flow_Results:
                 title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - Unfiltered"
             ax.text(
                 0.5,
-                1.12,
+                1.1,
                 title_text,
                 fontweight="bold",
-                fontsize=14,
+                fontsize=16,
                 ha="center",
                 va="bottom",
                 transform=ax.transAxes,
@@ -3738,7 +3738,7 @@ class Flow_Results:
                     scatter,
                     cax=colorbar_ax,
                     ticks=np.linspace(0, alpha, 6),
-                    shrink=0.7,
+                    shrink=0.6,
                     pad=0.1,
                 )
                 tick_labels = colorbar.get_ticks()
@@ -3753,7 +3753,7 @@ class Flow_Results:
                     scatter,
                     cax=colorbar_ax,
                     ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
-                    shrink=0.7,
+                    shrink=0.6,
                     pad=0.1,
                 )
                 colorbar.set_label("p-value", fontproperties=font_props)
@@ -3957,7 +3957,7 @@ class Flow_Results:
             colorbar = plt.colorbar(
                 scatter,
                 ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
-                shrink=0.7,
+                shrink=0.6,
                 pad=0.1,
             )
             colorbar.set_label("p-value", fontproperties=font_props)
@@ -3969,10 +3969,10 @@ class Flow_Results:
             title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - Unfiltered"
         ax.text(
             0.5,
-            1.12,
+            1.1,
             title_text,
             fontweight="bold",
-            fontsize=14,
+            fontsize=16,
             ha="center",
             va="bottom",
             transform=ax.transAxes,
