@@ -688,7 +688,7 @@ class Data_Functions:
         return new_df
 
     def find_closest_ts(
-        self, given_ts: float, ts_list: list[list | np.ndarray]
+        self, given_ts: float, ts_list: list[list | np.ndarray], index_offset: int = None
     ) -> Tuple[int, float]:
         """
         Find the closest timestamp to a given timestamp. The closet timestamp
@@ -697,6 +697,8 @@ class Data_Functions:
         Args:
             given_ts (float): Timestamp to find the closet one to.
             ts_list (list[list | np.ndarray]): List or array of timestamps.
+            index_offset (int): Offset the closest timestamp index by a specified number of points. 
+                                Defaults to None.
 
         Raises:
             Exception: No valid timestamp found.
@@ -723,6 +725,8 @@ class Data_Functions:
             else:
                 closest_ts = valid_ts[idx]
         closest_idx = np.where(ts_arr == closest_ts)[0][0]
+        if index_offset:
+            closest_idx = closest_idx + index_offset
         return closest_idx, closest_ts
 
 
