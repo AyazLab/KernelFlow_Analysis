@@ -513,7 +513,11 @@ class Flow_Coordinates:
         """
 
         def _create_surface(
-            ax: Axes, val: Union[int, float], dim: Literal["x", "y", "z"], color: str, ax3: bool = False
+            ax: Axes,
+            val: Union[int, float],
+            dim: Literal["x", "y", "z"],
+            color: str,
+            ax3: bool = False,
         ) -> None:
             """
             Create a surface at the specified dimension value.
@@ -2264,10 +2268,11 @@ class Participant_Flow:
         end_idx = self.par_behav.get_end_index_dt(time_abs_dt_offset, end_dt)
 
         flow_data = flow_session.get_data("dataframe")
-        if filter_type.lower() == "lowpass":
-            flow_data = flow_data.apply(lambda x: self.lowpass_filter(x), axis=0)
-        elif filter_type.lower() == "bandpass":
-            flow_data = flow_data.apply(lambda x: self.bandpass_filter(x), axis=0)
+        if filter_type:
+            if filter_type.lower() == "lowpass":
+                flow_data = flow_data.apply(lambda x: self.lowpass_filter(x), axis=0)
+            elif filter_type.lower() == "bandpass":
+                flow_data = flow_data.apply(lambda x: self.bandpass_filter(x), axis=0)
         flow_data.insert(0, "datetime", time_abs_dt_offset)
         return flow_data.iloc[start_idx:end_idx, :]
 
@@ -2848,16 +2853,17 @@ class Participant_Flow:
         for channel_num in channels:
             timeseries = flow_exp["datetime"]
             flow_data = flow_exp.iloc[:, channel_num + 1]
-            if filter_type.lower() == "lowpass":
-                if filter_order:
-                    flow_data = self.lowpass_filter(flow_data, order=filter_order)
-                else:
-                    flow_data = self.lowpass_filter(flow_data)
-            elif filter_type.lower() == "bandpass":
-                if filter_order:
-                    flow_data = self.bandpass_filter(flow_data, order=filter_order)
-                else:
-                    flow_data = self.bandpass_filter(flow_data)
+            if filter_type:
+                if filter_type.lower() == "lowpass":
+                    if filter_order:
+                        flow_data = self.lowpass_filter(flow_data, order=filter_order)
+                    else:
+                        flow_data = self.lowpass_filter(flow_data)
+                elif filter_type.lower() == "bandpass":
+                    if filter_order:
+                        flow_data = self.bandpass_filter(flow_data, order=filter_order)
+                    else:
+                        flow_data = self.bandpass_filter(flow_data)
             data_type_label = self.flow_session_dict[session].get_data_type_label(
                 channel_num
             )
