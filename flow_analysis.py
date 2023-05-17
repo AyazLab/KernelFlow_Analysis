@@ -2101,6 +2101,35 @@ class Participant_Flow:
             5: "skyblue",
         }
 
+    def create_abs_marker_df(self, session: str) -> pd.DataFrame:
+        """
+        Convert the "stim" marker DataFrame into absolute time.
+
+        Args:
+            session (str): Experiment session.
+
+        Returns:
+            pd.DataFrame: Marker "stim" data in absolute time.
+        """
+        marker_df = self.flow_session_dict[session].get_marker_df()
+        time_origin_ts = self.flow_session_dict[session].get_time_origin("timestamp")
+        marker_df["Timestamp"] = marker_df["Timestamp"] + time_origin_ts
+        marker_df.rename({"Timestamp": "Start timestamp"}, axis=1, inplace=True)
+
+        for idx, row in marker_df.iterrows():
+            end_ts = row["Start timestamp"] + row["Duration"]
+            marker_df.at[idx, "End timestamp"] = end_ts
+            exp_num = int(row["Experiment"])
+            exp_name = self.par_behav.marker_dict[exp_num]
+            marker_df.at[idx, "Experiment"] = exp_name
+
+        marker_df.rename({"Experiment": "Marker"}, axis=1, inplace=True)
+        marker_df.drop(["Value"], axis=1, inplace=True)
+        marker_df = marker_df[
+            ["Marker", "Start timestamp", "Duration", "End timestamp"]
+        ]
+        return marker_df
+
     def calc_time_offset(self, exp_name: str) -> float:
         """
         Calculate the time offset (in seconds) between the behavioral and Kernel Flow data
@@ -2246,7 +2275,8 @@ class Participant_Flow:
 
     def load_flow_exp(self, exp_name: str, filter_type: str = None) -> pd.DataFrame:
         """
-        Load Kernel Flow data for the time frame of a specified experiment.
+        Load Kernel Flow data time-aligned with a specified experiment.
+        NOTE: this function accounts for time offset.
 
         Args:
             exp_name (str): Name of the experiment.
@@ -2297,35 +2327,6 @@ class Participant_Flow:
             flow_session_dict[session] = self.load_flow_session(session, wrapper)
         return flow_session_dict
 
-    def create_abs_marker_df(self, session: str) -> pd.DataFrame:
-        """
-        Convert the "stim" marker DataFrame into absolute time.
-
-        Args:
-            session (str): Experiment session.
-
-        Returns:
-            pd.DataFrame: Marker "stim" data in absolute time.
-        """
-        marker_df = self.flow_session_dict[session].get_marker_df()
-        time_origin_ts = self.flow_session_dict[session].get_time_origin("timestamp")
-        marker_df["Timestamp"] = marker_df["Timestamp"] + time_origin_ts
-        marker_df.rename({"Timestamp": "Start timestamp"}, axis=1, inplace=True)
-
-        for idx, row in marker_df.iterrows():
-            end_ts = row["Start timestamp"] + row["Duration"]
-            marker_df.at[idx, "End timestamp"] = end_ts
-            exp_num = int(row["Experiment"])
-            exp_name = self.par_behav.marker_dict[exp_num]
-            marker_df.at[idx, "Experiment"] = exp_name
-
-        marker_df.rename({"Experiment": "Marker"}, axis=1, inplace=True)
-        marker_df.drop(["Value"], axis=1, inplace=True)
-        marker_df = marker_df[
-            ["Marker", "Start timestamp", "Duration", "End timestamp"]
-        ]
-        return marker_df
-
     def create_exp_stim_response_dict(
         self, exp_name: str, filter_type: str = None
     ) -> dict:
@@ -2357,11 +2358,12 @@ class Participant_Flow:
             self.par_behav.processed_data_dir, exp_name, self.par_behav.par_num
         )
         flow_exp = self.load_flow_exp(exp_name, filter_type)
-        session = self.par_behav.get_key_from_value(
-            self.par_behav.session_dict, exp_name
+        flow_start_idx = flow_exp.index[0]
+        ts_list = (
+            flow_exp["datetime"]
+            .apply(lambda x: datetime.datetime.timestamp(x))
+            .tolist()
         )
-        ts_list = self.flow_session_dict[session].get_time_abs("timestamp")
-        exp_time_offset = self.time_offset_dict[exp_name]
         exp_by_block = self.par_behav.by_block_ts_dict[exp_name]
 
         blocks = list(exp_results["block"].unique())
@@ -2371,16 +2373,11 @@ class Participant_Flow:
         processed_blocks = []
 
         if exp_name == "king_devick":  # normalize all blocks to the first block
-            (first_block_start_ts, first_block_end_ts) = next(
+            first_block_start_ts, first_block_end_ts = next(
                 iter(exp_by_block.keys())
             )  # start/end of first block
-            first_block_start_ts_offset = first_block_start_ts + exp_time_offset
             first_block_start_idx, _ = self.data_fun.find_closest_ts(
-                first_block_start_ts_offset, ts_list
-            )
-            first_block_end_ts_offset = first_block_end_ts + exp_time_offset
-            first_block_end_idx, _ = self.data_fun.find_closest_ts(
-                first_block_end_ts_offset, ts_list
+                first_block_start_ts, ts_list, flow_start_idx
             )
             baseline_rows = flow_exp.loc[
                 first_block_start_idx : first_block_start_idx + 35, 0:
@@ -2391,13 +2388,11 @@ class Participant_Flow:
                 block_start_ts,
                 block_end_ts,
             ) in exp_by_block.keys():  # for each block in the experiment
-                block_start_ts_offset = block_start_ts + exp_time_offset
                 block_start_idx, _ = self.data_fun.find_closest_ts(
-                    block_start_ts_offset, ts_list
+                    block_start_ts, ts_list, flow_start_idx
                 )
-                block_end_ts_offset = block_end_ts + exp_time_offset
                 block_end_idx, _ = self.data_fun.find_closest_ts(
-                    block_end_ts_offset, ts_list
+                    block_end_ts, ts_list, flow_start_idx
                 )
                 block_rows = flow_exp.loc[
                     block_start_idx:block_end_idx, 0:
@@ -2419,13 +2414,11 @@ class Participant_Flow:
                 block_start_ts,
                 block_end_ts,
             ) in exp_by_block.keys():  # for each block in the experiment
-                block_start_ts_offset = block_start_ts + exp_time_offset
                 block_start_idx, _ = self.data_fun.find_closest_ts(
-                    block_start_ts_offset, ts_list
+                    block_start_ts, ts_list, flow_start_idx
                 )
-                block_end_ts_offset = block_end_ts + exp_time_offset
                 block_end_idx, _ = self.data_fun.find_closest_ts(
-                    block_end_ts_offset, ts_list
+                    block_end_ts, ts_list, flow_start_idx
                 )
                 block_rows = flow_exp.loc[
                     block_start_idx:block_end_idx, 0:
@@ -2453,11 +2446,13 @@ class Participant_Flow:
 
         for _, row in exp_results.iterrows():
             stim_start_ts = row["stim_start"]
-            stim_start_ts_offset = stim_start_ts + exp_time_offset
-            start_idx, _ = self.data_fun.find_closest_ts(stim_start_ts_offset, ts_list)
+            start_idx, _ = self.data_fun.find_closest_ts(
+                stim_start_ts, ts_list, flow_start_idx
+            )
             stim_end_ts = row["stim_end"]
-            stim_end_ts_offset = stim_end_ts + exp_time_offset
-            end_idx, _ = self.data_fun.find_closest_ts(stim_end_ts_offset, ts_list)
+            end_idx, _ = self.data_fun.find_closest_ts(
+                stim_end_ts, ts_list, flow_start_idx
+            )
 
             stim_rows = processed_block_df.loc[start_idx:end_idx, 0:]
             avg_stim_rows = stim_rows.mean()  # all channels for a stim
