@@ -2147,7 +2147,7 @@ class Behav_Results:
 
         block_data, block_sem = self.get_bar_plot_data(exp_name)
         print(
-            f"\n{exp_name} performance metrics (mean):\n {block_data}\n\n{exp_name}performance metrics (SEM):\n {block_sem}\n"
+            f"\n{exp_name} performance metrics (mean):\n {block_data}\n\n{exp_name} performance metrics (SEM):\n {block_sem}\n"
         )
         num_bars = len(block_data)
         if num_bars == 2:
