@@ -2057,6 +2057,11 @@ class Behav_Results:
         Returns:
             Tuple[pd.DataFrame, pd.DataFrame]: Bar plot block data and SEM data.
         """
+        def _swap_rows(df, idx1, idx2):
+            a, b = df.iloc[idx1, :].copy(), df.iloc[idx2, :].copy()
+            df.iloc[idx1, :], df.iloc[idx2, :] = b, a
+            return df
+
         behav_data = load_results(self.par.processed_data_dir, exp_name)
 
         if exp_name == "king_devick":
@@ -2067,11 +2072,13 @@ class Behav_Results:
             block_data = behav_data.groupby("block").mean()[
                 ["response_time", "correct_response"]
             ]
+            block_data = block_data.reset_index()
             block_sem = behav_data.groupby("block").agg(
                 lambda x: sem(x, nan_policy="omit")
             )[["response_time", "correct_response"]]
+            block_sem = block_sem.reset_index()
             self.xtick_labels = [
-                block.replace("_", " ").title() for block in list(block_data.index)
+                block.replace("_", " ").title() for block in list(block_data["block"])
             ]
 
         elif (
@@ -2085,18 +2092,16 @@ class Behav_Results:
             block_data = behav_data.groupby("block").mean()[
                 ["response_time", "correct_response"]
             ]
+            block_data = block_data.reset_index()
             block_sem = behav_data.groupby("block").agg(
                 lambda x: sem(x, nan_policy="omit")
             )[["response_time", "correct_response"]]
+            block_sem = block_sem.reset_index()
             if exp_name == "go_no_go" or exp_name == "tower_of_london":
                 block_data = block_data.copy()
-                block_data.iloc[[1, 0]] = block_data.iloc[
-                    [0, 1]
-                ].values  # swap order for bar plot
+                block_data = _swap_rows(block_data, 0, 1)  # swap order for bar plot
                 block_sem = block_sem.copy()
-                block_sem.iloc[[1, 0]] = block_sem.iloc[
-                    [0, 1]
-                ].values  # swap order for bar plot
+                block_sem = _swap_rows(block_sem, 0, 1)  # swap order for bar plot
             if exp_name == "tower_of_london":
                 self.xtick_labels = ["Zero-move", "Multi-move"]
             elif exp_name == "go_no_go":
@@ -2105,7 +2110,7 @@ class Behav_Results:
                 self.xtick_labels = ["SAT", "vSAT"]
             else:
                 self.xtick_labels = [
-                    block.replace("_", " ").title() for block in block_data.index
+                    block.replace("_", " ").title() for block in block_data["block"]
                 ]
         return block_data, block_sem
 
@@ -2141,6 +2146,9 @@ class Behav_Results:
                 return [f"{tick:.2f}" for tick in ticks]
 
         block_data, block_sem = self.get_bar_plot_data(exp_name)
+        print(
+            f"\n{exp_name} performance metrics (mean):\n {block_data}\n\n{exp_name}performance metrics (SEM):\n {block_sem}\n"
+        )
         num_bars = len(block_data)
         if num_bars == 2:
             colors = [self.blue, self.purple]
