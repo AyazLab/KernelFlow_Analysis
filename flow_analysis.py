@@ -3279,6 +3279,7 @@ class Flow_Results:
         exp_name: str,
         hemo_type: str,
         filter_type: str = None,
+        corr: bool = False,
         drop: bool = False,
         inter_module_only: bool = True,
     ) -> pd.DataFrame:
@@ -3289,6 +3290,7 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
+            corr (bool): Apply a Bonferroni correction to the p-values. Defaults to True.
             drop (bool): Drop columns with extra post-hoc info. Defaults to False.
             inter_module_only (bool): Select only inter-module channels. Defaults to True.
 
@@ -3302,6 +3304,7 @@ class Flow_Results:
             exp_name,
             hemo_type,
             filter_type,
+            corr=corr,
             inter_module_only=inter_module_only,
             sig_only=True,
         )
@@ -3392,7 +3395,11 @@ class Flow_Results:
                 write_filename = f"{exp_name}_post_hoc_{hemo_type}_{filter_type}.csv"
                 write_filepath = os.path.join(write_filedir, write_filename)
                 post_hoc_results = self.run_pos_hoc_test(
-                    exp_name, hemo_type, filter_type, drop
+                    exp_name=exp_name,
+                    hemo_type=hemo_type,
+                    filter_type=filter_type,
+                    drop=drop,
+                    inter_module_only=inter_module_only,
                 )
                 post_hoc_results.to_csv(write_filepath, index=False)
 
@@ -3610,7 +3617,7 @@ class Flow_Results:
         add_labels: bool = False,
         filepath: str = None,
         show: bool = True,
-    ) -> None:
+    ) -> None:  # TODO: needs to be updated to match all channels function
         """
         Plot Kernel Flow statistical results for inter-module channels.
 
@@ -3991,6 +3998,7 @@ class Flow_Results:
         exp_name: str,
         hemo_type: str,
         filter_type: str = None,
+        compare_conditions: bool = True,
         corr: bool = False,
         add_labels: bool = False,
         filepath: str = None,
@@ -4003,6 +4011,7 @@ class Flow_Results:
             exp_name (str): Name of the experiment.
             hemo_type (str): Hemodynamic type. "HbO", "HbR", "HbTot", or "HbDiff".
             filter_type (str): Filter to apply to the data. Defaults to None.
+            compare_conditions (bool): Compare responses to increasing task condition difficulty. Defaults to True.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
             add_labels (bool): Add a channel number label at each detector position. Defaults to False.
             filepath (str): Filepath to save figure. Default to None (no output).
@@ -4039,13 +4048,21 @@ class Flow_Results:
         flow_stats = self.load_flow_stats(
             exp_name, hemo_type, filter_type, inter_module_only=False
         )
+        if compare_conditions:
+            post_hoc_stats = self.load_post_hoc_stats(
+                exp_name, hemo_type, filter_type, drop=True, inter_module_only=False
+            )
+            (
+                pos_condition_channels,
+                neg_condition_channels,
+            ) = self._get_condition_channels(exp_name, post_hoc_stats)
         source_detector_df = self.flow_session.create_source_detector_df(
             "2D", inter_module_only=False
         )
         plot_df_temp = pd.merge(flow_stats, source_detector_df, on="channel_num")
         plot_df = _add_missing()
 
-        fig = plt.figure(figsize=(8, 6.5))
+        fig = plt.figure(figsize=(10, 6.5))
         ax = fig.add_subplot(111)
         if corr:
             sig_detector_plot_df = plot_df[plot_df["is_sig_corr"] == True]
@@ -4057,21 +4074,49 @@ class Flow_Results:
             not_sig_detector_plot_df = plot_df[
                 (plot_df["is_sig"] == False) | (pd.isna(plot_df["p_value"]))
             ]
-        scatter = ax.scatter(
-            sig_detector_plot_df["midpoint_x_pos"],
-            sig_detector_plot_df["midpoint_y_pos"],
-            s=70,
-            c=sig_detector_plot_df["p_value"],
-            cmap="autumn",
-            edgecolors="black",
-            alpha=1,
-            zorder=3,
-        )
+        if compare_conditions:
+            pos_sig_detector_plot_df = sig_detector_plot_df[
+                sig_detector_plot_df["channel_num"].isin(pos_condition_channels)
+            ]
+            pos_condition_scatter = ax.scatter(
+                pos_sig_detector_plot_df["midpoint_x_pos"],
+                pos_sig_detector_plot_df["midpoint_y_pos"],
+                s=70,
+                c=pos_sig_detector_plot_df["p_value"],
+                cmap="autumn",
+                edgecolors="black",
+                alpha=1,
+                zorder=3,
+            )
+            neg_sig_detector_plot_df = sig_detector_plot_df[
+                sig_detector_plot_df["channel_num"].isin(neg_condition_channels)
+            ]
+            neg_condition_scatter = ax.scatter(
+                neg_sig_detector_plot_df["midpoint_x_pos"],
+                neg_sig_detector_plot_df["midpoint_y_pos"],
+                s=70,
+                c=neg_sig_detector_plot_df["p_value"],
+                cmap="winter",
+                edgecolors="black",
+                alpha=1,
+                zorder=3,
+            )
+        else:
+            scatter = ax.scatter(
+                sig_detector_plot_df["midpoint_x_pos"],
+                sig_detector_plot_df["midpoint_y_pos"],
+                s=70,
+                c=sig_detector_plot_df["p_value"],
+                cmap="autumn",
+                edgecolors="black",
+                alpha=1,
+                zorder=3,
+            )
         ax.scatter(
             not_sig_detector_plot_df["midpoint_x_pos"],
             not_sig_detector_plot_df["midpoint_y_pos"],
             s=20,
-            c="dodgerblue",
+            c="lightslategray",
             edgecolors="black",
             alpha=1,
             zorder=1,
@@ -4163,7 +4208,7 @@ class Flow_Results:
             transform=ax.transAxes,
         )
         font_props = FontProperties(size=12)
-        if corr:
+        if corr:  # TODO: needs to be implemented
             alpha = round(plot_df["alpha_corr"].iloc[0], 5)
             scatter.set_clim([0, alpha])
             colorbar = plt.colorbar(
@@ -4176,20 +4221,56 @@ class Flow_Results:
                 "Bonferroni-corrected p-value", fontproperties=font_props
             )
         else:
-            scatter.set_clim([0, 0.05])
-            colorbar = plt.colorbar(
-                scatter,
-                ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
-                shrink=0.6,
-                pad=0.1,
-            )
-            colorbar.set_label("p-value", fontproperties=font_props)
+            if compare_conditions:
+                neg_condition_scatter.set_clim([0, 0.05])
+                neg_colorbar = plt.colorbar(
+                    neg_condition_scatter,
+                    ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                    shrink=0.6,
+                    pad=0,
+                )
+                neg_colorbar.set_label("p-value", fontproperties=font_props)
+                ax.text(
+                    1.37,
+                    0.12,
+                    "\u2193Δ{}".format(hemo_type),
+                    fontweight="bold",
+                    fontsize=14,
+                    ha="center",
+                    va="bottom",
+                    transform=ax.transAxes,
+                )
+                pos_condition_scatter.set_clim([0, 0.05])
+                pos_colorbar = plt.colorbar(
+                    pos_condition_scatter,
+                    ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                    shrink=0.6,
+                    pad=0.1,
+                )
+                pos_colorbar.set_label("p-value", fontproperties=font_props)
+                ax.text(
+                    1.17,
+                    0.12,
+                    "\u2191Δ{}".format(hemo_type),
+                    fontweight="bold",
+                    fontsize=14,
+                    ha="center",
+                    va="bottom",
+                    transform=ax.transAxes,
+                )
+            else:
+                scatter.set_clim([0, 0.05])
+                colorbar = plt.colorbar(
+                    scatter,
+                    ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
+                    shrink=0.6,
+                    pad=0.0,
+                )
+                colorbar.set_label("p-value", fontproperties=font_props)
         try:
-            title_text = (
-                f"{exp_name_to_title(exp_name)} - {hemo_type} - {filter_type.title()}"
-            )
+            title_text = f"{exp_name_to_title(exp_name)} [{filter_type.lower()}]"
         except AttributeError:
-            title_text = f"{exp_name_to_title(exp_name)} - {hemo_type} - Unfiltered"
+            title_text = f"{exp_name_to_title(exp_name)} [unfiltered]"
         ax.text(
             0.5,
             1.1,
@@ -4205,9 +4286,57 @@ class Flow_Results:
         if filepath:
             fig.savefig(filepath, dpi=300, bbox_inches="tight")
 
+    def _get_condition_channels(
+        self, exp_name: str, post_hoc_stats: pd.DataFrame, channels_only: bool = True
+    ) -> Union[Tuple[List[int], List[int]], Tuple[pd.DataFrame, pd.DataFrame]]:
+        """_summary_
+
+        Args:
+            exp_name (str): Name of the experiment.
+            post_hoc_stats (pd.DataFrame): Post-hoc statistical test DataFrame
+            channels_only (bool, optional): Return only channel numbers or entire rows. Defaults to True.
+
+        Returns:
+            Union[Tuple[List[int], List[int]], Tuple[pd.DataFrame, pd.DataFrame]]: Channels or rows for positive
+                                                                                   and negative condition responses.
+        """
+        if exp_name == "go_no_go":
+            pos_condition_rows = post_hoc_stats[post_hoc_stats["t_stat"] > 0]
+            neg_condition_rows = post_hoc_stats[post_hoc_stats["t_stat"] < 0]
+        elif exp_name == "king_devick":
+            condition_rows = post_hoc_stats[
+                (post_hoc_stats["condition_A"] == "card_1")
+                & (post_hoc_stats["condition_B"] == "card_3")
+            ]
+            # condition order is swapped
+            pos_condition_rows = condition_rows[condition_rows["t_stat"] < 0]
+            neg_condition_rows = condition_rows[condition_rows["t_stat"] > 0]
+        elif exp_name == "n_back":
+            condition_rows = post_hoc_stats[
+                (post_hoc_stats["condition_A"] == "0_back")
+                & (post_hoc_stats["condition_B"] == "2_back")
+            ]
+            # condition order is swapped
+            pos_condition_rows = condition_rows[condition_rows["t_stat"] < 0]
+            neg_condition_rows = condition_rows[condition_rows["t_stat"] > 0]
+        elif exp_name == "tower_of_london":
+            pos_condition_rows = post_hoc_stats[post_hoc_stats["t_stat"] > 0]
+            neg_condition_rows = post_hoc_stats[post_hoc_stats["t_stat"] < 0]
+        elif exp_name == "vSAT":
+            # condition order is swapped
+            pos_condition_rows = post_hoc_stats[post_hoc_stats["t_stat"] < 0]
+            neg_condition_rows = post_hoc_stats[post_hoc_stats["t_stat"] > 0]
+        if channels_only:
+            pos_condition_channels = pos_condition_rows["channel_num"].to_list()
+            neg_condition_channels = neg_condition_rows["channel_num"].to_list()
+            return pos_condition_channels, neg_condition_channels
+        else:
+            return pos_condition_rows, neg_condition_rows
+
     def create_stat_results_figs(
         self,
         overwrite: bool = True,
+        compare_conditions: bool = True,
         corr: bool = False,
         inter_module_only: bool = True,
         add_labels: bool = False,
@@ -4220,6 +4349,7 @@ class Flow_Results:
         Args:
             overwrite (bool): Overwrite existing filter figures. Significant performance increase when False.
                               Defaults to True.
+            compare_conditions (bool): Compare responses to increasing task condition difficulty. Defaults to True.
             corr (bool): Apply a Bonferroni correction to the p-values. Defaults to False.
             inter_module_only (bool): Select only inter-module channels. Defaults to True.
             add_labels (bool): Add a channel number label at each detector position. Defaults to False.
@@ -4315,6 +4445,7 @@ class Flow_Results:
                                 exp_name=exp_name,
                                 hemo_type=hemo_type,
                                 filter_type=filter_type,
+                                compare_conditions=compare_conditions,
                                 corr=corr,
                                 add_labels=add_labels,
                                 filepath=filepath,
