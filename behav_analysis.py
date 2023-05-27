@@ -2106,6 +2106,8 @@ class Behav_Results:
                 self.xtick_labels = ["Zero-move", "Multi-move"]
             elif exp_name == "go_no_go":
                 self.xtick_labels = ["Go", "Go/No-go"]
+            elif exp_name == "n_back":
+                self.xtick_labels = ["0-Back", "1-Back", "2-Back"]
             elif exp_name == "vSAT":
                 self.xtick_labels = ["SAT", "vSAT"]
             else:
