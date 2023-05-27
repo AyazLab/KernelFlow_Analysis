@@ -3310,9 +3310,17 @@ class Flow_Results:
 
         pos_hoc_list = []
         for channel in sig_flow_df.columns:
-            results = pg.pairwise_tests(
-                data=flow_df, dv=channel, within="block", subject="participant"
-            )
+            with warnings.catch_warnings():
+                warnings.simplefilter(
+                    "ignore", category=RuntimeWarning
+                )  # suppress RuntimeWarning warnings
+                results = pg.pairwise_tests(
+                    data=flow_df,
+                    dv=channel,
+                    within="block",
+                    subject="participant",
+                    alternative="greater",
+                )  # one-sided, condition A > condition B
             aov_p_value = float(
                 sig_df[sig_df["channel_num"] == int(channel)]["p_value"]
             )
