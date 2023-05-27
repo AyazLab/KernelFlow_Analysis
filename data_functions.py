@@ -688,7 +688,10 @@ class Data_Functions:
         return new_df
 
     def find_closest_ts(
-        self, given_ts: float, ts_list: list[list | np.ndarray], index_offset: int = None
+        self,
+        given_ts: float,
+        ts_list: list[list | np.ndarray],
+        index_offset: int = None,
     ) -> Tuple[int, float]:
         """
         Find the closest timestamp to a given timestamp. The closet timestamp
@@ -697,7 +700,7 @@ class Data_Functions:
         Args:
             given_ts (float): Timestamp to find the closet one to.
             ts_list (list[list | np.ndarray]): List or array of timestamps.
-            index_offset (int): Offset the closest timestamp index by a specified number of points. 
+            index_offset (int): Offset the closest timestamp index by a specified number of points.
                                 Defaults to None.
 
         Raises:
@@ -794,7 +797,8 @@ def load_results(
                 pass
             exp_dict[exp_name] = df
         return exp_dict
-    
+
+
 def exp_name_to_title(exp_name: str) -> str:
     """
     Convert experiment name into a title format.
@@ -806,9 +810,9 @@ def exp_name_to_title(exp_name: str) -> str:
         str: Experiment name in title format.
     """
     if exp_name == "go_no_go":
-        exp_name_title = "Go/No-go"
+        exp_name_title = "Go/No-Go"
     elif exp_name == "n_back":
-        exp_name_title = exp_name.replace("_", "-").title() 
+        exp_name_title = exp_name.replace("_", "-").title()
     elif exp_name == "tower_of_london":
         exp_name_title = "Tower of London"
     elif exp_name == "video_narrative_cmiyc":
