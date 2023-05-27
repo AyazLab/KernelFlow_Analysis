@@ -9,6 +9,7 @@ import pingouin as pg
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
+from math import floor
 from matplotlib.axes import Axes
 from matplotlib.font_manager import FontProperties
 from adjustText import adjust_text
@@ -2100,6 +2101,7 @@ class Participant_Flow:
             4: "pink",
             5: "skyblue",
         }
+        self.samp_freq = 7.13862  # Kernel Flow sampling frequency (approx.)
 
     def create_abs_marker_df(self, session: str) -> pd.DataFrame:
         """
@@ -2380,7 +2382,9 @@ class Participant_Flow:
                 first_block_start_ts, ts_list, flow_start_idx
             )
             baseline_rows = flow_exp.loc[
-                first_block_start_idx : first_block_start_idx + 35, 0:
+                first_block_start_idx : first_block_start_idx
+                + floor(self.samp_freq * 5),
+                0:,
             ]  # first 5 seconds of a block
             baseline = pd.DataFrame(baseline_rows.mean()).T
 
@@ -2425,7 +2429,7 @@ class Participant_Flow:
                 ]  # rows from block start to end
 
                 baseline_rows = flow_exp.loc[
-                    block_start_idx : block_start_idx + 35, 0:
+                    block_start_idx : block_start_idx + floor(self.samp_freq * 5), 0:
                 ]  # first 5 seconds of a block
                 baseline = pd.DataFrame(baseline_rows.mean()).T
                 baseline_df = pd.concat(
