@@ -1586,8 +1586,52 @@ class Process_Flow:
         """
         if depth is None:
             depth = 0
+        sd_df_2d = self.create_source_detector_df(
+            "2D", inter_module_only, add_missing=True, brain_regions=False
+        )
+        sd_df_2d.rename(
+            columns={
+                "source_x_pos": "source_x_pos_2D",
+                "source_y_pos": "source_y_pos_2D",
+                "detector_x_pos": "detector_x_pos_2D",
+                "detector_y_pos": "detector_y_pos_2D",
+                "midpoint_x_pos": "midpoint_x_pos_2D",
+                "midpoint_y_pos": "midpoint_y_pos_2D",
+            },
+            inplace=True,
+        )
         atlas_df = self.create_source_detector_df(
             "3D", inter_module_only, add_missing=True, brain_regions=True, depth=depth
+        )
+        atlas_df.insert(
+            atlas_df.columns.get_loc("source_label") + 1,
+            "source_x_pos_2D",
+            sd_df_2d["source_x_pos_2D"],
+        )
+        atlas_df.insert(
+            atlas_df.columns.get_loc("source_label") + 2,
+            "source_y_pos_2D",
+            sd_df_2d["source_y_pos_2D"],
+        )
+        atlas_df.insert(
+            atlas_df.columns.get_loc("detector_label") + 1,
+            "detector_x_pos_2D",
+            sd_df_2d["detector_x_pos_2D"],
+        )
+        atlas_df.insert(
+            atlas_df.columns.get_loc("detector_label") + 2,
+            "detector_y_pos_2D",
+            sd_df_2d["detector_y_pos_2D"],
+        )
+        atlas_df.insert(
+            atlas_df.columns.get_loc("midpoint_x_pos"),
+            "midpoint_x_pos_2D",
+            sd_df_2d["midpoint_x_pos_2D"],
+        )
+        atlas_df.insert(
+            atlas_df.columns.get_loc("midpoint_x_pos"),
+            "midpoint_y_pos_2D",
+            sd_df_2d["midpoint_y_pos_2D"],
         )
         if inter_module_only:
             filename = f"kernel_flow_atlas_depth_{depth}.csv"
@@ -2226,7 +2270,9 @@ class Participant_Flow:
         """
         try:
             time_offset = self.get_time_offset(exp_name)
-        except KeyError:  # if experiment start time is missing, use avg of other session experiments
+        except (
+            KeyError
+        ):  # if experiment start time is missing, use avg of other session experiments
             time_offset_list = []
             for exp_name in self.par_behav.exp_order:
                 try:
@@ -4264,7 +4310,7 @@ class Flow_Results:
                     scatter,
                     ticks=[0, 0.01, 0.02, 0.03, 0.04, 0.05],
                     shrink=0.6,
-                    pad=0.0,
+                    pad=0,
                 )
                 colorbar.set_label("p-value", fontproperties=font_props)
         try:
@@ -4276,7 +4322,7 @@ class Flow_Results:
             1.1,
             title_text,
             fontweight="bold",
-            fontsize=16,
+            fontsize=18,
             ha="center",
             va="bottom",
             transform=ax.transAxes,
