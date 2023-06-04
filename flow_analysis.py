@@ -1,4 +1,5 @@
 import os
+import json
 import snirf
 import ctypes
 import datetime
@@ -4498,3 +4499,18 @@ class Flow_Results:
                                 show=False,
                             )
                 _combine_figs(filedir)
+
+
+def load_brain_region_name_scheme() -> dict:
+    """
+    Read the brain region naming scheme JSON file into a dictionary.
+
+    Returns:
+        dict: Brain region naming scheme
+            keys: AAL naming convention
+            values: Actual name
+    """
+    with open("brain_region_naming_scheme.json", "r") as json_file:
+        brain_region_dict = json.load(json_file)
+
+    return brain_region_dict
