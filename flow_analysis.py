@@ -4333,6 +4333,143 @@ class Flow_Results:
         if filepath:
             fig.savefig(filepath, dpi=300, bbox_inches="tight")
 
+    def plot_brain_region_map(self) -> None:
+        """
+        Plot Kernel Flow statistical results for all channels.
+        """
+
+        def _add_missing() -> pd.DataFrame:
+            """
+            Add missing optical module to the plot DataFrame.
+
+            Returns:
+                pd.DataFrame: Plot DataFrame with missing optical module.
+            """
+            missing_df = pd.read_csv(
+                os.path.join(
+                    self.par.flow_processed_data_dir, "missing_optical_module.csv"
+                )
+            )
+            missing_cols = missing_df[
+                ["midpoint_x_pos", "midpoint_y_pos", "AAL_region"]
+            ]
+            missing_cols = missing_cols.copy()
+            missing_cols.rename(
+                columns={
+                    "midpoint_x_pos": "midpoint_x_pos_2D",
+                    "midpoint_y_pos": "midpoint_y_pos_2D",
+                },
+                inplace=True,
+            )
+            flow_atlas = pd.concat(
+                [flow_atlas_temp, missing_cols], axis=0, ignore_index=True
+            )
+            return flow_atlas
+
+        flow_atlas_temp = self.par.flow.load_flow_atlas(inter_module_only=False)
+        brain_regions = np.array(
+            [region[:-2] for region in flow_atlas_temp["AAL_region"]]
+        )
+        _, idx = np.unique(brain_regions, return_index=True)
+        unique_brain_regions = brain_regions[np.sort(idx)]
+
+        flow_atlas = _add_missing()
+
+        fig = plt.figure(figsize=(6.5, 6.5))
+        ax = fig.add_subplot(111)
+
+        ax.scatter(
+            flow_atlas["midpoint_x_pos_2D"],
+            flow_atlas["midpoint_y_pos_2D"],
+            s=20,
+            c="lightslategray",
+            edgecolors="black",
+            alpha=1,
+            zorder=3,
+        )
+        ax.scatter(
+            flow_atlas["source_x_pos_2D"],
+            flow_atlas["source_y_pos_2D"],
+            s=20,
+            c="black",
+            zorder=4,
+        )
+
+        for region in unique_brain_regions:
+            region_l = region + "_L"
+            region_r = region + "_R"
+            brain_region_rows_l = flow_atlas[flow_atlas["AAL_region"] == region_l]
+            brain_region_rows_r = flow_atlas[flow_atlas["AAL_region"] == region_r]
+            brain_region_rows = pd.concat(
+                [brain_region_rows_l, brain_region_rows_r], axis=0
+            )
+
+            ax.scatter(
+                brain_region_rows["midpoint_x_pos_2D"],
+                brain_region_rows["midpoint_y_pos_2D"],
+                s=130,
+                alpha=1,
+                zorder=2,
+                label=region,
+            )
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title("Anterior", fontweight="bold", fontsize=14, y=1)
+        ax.text(
+            0.5,
+            -0.06,
+            "Posterior",
+            fontweight="bold",
+            fontsize=14,
+            ha="center",
+            va="bottom",
+            transform=ax.transAxes,
+        )
+        ax.text(
+            -0.02,
+            0.5,
+            "Left",
+            fontsize=14,
+            fontweight="bold",
+            rotation=90,
+            va="center",
+            ha="center",
+            transform=ax.transAxes,
+        )
+        ax.text(
+            1.02,
+            0.5,
+            "Right",
+            fontsize=14,
+            fontweight="bold",
+            rotation=90,
+            va="center",
+            ha="center",
+            transform=ax.transAxes,
+        )
+        title_text = "Kernel Flow / AAL Atlas Brain Region Map"
+        ax.text(
+            0.5,
+            1.1,
+            title_text,
+            fontweight="bold",
+            fontsize=18,
+            ha="center",
+            va="bottom",
+            transform=ax.transAxes,
+        )
+        plt.legend(bbox_to_anchor=(1.1, 1), loc="upper left", ncol=2)
+        filepath = os.path.join(
+                    self.par.flow_processed_data_dir, "brain_region_mapping.png"
+                ) 
+        fig.savefig(filepath, dpi=300, bbox_inches="tight")
+
     def _get_condition_channels(
         self, exp_name: str, post_hoc_stats: pd.DataFrame, channels_only: bool = True
     ) -> Union[Tuple[List[int], List[int]], Tuple[pd.DataFrame, pd.DataFrame]]:
